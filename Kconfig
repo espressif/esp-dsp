@@ -1,0 +1,35 @@
+menu "DSP Standard Library"
+
+choice DSL_MAX_FFT_SIZE
+   bool "Maximum fft length"
+   default DSL_MAX_FFT_SIZE_4096
+   help
+        This is default fft size for internal usage.
+       
+config DSL_MAX_FFT_SIZE_512
+   bool "512"
+config DSL_MAX_FFT_SIZE_1024
+   bool "1024"
+config DSL_MAX_FFT_SIZE_2048
+   bool "2048"
+config DSL_MAX_FFT_SIZE_4096
+   bool "4096"
+config DSL_MAX_FFT_SIZE_8192
+   bool "8192"
+config DSL_MAX_FFT_SIZE_16384
+   bool "16384"
+config DSL_MAX_FFT_SIZE_32768
+   bool "32768"
+endchoice
+
+config DSL_MAX_FFT_SIZE
+    int
+    default 512 if DSL_MAX_FFT_SIZE_512
+    default 1024 if DSL_MAX_FFT_SIZE_1024
+    default 2048 if DSL_MAX_FFT_SIZE_2048
+    default 4096 if DSL_MAX_FFT_SIZE_4096
+    default 8192 if DSL_MAX_FFT_SIZE_8192
+    default 16384 if DSL_MAX_FFT_SIZE_16384
+    default 32768 if DSL_MAX_FFT_SIZE_32768
+
+endmenu
