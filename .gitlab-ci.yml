@@ -1,29 +1,80 @@
 stages:
+  - build
   - deploy
 
-push_master_to_github:
-  stage: deploy
-  only:
-    - master
-    - /^release\/v/
-#  when: on_success
-  image: espressif/esp32-ci-env
+variables:
+  # System environment
+
+  # Common parameters for the 'make' during CI tests
+  MAKEFLAGS: "-j5 --no-keep-going"
+
+# GitLab-CI environment
+
+  # more attempts for more robust
+  GET_SOURCES_ATTEMPTS: "10"
+  ARTIFACT_DOWNLOAD_ATTEMPTS: "10"
+
+  # We use get_sources.sh script to fetch the submodules and/or re-fetch the repo
+  # if it was corrupted (if submodule update fails this can happen)
+  GIT_STRATEGY: clone
+  GIT_SUBMODULE_STRATEGY: none
+  #IDF_PATH: "$CI_PROJECT_DIR/esp-idf"
+  
+  # Docker images
+  BOT_DOCKER_IMAGE_TAG: ":latest"
+
+before_script:
+  # add gitlab ssh key
+  - mkdir -p ~/.ssh
+  - chmod 700 ~/.ssh
+  - echo -n $GITLAB_KEY > ~/.ssh/id_rsa_base64
+  - base64 --decode --ignore-garbage ~/.ssh/id_rsa_base64 > ~/.ssh/id_rsa
+  - chmod 600 ~/.ssh/id_rsa
+  - echo -e "Host gitlab.espressif.cn\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
+  # replace submodule esp-idf to internal repository to speedup cloning
+  # - sed -i "s%https://github.com/espressif/esp-idf%${GITLAB_SSH_SERVER}/idf/esp-idf.git%" .gitmodules
+  #- mkdir -p ~/esp
+  #- cd ~/esp
+  # Download binary toolchain for the ESP32
+  #- wget https://dl.espressif.com/dl/xtensa-esp32-elf-linux64-1.22.0-61-gab8375a-5.2.0.tar.gz
+  #- tar -xzf xtensa-esp32-elf-linux64-1.22.0-61-gab8375a-5.2.0.tar.gz
+  # Make xtensa-esp32-elf available for all terminal sessions
+  #- export PATH=$PATH:$HOME/esp/xtensa-esp32-elf/bin
+  # 
+  # this is how we can save current git state and then copy it to somewhere
+  #- git archive --format=tar.gz --prefix="dsp/" -o dsp.tar.gz HEAD
+  # Get ESP-IDF from github
+  - git clone --recursive https://github.com/espressif/esp-idf.git
+  # Set the path to ESP-IDF directory
+  - git submodule update --init
+  - PROJECT_PATH=$(pwd)
+  - export IDF_PATH=$PROJECT_PATH/esp-idf
+  - ls
+  - echo $IDF_PATH
+
+build:
+  stage: build
+  #image: ${CI_DOCKER_REGISTRY}/esp32-ci-env
+  image: $CI_DOCKER_REGISTRY/esp32-ci-env$BOT_DOCKER_IMAGE_TAG
+  tags:
+    - build
+
   variables:
-    GIT_STRATEGY: clone
-    GITHUB_PUSH_REFS: refs/remotes/origin/release refs/remotes/origin/master
+    GIT_STRATEGY: fetch
+
   script:
-    - mkdir -p ~/.ssh
-    - chmod 700 ~/.ssh
-    - echo -n $GH_PUSH_KEY > ~/.ssh/id_rsa_base64
-    - base64 --decode --ignore-garbage ~/.ssh/id_rsa_base64 > ~/.ssh/id_rsa
-    - chmod 600 ~/.ssh/id_rsa
-    - echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
-    - git remote add github git@github.com:espressif/esp-dsl.git
-    # What the next line of script does: goes through the list of refs for all branches we push to github,
-    # generates a snippet of shell which is evaluated. The snippet checks CI_BUILD_REF against the SHA
-    # (aka objectname) at tip of each branch, and if any SHAs match then it checks out the local branch
-    # and then pushes that ref to a corresponding github branch
-    #
-    # NB: In gitlab 9.x, CI_BUILD_REF was deprecated. New name is CI_COMMIT_REF. If below command suddenly
-    # generates bash syntax errors, this is probably why.
-    - eval $(git for-each-ref --shell bash --format 'if [ $CI_BUILD_REF == %(objectname) ]; then git checkout -B %(refname:strip=3); git push --follow-tags github %(refname:strip=3); fi;' $GITHUB_PUSH_REFS)
+    # Build ESP32 Eclipse Plugins
+    - echo "Hello Dmitry!"
+    # The way how to copy saved state archive to the commponent folder
+    # - cd ./esp-idf/components
+    # - ls
+    # - tar xf ../../dsp.tar.gz
+    # - cd dsp
+    # - ls
+    # - cd $IDF_PATH/components/dsp/examples/dotprod
+    - ls
+    - cd $PROJECT_PATH/examples/dotprod
+    - ls
+    - make defconfig
+    - echo $IDF_PATH
+    - make -j4 all

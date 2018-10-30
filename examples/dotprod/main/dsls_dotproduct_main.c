@@ -43,6 +43,6 @@ void app_main()
         status = dsls_dotprod_16s_ae32(x, y, z, 1021, 1);
         status = dsls_dotprod_16s_ae32(x, y, z, 1022, 1);
         status = dsls_dotprod_16s_ae32(x, y, z, 1023, 1);
-        //printf("status= %i\n", status);
+        printf("status= %i\n", status);
     }
 }

@@ -14,7 +14,7 @@
 
 //#include "../../dotprod/float/dsls_dotprod_32f_m_ae32.S"
 #include "dsls_dotprod_16s_m_ae32.S"
-#include "dslm_mult_16s_ae32_m_vector.S"
+#include "dslm_mult_16s_m_ae32_vector.S"
 //esp_err_t dslm_mult_16s_ae32(int16_t* A, int16_t* B, int16_t* C, int m, int n, int k, int shift);
 
 // This is dot product function for Esp32 processor.
@@ -57,12 +57,9 @@ dslm_mult_16s_ae32:
     beq      a7, a12, vector_mult
     // We have normal path with k > 1
 
-
-
-
     movi.n	a2, 0 // return status ESP_OK
     retw.n
 
 // The path where n > 1
 vector_mult:
-    dslm_mult_16s_ae32_m_vector;
+    dslm_mult_16s_m_ae32_vector;
