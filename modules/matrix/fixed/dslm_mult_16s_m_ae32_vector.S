@@ -13,7 +13,7 @@
 // limitations under the License. 
 
 
-.macro dslm_mult_16s_ae32_m_vector
+.macro dslm_mult_16s_m_ae32_vector
 // m - a5 - any > 0
 // n - a6 - 1,2,3, any
 // k - a7 - 1, any
@@ -27,7 +27,7 @@
 	addi a7, a7, -1
  
 
-dpf_loop1:
+mmultv_loop1:
 	wsr a8, acchi
 	wsr a15, acclo // initialize acc with shifted round value
 
@@ -56,7 +56,7 @@ dpf_loop1:
 
         add.n   a2, a2, a14 // Increment A, A = A[i*n]
         addi    a9, a9, 1 // Increment loop1 counter    
-    blt     a9, a5, dpf_loop1
+    blt     a9, a5, mmultv_loop1
 
 
     movi.n	a2, 0 // return status ESP_OK
@@ -102,4 +102,4 @@ small_process_loop:
     retw.n
 
 
-.endm // dslm_mult_16s_ae32_m_vector
+.endm // dslm_mult_16s_m_ae32_vector
