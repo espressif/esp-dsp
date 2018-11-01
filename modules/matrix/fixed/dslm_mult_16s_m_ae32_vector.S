@@ -52,7 +52,7 @@ mmultv_loop1:
 		src a12, a12, a13
         
         s16i	a12, a4, 0
-        add     a4, a4, a10
+        addi    a4, a4, 2
 
         add.n   a2, a2, a14 // Increment A, A = A[i*n]
         addi    a9, a9, 1 // Increment loop1 counter    
@@ -92,7 +92,7 @@ small_process_loop:
 		src a12, a12, a13
         
         s16i	a12, a4, 0
-        add     a4, a4, a10
+        addi     a4, a4, 2
 
         add.n   a2, a2, a14 // Increment A, A = A[i*n]
         addi    a9, a9, 1 // Increment loop1 counter    

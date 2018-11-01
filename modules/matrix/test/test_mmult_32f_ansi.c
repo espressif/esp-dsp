@@ -14,74 +14,78 @@
 // Test dsls_dotprod_16s_ansi function
 TEST_CASE("dslm_mult_32f_ansi functionality", "[dslm]")
 {
-    int m = 4;
-    int n = 3;
-    int k = 4;
-
-
-    float A[m][n];
-    float* A_ptr = (float*)A;
-
-    float B[n][k];
-    float* B_ptr = (float*)B;
-
-    float C[m][k];
-    float* C_ptr = (float*)C;
-    float C_compare[m][k];
-    float* Cc_ptr = (float*)C_compare;
-
-    for (int i=0 ; i< m*n; i++)
+    for (int m=1 ; m < 8 ; m++)
     {
-        A_ptr[i] = i;
-        B_ptr[i] = i;
-    }
-    for (int i=0 ; i< m ; i++)
-    {
-        for (int j=0 ; j< n ; j++)
+        for (int n=1; n< 8 ; n++)
         {
-            A[i][j] = i*n + j;
-        }
-    }
-    for (int i=0 ; i< n ; i++)
-    {
-        for (int j=0 ; j< k ; j++)
-        {
-            B[i][j] = i*k + j;
-        }
-    }
-    for (int i=0 ; i< m ; i++)
-    {
-        for (int j=0 ; j< k ; j++)
-        {
-            C_compare[i][j] = 0;
-            for (int s=0 ; s< n ; s++)
+            for (int k=1; k< 8 ; k++)
             {
-                C_compare[i][j] += A[i][s]*B[s][j];
-            }
-        }
-    }
-    dslm_mult_32f_ansi(A_ptr, B_ptr, C_ptr, m, n, k);
+                float A[m][n];
+                float* A_ptr = (float*)A;
 
-    // for (int i=0 ; i< m ; i++)
-    // {
-    //     for (int j=0 ; j< k ; j++)
-    //     {
-    //         printf("[%i][%i] calc=%f, expected =%f\n",i,j, C[i][j], C_compare[i][j]);
-    //     }
-    // }
-    // Compare and check results
-    for (int i = 0 ; i< m*k ; i++)
-    {
-        if (Cc_ptr[i] != C_ptr[i])
-        {
-            TEST_ASSERT_EQUAL(Cc_ptr[i], C_ptr[i]);
+                float B[n][k];
+                float* B_ptr = (float*)B;
+
+                float C[m][k];
+                float* C_ptr = (float*)C;
+                float C_compare[m][k];
+                float* Cc_ptr = (float*)C_compare;
+
+                for (int i=0 ; i< m*n; i++)
+                {
+                    A_ptr[i] = i;
+                    B_ptr[i] = i;
+                }
+                for (int i=0 ; i< m ; i++)
+                {
+                    for (int j=0 ; j< n ; j++)
+                    {
+                        A[i][j] = i*n + j;
+                    }
+                }
+                for (int i=0 ; i< n ; i++)
+                {
+                    for (int j=0 ; j< k ; j++)
+                    {
+                        B[i][j] = i*k + j;
+                    }
+                }
+                for (int i=0 ; i< m ; i++)
+                {
+                    for (int j=0 ; j< k ; j++)
+                    {
+                        C_compare[i][j] = 0;
+                        for (int s=0 ; s< n ; s++)
+                        {
+                            C_compare[i][j] += A[i][s]*B[s][j];
+                        }
+                    }
+                }
+                dslm_mult_32f_ansi(A_ptr, B_ptr, C_ptr, m, n, k);
+
+                // for (int i=0 ; i< m ; i++)
+                // {
+                //     for (int j=0 ; j< k ; j++)
+                //     {
+                //         printf("[%i][%i] calc=%f, expected =%f\n",i,j, C[i][j], C_compare[i][j]);
+                //     }
+                // }
+                // Compare and check results
+                for (int i = 0 ; i< m*k ; i++)
+                {
+                    if (Cc_ptr[i] != C_ptr[i])
+                    {
+                        TEST_ASSERT_EQUAL(Cc_ptr[i], C_ptr[i]);
+                    }
+                }
+            }
         }
     }
 }
 
 static portMUX_TYPE testnlock = portMUX_INITIALIZER_UNLOCKED;
 
-TEST_CASE("DSL check dslm_mult_32f_ansi benchmark", "[dsl]")
+TEST_CASE("dslm_mult_32f_ansi benchmark", "[dslm]")
 {
     int m = 4;
     int n = 4;

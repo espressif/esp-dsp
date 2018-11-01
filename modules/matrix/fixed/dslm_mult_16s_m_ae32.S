@@ -13,7 +13,7 @@
 // limitations under the License. 
 
 
-.macro dslm_mult_16s_ae32_MxNx1
+.macro dslm_mult_16s_ae32_MxNxN
 // A - a2
 // B - a3
 // C - a4
@@ -55,4 +55,4 @@ do_dotproduct:
     movi.n	a2, 0 // return status ESP_OK
     retw.n
 
-.endm // dotprod_16s_ae32
+.endm // dslm_mult_16s_ae32_MxNxN
