@@ -12,7 +12,7 @@
 #include "esp_attr.h"
 
 
-TEST_CASE("DSL check dsls_dotprod_32f_ae32 functionality", "[dsl]")
+TEST_CASE("dsls_dotprod_32f_ae32 functionality", "[dsls]")
 {
     float check_value = 1235;
     int max_N = 1024;
@@ -56,7 +56,7 @@ TEST_CASE("DSL check dsls_dotprod_32f_ae32 functionality", "[dsl]")
     free(z);
 }
 
-TEST_CASE("DSL check dsls_dotprod_32f_ae32 benchmark", "[dsl]")
+TEST_CASE("dsls_dotprod_32f_ae32 benchmark", "[dsls]")
 {
     int max_N = 1024;
     float* x = (float*)malloc(max_N*sizeof(float));
@@ -95,7 +95,7 @@ TEST_CASE("DSL check dsls_dotprod_32f_ae32 benchmark", "[dsl]")
 }
 
 
-TEST_CASE("DSL check dsls_dotprod_32f_ansi functionality", "[dsl]")
+TEST_CASE("dsls_dotprod_32f_ansi functionality", "[dsls]")
 {
     float check_value = 1235;
     int max_N = 1024;
@@ -139,7 +139,7 @@ TEST_CASE("DSL check dsls_dotprod_32f_ansi functionality", "[dsl]")
     free(z);
 }
 
-TEST_CASE("DSL check dsls_dotprod_32f_ansi benchmark", "[dsl]")
+TEST_CASE("dsls_dotprod_32f_ansi benchmark", "[dsls]")
 {
     int max_N = 1024;
     float* x = (float*)malloc(max_N*sizeof(float));

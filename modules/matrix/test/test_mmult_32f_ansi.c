@@ -12,7 +12,7 @@
 #include "esp_attr.h"
 
 // Test dsls_dotprod_16s_ansi function
-TEST_CASE("DSL check dslm_mult_32f_ansi functionality", "[dsl]")
+TEST_CASE("dslm_mult_32f_ansi functionality", "[dslm]")
 {
     int m = 4;
     int n = 3;

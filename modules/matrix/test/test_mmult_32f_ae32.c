@@ -12,7 +12,7 @@
 #include "esp_attr.h"
 
 // Test dsls_dotprod_16s_ansi function
-TEST_CASE("DSL check dslm_mult_32f_ae32 functionality", "[dsl]")
+TEST_CASE("dslm_mult_32f_ae32 functionality", "[dslm]")
 {
     int m = 4;
     int n = 3;
@@ -67,7 +67,7 @@ TEST_CASE("DSL check dslm_mult_32f_ae32 functionality", "[dsl]")
 
 static portMUX_TYPE testnlock = portMUX_INITIALIZER_UNLOCKED;
 
-TEST_CASE("DSL check dslm_mult_32f_ae32 benchmark", "[dsl]")
+TEST_CASE("dslm_mult_32f_ae32 benchmark", "[dslm]")
 {
     int m = 4;
     int n = 4;

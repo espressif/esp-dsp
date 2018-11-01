@@ -18,7 +18,7 @@ TEST_CASE("DSL doesn't leak memory", "[dsl]")
     if (stack_diff > 8) TEST_ASSERT_EQUAL(0, stack_diff);
 }
 
-// TEST_CASE("DSL check partition parameters", "[dsl][ignore]")
+// TEST_CASE("partition parameters", "[dsl][ignore]")
 // {
 //     size_t size_before = xPortGetFreeHeapSize();
 //     size_t size_after = xPortGetFreeHeapSize();

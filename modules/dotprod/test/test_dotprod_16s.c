@@ -12,7 +12,7 @@
 #include "esp_attr.h"
 
 // Test dsls_dotprod_16s_ansi function
-TEST_CASE("DSL check dsls_dotprod_16s_ansi functionality", "[dsl]")
+TEST_CASE("dsls_dotprod_16s_ansi functionality", "[dsls]")
 {
     int16_t check_value = 1235;
     int max_N = 1024;
@@ -76,7 +76,7 @@ TEST_CASE("DSL check dsls_dotprod_16s_ansi functionality", "[dsl]")
 }
 
 // Test dsls_dotprod_16s_ansi function
-TEST_CASE("DSL check dsls_dotprod_16s_ae32 functionality", "[dsl]")
+TEST_CASE("dsls_dotprod_16s_ae32 functionality", "[dsls]")
 {
     int16_t check_value = 1235;
     int max_N = 1024;
@@ -154,7 +154,7 @@ TEST_CASE("DSL check dsls_dotprod_16s_ae32 functionality", "[dsl]")
 }
 
 static portMUX_TYPE testnlock = portMUX_INITIALIZER_UNLOCKED;
-TEST_CASE("DSL dsls_dotprod_16s_ae32 benchmark", "[dsl]")
+TEST_CASE("dsls_dotprod_16s_ae32 benchmark", "[dsls]")
 {
     int max_N = 1024;
 
@@ -197,7 +197,7 @@ TEST_CASE("DSL dsls_dotprod_16s_ae32 benchmark", "[dsl]")
     free(z);
 }
 
-TEST_CASE("DSL dsls_dotprod_16s_ansi benchmark", "[dsl]")
+TEST_CASE("dsls_dotprod_16s_ansi benchmark", "[dsls]")
 {
     int max_N = 1024;
 

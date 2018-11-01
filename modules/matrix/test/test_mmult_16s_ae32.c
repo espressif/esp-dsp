@@ -13,7 +13,7 @@
 #include "esp_log.h"
 
 // Test dsls_dotprod_16s_ansi function
-TEST_CASE("DSL check dslm_mult_16s_ae32 functionality", "[dsl]")
+TEST_CASE("dslm_mult_16s_ae32 functionality", "[dslm]")
 {
     for (int m=1 ; m< 8 ; m++)
     {
