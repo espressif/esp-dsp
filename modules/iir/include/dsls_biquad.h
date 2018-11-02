@@ -1,3 +1,4 @@
+
 // Copyright 2018-2019 Espressif Systems (Shanghai) PTE LTD
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,9 +14,22 @@
 // limitations under the License. 
 
 
-#include "dsps_biquad.h"
+#ifndef _dsls_biquad_H_
+#define _dsls_biquad_H_
 
-esp_err_t dsps_biquad_32f(float* input, float* output, int len, float* coeffs, float* delay)
+#include "dsl_err.h"
+
+
+#ifdef __cplusplus
+extern "C"
 {
-    return ESP_OK;
+#endif
+
+esp_err_t dsls_biquad_32f_ansi(float* x, float* y, int len, float* coef, float* w);
+esp_err_t dsls_biquad_32f_ae32(float* x, float* y, int len, float* coef, float* w);
+
+#ifdef __cplusplus
 }
+#endif
+
+#endif // _dsls_biquad_H_

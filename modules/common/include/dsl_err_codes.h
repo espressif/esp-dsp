@@ -18,6 +18,8 @@
 #define DSL_OK                          0 // For internal use only. Please use ESP_OK instead
 #define ESP_ERR_DSL_BASE                0x70000
 #define ESP_ERR_DSL_INVALID_LENGTH      (ESP_ERR_DSL_BASE + 1)
+#define ESP_ERR_DSL_INVALID_PARAM       (ESP_ERR_DSL_BASE + 2)
+#define ESP_ERR_DSL_PARAM_OUTOFRANGE    (ESP_ERR_DSL_BASE + 3)
 
 
 #endif // _dsl_error_codes_H_
