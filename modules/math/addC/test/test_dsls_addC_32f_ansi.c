@@ -34,7 +34,7 @@ TEST_CASE("dsls_addC_32f_ansi functionality", "[dsls]")
     for (int i=0 ; i< n ; i++)
     {
         x[i] = i;
-        y[i] = i*10;
+        y[i] = i + 10;
     }
     dsls_addC_32f_ansi(x, x, n, 10, 1, 1);
     for (int i=0 ; i< n ; i++)
@@ -44,7 +44,6 @@ TEST_CASE("dsls_addC_32f_ansi functionality", "[dsls]")
             TEST_ASSERT_EQUAL(x[i], y[i]);      
         }
     }
-
     //TEST_ASSERT_EQUAL(0, z[1]);
     //TEST_ASSERT_MESSAGE (false, "Exec time takes less then expected!"); 
 }

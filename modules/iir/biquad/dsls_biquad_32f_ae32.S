@@ -63,20 +63,20 @@ dsls_biquad_32f_ae32:
     lsi   f7, a6, 0 // w[0]
     lsi   f8, a6, 4 // w[1]
     
-    addi    a3, a3, -4   // i-- // preset a3
-    lsi     f9, a2, 0      // f9 = x[i]
+    addi    a3, a3, -4       // i-- // preset a3
+    lsi     f9, a2, 0        // f9 = x[i]
     loopnez a4, loop_bq_end_m_ae32
-        madd.s  f9, f7, f5 // f9 += -a1*w0
-        addi    a3, a3, 4   // i++;
-        mul.s   f10, f1, f7 // f10 = b1*w0
-        madd.s  f9, f8, f6 // f9 += -a2*w1
-        madd.s  f10, f9, f0 // f10 += b0*d0
-        addi    a2, a2, 4   // i++;
-        madd.s  f10, f2, f8 // f10+= b2*w1, f10 - result
-        mov.s   f8, f7   // w1 = w0
-        mov.s   f7, f9   // w0 = d0
-        lsi     f9, a2, 0      // f9 = x[i]
-        ssi	    f10, a3, 0  // y[i] = result
+        madd.s  f9, f7, f5   // f9 += -a1*w0
+        addi    a3, a3, 4    // out++;
+        mul.s   f10, f1, f7  // f10 = b1*w0
+        madd.s  f9, f8, f6   // f9 += -a2*w1
+        madd.s  f10, f9, f0  // f10 += b0*d0
+        addi    a2, a2, 4    // in++;
+        madd.s  f10, f2, f8  // f10+= b2*w1, f10 - result
+        mov.s   f8, f7       // w1 = w0
+        mov.s   f7, f9       // w0 = d0
+        lsi     f9, a2,  0   // f9 = x[i]
+        ssi	    f10, a3, 0   // y[i] = result
 loop_bq_end_m_ae32:
         // Store delay line
         ssi     f7, a6, 0
