@@ -25,7 +25,38 @@ extern "C"
 {
 #endif
 
+/**
+ * @function dsls_biquad_32f_ansi
+ * IIR filter 2nd order direct form II (bi quad)
+ * The implementation use ANSI C and could be compiled and run on any platform
+ *
+ * @param x: input array
+ * @param y: output array 
+ * @param len: length of input and output vectors
+ * @param coef: array of coefficients. b0,b1,b2,a1,a2
+ *              expected that a0 = 1. b0..b2 - numerator, a0..a2 - denominator  
+ * @param w: delay line w0,w1. Length of 2.
+ * @return
+ *      - ESP_OK on success
+ *      - One of the error codes from DSP library
+ */
 esp_err_t dsls_biquad_32f_ansi(float* x, float* y, int len, float* coef, float* w);
+
+/**
+ * @function dsls_biquad_32f_ansi
+ * IIR filter 2nd order direct form II (bi quad)
+ * The implementation optimized for Esp32 platform
+ *
+ * @param x: input array
+ * @param y: output array 
+ * @param len: length of input and output vectors
+ * @param coef: array of coefficients. b0,b1,b2,a1,a2
+ *              expected that a0 = 1. b0..b2 - numerator, a0..a2 - denominator  
+ * @param w: delay line w0,w1. Length of 2.
+ * @return
+ *      - ESP_OK on success
+ *      - One of the error codes from DSP library
+ */
 esp_err_t dsls_biquad_32f_ae32(float* x, float* y, int len, float* coef, float* w);
 
 #ifdef __cplusplus
