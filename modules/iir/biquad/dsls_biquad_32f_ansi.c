@@ -13,9 +13,17 @@
 // limitations under the License. 
 
 
-#include "dsps_biquad.h"
+#include "dsls_biquad.h"
 
-esp_err_t dsps_biquad_32f(float* input, float* output, int len, float* coeffs, float* delay)
+
+esp_err_t dsls_biquad_32f_ansi(float* x, float* y, int len, float* coef, float* w)
 {
+    for (int i=0 ; i< len ; i++)
+    {
+        float d0 = x[i] - coef[3]*w[0] - coef[4]*w[1];
+        y[i] = coef[0]*d0 +  coef[1]*w[0] + coef[2]*w[1];
+        w[1] = w[0];
+        w[0] = d0;
+    }
     return ESP_OK;
 }
