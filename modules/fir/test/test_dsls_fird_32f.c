@@ -42,7 +42,7 @@ TEST_CASE("dsls_fird_32f_ansi functionality", "[dsls]")
         x[i] = i%decim;
     }
 
-    dsls_fird_init_32f(&fir1, coeffs, delay, fir_len, decim);
+    dsls_fird_init_32f(&fir1, coeffs, delay, fir_len, decim, 0);
     int total = dsls_fird_32f_ansi(&fir1, x, y, len);
     ESP_LOGI(TAG,"Total result = %i from %i", total, len);
     TEST_ASSERT_EQUAL(total, len/decim);

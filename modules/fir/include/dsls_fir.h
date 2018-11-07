@@ -21,8 +21,10 @@ typedef struct fir_32f_s
 }fir_32f_t;
 
 esp_err_t dsls_fir_init_32f(fir_32f_t* fir, float* coeffs, float* delay, int N);
+
 // d - decimation factor
-esp_err_t dsls_fird_init_32f(fir_32f_t* fir, float* coeffs, float* delay, int N, int d);
+// start_pos - initial position for delay sample
+esp_err_t dsls_fird_init_32f(fir_32f_t* fir, float* coeffs, float* delay, int N, int d, int start_pos);
 
 esp_err_t dsls_fir_32f_ansi(fir_32f_t* fir, float* x, float* y, int len);
 
