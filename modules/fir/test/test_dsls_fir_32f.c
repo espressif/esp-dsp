@@ -67,11 +67,18 @@ TEST_CASE("dsls_fir_32f_ansi functionality", "[dsls]")
     dsls_fir_init_32f(&fir1, coeffs, delay, fir_len);
     dsls_fir_32f_ansi(&fir1, x, y, len);
     
-    for (int i=0 ; i< len ; i++)
+    for (int i=0 ; i< fir_len ; i++)
     {
         if (y[i] != i)
         {
             TEST_ASSERT_EQUAL(y[i], i);
+        }
+    }
+    for (int i=fir_len ; i< len ; i++)
+    {
+        if (y[i] != 0)
+        {
+            TEST_ASSERT_EQUAL(y[i], 0);
         }
     }
 
