@@ -75,3 +75,38 @@ TEST_CASE("dsls_fird_32f_ansi functionality", "[dsls]")
 
 }
 
+
+TEST_CASE("dsls_fird_32f_ansi benchmark", "[dsls]")
+{
+
+    int len = sizeof(x)/sizeof(float);
+    int fir_len = sizeof(coeffs)/sizeof(float);
+    int repeat_count = 1;
+    int decim = 4;
+
+    fir_32f_t fir1;
+    for (int i=0 ; i< fir_len ; i++)
+    {
+        coeffs[i] = i;
+    }
+
+    for (int i=0 ; i< len ; i++)
+    {
+        x[i] = 0;
+    }
+    x[0] = 1;
+
+    dsls_fird_init_32f(&fir1, coeffs, delay, fir_len, decim, 0);
+
+    unsigned int start_b = xthal_get_ccount();
+    for (int i=0 ; i< repeat_count ; i++)
+    {
+        dsls_fird_32f_ansi(&fir1, x, y, len);
+    }
+    unsigned int end_b = xthal_get_ccount();
+
+    float total_b = end_b - start_b;
+    float cycles = total_b/(len*repeat_count);
+
+    ESP_LOGI(TAG, "dsls_fir_32f_ansi - %f per sample for for %i coefficients, %f per decim tap \n", cycles, fir_len, cycles/(float)fir_len*decim);
+}
