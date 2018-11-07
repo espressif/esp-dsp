@@ -129,4 +129,13 @@ TEST_CASE("dsls_fir_32f_ansi benchmark", "[dsls]")
     float cycles = total_b/(len*repeat_count);
 
     ESP_LOGI(TAG, "dsls_fir_32f_ansi - %f per sample for for %i coefficients, %f per tap \n", cycles, fir_len, cycles/(float)fir_len);
+
+    float min_exec = 10;
+    float max_exec = 800;
+    if (cycles >= max_exec) { 
+        TEST_ASSERT_MESSAGE (false, "Exec time takes more then expected!");
+    }
+    if (cycles < min_exec) { 
+        TEST_ASSERT_MESSAGE (false, "Exec time takes less then expected!");
+    }
 }
