@@ -13,7 +13,7 @@
 // limitations under the License. 
 
 //#include "../../dotprod/float/dsls_dotprod_32f_m_ae32.S"
-#include "dsls_dotprod_32f_m_ae32.S"
+#include "dsls_dotprode_32f_m_ae32.S"
 
 // This is matrix multipliction function for Esp32 processor.
     .text
@@ -80,7 +80,7 @@ dpf_loop2:
 
     wfr	    f1, a14 // reset f1
     // Calculating dotproduct...
-    dotprod_32f_ae32 a12, a13, a6, a10, a15;
+    dotprode_32f_ae32 a12, a13, a6, a10, a15;
 
     ssi	    f1, a4, 0 // Store result from f1 to memory at a4
     addi    a4, a4, 4 // increment a4 for next time

@@ -94,7 +94,7 @@ TEST_CASE("dsls_dotprod_32f_ae32 benchmark", "[dsls]")
     float total_b = end_b - start_b;
     float cycles = total_b/(1024*repeat_count);
     printf("Benchmark dsls_dotprod_32f_ae32 - %f per sample + overhead.\n", cycles);
-    float min_exec = 5;
+    float min_exec = 3;
     float max_exec = 6;
     if (cycles >= max_exec) { 
         TEST_ASSERT_MESSAGE (false, "Exec time takes more then expected!");

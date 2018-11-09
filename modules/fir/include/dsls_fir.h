@@ -41,6 +41,7 @@ esp_err_t dsls_fir_init_32f(fir_32f_t* fir, float* coeffs, float* delay, int N);
 esp_err_t dsls_fird_init_32f(fir_32f_t* fir, float* coeffs, float* delay, int N, int d, int start_pos);
 
 esp_err_t dsls_fir_32f_ansi(fir_32f_t* fir, float* x, float* y, int len);
+esp_err_t dsls_fir_32f_ae32(fir_32f_t* fir, float* x, float* y, int len);
 
 // return - amount of processed samples
 int dsls_fird_32f_ansi(fir_32f_t* fir, float* x, float* y, int len);
