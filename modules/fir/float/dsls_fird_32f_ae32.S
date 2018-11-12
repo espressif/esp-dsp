@@ -17,12 +17,12 @@
 // This is FIR filter for Esp32 processor.
     .text
     .align  4
-    .global dsls_fir_32f_ae32
-    .type   dsls_fir_32f_ae32,@function
+    .global dsls_fird_32f_ae32
+    .type   dsls_fird_32f_ae32,@function
 // The function implements next C code:
 //esp_err_t dsls_fir_32f_ae32(fir_32f_t* fir, float* x, float* y, int len);
 
-dsls_fir_32f_ae32: 
+dsls_fird_32f_ae32: 
 // fir  - a2
 // x    - a3
 // y    - a4
@@ -40,10 +40,12 @@ dsls_fir_32f_ae32:
     addi    a10, a10, -4 // a10 = &coeffs[N-1];
     l32i    a11, a2, 4  // a11 - delay line
     l32i    a6,  a2, 8  // a6  - N
-    movi.n	a9, 0
+    l32i    a12, a2, 16  // a12  - decimation
+    l32i    a9,  a2, 20   // a9  -  d_pos
+    movi    a8, 0         // result = 0;
 
 //  a13 - delay index
-fir_loop_len:
+fird_loop_len:
         // Store to delay line
         lsi     f0, a3, 0       // f0 = x[i]
         addi    a3, a3, 4       // x++
@@ -55,36 +57,44 @@ fir_loop_len:
             movi    a13, 0
             movi    a7,  0
     do_not_reset_a13:
+        // calc d_pos
+        addi    a9, a9, 1
+        blt     a9, a12, next_itt_fir32 // Jump if d_pos < d
+        addi    a8, a8, 1
+        movi    a9, 0 // reset d_pos
         // Calc amount for delay line before end
         mov     a15, a10        // a15 - coeffs
         wfr	    f2, a9 // f2 = 0;
         sub   a14, a6, a7   // a14 = N-pos
-        loopnez  a14, first_fir_loop // pos...N-1
+        loopnez  a14, first_fird_loop // pos...N-1
             lsi     f1, a15, 0
             addi    a15, a15, -4    // a15--
             lsx     f0, a11, a13    // load delay f0 = delay[pos]
             addi    a13, a13, 4     // a13++, pos++
             madd.s  f2, f0, f1      // f2 += f0*f1
-first_fir_loop:
+first_fird_loop:
         movi a13, 0    // load delay line counter to 0
-        loopnez  a7, second_fir_loop // 0..pos
+        loopnez  a7, second_fird_loop // 0..pos
             lsi     f1, a15, 0
             addi    a15, a15, -4    // a15--
             lsx     f0, a11, a13    // load delay f0 = delay[pos]
             addi    a13, a13, 4     // a13++, pos++
             madd.s  f2, f0, f1      // f2 += f0*f1
-second_fir_loop:
+second_fird_loop:
 
         // and after end
         // Store result
         ssi     f2, a4, 0
         //s32i    a13, a4, 0// just for debug *a4 = a13
         addi    a4, a4, 4 // y++ - increment output pointer
+next_itt_fir32:        
         // Check loop 
         addi   a5, a5, -1
-    bnez    a5, fir_loop_len
+    bnez    a5, fird_loop_len
     // store state
 
     s32i    a7,  a2, 12 // pos = a7
-    movi.n	a2, 0 // return status ESP_OK
+    s32i    a9,  a2, 20 // d_pos = a9
+    
+    mov 	a2, a8 // return status ESP_OK
     retw.n
