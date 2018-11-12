@@ -29,13 +29,13 @@
 
 static const char *TAG = "dsls_fird_32f_ae32";
 
-float x[1024];
-float y[1024];
-float y_compare[1024];
+static float x[1024];
+static float y[1024];
+static float y_compare[1024];
 
-float coeffs[32];
-float delay[32];
-float delay_compare[32];
+static float coeffs[32];
+static float delay[32];
+static float delay_compare[32];
 
 TEST_CASE("dsls_fird_32f_ae32 functionality", "[dsls]")
 {

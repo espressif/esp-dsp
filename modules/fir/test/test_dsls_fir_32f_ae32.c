@@ -87,8 +87,9 @@ TEST_CASE("dsls_fir_32f_ae32 functionality", "[dsls]")
     }
     x[0] = 1;
     dsls_fir_init_32f(&fir1, coeffs, delay, fir_len);
-    dsls_fir_32f_ae32(&fir1, x, y, len);
     dsls_fir_init_32f(&fir2, coeffs, delay_compare, fir_len);
+
+    dsls_fir_32f_ae32(&fir1, x, y, len);
     dsls_fir_32f_ansi(&fir2, x, y_compare, len);
     dsls_fir_32f_ae32(&fir1, x, y, len);
     dsls_fir_32f_ansi(&fir2, x, y_compare, len);
