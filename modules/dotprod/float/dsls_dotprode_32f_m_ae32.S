@@ -13,12 +13,11 @@
 // limitations under the License. 
 
 
-.macro dotprod_32f_ae32 x1 x2 count step1  step2
+.macro dotprode_32f_ae32 x1 x2 count step1  step2
 // This macro calculates floating point dot product for count float samples
 // x1, x2 - input arrays
 // count - amount of samples
-// step1 - start step 
-//,step2 - A register for array step increment. (should be divided by 4)
+// step1,step2 - A register for array step. (should be divided by 4)
 // f1 - contains initial value 
 //
 // result in f1
@@ -30,13 +29,13 @@
 // a8 == 4, step is 4 bytes
 // a5 == 32, length of array is 32
 // 
-//    mov     \step1, \step2
-    lsx	    f0, \x2,  \step1
-//    sub	    \x1, \x1, \step1 // To compensate first increment
-    loopnez \count, loop_mac_end_m_ae32
-        lsx    f2, \x1, \step1
-        madd.s  f1, f2, f0
-        add.n	\step1, \step1, \step2
-        lsx    f0, \x2, \step1
-    loop_mac_end_m_ae32:
+    lsi	    f0, \x2, 0
+    sub	    \x1, \x1, \step1 // To compensate first increment
+    loopnez \count, loop_mace_end_m_ae32
+        add.n	\x1, \x1, \step1
+        lsi	    f2, \x1, 0
+        madd.s	f1, f2, f0
+        add.n	\x2, \x2, \step2
+        lsi	     f0, \x2, 0
+    loop_mace_end_m_ae32:
 .endm

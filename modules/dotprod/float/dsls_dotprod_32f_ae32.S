@@ -47,7 +47,7 @@ dsls_dotprod_32f_ae32:
     // a3 - input2
     // a5 - length
     // a8 - 4,  step in arrays
-    dotprod_32f_ae32 a2, a3, a5, a8, a8;
+    dotprod_32f_ae32 a2, a3, a5, a9, a8;
     
     ssi	f1, a4, 0 // Store result from f1 to memory at a4
     

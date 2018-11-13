@@ -2,6 +2,7 @@ COMPONENT_ADD_INCLUDEDIRS := modules/dotprod/include \
 							modules/support/include \
 							modules/windows/Barrel/include \
 							modules/iir/include \
+							modules/fir/include \
 							modules/math/include \
 							modules/matrix/include \
 							modules/common/include 
@@ -29,7 +30,9 @@ COMPONENT_SRCDIRS :=. \
 					modules/windows/Barrel/float \
 					modules/windows/Barrel/fixed \
 					modules/iir \
-					modules/iir/biquad 
+					modules/iir/biquad \
+					modules/fir \
+					modules/fir/float
 					
 COMPONENT_PRIV_INCLUDEDIRS := 	modules/dotprod/float \
 								modules/dotprod/fixed				

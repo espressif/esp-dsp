@@ -20,6 +20,7 @@
 #include "freertos/task.h"
 #include "freertos/semphr.h"
 #include "esp_clk.h"
+#include "esp_log.h"
 #include "soc/cpu.h"
 
 #include "dslm_mult.h"
@@ -113,7 +114,7 @@ TEST_CASE("dslm_mult_16s_ansi benchmark", "[dslm]")
 
     float total_b = end_b - start_b;
     float cycles = total_b/(repeat_count);
-    printf("Benchmark dslm_mult_16s_ansi - %f per multiplication %ix%ix%i.\n", cycles, m,n,k);
+    ESP_LOGI("dslm_mult_16s_ansi","Benchmark dslm_mult_16s_ansi - %f per multiplication %ix%ix%i.\n", cycles, m,n,k);
     float min_exec = 2000;
     float max_exec = 3000;
     if (cycles >= max_exec) { 

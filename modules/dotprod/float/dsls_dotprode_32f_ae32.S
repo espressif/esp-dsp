@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License. 
 
-#include "dsls_dotprod_32f_m_ae32.S"
+#include "dsls_dotprode_32f_m_ae32.S"
 
 // This is dot product function for Esp32 processor.
     .text
@@ -52,7 +52,7 @@ dsls_dotprode_32f_ae32:
     // a3 - input2
     // a5 - length
     // a6,a7,  step in arrays
-    dotprod_32f_ae32 a2, a3, a5, a6, a7;
+    dotprode_32f_ae32 a2, a3, a5, a6, a7;
     
     ssi	f1, a4, 0 // Store result from f1 to memory at a4
     

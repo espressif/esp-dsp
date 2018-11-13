@@ -5,6 +5,7 @@ COMPONENT_SRCDIRS := . \
 					../modules/dotprod/test \
 					../modules/matrix/test \
 					../modules/iir/test \
+					../modules/fir/test \
 					../modules/math/mulC/test \
 					../modules/math/addC/test \
 					../test 
