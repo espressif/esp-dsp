@@ -115,7 +115,7 @@ TEST_CASE("dslm_mult_16s_ae32 benchmark", "[dslm]")
 
                 float total_b = end_b - start_b;
                 float cycles = total_b;
-                ESP_LOGI("dslm_mult_16s_ae32", "dslm_mult_16s_ae32[%i][%i][%i] - %f", m,n,k, cycles);
+                ESP_LOGD("dslm_mult_16s_ae32", "dslm_mult_16s_ae32[%i][%i][%i] - %f", m,n,k, cycles);
             }
         }
     }

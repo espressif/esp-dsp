@@ -52,11 +52,11 @@ TEST_CASE("dsls_biquad_32f_ae32 functionality", "[dsls]")
 
     for (int i=0 ; i< 32 ; i++)
     {
-        printf("[%i]calc = %f, expected=%f\n", i, y[i], z[i]);
-        // if (y[i] != z[i])
-        // {
-        //     TEST_ASSERT_EQUAL( y[i], z[i]);
-        // }
+        ESP_LOGD(TAG, "[%i]calc = %f, expected=%f", i, y[i], z[i]);
+        if (y[i] != z[i])
+        {
+            TEST_ASSERT_EQUAL( y[i], z[i]);
+        }
     }
 }
 
