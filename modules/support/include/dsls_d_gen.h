@@ -22,10 +22,21 @@ extern "C"
 {
 #endif
 
-// x - input buffer
-// len - length of the buffer
-// pos - position of inpuls
-
+/**
+ * @function dsls_d_gen_f32
+ * The function generate delta function.
+ * x[i]=0, if i=[0..N)
+ * x[i]=1, if i=pos, pos: [0..N-1)
+ * The implementation use ANSI C and could be compiled and run on any platform
+ *
+ * @param x: input array.
+ * @param len: length of the input signal
+ * @param pos: delta function position
+ * 
+ * @return
+ *      - ESP_OK on success
+ *      - One of the error codes from DSP library
+ */
 esp_err_t dsls_d_gen_f32(float* x, int len, int pos);
 
 #ifdef __cplusplus

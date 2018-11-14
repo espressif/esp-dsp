@@ -22,9 +22,21 @@ extern "C"
 {
 #endif
 
-// x - input buffer
-// len - length of the buffer
-// pos - position of inpuls [0..len)
+/**
+ * @function dsls_h_gen_f32
+ * The Heviside function.
+ * x[i]=0, if i=[0..pos)
+ * x[i]=1, if i=[pos..N)
+ * The implementation use ANSI C and could be compiled and run on any platform
+ *
+ * @param x: input array.
+ * @param len: length of the input signal
+ * @param pos: heviside function position
+ * 
+ * @return
+ *      - ESP_OK on success
+ *      - One of the error codes from DSP library
+ */
 
 esp_err_t dsls_h_gen_f32(float* x, int len, int pos);
 

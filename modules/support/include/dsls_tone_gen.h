@@ -29,6 +29,23 @@ extern "C"
 // ph - phase in degree
 //
 // x[i] = A*sin(2*PI*i + ph/180*PI)
+
+/**
+ * @function dsls_tone_gen_f32
+ * The function generate a tone signal.
+ * x[i]=A*sin(2*PI*i + ph/180*PI)
+ * The implementation use ANSI C and could be compiled and run on any platform
+ *
+ * @param x: input array.
+ * @param len: length of the input signal
+ * @param A: amplitude
+ * @param f: frequency 0..0.5 
+ * @param ph: phase in gadian
+ * 
+ * @return
+ *      - ESP_OK on success
+ *      - One of the error codes from DSP library
+ */
 esp_err_t dsls_tone_gen_f32(float* x, int len, float A, float f, float ph);
 
 #ifdef __cplusplus

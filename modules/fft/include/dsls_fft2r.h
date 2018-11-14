@@ -27,10 +27,79 @@ extern "C"
 #endif
 
 extern float dsls_fft_w_table_32fc[CONFIG_DSL_MAX_FFT_SIZE];
+
+/**
+ * @function dsls_fft2r_init_32fc
+ * Initialization of Complex FFT. This function initialize coefficients table.
+ * The implementation use ANSI C and could be compiled and run on any platform
+ *
+ * @return
+ *      - ESP_OK on success
+ *      - One of the error codes from DSP library
+ */
 esp_err_t dsls_fft2r_init_32fc();
+
+/**
+ * @function dsls_fft2r_32fc_ansi
+ * Complex FFT of radix 2
+ * The implementation use ANSI C and could be compiled and run on any platform
+ *
+ * @param input: input complex array. An elements located: Re[0], Im[0], ... Re[N-1], Im[N-1]
+ *               result of FFT will be stored to this array. 
+ * @param N: size of the complex array 
+ * 
+ * @return
+ *      - ESP_OK on success
+ *      - One of the error codes from DSP library
+ */
 esp_err_t dsls_fft2r_32fc_ansi(float* input, int N);
+/**
+ * @function dsls_bit_rev_32fc
+ * Bit reverse operation for the complex input array
+ * The implementation use ANSI C and could be compiled and run on any platform
+ *
+ * @param input: input complex array. An elements located: Re[0], Im[0], ... Re[N-1], Im[N-1]
+ *               result of FFT will be stored to this array. 
+ * @param N: size of the complex array 
+ * 
+ * @return
+ *      - ESP_OK on success
+ *      - One of the error codes from DSP library
+ */
 esp_err_t dsls_bit_rev_32fc(float *input, int N);
+
+/**
+ * @function dsls_gen_w_r2_32fc
+ * Generate coefficients table for the FFT radix 2. This function called inside init.
+ * The implementation use ANSI C and could be compiled and run on any platform
+ *
+ * @param w: memory location to store coefficients.
+ *           By default coefficients will be stored to the dsls_fft_w_table_32fc.
+ *           Maximum size of the FFT must be setup in menuconfig
+ * @param N: maximum size of the FFT that will be used 
+ * 
+ * @return
+ *      - ESP_OK on success
+ *      - One of the error codes from DSP library
+ */
 esp_err_t dsls_gen_w_r2_32fc(float *w, int N);
+
+/**
+ * @function dsls_cplx2reC_32fc
+ * Convert complex array to two real arrays in case if input was two real arrays.
+ * This function have to be used if FFT used to process real data.
+ * The implementation use ANSI C and could be compiled and run on any platform
+ *
+ * @param input: Input complex array as result of FFT2R.
+ *               input has size of 2*N, because contains real and imaginary part.
+ *               result will be stored to the same array.
+ *               Input1: input[0..N-1], Input2: input[N..2*N-1]   
+ * @param N: input complex array size 
+ * 
+ * @return
+ *      - ESP_OK on success
+ *      - One of the error codes from DSP library
+ */
 esp_err_t dsls_cplx2reC_32fc(float *input, int N);
 
 #ifdef __cplusplus
