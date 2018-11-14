@@ -10,7 +10,7 @@
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
-// limitations under the License. 
+// limitations under the License.
 
 #include <string.h>
 #include "unity.h"
@@ -33,15 +33,14 @@ static float data[1024];
 
 TEST_CASE("dsls_snr_32f functionality", "[dsls]")
 {
-    int N = sizeof(data)/sizeof(float)/2;
+    int N = sizeof(data) / sizeof(float) / 2;
     int check_bin = 32;
     float snr_exp = 0.001;
-    for (int i=0 ; i< N ; i++)
-    {
-        data[i] = 1*sinf(M_PI/N*check_bin*i)/(N/2);
-        data[i] += 0.001/N;//0.1*sinf(M_PI/N*check_bin*i*2)/(N/2);
+    for (int i = 0 ; i < N ; i++) {
+        data[i] = 1 * sinf(M_PI / N * check_bin * i) / (N / 2);
+        data[i] += 0.001 / N; //0.1*sinf(M_PI/N*check_bin*i*2)/(N/2);
     }
     float snr = dsls_snr_32f(data, N, 1);
-    TEST_ASSERT_EQUAL(-round(20*log10(snr_exp) + 3), (int)round(snr));
-	ESP_LOGI(TAG, "dsls_snr_32f = %f dB", snr);
+    TEST_ASSERT_EQUAL(-round(20 * log10(snr_exp) + 3), (int)round(snr));
+    ESP_LOGI(TAG, "dsls_snr_32f = %f dB", snr);
 }

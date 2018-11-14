@@ -10,7 +10,7 @@
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
-// limitations under the License. 
+// limitations under the License.
 
 #ifndef _dsls_view_H_
 #define _dsls_view_H_
@@ -32,13 +32,13 @@ extern "C"
  * @param len: length of the input array
  * @param width: plot width in symbols
  * @param height: plot height in lines
- * @param min: minimum value that will be limited by Axis Y.  
- * @param max: maximum value that will be limited by Axis Y.  
+ * @param min: minimum value that will be limited by Axis Y.
+ * @param max: maximum value that will be limited by Axis Y.
  * @param view_char: character to draw the plot calues ('.' or '|' etc)
- * 
+ *
  */
 
-void dsls_view(float* data, int32_t len, int width, int height, float min, float max, char view_char);
+void dsls_view(float *data, int32_t len, int width, int height, float min, float max, char view_char);
 
 /**
  * @function dsls_view_spectrum
@@ -47,11 +47,11 @@ void dsls_view(float* data, int32_t len, int width, int height, float min, float
  *
  * @param data: array with input samples.
  * @param len: length of the input array
- * @param min: minimum value that will be limited by Axis Y.  
- * @param max: maximum value that will be limited by Axis Y.  
- * 
+ * @param min: minimum value that will be limited by Axis Y.
+ * @param max: maximum value that will be limited by Axis Y.
+ *
  */
-void dsls_view_spectrum(float* data, int32_t len, float min, float max);
+void dsls_view_spectrum(float *data, int32_t len, float min, float max);
 
 #ifdef __cplusplus
 }

@@ -10,7 +10,7 @@
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
-// limitations under the License. 
+// limitations under the License.
 
 #include "dsls_sfdr.h"
 #include "dsls_fft2r.h"
@@ -21,32 +21,33 @@
 
 static const char *TAG = "sfdr";
 
-float dsls_sfdr_32f(float* input, int32_t len, int8_t use_dc)
+float dsls_sfdr_32f(float *input, int32_t len, int8_t use_dc)
 {
-	if (!is_power_of_two(len)) return 0;
+    if (!is_power_of_two(len)) {
+        return 0;
+    }
 
-    float* temp_array = new float[len*2];
-    for (int i=0 ; i< len ; i++)
-    {
+    float *temp_array = new float[len * 2];
+    for (int i = 0 ; i < len ; i++) {
         float wind = 0.5 * (1 - cosf(i * 2 * M_PI / (float)len));
-        temp_array[i*2 + 0] = input[i]*wind;
-        temp_array[i*2 + 1] = 0;
+        temp_array[i * 2 + 0] = input[i] * wind;
+        temp_array[i * 2 + 1] = 0;
     }
 
     dsls_fft2r_init_32fc();
 
-    dsls_fft2r_32fc_ansi(temp_array, len); 
+    dsls_fft2r_32fc_ansi(temp_array, len);
     dsls_bit_rev_32fc(temp_array, len);
 
     float min = std::numeric_limits<float>::max();
     float max = std::numeric_limits<float>::min();
     int max_pos = 0;
-    for (int i=0 ; i< len/2 ; i++)
-    {
-        temp_array[i] = 10*log10f(temp_array[i*2 + 0]*temp_array[i*2 + 0] + temp_array[i*2 + 1]*temp_array[i*2 + 1]);
-        if (temp_array[i] < min) min = temp_array[i];
-        if (temp_array[i] > max) 
-        {
+    for (int i = 0 ; i < len / 2 ; i++) {
+        temp_array[i] = 10 * log10f(temp_array[i * 2 + 0] * temp_array[i * 2 + 0] + temp_array[i * 2 + 1] * temp_array[i * 2 + 1]);
+        if (temp_array[i] < min) {
+            min = temp_array[i];
+        }
+        if (temp_array[i] > max) {
             max = temp_array[i];
             max_pos = i;
         }
@@ -55,15 +56,14 @@ float dsls_sfdr_32f(float* input, int32_t len, int8_t use_dc)
     int start_pos = 0;
     int wind_width = 5;
     float min_diff = std::numeric_limits<float>::max();
-    
-    if (use_dc == 0) start_pos = wind_width;
-    for (int i=start_pos ; i< len/2 ; i++)
-    {
-        if ((i< (max_pos-wind_width)) || (i> (max_pos+wind_width)))
-        {
+
+    if (use_dc == 0) {
+        start_pos = wind_width;
+    }
+    for (int i = start_pos ; i < len / 2 ; i++) {
+        if ((i < (max_pos - wind_width)) || (i > (max_pos + wind_width))) {
             float diff = max - temp_array[i];
-            if (diff < min_diff) 
-            {
+            if (diff < min_diff) {
                 ESP_LOGD(TAG, "FFT Data[%i] =%8.4f dB, maX=%f, max_pos=%i", i, temp_array[i], max, max_pos);
                 min_diff = diff;
             }
@@ -71,5 +71,5 @@ float dsls_sfdr_32f(float* input, int32_t len, int8_t use_dc)
     }
 
     delete temp_array;
-	return min_diff;
+    return min_diff;
 }

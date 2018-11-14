@@ -10,7 +10,7 @@
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
-// limitations under the License. 
+// limitations under the License.
 
 #ifndef _dsls_tone_gen_H_
 #define _dsls_tone_gen_H_
@@ -25,7 +25,7 @@ extern "C"
 // x - input buffer
 // len - length of the buffer
 // A - amplitude
-// f - frequency -1...1 
+// f - frequency -1...1
 // ph - phase in degree
 //
 // x[i] = A*sin(2*PI*i + ph/180*PI)
@@ -39,14 +39,14 @@ extern "C"
  * @param x: input array.
  * @param len: length of the input signal
  * @param A: amplitude
- * @param f: frequency -1..1 
+ * @param f: frequency -1..1
  * @param ph: phase in degree
- * 
+ *
  * @return
  *      - ESP_OK on success
  *      - One of the error codes from DSP library
  */
-esp_err_t dsls_tone_gen_f32(float* x, int len, float A, float f, float ph);
+esp_err_t dsls_tone_gen_f32(float *x, int len, float A, float f, float ph);
 
 #ifdef __cplusplus
 }

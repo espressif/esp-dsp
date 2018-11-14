@@ -10,7 +10,7 @@
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
-// limitations under the License. 
+// limitations under the License.
 
 #include <string.h>
 #include "unity.h"
@@ -32,12 +32,11 @@ static float data[1024];
 
 TEST_CASE("dsls_view functionality", "[dsls]")
 {
-    for (int i=0 ; i< 1024 ; i++)
-    {
+    for (int i = 0 ; i < 1024 ; i++) {
         data[i] = -100;
     }
     data[256] = 0;
     dsls_view_spectrum(data, 1024, -100, 0);
 
-	ESP_LOGI(TAG, "Just a check\n");
+    ESP_LOGI(TAG, "Just a check\n");
 }

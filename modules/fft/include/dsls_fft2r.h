@@ -10,7 +10,7 @@
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
-// limitations under the License. 
+// limitations under the License.
 
 #ifndef _dsls_fft2r_H_
 #define _dsls_fft2r_H_
@@ -45,23 +45,23 @@ esp_err_t dsls_fft2r_init_32fc();
  * The implementation use ANSI C and could be compiled and run on any platform
  *
  * @param input: input complex array. An elements located: Re[0], Im[0], ... Re[N-1], Im[N-1]
- *               result of FFT will be stored to this array. 
- * @param N: size of the complex array 
- * 
+ *               result of FFT will be stored to this array.
+ * @param N: size of the complex array
+ *
  * @return
  *      - ESP_OK on success
  *      - One of the error codes from DSP library
  */
-esp_err_t dsls_fft2r_32fc_ansi(float* input, int N);
+esp_err_t dsls_fft2r_32fc_ansi(float *input, int N);
 /**
  * @function dsls_bit_rev_32fc
  * Bit reverse operation for the complex input array
  * The implementation use ANSI C and could be compiled and run on any platform
  *
  * @param input: input complex array. An elements located: Re[0], Im[0], ... Re[N-1], Im[N-1]
- *               result of FFT will be stored to this array. 
- * @param N: size of the complex array 
- * 
+ *               result of FFT will be stored to this array.
+ * @param N: size of the complex array
+ *
  * @return
  *      - ESP_OK on success
  *      - One of the error codes from DSP library
@@ -76,8 +76,8 @@ esp_err_t dsls_bit_rev_32fc(float *input, int N);
  * @param w: memory location to store coefficients.
  *           By default coefficients will be stored to the dsls_fft_w_table_32fc.
  *           Maximum size of the FFT must be setup in menuconfig
- * @param N: maximum size of the FFT that will be used 
- * 
+ * @param N: maximum size of the FFT that will be used
+ *
  * @return
  *      - ESP_OK on success
  *      - One of the error codes from DSP library
@@ -93,9 +93,9 @@ esp_err_t dsls_gen_w_r2_32fc(float *w, int N);
  * @param input: Input complex array as result of FFT2R.
  *               input has size of 2*N, because contains real and imaginary part.
  *               result will be stored to the same array.
- *               Input1: input[0..N-1], Input2: input[N..2*N-1]   
- * @param N: input complex array size 
- * 
+ *               Input1: input[0..N-1], Input2: input[N..2*N-1]
+ * @param N: input complex array size
+ *
  * @return
  *      - ESP_OK on success
  *      - One of the error codes from DSP library

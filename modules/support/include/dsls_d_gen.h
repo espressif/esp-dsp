@@ -10,7 +10,7 @@
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
-// limitations under the License. 
+// limitations under the License.
 
 #ifndef _dsls_d_gen_H_
 #define _dsls_d_gen_H_
@@ -32,12 +32,12 @@ extern "C"
  * @param x: input array.
  * @param len: length of the input signal
  * @param pos: delta function position
- * 
+ *
  * @return
  *      - ESP_OK on success
  *      - One of the error codes from DSP library
  */
-esp_err_t dsls_d_gen_f32(float* x, int len, int pos);
+esp_err_t dsls_d_gen_f32(float *x, int len, int pos);
 
 #ifdef __cplusplus
 }

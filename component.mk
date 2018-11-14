@@ -23,7 +23,7 @@ COMPONENT_SRCDIRS :=. \
 					modules/math/mulC/float \
 					modules/math/addC \
 					modules/math/addC/float \
-					modules/fft \
+					modules/fft/float \
 					modules/support \
 					modules/support/snr \
 					modules/support/sfdr \

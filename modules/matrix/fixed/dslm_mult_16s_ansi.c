@@ -10,7 +10,7 @@
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
-// limitations under the License. 
+// limitations under the License.
 
 #include "dsls_dotprod.h"
 #include "dslm_mult.h"
@@ -18,22 +18,22 @@
 // Matrinx A(m,n), m - amount or rows, n - amount of columns
 // C(m,k) = A(m,n)*B(n,k)
 // c(i,j) = sum(a(i,s)*b(s,j)) , s=1..n
-esp_err_t dslm_mult_16s_ansi(int16_t* A, int16_t* B, int16_t* C, int m, int n, int k, int shift)
+esp_err_t dslm_mult_16s_ansi(int16_t *A, int16_t *B, int16_t *C, int m, int n, int k, int shift)
 {
-	int final_shift = shift - 15;
-	for (int i=0 ; i< m ; i++)
-	{
-		for (int j=0 ; j< k ; j++)
-		{
-			//dsls_dotprode_32f_ae32(&A[i*n],&B[j],&C[i*k + j],n,1,n);
-			long long acc = 0x7fff>>shift;
-			for (int s=0; s< n ; s++)
-			{
-				acc += (int32_t)A[i*n + s]*(int32_t)B[s*k + j];
-			}
-			if (final_shift > 0) C[i*k + j] = (acc << final_shift);
-			else C[i*k + j] = (acc >> (-final_shift));
-		}
-	}
-	return ESP_OK;
+    int final_shift = shift - 15;
+    for (int i = 0 ; i < m ; i++) {
+        for (int j = 0 ; j < k ; j++) {
+            //dsls_dotprode_32f_ae32(&A[i*n],&B[j],&C[i*k + j],n,1,n);
+            long long acc = 0x7fff >> shift;
+            for (int s = 0; s < n ; s++) {
+                acc += (int32_t)A[i * n + s] * (int32_t)B[s * k + j];
+            }
+            if (final_shift > 0) {
+                C[i * k + j] = (acc << final_shift);
+            } else {
+                C[i * k + j] = (acc >> (-final_shift));
+            }
+        }
+    }
+    return ESP_OK;
 }

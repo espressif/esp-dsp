@@ -10,15 +10,14 @@
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
-// limitations under the License. 
+// limitations under the License.
 
 #include "dsls_addC.h"
 
-esp_err_t dsls_addC_32f_ansi(float* x, float* y, int len, float C, int step1, int step2)
+esp_err_t dsls_addC_32f_ansi(float *x, float *y, int len, float C, int step1, int step2)
 {
-	for (int i=0 ; i< len ; i++)
-	{
-		y[i*step2] = x[i*step1] + C;
-	}
-	return ESP_OK;
+    for (int i = 0 ; i < len ; i++) {
+        y[i * step2] = x[i * step1] + C;
+    }
+    return ESP_OK;
 }

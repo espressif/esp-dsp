@@ -10,7 +10,7 @@
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
-// limitations under the License. 
+// limitations under the License.
 
 #ifndef _dsls_sfdr_H_
 #define _dsls_sfdr_H_
@@ -26,9 +26,9 @@ extern "C"
 /**
  * @function dsls_sfdr_32f
  * The function calculates Spurious-Free Dynamic Range.
- * The function makes FFT of the input, then search a spectrum maximum, and then compare 
- * maximum value with all others. Result calculated as minimum value. 
- * This function have to be used for debug and unit tests only. It's not optimized for real-time processing.   
+ * The function makes FFT of the input, then search a spectrum maximum, and then compare
+ * maximum value with all others. Result calculated as minimum value.
+ * This function have to be used for debug and unit tests only. It's not optimized for real-time processing.
  * The implementation use ANSI C and could be compiled and run on any platform
  *
  * @param input: input array.
@@ -36,12 +36,12 @@ extern "C"
  * @param use_dc: this parameter define will be DC value used for calculation or not.
  *                0 - SNR will not include DC power
  *                1 - SNR will include DC power
- * 
+ *
  * @return
  *      - SFDR in DB
  */
-float dsls_sfdr_32f(float* input, int32_t len, int8_t use_dc);
-float dsls_sfdr_32fc(float* input, int32_t len);
+float dsls_sfdr_32f(float *input, int32_t len, int8_t use_dc);
+float dsls_sfdr_32fc(float *input, int32_t len);
 
 #ifdef __cplusplus
 }

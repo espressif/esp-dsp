@@ -10,7 +10,7 @@
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
-// limitations under the License. 
+// limitations under the License.
 
 #ifndef _dsls_addC_H_
 #define _dsls_addC_H_
@@ -28,7 +28,7 @@ extern "C"
 // step1 - step through 1 array (by default - 1)
 // step2 - step through 2 array (by default - 1)
 
-esp_err_t dsls_addC_32f_ansi(float* x, float* y, int len, float C, int step1, int step2);
+esp_err_t dsls_addC_32f_ansi(float *x, float *y, int len, float C, int step1, int step2);
 
 #ifdef __cplusplus
 }
