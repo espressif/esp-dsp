@@ -16,24 +16,24 @@
 #include "dsls_dotprod_32f_m_ae32.S"
 
 // This is matrix multipliction function for Esp32 processor.
-    .text
-    .align  4
-    .global dslm_mult_3x3x1_32f_ae32
-    .type   dslm_mult_3x3x1_32f_ae32,@function
+	.text
+	.align  4
+	.global dslm_mult_3x3x1_32f_ae32
+	.type   dslm_mult_3x3x1_32f_ae32,@function
 // The function implements next C code:
 // esp_err_t dslm_mult_3x3x1_32f_ansi(float* A, float* B, float* C, int m, int n, int k)
 // {
-    // for (int i=0 ; i< m ; i++)
-    // {
-    //     for (int j=0 ; j< k ; j++)
-    //     {
-    //         C[i*k + j] = A[i*n]*B[j];
-    //         for (int s=1; s< n ; s++)
-    //         {
-    //             C[i*k + j] += A[i*n + s]*B[s*k + j];
-    //         }
-    //     }
-    // }
+	// for (int i=0 ; i< m ; i++)
+	// {
+	//     for (int j=0 ; j< k ; j++)
+	//     {
+	//         C[i*k + j] = A[i*n]*B[j];
+	//         for (int s=1; s< n ; s++)
+	//         {
+	//             C[i*k + j] += A[i*n + s]*B[s*k + j];
+	//         }
+	//     }
+	// }
 //     return ESP_OK;
 // }
 
@@ -44,30 +44,30 @@ dslm_mult_3x3x1_32f_ae32:
 
 // a5 - 0
 // a6 - 3
-    entry	a1, 32
+	entry	a1, 32
 
-    movi a5, 0
-    movi a6, 3
-    
-    lsi	    f13,a3, 0 // B[0]
-    lsi	    f14,a3, 4 // B[1]
-    lsi	    f15,a3, 8 // B[2]
+	movi a5, 0
+	movi a6, 3
+	
+	lsi	    f13,a3, 0 // B[0]
+	lsi	    f14,a3, 4 // B[1]
+	lsi	    f15,a3, 8 // B[2]
 
 //    addi	    a2, a2, -12 // To compensate first increment
-    loopnez     a6, loop_mac_3x3x1_end_m_ae32
-        wfr	    f0, a5
-        lsi	    f2, a2, 0
-        madd.s	f0, f2, f13
-        lsi	    f3, a2, 4
-        madd.s	f0, f3, f14
-        lsi	    f4, a2, 8
-        madd.s	f0, f4, f15
-        
-        addi	a2, a2, 12        
-        ssi	    f0, a4, 0
-        addi    a4, a4, 4
+	loopnez     a6, loop_mac_3x3x1_end_m_ae32
+		wfr	    f0, a5
+		lsi	    f2, a2, 0
+		madd.s	f0, f2, f13
+		lsi	    f3, a2, 4
+		madd.s	f0, f3, f14
+		lsi	    f4, a2, 8
+		madd.s	f0, f4, f15
+		
+		addi	a2, a2, 12        
+		ssi	    f0, a4, 0
+		addi    a4, a4, 4
 
-    loop_mac_3x3x1_end_m_ae32:
+	loop_mac_3x3x1_end_m_ae32:
 
-    movi.n	a2, 0 // return status ESP_OK
-    retw.n
+	movi.n	a2, 0 // return status ESP_OK
+	retw.n

@@ -31,12 +31,12 @@
 // a5 == 32, length of array is 32
 // 
 //    mov     \step1, \step2
-    lsx	    f0, \x2,  \step1
+	lsx	    f0, \x2,  \step1
 //    sub	    \x1, \x1, \step1 // To compensate first increment
-    loopnez \count, loop_mac_end_m_ae32
-        lsx    f2, \x1, \step1
-        madd.s  f1, f2, f0
-        add.n	\step1, \step1, \step2
-        lsx    f0, \x2, \step1
-    loop_mac_end_m_ae32:
+	loopnez \count, loop_mac_end_m_ae32
+		lsx    f2, \x1, \step1
+		madd.s  f1, f2, f0
+		add.n	\step1, \step1, \step2
+		lsx    f0, \x2, \step1
+	loop_mac_end_m_ae32:
 .endm

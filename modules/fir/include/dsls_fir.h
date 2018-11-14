@@ -26,12 +26,12 @@ extern "C"
 
 typedef struct fir_32f_s
 {
-    float*  coeffs;
-    float*  delay;
-    int     N;
-    int     pos;
-    int     d;
-    int     d_pos;
+	float*  coeffs;
+	float*  delay;
+	int     N;
+	int     pos;
+	int     d;
+	int     d_pos;
 }fir_32f_t;
 
 /**

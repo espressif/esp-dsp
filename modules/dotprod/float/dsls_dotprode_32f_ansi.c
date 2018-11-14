@@ -17,11 +17,11 @@
 
 esp_err_t dsls_dotprode_32f_ansi(float* src1, float* src2, float* dest, int len, int step1, int step2)
 {
-    float acc = 0;
-    for (int i=0 ; i< len ; i++)
-    {
-        acc += src1[i*step1]*src2[i*step2];
-    }
-    *dest = acc;
-    return ESP_OK;
+	float acc = 0;
+	for (int i=0 ; i< len ; i++)
+	{
+		acc += src1[i*step1]*src2[i*step2];
+	}
+	*dest = acc;
+	return ESP_OK;
 }

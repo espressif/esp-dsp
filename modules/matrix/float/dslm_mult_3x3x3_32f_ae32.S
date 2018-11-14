@@ -16,24 +16,24 @@
 #include "dsls_dotprod_32f_m_ae32.S"
 
 // This is matrix multipliction function for Esp32 processor.
-    .text
-    .align  4
-    .global dslm_mult_3x3x3_32f_ae32
-    .type   dslm_mult_3x3x3_32f_ae32,@function
+	.text
+	.align  4
+	.global dslm_mult_3x3x3_32f_ae32
+	.type   dslm_mult_3x3x3_32f_ae32,@function
 // The function implements next C code:
 // esp_err_t dslm_mult_3x3x1_32f_ansi(float* A, float* B, float* C, int m, int n, int k)
 // {
-    // for (int i=0 ; i< m ; i++)
-    // {
-    //     for (int j=0 ; j< k ; j++)
-    //     {
-    //         C[i*k + j] = A[i*n]*B[j];
-    //         for (int s=1; s< n ; s++)
-    //         {
-    //             C[i*k + j] += A[i*n + s]*B[s*k + j];
-    //         }
-    //     }
-    // }
+	// for (int i=0 ; i< m ; i++)
+	// {
+	//     for (int j=0 ; j< k ; j++)
+	//     {
+	//         C[i*k + j] = A[i*n]*B[j];
+	//         for (int s=1; s< n ; s++)
+	//         {
+	//             C[i*k + j] += A[i*n + s]*B[s*k + j];
+	//         }
+	//     }
+	// }
 //     return ESP_OK;
 // }
 
@@ -45,40 +45,40 @@ dslm_mult_3x3x3_32f_ae32:
 // a5 - 0
 // a6 - 3 - internal loop for n
 // a7 - 3 - external loop for M
-    entry	a1, 32
+	entry	a1, 32
 
-    movi a5, 0
-    movi a6, 3
-    movi a7, 3 // loop ccount
-    
+	movi a5, 0
+	movi a6, 3
+	movi a7, 3 // loop ccount
+	
 m_loop_3x3x3:
-        mov a12, a2 // A
-        mov a14, a4 // output pointer
+		mov a12, a2 // A
+		mov a14, a4 // output pointer
 
-        lsi	    f12, a3, 0  // B[0][0]
-        lsi	    f13, a3, 12 // B[1][0]
-        lsi	    f14, a3, 24 // B[2][0]
+		lsi	    f12, a3, 0  // B[0][0]
+		lsi	    f13, a3, 12 // B[1][0]
+		lsi	    f14, a3, 24 // B[2][0]
 
-        loopnez     a6, loop_mac_3x3x3_end_m_ae32
-            wfr	    f0, a5
-            
-            lsi	    f2, a12, 0
-            madd.s	f0, f2, f12
-            lsi	    f3, a12, 4
-            madd.s	f0, f3, f13
-            lsi	    f4, a12, 8
-            madd.s	f0, f4, f14
-            
-            addi	a12, a12, 12
-            ssi	    f0, a14, 0
-            addi    a14, a14, 12
-        loop_mac_3x3x3_end_m_ae32:
+		loopnez     a6, loop_mac_3x3x3_end_m_ae32
+			wfr	    f0, a5
+			
+			lsi	    f2, a12, 0
+			madd.s	f0, f2, f12
+			lsi	    f3, a12, 4
+			madd.s	f0, f3, f13
+			lsi	    f4, a12, 8
+			madd.s	f0, f4, f14
+			
+			addi	a12, a12, 12
+			ssi	    f0, a14, 0
+			addi    a14, a14, 12
+		loop_mac_3x3x3_end_m_ae32:
 
-        addi a3,  a3,  4  // increment input pointer B 
+		addi a3,  a3,  4  // increment input pointer B 
 //        addi a2,  a2, 16   // increment input pointer A
-        addi a4, a4, 4
-        addi a7, a7, -1
-    bnez    a7, m_loop_3x3x3
+		addi a4, a4, 4
+		addi a7, a7, -1
+	bnez    a7, m_loop_3x3x3
 
-    movi.n	a2, 0 // return status ESP_OK
-    retw.n
+	movi.n	a2, 0 // return status ESP_OK
+	retw.n

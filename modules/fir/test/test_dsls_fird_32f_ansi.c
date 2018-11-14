@@ -37,41 +37,41 @@ float delay[32];
 
 TEST_CASE("dsls_fird_32f_ansi functionality", "[dsls]")
 {
-    // In the test we generate filter with cutt off frequency 0.1
-    // and then filtering 0.1 and 0.3 frequencis.
-    // Result must be better then 24 dB
-    int len = sizeof(x)/sizeof(float);
-    int fir_len = sizeof(coeffs)/sizeof(float);
-    int decim = 4;
-    
-    fir_32f_t fir1;
-    for (int i=0 ; i< fir_len ; i++)
-    {
-        coeffs[i] = 0;
-    }
-    coeffs[0] = 1;
+	// In the test we generate filter with cutt off frequency 0.1
+	// and then filtering 0.1 and 0.3 frequencis.
+	// Result must be better then 24 dB
+	int len = sizeof(x)/sizeof(float);
+	int fir_len = sizeof(coeffs)/sizeof(float);
+	int decim = 4;
+	
+	fir_32f_t fir1;
+	for (int i=0 ; i< fir_len ; i++)
+	{
+		coeffs[i] = 0;
+	}
+	coeffs[0] = 1;
 
-    for (int i=0 ; i< len ; i++)
-    {
-        x[i] = i%decim;
-    }
+	for (int i=0 ; i< len ; i++)
+	{
+		x[i] = i%decim;
+	}
 
-    dsls_fird_init_32f(&fir1, coeffs, delay, fir_len, decim, 0);
-    int total = dsls_fird_32f_ansi(&fir1, x, y, len);
-    ESP_LOGI(TAG,"Total result = %i from %i", total, len);
-    TEST_ASSERT_EQUAL(total, len/decim);
-    // for (int i=0 ; i< total ; i++)
-    // {
-    //     printf("data[%i] = %f\n", i, y[i]);
-    // }    
-    for (int i=0 ; i< total ; i++)
-    {
-        if (y[i] != (decim-1))
-        {
-            TEST_ASSERT_EQUAL(y[i], (decim-1));
-        }
-    }
-    
+	dsls_fird_init_32f(&fir1, coeffs, delay, fir_len, decim, 0);
+	int total = dsls_fird_32f_ansi(&fir1, x, y, len);
+	ESP_LOGI(TAG,"Total result = %i from %i", total, len);
+	TEST_ASSERT_EQUAL(total, len/decim);
+	// for (int i=0 ; i< total ; i++)
+	// {
+	//     printf("data[%i] = %f\n", i, y[i]);
+	// }    
+	for (int i=0 ; i< total ; i++)
+	{
+		if (y[i] != (decim-1))
+		{
+			TEST_ASSERT_EQUAL(y[i], (decim-1));
+		}
+	}
+	
 
 }
 
@@ -79,43 +79,43 @@ TEST_CASE("dsls_fird_32f_ansi functionality", "[dsls]")
 TEST_CASE("dsls_fird_32f_ansi benchmark", "[dsls]")
 {
 
-    int len = sizeof(x)/sizeof(float);
-    int fir_len = sizeof(coeffs)/sizeof(float);
-    int repeat_count = 1;
-    int decim = 4;
+	int len = sizeof(x)/sizeof(float);
+	int fir_len = sizeof(coeffs)/sizeof(float);
+	int repeat_count = 1;
+	int decim = 4;
 
-    fir_32f_t fir1;
-    for (int i=0 ; i< fir_len ; i++)
-    {
-        coeffs[i] = i;
-    }
+	fir_32f_t fir1;
+	for (int i=0 ; i< fir_len ; i++)
+	{
+		coeffs[i] = i;
+	}
 
-    for (int i=0 ; i< len ; i++)
-    {
-        x[i] = 0;
-    }
-    x[0] = 1;
+	for (int i=0 ; i< len ; i++)
+	{
+		x[i] = 0;
+	}
+	x[0] = 1;
 
-    dsls_fird_init_32f(&fir1, coeffs, delay, fir_len, decim, 0);
+	dsls_fird_init_32f(&fir1, coeffs, delay, fir_len, decim, 0);
 
-    unsigned int start_b = xthal_get_ccount();
-    for (int i=0 ; i< repeat_count ; i++)
-    {
-        dsls_fird_32f_ansi(&fir1, x, y, len);
-    }
-    unsigned int end_b = xthal_get_ccount();
+	unsigned int start_b = xthal_get_ccount();
+	for (int i=0 ; i< repeat_count ; i++)
+	{
+		dsls_fird_32f_ansi(&fir1, x, y, len);
+	}
+	unsigned int end_b = xthal_get_ccount();
 
-    float total_b = end_b - start_b;
-    float cycles = total_b/(len*repeat_count);
+	float total_b = end_b - start_b;
+	float cycles = total_b/(len*repeat_count);
 
-    ESP_LOGI(TAG, "dsls_fir_32f_ansi - %f per sample for for %i coefficients, %f per decim tap \n", cycles, fir_len, cycles/(float)fir_len*decim);
-    float min_exec = 10;
-    float max_exec = 300;
-    if (cycles >= max_exec) { 
-        TEST_ASSERT_MESSAGE (false, "Exec time takes more then expected!");
-    }
-    if (cycles < min_exec) { 
-        TEST_ASSERT_MESSAGE (false, "Exec time takes less then expected!");
-    }
+	ESP_LOGI(TAG, "dsls_fir_32f_ansi - %f per sample for for %i coefficients, %f per decim tap \n", cycles, fir_len, cycles/(float)fir_len*decim);
+	float min_exec = 10;
+	float max_exec = 300;
+	if (cycles >= max_exec) { 
+		TEST_ASSERT_MESSAGE (false, "Exec time takes more then expected!");
+	}
+	if (cycles < min_exec) { 
+		TEST_ASSERT_MESSAGE (false, "Exec time takes less then expected!");
+	}
 
 }

@@ -12,14 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License. 
 
-#include "dsls_wind_Barrel.h"
-#include <math.h>
+#include "dsls_snr.h"
 
-void dsls_wind_Barrel_32f(float* window, int len)
+float dsls_sfdr_32f(float* input, int32_t len)
 {
-	float pi = 4.0 * atan(1.0);
-	for (int i = 0; i < len; i++)
-	{
-		window[i] = 0.5 * (1 - cosf(i * 2 * pi / (float)len));
-	}
+	float result = 0;
+
+	return result;
 }

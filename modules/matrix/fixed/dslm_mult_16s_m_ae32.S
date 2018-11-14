@@ -22,20 +22,20 @@
 // k - a7
 // shift - stack (a8) 
 
-    movi  a10, 4 // load 4 as a constant
-    // Check if n >=4 then acceleration is possible and 
-    blt   a6, a10, do_dotproduct 
-    // Here we make operations one by one...
+	movi  a10, 4 // load 4 as a constant
+	// Check if n >=4 then acceleration is possible and 
+	blt   a6, a10, do_dotproduct 
+	// Here we make operations one by one...
 
 
-    movi.n	a2, 0 // return status ESP_OK
-    retw.n
+	movi.n	a2, 0 // return status ESP_OK
+	retw.n
 
 do_dotproduct:
 
-        mov  a12, a2
-        mov  a13, a3
-        
+		mov  a12, a2
+		mov  a13, a3
+		
 		srli a9, a6, 2  // a9 - count/4 - 1
 		addi a9, a9, -1
 
@@ -47,12 +47,12 @@ do_dotproduct:
 		rsr a2, acchi
 		rsr a3, acclo
 		src a2, a2, a3
-        
-        s16i	a2, a4, 0
-        movi.n	a2, 0
+		
+		s16i	a2, a4, 0
+		movi.n	a2, 0
 
 
-    movi.n	a2, 0 // return status ESP_OK
-    retw.n
+	movi.n	a2, 0 // return status ESP_OK
+	retw.n
 
 .endm // dslm_mult_16s_ae32_MxNxN

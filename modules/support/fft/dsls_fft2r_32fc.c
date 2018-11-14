@@ -20,13 +20,13 @@ float dsls_fft_w_table_32fc[CONFIG_DSL_MAX_FFT_SIZE];
 
 esp_err_t dsls_fft2r_32fc(float* input, float* w, int N)
 {
-    if (!is_power_of_two(N)) return ESP_ERR_DSL_INVALID_LENGTH;
+	if (!is_power_of_two(N)) return ESP_ERR_DSL_INVALID_LENGTH;
    
-    esp_err_t result = ESP_OK;
+	esp_err_t result = ESP_OK;
 	
-    int ie, ia, m;
+	int ie, ia, m;
 	float re_temp, im_temp;
-    float c, s;
+	float c, s;
 	int N2 = N;
 	ie = 1;
 	for (int k = N; k > 1; k >>= 1)
@@ -52,13 +52,13 @@ esp_err_t dsls_fft2r_32fc(float* input, float* w, int N)
 		}
 		ie <<= 1;
 	}    
-    return result;
+	return result;
 }
 
 esp_err_t dsls_bit_rev_32fc(float *input, int N)
 {
-    if (!is_power_of_two(N)) return ESP_ERR_DSL_INVALID_LENGTH;
-    esp_err_t result = ESP_OK;
+	if (!is_power_of_two(N)) return ESP_ERR_DSL_INVALID_LENGTH;
+	esp_err_t result = ESP_OK;
 
 	int i, j, k;
 	float r_temp, i_temp;
@@ -83,14 +83,14 @@ esp_err_t dsls_bit_rev_32fc(float *input, int N)
 			input[i * 2 + 1] = i_temp;
 		}
 	}
-    return result;
+	return result;
 }
 
 esp_err_t dsls_gen_w_r2_32fc(float *w, int N)
 {
-    if (!is_power_of_two(N)) return ESP_ERR_DSL_INVALID_LENGTH;
+	if (!is_power_of_two(N)) return ESP_ERR_DSL_INVALID_LENGTH;
 
-    esp_err_t result = ESP_OK;
+	esp_err_t result = ESP_OK;
 
 	int i;
 	float e = M_PI * 2.0 / N;
@@ -101,13 +101,13 @@ esp_err_t dsls_gen_w_r2_32fc(float *w, int N)
 		w[2 * i + 1] = sinf(i * e);
 	}
 
-    return result;
+	return result;
 }
 
 esp_err_t dsls_cplx2reC_32fc(float *input, int N)
 {
-    if (!is_power_of_two(N)) return ESP_ERR_DSL_INVALID_LENGTH;
-    esp_err_t result = ESP_OK;
+	if (!is_power_of_two(N)) return ESP_ERR_DSL_INVALID_LENGTH;
+	esp_err_t result = ESP_OK;
 
 	int i;
 	int n2 = N << 1;
@@ -149,7 +149,7 @@ esp_err_t dsls_cplx2reC_32fc(float *input, int N)
 	input[1] = 0;
 	input[N + 1] = 0;
 
-    return result;
+	return result;
 }
 
 // =============== How to use: ==========================================

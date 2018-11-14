@@ -28,23 +28,23 @@
 
 TEST_CASE("dsls_mulC_f32_ansi functionality", "[dsls]")
 {
-    int n = 64; 
-    float x[n];
-    float y[n];
-    for (int i=0 ; i< n ; i++)
-    {
-        x[i] = i;
-        y[i] = i*10;
-    }
-    dsls_mulC_f32_ansi(x, x, n, 10, 1, 1);
-    for (int i=0 ; i< n ; i++)
-    {
-        if (x[i] != y[i])
-        {
-            TEST_ASSERT_EQUAL(x[i], y[i]);      
-        }
-    }
+	int n = 64; 
+	float x[n];
+	float y[n];
+	for (int i=0 ; i< n ; i++)
+	{
+		x[i] = i;
+		y[i] = i*10;
+	}
+	dsls_mulC_f32_ansi(x, x, n, 10, 1, 1);
+	for (int i=0 ; i< n ; i++)
+	{
+		if (x[i] != y[i])
+		{
+			TEST_ASSERT_EQUAL(x[i], y[i]);      
+		}
+	}
 
-    //TEST_ASSERT_EQUAL(0, z[1]);
-    //TEST_ASSERT_MESSAGE (false, "Exec time takes less then expected!"); 
+	//TEST_ASSERT_EQUAL(0, z[1]);
+	//TEST_ASSERT_MESSAGE (false, "Exec time takes less then expected!"); 
 }
