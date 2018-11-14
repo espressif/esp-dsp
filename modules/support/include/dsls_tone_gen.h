@@ -39,8 +39,8 @@ extern "C"
  * @param x: input array.
  * @param len: length of the input signal
  * @param A: amplitude
- * @param f: frequency 0..0.5 
- * @param ph: phase in gadian
+ * @param f: frequency -1..1 
+ * @param ph: phase in degree
  * 
  * @return
  *      - ESP_OK on success
