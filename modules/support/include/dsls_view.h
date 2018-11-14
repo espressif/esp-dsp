@@ -12,11 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License. 
 
-#include "dsls_snr.h"
+#ifndef _dsls_view_H_
+#define _dsls_view_H_
 
-float dsls_snr_32f(float* input, int32_t len)
+#include "dsl_err.h"
+
+#ifdef __cplusplus
+extern "C"
 {
-	float result = 0;
+#endif
 
-	return result;
+void dsls_view(float* data, int32_t len, int width, int heigth, float min, float max, char view_char);
+void dsls_view_spectrum(float* data, int32_t len, float min, float max);
+
+#ifdef __cplusplus
 }
+#endif
+
+#endif // _dsls_view_H_

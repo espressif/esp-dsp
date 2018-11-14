@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License. 
 
+#include "dsl_common.h"
+
 uint8_t is_power_of_two(int x)
 {
 	return (x != 0) && ((x & (x - 1)) == 0);

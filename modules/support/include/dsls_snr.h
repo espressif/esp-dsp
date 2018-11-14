@@ -22,8 +22,10 @@ extern "C"
 {
 #endif
 
-float dsls_snr_32f(float* input, int32_t len);
+float dsls_snr_32f(float* input, int32_t len, uint8_t use_dc);
 float dsls_snr_32fc(float* input, int32_t len);
+
+
 #ifdef __cplusplus
 }
 #endif

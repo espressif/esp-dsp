@@ -12,11 +12,32 @@
 // See the License for the specific language governing permissions and
 // limitations under the License. 
 
-#include "dsls_snr.h"
+#include <string.h>
+#include "unity.h"
+#include "test_utils.h"
+#include "freertos/FreeRTOS.h"
+#include "freertos/portable.h"
+#include "freertos/task.h"
+#include "freertos/semphr.h"
+#include "esp_clk.h"
+#include "esp_log.h"
+#include "soc/cpu.h"
 
-float dsls_sfdr_32f(float* input, int32_t len)
+#include "dsls_view.h"
+
+
+static const char *TAG = "dsls_view";
+
+static float data[1024];
+
+TEST_CASE("dsls_view functionality", "[dsls]")
 {
-	float result = 0;
+    for (int i=0 ; i< 1024 ; i++)
+    {
+        data[i] = -100;
+    }
+    data[256] = 0;
+    dsls_view_spectrum(data, 1024, -100, 0);
 
-	return result;
+	ESP_LOGI(TAG, "Just a check\n");
 }

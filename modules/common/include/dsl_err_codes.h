@@ -20,6 +20,7 @@
 #define ESP_ERR_DSL_INVALID_LENGTH      (ESP_ERR_DSL_BASE + 1)
 #define ESP_ERR_DSL_INVALID_PARAM       (ESP_ERR_DSL_BASE + 2)
 #define ESP_ERR_DSL_PARAM_OUTOFRANGE    (ESP_ERR_DSL_BASE + 3)
+#define ESP_ERR_DSL_UNINITIALIZED       (ESP_ERR_DSL_BASE + 4)
 
 
 #endif // _dsl_error_codes_H_

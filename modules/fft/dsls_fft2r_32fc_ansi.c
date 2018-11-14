@@ -17,13 +17,29 @@
 #include <math.h>
 
 float dsls_fft_w_table_32fc[CONFIG_DSL_MAX_FFT_SIZE];
+uint8_t dsls_fft2r_initialized = 0;
 
-esp_err_t dsls_fft2r_32fc(float* input, float* w, int N)
+esp_err_t dsls_fft2r_init_32fc()
+{
+    esp_err_t result = ESP_OK;
+    if (dsls_fft2r_initialized != 0) return result;
+    result = dsls_gen_w_r2_32fc(dsls_fft_w_table_32fc, CONFIG_DSL_MAX_FFT_SIZE);
+    if (result != ESP_OK) return result;
+    dsls_bit_rev_32fc(dsls_fft_w_table_32fc, CONFIG_DSL_MAX_FFT_SIZE>>1);
+    if (result != ESP_OK) return result;
+    dsls_fft2r_initialized = 1;
+    return ESP_OK;
+}
+
+esp_err_t dsls_fft2r_32fc_ansi(float* input, int N)
 {
 	if (!is_power_of_two(N)) return ESP_ERR_DSL_INVALID_LENGTH;
-   
+    if (!dsls_fft2r_initialized) return ESP_ERR_DSL_UNINITIALIZED;
+
 	esp_err_t result = ESP_OK;
-	
+
+	float* w = dsls_fft_w_table_32fc;
+
 	int ie, ia, m;
 	float re_temp, im_temp;
 	float c, s;

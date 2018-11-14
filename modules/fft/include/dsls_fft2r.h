@@ -27,8 +27,8 @@ extern "C"
 #endif
 
 extern float dsls_fft_w_table_32fc[CONFIG_DSL_MAX_FFT_SIZE];
-
-esp_err_t dsls_fft2r_32fc(float* input, float* w, int N);
+esp_err_t dsls_fft2r_init_32fc();
+esp_err_t dsls_fft2r_32fc_ansi(float* input, int N);
 esp_err_t dsls_bit_rev_32fc(float *input, int N);
 esp_err_t dsls_gen_w_r2_32fc(float *w, int N);
 esp_err_t dsls_cplx2reC_32fc(float *input, int N);

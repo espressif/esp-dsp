@@ -23,7 +23,7 @@ extern "C"
 {
 #endif
 
-float dsls_sfdr_32f(float* input, int32_t len);
+float dsls_sfdr_32f(float* input, int32_t len, int8_t use_dc);
 float dsls_sfdr_32fc(float* input, int32_t len);
 
 #ifdef __cplusplus

@@ -14,6 +14,7 @@
 
 #ifndef _dsl_common_H_
 #define _dsl_common_H_
+#include "stdint.h"
 #include "dsl_err.h"
 
 
