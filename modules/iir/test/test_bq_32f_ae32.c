@@ -10,7 +10,7 @@
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
-// limitations under the License. 
+// limitations under the License.
 
 #include <string.h>
 #include "unity.h"
@@ -39,7 +39,7 @@ TEST_CASE("dsls_biquad_32f_ae32 functionality", "[dsls]")
     // In the test we generate filter with cutt off frequency 0.1
     // and then filtering 0.1 and 0.3 frequencis.
     // Result must be better then 24 dB
-    int len = sizeof(x)/sizeof(float);
+    int len = sizeof(x) / sizeof(float);
 
 //    dsls_tone_gen_f32(x, len, 1, 0.1, 0);
     dsls_d_gen_f32(x, len, 0);
@@ -50,11 +50,9 @@ TEST_CASE("dsls_biquad_32f_ae32 functionality", "[dsls]")
     dsls_biquad_32f_ae32(x, y, len, coeffs, w1);
     dsls_biquad_32f_ansi(x, z, len, coeffs, w2);
 
-    for (int i=0 ; i< 32 ; i++)
-    {
+    for (int i = 0 ; i < 32 ; i++) {
         ESP_LOGD(TAG, "[%i]calc = %f, expected=%f", i, y[i], z[i]);
-        if (y[i] != z[i])
-        {
+        if (y[i] != z[i]) {
             TEST_ASSERT_EQUAL( y[i], z[i]);
         }
     }
@@ -64,7 +62,7 @@ TEST_CASE("dsls_biquad_32f_ae32 benchmark", "[dsls]")
 {
     float w1[2] = {0};
     float w2[2] = {0};
-    int len = sizeof(x)/sizeof(float);
+    int len = sizeof(x) / sizeof(float);
     int repeat_count = 1024;
     dsls_d_gen_f32(x, len, 0);
     float coeffs[5];
@@ -72,32 +70,30 @@ TEST_CASE("dsls_biquad_32f_ae32 benchmark", "[dsls]")
 
 
     unsigned int start_b = xthal_get_ccount();
-    for (int i=0 ; i< repeat_count ; i++)
-    {
+    for (int i = 0 ; i < repeat_count ; i++) {
         dsls_biquad_32f_ae32(x, y, len, coeffs, w1);
     }
     unsigned int end_b = xthal_get_ccount();
 
     float total_b = end_b - start_b;
-    float cycles = total_b/(len*repeat_count);
+    float cycles = total_b / (len * repeat_count);
 
     start_b = xthal_get_ccount();
-    for (int i=0 ; i< repeat_count ; i++)
-    {
+    for (int i = 0 ; i < repeat_count ; i++) {
         dsls_biquad_32f_ansi(x, y, len, coeffs, w1);
     }
     end_b = xthal_get_ccount();
     float total_b_ansi = end_b - start_b;
-    float cycles_ansi = total_b_ansi/(len*repeat_count);
+    float cycles_ansi = total_b_ansi / (len * repeat_count);
 
     ESP_LOGI(TAG, "dsls_biquad_32f_ae32 - %f per sample\n", cycles);
     ESP_LOGI(TAG, "dsls_biquad_32f_ansi - %f per sample\n", cycles_ansi);
     // float min_exec = 10;
     // float max_exec = 20;
-    // if (cycles >= max_exec) { 
+    // if (cycles >= max_exec) {
     //     TEST_ASSERT_MESSAGE (false, "Exec time takes more then expected!");
     // }
-    // if (cycles < min_exec) { 
+    // if (cycles < min_exec) {
     //     TEST_ASSERT_MESSAGE (false, "Exec time takes less then expected!");
     // }
 

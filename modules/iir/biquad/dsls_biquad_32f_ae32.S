@@ -15,10 +15,10 @@
 #include "dsls_dotprod_32f_m_ae32.S"
 
 // This is bi quad filter form II for Esp32 processor.
-    .text
-    .align  4
-    .global dsls_biquad_32f_ae32
-    .type   dsls_biquad_32f_ae32,@function
+	.text
+	.align  4
+	.global dsls_biquad_32f_ae32
+	.type   dsls_biquad_32f_ae32,@function
 // The function implements next C code:
 //esp_err_t dsls_biquad_32f_ae32(float* x, float* y, int len, float* coef, float* w)
 //  {
@@ -48,39 +48,39 @@ dsls_biquad_32f_ae32:
 // f5 - w0
 // f6 - w1
 
-    entry	a1, 32
-    // Array increment for floating point data should be 4
-    lsi   f0, a5, 0
-    lsi   f1, a5, 4
-    lsi   f2, a5, 8
-    lsi   f3, a5, 12
-    lsi   f4, a5, 16
+	entry	a1, 32
+	// Array increment for floating point data should be 4
+	lsi   f0, a5, 0
+	lsi   f1, a5, 4
+	lsi   f2, a5, 8
+	lsi   f3, a5, 12
+	lsi   f4, a5, 16
 
-    
-    neg.s  f5, f3   // -a[1]
-    neg.s  f6, f4   // -a[2]
+	
+	neg.s  f5, f3   // -a[1]
+	neg.s  f6, f4   // -a[2]
 
-    lsi   f7, a6, 0 // w[0]
-    lsi   f8, a6, 4 // w[1]
-    
-    addi    a3, a3, -4       // i-- // preset a3
-    lsi     f9, a2, 0        // f9 = x[i]
-    loopnez a4, loop_bq_end_m_ae32
-        madd.s  f9, f7, f5   // f9 += -a1*w0
-        addi    a3, a3, 4    // out++;
-        mul.s   f10, f1, f7  // f10 = b1*w0
-        madd.s  f9, f8, f6   // f9 += -a2*w1
-        madd.s  f10, f9, f0  // f10 += b0*d0
-        addi    a2, a2, 4    // in++;
-        madd.s  f10, f2, f8  // f10+= b2*w1, f10 - result
-        mov.s   f8, f7       // w1 = w0
-        mov.s   f7, f9       // w0 = d0
-        lsi     f9, a2,  0   // f9 = x[i]
-        ssi	    f10, a3, 0   // y[i] = result
+	lsi   f7, a6, 0 // w[0]
+	lsi   f8, a6, 4 // w[1]
+	
+	addi    a3, a3, -4       // i-- // preset a3
+	lsi     f9, a2, 0        // f9 = x[i]
+	loopnez a4, loop_bq_end_m_ae32
+		madd.s  f9, f7, f5   // f9 += -a1*w0
+		addi    a3, a3, 4    // out++;
+		mul.s   f10, f1, f7  // f10 = b1*w0
+		madd.s  f9, f8, f6   // f9 += -a2*w1
+		madd.s  f10, f9, f0  // f10 += b0*d0
+		addi    a2, a2, 4    // in++;
+		madd.s  f10, f2, f8  // f10+= b2*w1, f10 - result
+		mov.s   f8, f7       // w1 = w0
+		mov.s   f7, f9       // w0 = d0
+		lsi     f9, a2,  0   // f9 = x[i]
+		ssi	    f10, a3, 0   // y[i] = result
 loop_bq_end_m_ae32:
-        // Store delay line
-        ssi     f7, a6, 0
-        ssi     f8, a6, 4
+		// Store delay line
+		ssi     f7, a6, 0
+		ssi     f8, a6, 4
 
-    movi.n	a2, 0 // return status ESP_OK
-    retw.n
+	movi.n	a2, 0 // return status ESP_OK
+	retw.n

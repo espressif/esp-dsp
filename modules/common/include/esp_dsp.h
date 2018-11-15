@@ -10,31 +10,37 @@
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
-// limitations under the License. 
+// limitations under the License.
 
-#ifndef _dsls_fft2r_H_
-#define _dsls_fft2r_H_
-#include "dsl_err.h"
-#include "sdkconfig.h"
-
-#ifndef CONFIG_DSL_MAX_FFT_SIZE
-#define CONFIG_DSL_MAX_FFT_SIZE 4096
-#endif // CONFIG_DSL_MAX_FFT_SIZE
+#ifndef _esp_dsp_H_
+#define _esp_dsp_H_
 
 #ifdef __cplusplus
 extern "C"
 {
 #endif
 
-extern float dsls_fft_w_table_32fc[CONFIG_DSL_MAX_FFT_SIZE];
+// Common includes
+#include "dsl_common.h"
 
-esp_err_t dsls_fft2r_32fc(float* input, float* w, int N);
-esp_err_t dsls_bit_rev_32fc(float *input, int N);
-esp_err_t dsls_gen_w_r2_32fc(float *w, int N);
-esp_err_t dsls_cplx2reC_32fc(float *input, int N);
+// Signal processing
+#include "dsls_dotprod.h"
+#include "dsls_fir.h"
+#include "dsls_biquad.h"
+#include "dsls_biquad_gen.h"
+#include "dsls_addC.h"
+#include "dsls_mulC.h"
+#include "dsls_wind_Barrel.h"
+
+// Matrix operations
+#include "dslm_mult.h"
+
+
+
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // _dsls_fft2r_cf_H_
+
+#endif // _esp_dsp_H_

@@ -5,10 +5,12 @@ COMPONENT_ADD_INCLUDEDIRS := modules/dotprod/include \
 							modules/fir/include \
 							modules/math/include \
 							modules/matrix/include \
+							modules/fft/include \
 							modules/common/include 
 
 COMPONENT_SRCDIRS :=. \
 					modules/common \
+					modules/common/misc \
 					modules/misc \
 					modules/dotprod \
 					modules/dotprod/float \
@@ -21,11 +23,12 @@ COMPONENT_SRCDIRS :=. \
 					modules/math/mulC/float \
 					modules/math/addC \
 					modules/math/addC/float \
+					modules/fft/float \
 					modules/support \
-					modules/support/fft \
 					modules/support/snr \
 					modules/support/sfdr \
 					modules/support/misc \
+					modules/support/view \
 					modules/windows/Barrel \
 					modules/windows/Barrel/float \
 					modules/windows/Barrel/fixed \

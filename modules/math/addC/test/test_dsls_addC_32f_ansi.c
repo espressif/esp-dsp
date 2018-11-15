@@ -10,7 +10,7 @@
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
-// limitations under the License. 
+// limitations under the License.
 
 #include <string.h>
 #include "unity.h"
@@ -28,22 +28,19 @@
 
 TEST_CASE("dsls_addC_32f_ansi functionality", "[dsls]")
 {
-    int n = 64; 
+    int n = 64;
     float x[n];
     float y[n];
-    for (int i=0 ; i< n ; i++)
-    {
+    for (int i = 0 ; i < n ; i++) {
         x[i] = i;
         y[i] = i + 10;
     }
     dsls_addC_32f_ansi(x, x, n, 10, 1, 1);
-    for (int i=0 ; i< n ; i++)
-    {
-        if (x[i] != y[i])
-        {
-            TEST_ASSERT_EQUAL(x[i], y[i]);      
+    for (int i = 0 ; i < n ; i++) {
+        if (x[i] != y[i]) {
+            TEST_ASSERT_EQUAL(x[i], y[i]);
         }
     }
     //TEST_ASSERT_EQUAL(0, z[1]);
-    //TEST_ASSERT_MESSAGE (false, "Exec time takes less then expected!"); 
+    //TEST_ASSERT_MESSAGE (false, "Exec time takes less then expected!");
 }

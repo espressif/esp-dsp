@@ -10,7 +10,7 @@
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
-// limitations under the License. 
+// limitations under the License.
 
 
 #ifndef _dsls_biquad_H_
@@ -30,16 +30,16 @@ extern "C"
  * The implementation use ANSI C and could be compiled and run on any platform
  *
  * @param x: input array
- * @param y: output array 
+ * @param y: output array
  * @param len: length of input and output vectors
  * @param coef: array of coefficients. b0,b1,b2,a1,a2
- *              expected that a0 = 1. b0..b2 - numerator, a0..a2 - denominator  
+ *              expected that a0 = 1. b0..b2 - numerator, a0..a2 - denominator
  * @param w: delay line w0,w1. Length of 2.
  * @return
  *      - ESP_OK on success
  *      - One of the error codes from DSP library
  */
-esp_err_t dsls_biquad_32f_ansi(float* x, float* y, int len, float* coef, float* w);
+esp_err_t dsls_biquad_32f_ansi(float *x, float *y, int len, float *coef, float *w);
 
 /**
  * @function dsls_biquad_32f_ansi
@@ -47,16 +47,16 @@ esp_err_t dsls_biquad_32f_ansi(float* x, float* y, int len, float* coef, float* 
  * The implementation optimized for Esp32 platform
  *
  * @param x: input array
- * @param y: output array 
+ * @param y: output array
  * @param len: length of input and output vectors
  * @param coef: array of coefficients. b0,b1,b2,a1,a2
- *              expected that a0 = 1. b0..b2 - numerator, a0..a2 - denominator  
+ *              expected that a0 = 1. b0..b2 - numerator, a0..a2 - denominator
  * @param w: delay line w0,w1. Length of 2.
  * @return
  *      - ESP_OK on success
  *      - One of the error codes from DSP library
  */
-esp_err_t dsls_biquad_32f_ae32(float* x, float* y, int len, float* coef, float* w);
+esp_err_t dsls_biquad_32f_ae32(float *x, float *y, int len, float *coef, float *w);
 
 #ifdef __cplusplus
 }

@@ -60,10 +60,10 @@
 		mula.dd.ll.ldinc m3, \x2, m0, m2
 		loopnez \count, .loop_end
 		.loop:
-            mula.dd.hh.ldinc m0, \x1, m0, m2
-            mula.dd.ll.ldinc m2, \x2, m1, m3
-            mula.dd.hh.ldinc m1, \x1, m1, m3
-            mula.dd.ll.ldinc m3, \x2, m0, m2
+			mula.dd.hh.ldinc m0, \x1, m0, m2
+			mula.dd.ll.ldinc m2, \x2, m1, m3
+			mula.dd.hh.ldinc m1, \x1, m1, m3
+			mula.dd.ll.ldinc m3, \x2, m0, m2
 		.loop_end:
 	
 		mula.dd.hh m0, m2
@@ -89,16 +89,16 @@
 
 		dotprod_16s_ae32 \x1, \x2, \count
 
-    	bbci  \full_count, 1, .mod2chk
-        ldinc m0, \x1
-        ldinc m2, \x2
-        mula.dd.hh m0, m2
-        mula.dd.ll m0, m2
-    .mod2chk:
-        bbci  \full_count, 0, .mod1chk
-        ldinc m0, \x1
-        ldinc m2, \x2
-        mula.dd.ll m0, m2
-    .mod1chk:
+		bbci  \full_count, 1, .mod2chk
+		ldinc m0, \x1
+		ldinc m2, \x2
+		mula.dd.hh m0, m2
+		mula.dd.ll m0, m2
+	.mod2chk:
+		bbci  \full_count, 0, .mod1chk
+		ldinc m0, \x1
+		ldinc m2, \x2
+		mula.dd.ll m0, m2
+	.mod1chk:
 
 .endm // dotprod_16s_ae32_full

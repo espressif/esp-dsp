@@ -16,24 +16,24 @@
 #include "dsls_dotprode_32f_m_ae32.S"
 
 // This is matrix multipliction function for Esp32 processor.
-    .text
-    .align  4
-    .global dslm_mult_32f_ae32
-    .type   dslm_mult_32f_ae32,@function
+	.text
+	.align  4
+	.global dslm_mult_32f_ae32
+	.type   dslm_mult_32f_ae32,@function
 // The function implements next C code:
 // esp_err_t dslm_mult_32f_ansi(float* A, float* B, float* C, int m, int n, int k)
 // {
-    // for (int i=0 ; i< m ; i++)
-    // {
-    //     for (int j=0 ; j< k ; j++)
-    //     {
-    //         C[i*k + j] = A[i*n]*B[j];
-    //         for (int s=1; s< n ; s++)
-    //         {
-    //             C[i*k + j] += A[i*n + s]*B[s*k + j];
-    //         }
-    //     }
-    // }
+	// for (int i=0 ; i< m ; i++)
+	// {
+	//     for (int j=0 ; j< k ; j++)
+	//     {
+	//         C[i*k + j] = A[i*n]*B[j];
+	//         for (int s=1; s< n ; s++)
+	//         {
+	//             C[i*k + j] += A[i*n + s]*B[s*k + j];
+	//         }
+	//     }
+	// }
 //     return ESP_OK;
 // }
 
@@ -53,47 +53,47 @@ dslm_mult_32f_ae32:
 // a13 - B
 // a4  - C
 
-    entry	a1, 32
-    // Array increment for floating point data should be 4
-    
-    slli    a8, a6, 2 // Pointer increment for A
-    slli    a15,a7, 2 // Pointer increment for B
+	entry	a1, 32
+	// Array increment for floating point data should be 4
+	
+	slli    a8, a6, 2 // Pointer increment for A
+	slli    a15,a7, 2 // Pointer increment for B
 
-    movi.n	a14, 0 // Innitial state of accumulator f1
-    movi.n	a10, 4 // Increment = 4
-    movi.n	a9, 0  // counter loop1
+	movi.n	a14, 0 // Innitial state of accumulator f1
+	movi.n	a10, 4 // Increment = 4
+	movi.n	a9, 0  // counter loop1
 
 dpf_loop1:    
-    movi.n	a11, 0 // reset counter for loop2
+	movi.n	a11, 0 // reset counter for loop2
 dpf_loop2:
 
-    // Clear initial state of the result register
-    // a2 - A
-    // a3 - B
-    // a6 - n
-    // a10 - step == 4 bytes
-    // a8 -  step n*4
-    mov      a12, a2 // load A
+	// Clear initial state of the result register
+	// a2 - A
+	// a3 - B
+	// a6 - n
+	// a10 - step == 4 bytes
+	// a8 -  step n*4
+	mov      a12, a2 // load A
 
-    slli     a13, a11, 2 // loop count to pointer value
-    add.n    a13, a3, a13 // load A
+	slli     a13, a11, 2 // loop count to pointer value
+	add.n    a13, a3, a13 // load A
 
-    wfr	    f1, a14 // reset f1
-    // Calculating dotproduct...
-    dotprode_32f_ae32 a12, a13, a6, a10, a15;
+	wfr	    f1, a14 // reset f1
+	// Calculating dotproduct...
+	dotprode_32f_ae32 a12, a13, a6, a10, a15;
 
-    ssi	    f1, a4, 0 // Store result from f1 to memory at a4
-    addi    a4, a4, 4 // increment a4 for next time
+	ssi	    f1, a4, 0 // Store result from f1 to memory at a4
+	addi    a4, a4, 4 // increment a4 for next time
 
-    // check loop 2
-    addi  a11, a11, 1 // Increment loop2 counter
-    blt   a11, a7, dpf_loop2
+	// check loop 2
+	addi  a11, a11, 1 // Increment loop2 counter
+	blt   a11, a7, dpf_loop2
 
-    // check loop 1
-    add.n   a2, a2, a8 // Increment A, A = A[i*n]
+	// check loop 1
+	add.n   a2, a2, a8 // Increment A, A = A[i*n]
 
-    addi  a9, a9, 1 // Increment loop1 counter
-    blt   a9, a5, dpf_loop1
+	addi  a9, a9, 1 // Increment loop1 counter
+	blt   a9, a5, dpf_loop1
 
-    movi.n	a2, 0 // return status ESP_OK
-    retw.n
+	movi.n	a2, 0 // return status ESP_OK
+	retw.n

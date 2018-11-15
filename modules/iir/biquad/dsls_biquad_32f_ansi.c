@@ -10,18 +10,17 @@
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
-// limitations under the License. 
+// limitations under the License.
 
 
 #include "dsls_biquad.h"
 
 
-esp_err_t dsls_biquad_32f_ansi(float* x, float* y, int len, float* coef, float* w)
+esp_err_t dsls_biquad_32f_ansi(float *x, float *y, int len, float *coef, float *w)
 {
-    for (int i=0 ; i< len ; i++)
-    {
-        float d0 = x[i] - coef[3]*w[0] - coef[4]*w[1];
-        y[i] = coef[0]*d0 +  coef[1]*w[0] + coef[2]*w[1];
+    for (int i = 0 ; i < len ; i++) {
+        float d0 = x[i] - coef[3] * w[0] - coef[4] * w[1];
+        y[i] = coef[0] * d0 +  coef[1] * w[0] + coef[2] * w[1];
         w[1] = w[0];
         w[0] = d0;
     }

@@ -29,13 +29,13 @@
 // a8 == 4, step is 4 bytes
 // a5 == 32, length of array is 32
 // 
-    lsi	    f0, \x2, 0
-    sub	    \x1, \x1, \step1 // To compensate first increment
-    loopnez \count, loop_mace_end_m_ae32
-        add.n	\x1, \x1, \step1
-        lsi	    f2, \x1, 0
-        madd.s	f1, f2, f0
-        add.n	\x2, \x2, \step2
-        lsi	     f0, \x2, 0
-    loop_mace_end_m_ae32:
+	lsi	    f0, \x2, 0
+	sub	    \x1, \x1, \step1 // To compensate first increment
+	loopnez \count, loop_mace_end_m_ae32
+		add.n	\x1, \x1, \step1
+		lsi	    f2, \x1, 0
+		madd.s	f1, f2, f0
+		add.n	\x2, \x2, \step2
+		lsi	     f0, \x2, 0
+	loop_mace_end_m_ae32:
 .endm

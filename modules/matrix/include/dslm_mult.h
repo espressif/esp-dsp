@@ -10,7 +10,7 @@
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
-// limitations under the License. 
+// limitations under the License.
 
 #ifndef _dslm_mult_H_
 #define _dslm_mult_H_
@@ -32,7 +32,7 @@
  *      - ESP_OK on success
  *      - One of the error codes from DSP library
  */
-esp_err_t dslm_mult_32f_ansi(float* A, float* B, float* C, int m, int n, int k);
+esp_err_t dslm_mult_32f_ansi(float *A, float *B, float *C, int m, int n, int k);
 
 /**
  * @function dslm_mult_32f_ae32
@@ -49,7 +49,7 @@ esp_err_t dslm_mult_32f_ansi(float* A, float* B, float* C, int m, int n, int k);
  *      - ESP_OK on success
  *      - One of the error codes from DSP library
  */
-esp_err_t dslm_mult_32f_ae32(float* A, float* B, float* C, int m, int n, int k);
+esp_err_t dslm_mult_32f_ae32(float *A, float *B, float *C, int m, int n, int k);
 
 /**
  * @function dslm_mult_3x3x1_32f_ae32
@@ -63,7 +63,7 @@ esp_err_t dslm_mult_32f_ae32(float* A, float* B, float* C, int m, int n, int k);
  *      - ESP_OK on success
  *      - One of the error codes from DSP library
  */
-esp_err_t dslm_mult_3x3x1_32f_ae32(float* A, float* B, float* C);
+esp_err_t dslm_mult_3x3x1_32f_ae32(float *A, float *B, float *C);
 
 /**
  * @function dslm_mult_3x3x3_32f_ae32
@@ -77,7 +77,7 @@ esp_err_t dslm_mult_3x3x1_32f_ae32(float* A, float* B, float* C);
  *      - ESP_OK on success
  *      - One of the error codes from DSP library
  */
-esp_err_t dslm_mult_3x3x3_32f_ae32(float* A, float* B, float* C);
+esp_err_t dslm_mult_3x3x3_32f_ae32(float *A, float *B, float *C);
 /**
  * @function dslm_mult_4x4x1_32f_ae32
  * Matrix multiplication for two floating point matrices 4x4 and 4x1: C[1][4] = A[4][4] * B[4][1]
@@ -91,7 +91,7 @@ esp_err_t dslm_mult_3x3x3_32f_ae32(float* A, float* B, float* C);
  *      - One of the error codes from DSP library
  */
 
-esp_err_t dslm_mult_4x4x1_32f_ae32(float* A, float* B, float* C);
+esp_err_t dslm_mult_4x4x1_32f_ae32(float *A, float *B, float *C);
 /**
  * @function dslm_mult_4x4x4_32f_ae32
  * Matrix multiplication for two square 3x3 floating point matrices: C[4][4] = A[4][4] * B[4][4]
@@ -104,7 +104,7 @@ esp_err_t dslm_mult_4x4x1_32f_ae32(float* A, float* B, float* C);
  *      - ESP_OK on success
  *      - One of the error codes from DSP library
  */
-esp_err_t dslm_mult_4x4x4_32f_ae32(float* A, float* B, float* C);
+esp_err_t dslm_mult_4x4x4_32f_ae32(float *A, float *B, float *C);
 
 /**
  * @function dslm_mult_16s_ansi
@@ -122,7 +122,7 @@ esp_err_t dslm_mult_4x4x4_32f_ae32(float* A, float* B, float* C);
  *      - ESP_OK on success
  *      - One of the error codes from DSP library
  */
-esp_err_t dslm_mult_16s_ansi(int16_t* A, int16_t* B, int16_t* C, int m, int n, int k, int shift);
+esp_err_t dslm_mult_16s_ansi(int16_t *A, int16_t *B, int16_t *C, int m, int n, int k, int shift);
 
 /**
  * @function dslm_mult_16s_ae32
@@ -140,6 +140,6 @@ esp_err_t dslm_mult_16s_ansi(int16_t* A, int16_t* B, int16_t* C, int m, int n, i
  *      - ESP_OK on success
  *      - One of the error codes from DSP library
  */
-esp_err_t dslm_mult_16s_ae32(int16_t* A, int16_t* B, int16_t* C, int m, int n, int k, int shift);
+esp_err_t dslm_mult_16s_ae32(int16_t *A, int16_t *B, int16_t *C, int m, int n, int k, int shift);
 
 #endif // _dslm_mult_H_

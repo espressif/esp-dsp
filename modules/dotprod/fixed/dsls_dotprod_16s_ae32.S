@@ -15,10 +15,10 @@
 #include "dsls_dotprod_16s_m_ae32.S"
 #include "dsl_err_codes.h"
 
-.text
-    .align  4
-    .global dsls_dotprod_16s_ae32
-    .type   dsls_dotprod_16s_ae32,@function
+	.text
+	.align  4
+	.global dsls_dotprod_16s_ae32
+	.type   dsls_dotprod_16s_ae32,@function
 
 
 //esp_err_t dsls_dotprod_16s_ae32(int16_t* src1, int16_t* src2, int16_t* dest, int len, int8_t shift);
@@ -29,48 +29,48 @@ dsls_dotprod_16s_ae32:
 // len  - a5
 // shift - a6
 
-    entry	a1, 32
+	entry	a1, 32
 
-        // Check minimum length
-        movi a8, 4
-        blt a5, a8, dsls_dotprod_16s_ae32_error
+	// Check minimum length
+	movi a8, 4
+	blt a5, a8, dsls_dotprod_16s_ae32_error
 	
-		/* Clear accumulator */
-		movi a8, 0
-		wsr a8, acchi
-        
-        // Prepare and load round value
-		movi a8, 0x7fff
-        ssr a6
-        srl a8, a8
-		wsr a8, acclo // initialize acc with shifted round value
+	// Clear accumulator
+	movi a8, 0
+	wsr a8, acchi
+		
+	// Prepare and load round value
+	movi a8, 0x7fff
+	ssr a6
+	srl a8, a8
+	wsr a8, acclo // initialize acc with shifted round value
 
-		// Compensate for pre-increment 
-		// Right shift to 16 bits
-		// RS = -shift + 15
-		neg  a6, a6 
-		addi a6, a6, 15
+	// Compensate for pre-increment 
+	// Right shift to 16 bits
+	// RS = -shift + 15
+	neg  a6, a6 
+	addi a6, a6, 15
 	
-		/* number of loop iterations (see below):
-		 * a7 = count / 4 - 1
-		 */
+	/* number of loop iterations (see below):
+	 * a7 = count / 4 - 1
+	 */
 	
-		srli a7, a5, 2
-		addi a7, a7, -1
+	srli a7, a5, 2
+	addi a7, a7, -1
 
-		movi.n	a10, 0 // load 0 to the a10 to increment second array
+	movi.n	a10, 0 // load 0 to the a10 to increment second array
 
-		dotprod_16s_ae32_full a2, a3, a7, a5
+	dotprod_16s_ae32_full a2, a3, a7, a5
 
-		/* Get accumulator */
-		ssr a6
-		rsr a2, acchi
-		rsr a3, acclo
-		src a2, a2, a3
-        
-        s16i	a2, a4, 0
-        movi.n	a2, 0
-    retw.n
+	/* Get accumulator */
+	ssr a6
+	rsr a2, acchi
+	rsr a3, acclo
+	src a2, a2, a3
+		
+	s16i	a2, a4, 0
+	movi.n	a2, 0
+	retw.n
 dsls_dotprod_16s_ae32_error:
-        movi.n	a2, ESP_ERR_DSL_INVALID_LENGTH
-    retw.n
+	movi.n	a2, ESP_ERR_DSL_INVALID_LENGTH
+	retw.n

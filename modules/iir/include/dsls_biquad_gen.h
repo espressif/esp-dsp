@@ -10,7 +10,7 @@
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
-// limitations under the License. 
+// limitations under the License.
 
 #ifndef _dsls_biquad_gen_H_
 #define _dsls_biquad_gen_H_
@@ -35,15 +35,15 @@ extern "C"
  * The implementation use ANSI C and could be compiled and run on any platform
  *
  * @param coeffs: result coefficients. b0,b1,b2,a1,a2, a0 expected as 1
- * @param f: filter cut off frequency in range of 0..0.5 (normalized to sample frequency)  
+ * @param f: filter cut off frequency in range of 0..0.5 (normalized to sample frequency)
  * @param gain: gain in passband in dB
- * @param qFactor: Q factor of filter 
- * 
+ * @param qFactor: Q factor of filter
+ *
  * @return
  *      - ESP_OK on success
  *      - One of the error codes from DSP library
  */
-esp_err_t dsls_biquad_gen_lpf_32f(float* coeffs, float f, float gain, float qFactor);
+esp_err_t dsls_biquad_gen_lpf_32f(float *coeffs, float f, float gain, float qFactor);
 
 /**
  * @function dsls_biquad_gen_lpf_32f
@@ -51,15 +51,15 @@ esp_err_t dsls_biquad_gen_lpf_32f(float* coeffs, float f, float gain, float qFac
  * The implementation use ANSI C and could be compiled and run on any platform
  *
  * @param coeffs: result coefficients. b0,b1,b2,a1,a2, a0 expected as 1
- * @param f: filter cut off frequency in range of 0..0.5 (normalized to sample frequency)  
+ * @param f: filter cut off frequency in range of 0..0.5 (normalized to sample frequency)
  * @param gain: gain in passband in dB
- * @param qFactor: Q factor of filter 
- * 
+ * @param qFactor: Q factor of filter
+ *
  * @return
  *      - ESP_OK on success
  *      - One of the error codes from DSP library
  */
-esp_err_t dsls_biquad_gen_hpf_32f(float* coeffs, float f, float gain, float qFactor);
+esp_err_t dsls_biquad_gen_hpf_32f(float *coeffs, float f, float gain, float qFactor);
 
 /**
  * @function dsls_biquad_gen_lpf_32f
@@ -67,15 +67,15 @@ esp_err_t dsls_biquad_gen_hpf_32f(float* coeffs, float f, float gain, float qFac
  * The implementation use ANSI C and could be compiled and run on any platform
  *
  * @param coeffs: result coefficients. b0,b1,b2,a1,a2, a0 expected as 1
- * @param f: filter center frequency in range of 0..0.5 (normalized to sample frequency)  
+ * @param f: filter center frequency in range of 0..0.5 (normalized to sample frequency)
  * @param gain: gain in passband in dB
- * @param qFactor: Q factor of filter 
- * 
+ * @param qFactor: Q factor of filter
+ *
  * @return
  *      - ESP_OK on success
  *      - One of the error codes from DSP library
  */
-esp_err_t dsls_biquad_gen_bpf_32f(float* coeffs, float f, float gain, float qFactor);
+esp_err_t dsls_biquad_gen_bpf_32f(float *coeffs, float f, float gain, float qFactor);
 
 /**
  * @function dsls_biquad_gen_lpf_32f
@@ -83,15 +83,15 @@ esp_err_t dsls_biquad_gen_bpf_32f(float* coeffs, float f, float gain, float qFac
  * The implementation use ANSI C and could be compiled and run on any platform
  *
  * @param coeffs: result coefficients. b0,b1,b2,a1,a2, a0 expected as 1
- * @param f: filter center frequency in range of 0..0.5 (normalized to sample frequency)  
+ * @param f: filter center frequency in range of 0..0.5 (normalized to sample frequency)
  * @param gain: gain in stopband in dB
- * @param qFactor: Q factor of filter 
- * 
+ * @param qFactor: Q factor of filter
+ *
  * @return
  *      - ESP_OK on success
  *      - One of the error codes from DSP library
  */
-esp_err_t dsls_biquad_gen_bpf0db_32f(float* coeffs, float f, float gain, float qFactor);
+esp_err_t dsls_biquad_gen_bpf0db_32f(float *coeffs, float f, float gain, float qFactor);
 
 /**
  * @function dsls_biquad_gen_lpf_32f
@@ -99,90 +99,90 @@ esp_err_t dsls_biquad_gen_bpf0db_32f(float* coeffs, float f, float gain, float q
  * The implementation use ANSI C and could be compiled and run on any platform
  *
  * @param coeffs: result coefficients. b0,b1,b2,a1,a2, a0 expected as 1
- * @param f: filter notch frequency in range of 0..0.5 (normalized to sample frequency)  
+ * @param f: filter notch frequency in range of 0..0.5 (normalized to sample frequency)
  * @param gain: gain in stopband in dB
- * @param qFactor: Q factor of filter 
- * 
+ * @param qFactor: Q factor of filter
+ *
  * @return
  *      - ESP_OK on success
  *      - One of the error codes from DSP library
  */
-esp_err_t dsls_biquad_gen_notch_32f(float* coeffs, float f, float gain, float qFactor);
+esp_err_t dsls_biquad_gen_notch_32f(float *coeffs, float f, float gain, float qFactor);
 /**
  * @function dsls_biquad_gen_lpf_32f
  * Coefficients for all pass 2nd order IIR filter (bi-quad) with 360 degree phase shift
  * The implementation use ANSI C and could be compiled and run on any platform
  *
  * @param coeffs: result coefficients. b0,b1,b2,a1,a2, a0 expected as 1
- * @param f: filter notch frequency in range of 0..0.5 (normalized to sample frequency)  
+ * @param f: filter notch frequency in range of 0..0.5 (normalized to sample frequency)
  * @param gain: gain in stopband in dB
- * @param qFactor: Q factor of filter 
- * 
+ * @param qFactor: Q factor of filter
+ *
  * @return
  *      - ESP_OK on success
  *      - One of the error codes from DSP library
  */
-esp_err_t dsls_biquad_gen_allpass360_32f(float* coeffs, float f, float gain, float qFactor);
+esp_err_t dsls_biquad_gen_allpass360_32f(float *coeffs, float f, float gain, float qFactor);
 /**
  * @function dsls_biquad_gen_lpf_32f
  * Coefficients for all pass 2nd order IIR filter (bi-quad) with 180 degree phase shift
  * The implementation use ANSI C and could be compiled and run on any platform
  *
  * @param coeffs: result coefficients. b0,b1,b2,a1,a2, a0 expected as 1
- * @param f: filter notch frequency in range of 0..0.5 (normalized to sample frequency)  
+ * @param f: filter notch frequency in range of 0..0.5 (normalized to sample frequency)
  * @param gain: gain in stopband in dB
- * @param qFactor: Q factor of filter 
- * 
+ * @param qFactor: Q factor of filter
+ *
  * @return
  *      - ESP_OK on success
  *      - One of the error codes from DSP library
  */
-esp_err_t dsls_biquad_gen_allpass180_32f(float* coeffs, float f, float gain, float qFactor);
+esp_err_t dsls_biquad_gen_allpass180_32f(float *coeffs, float f, float gain, float qFactor);
 /**
  * @function dsls_biquad_gen_lpf_32f
- * Coefficients for peak 2nd order IIR filter (bi-quad) 
+ * Coefficients for peak 2nd order IIR filter (bi-quad)
  * The implementation use ANSI C and could be compiled and run on any platform
  *
  * @param coeffs: result coefficients. b0,b1,b2,a1,a2, a0 expected as 1
- * @param f: filter notch frequency in range of 0..0.5 (normalized to sample frequency)  
+ * @param f: filter notch frequency in range of 0..0.5 (normalized to sample frequency)
  * @param gain: gain in stopband in dB
- * @param qFactor: Q factor of filter 
- * 
+ * @param qFactor: Q factor of filter
+ *
  * @return
  *      - ESP_OK on success
  *      - One of the error codes from DSP library
  */
-esp_err_t dsls_biquad_gen_peakingEQ_32f(float* coeffs, float f, float gain, float qFactor);
+esp_err_t dsls_biquad_gen_peakingEQ_32f(float *coeffs, float f, float gain, float qFactor);
 /**
  * @function dsls_biquad_gen_lpf_32f
- * Coefficients for low pass Shelf 2nd order IIR filter (bi-quad) 
+ * Coefficients for low pass Shelf 2nd order IIR filter (bi-quad)
  * The implementation use ANSI C and could be compiled and run on any platform
  *
  * @param coeffs: result coefficients. b0,b1,b2,a1,a2, a0 expected as 1
- * @param f: filter notch frequency in range of 0..0.5 (normalized to sample frequency)  
+ * @param f: filter notch frequency in range of 0..0.5 (normalized to sample frequency)
  * @param gain: gain in stopband in dB
- * @param qFactor: Q factor of filter 
- * 
+ * @param qFactor: Q factor of filter
+ *
  * @return
  *      - ESP_OK on success
  *      - One of the error codes from DSP library
  */
-esp_err_t dsls_biquad_gen_lowShelf_32f(float* coeffs, float f, float gain, float qFactor);
+esp_err_t dsls_biquad_gen_lowShelf_32f(float *coeffs, float f, float gain, float qFactor);
 /**
  * @function dsls_biquad_gen_lpf_32f
- * Coefficients for high pass Shelf 2nd order IIR filter (bi-quad) 
+ * Coefficients for high pass Shelf 2nd order IIR filter (bi-quad)
  * The implementation use ANSI C and could be compiled and run on any platform
  *
  * @param coeffs: result coefficients. b0,b1,b2,a1,a2, a0 expected as 1
- * @param f: filter notch frequency in range of 0..0.5 (normalized to sample frequency)  
+ * @param f: filter notch frequency in range of 0..0.5 (normalized to sample frequency)
  * @param gain: gain in stopband in dB
- * @param qFactor: Q factor of filter 
- * 
+ * @param qFactor: Q factor of filter
+ *
  * @return
  *      - ESP_OK on success
  *      - One of the error codes from DSP library
  */
-esp_err_t dsls_biquad_gen_highShelf_32f(float* coeffs, float f, float gain, float qFactor);
+esp_err_t dsls_biquad_gen_highShelf_32f(float *coeffs, float f, float gain, float qFactor);
 
 #ifdef __cplusplus
 }
