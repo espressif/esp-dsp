@@ -22,12 +22,23 @@ extern "C"
 {
 #endif
 
-// x - input buffer
-// len - length of the buffer
-// pos - position of inpuls [0..len)
-// step1 - step through 1 array (by default - 1)
-// step2 - step through 2 array (by default - 1)
-
+/**
+ * @function dsls_mulC_f32_ansi
+ * The function multiplies input array to the constant value
+ * x[i*step1] = y[i*step2]*C; i=[0..len)
+ * The implementation use ANSI C and could be compiled and run on any platform
+ *
+ * @param x: input array
+ * @param y: output array
+ * @param len: amount of operations for arrays
+ * @param C: constant value
+ * @param step1: step over x array (by default should be 1)
+ * @param step2: step over y array (by default should be 1)
+ * 
+ * @return
+ *      - ESP_OK on success
+ *      - One of the error codes from DSP library
+ */
 esp_err_t dsls_mulC_f32_ansi(float *x, float *y, int len, float C, int step1, int step2);
 
 #ifdef __cplusplus

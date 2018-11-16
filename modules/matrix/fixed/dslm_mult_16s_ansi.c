@@ -23,6 +23,7 @@ esp_err_t dslm_mult_16s_ansi(int16_t *A, int16_t *B, int16_t *C, int m, int n, i
     int final_shift = shift - 15;
     for (int i = 0 ; i < m ; i++) {
         for (int j = 0 ; j < k ; j++) {
+            // This code also could be used
             //dsls_dotprode_32f_ae32(&A[i*n],&B[j],&C[i*k + j],n,1,n);
             long long acc = 0x7fff >> shift;
             for (int s = 0; s < n ; s++) {

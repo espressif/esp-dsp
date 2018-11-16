@@ -22,14 +22,6 @@ extern "C"
 {
 #endif
 
-// x - input buffer
-// len - length of the buffer
-// A - amplitude
-// f - frequency -1...1
-// ph - phase in degree
-//
-// x[i] = A*sin(2*PI*i + ph/180*PI)
-
 /**
  * @function dsls_tone_gen_f32
  * The function generate a tone signal.

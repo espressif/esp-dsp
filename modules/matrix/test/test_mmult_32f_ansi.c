@@ -20,10 +20,13 @@
 #include "freertos/task.h"
 #include "freertos/semphr.h"
 #include "esp_clk.h"
+#include "esp_log.h"
 #include "soc/cpu.h"
 
 #include "dslm_mult.h"
 #include "esp_attr.h"
+
+static const char *TAG = "dslm_mult_32f_ansi";
 
 // Test dsls_dotprod_16s_ansi function
 TEST_CASE("dslm_mult_32f_ansi functionality", "[dslm]")
@@ -66,13 +69,13 @@ TEST_CASE("dslm_mult_32f_ansi functionality", "[dslm]")
                 }
                 dslm_mult_32f_ansi(A_ptr, B_ptr, C_ptr, m, n, k);
 
-                // for (int i=0 ; i< m ; i++)
-                // {
-                //     for (int j=0 ; j< k ; j++)
-                //     {
-                //         printf("[%i][%i] calc=%f, expected =%f\n",i,j, C[i][j], C_compare[i][j]);
-                //     }
-                // }
+                for (int i=0 ; i< m ; i++)
+                {
+                    for (int j=0 ; j< k ; j++)
+                    {
+                        ESP_LOGD(TAG, "[%i][%i] calc=%f, expected =%f\n",i,j, C[i][j], C_compare[i][j]);
+                    }
+                }
                 // Compare and check results
                 for (int i = 0 ; i < m * k ; i++) {
                     if (Cc_ptr[i] != C_ptr[i]) {

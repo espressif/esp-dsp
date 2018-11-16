@@ -67,10 +67,10 @@ TEST_CASE("dsls_fird_32f_ae32 functionality", "[dsls]")
     total2 += dsls_fird_32f_ansi(&fir2, x, y_compare, len);
     ESP_LOGI(TAG, "Total result = %i, expected %i from %i", total1, total2, len);
     TEST_ASSERT_EQUAL(total1, total2);
-    // for (int i=0 ; i< total ; i++)
-    // {
-    //     printf("data[%i] = %f\n", i, y[i]);
-    // }
+    for (int i=0 ; i< total1 ; i++)
+    {
+        ESP_LOGD(TAG, "data[%i] = %f\n", i, y[i]);
+    }
     for (int i = 0 ; i < total1 ; i++) {
         if (y[i] != y_compare[i]) {
             TEST_ASSERT_EQUAL(y[i], y_compare[i]);
@@ -119,5 +119,4 @@ TEST_CASE("dsls_fird_32f_ae32 benchmark", "[dsls]")
     if (cycles < min_exec) {
         TEST_ASSERT_MESSAGE (false, "Exec time takes less then expected!");
     }
-
 }

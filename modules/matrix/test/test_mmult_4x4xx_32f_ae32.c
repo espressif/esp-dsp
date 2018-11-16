@@ -26,13 +26,13 @@
 #include "dslm_mult.h"
 #include "esp_attr.h"
 
+static const char *TAG = "dslm_mult_4x4x1_32f_ae32";
 
 TEST_CASE("dslm_mult_4x4x1_32f_ae32 functionality", "[dslm]")
 {
     int m = 4;
     int n = 4;
     int k = 1;
-
 
     float A[m][n];
     float *A_ptr = (float *)A;
@@ -59,13 +59,13 @@ TEST_CASE("dslm_mult_4x4x1_32f_ae32 functionality", "[dslm]")
     dslm_mult_4x4x1_32f_ae32(A_ptr, B_ptr, C_ptr);
     dslm_mult_32f_ansi(A_ptr, B_ptr, Cc_ptr, m, n, k);
 
-    // for (int i=0 ; i< m ; i++)
-    // {
-    //     for (int j=0 ; j< k ; j++)
-    //     {
-    //         printf("[%i][%i] calc=%f, expected =%f\n",i,j, C[i][j], C_compare[i][j]);
-    //     }
-    // }
+    for (int i=0 ; i< m ; i++)
+    {
+        for (int j=0 ; j< k ; j++)
+        {
+            ESP_LOGD(TAG, "[%i][%i] calc=%f, expected =%f\n",i,j, C[i][j], C_compare[i][j]);
+        }
+    }
     //Compare and check results
     for (int i = 0; i < m * k; i++) {
         if (Cc_ptr[i] != C_ptr[i]) {
