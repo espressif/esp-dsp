@@ -41,6 +41,4 @@ TEST_CASE("dsls_addC_32f_ansi functionality", "[dsls]")
             TEST_ASSERT_EQUAL(x[i], y[i]);
         }
     }
-    //TEST_ASSERT_EQUAL(0, z[1]);
-    //TEST_ASSERT_MESSAGE (false, "Exec time takes less then expected!");
 }

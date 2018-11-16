@@ -19,7 +19,7 @@ esp_err_t dsls_dotprod_16s_ansi(int16_t *src1, int16_t *src2, int16_t *dest, int
 {
     // To make correct round operation we have to shift round value
     long long acc = 0x7fff >> shift;
-    //acc = 0;
+    
     for (int i = 0 ; i < len ; i++) {
         acc += (int32_t)src1[i] * (int32_t)src2[i];
     }

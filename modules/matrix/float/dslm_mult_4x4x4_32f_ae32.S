@@ -78,7 +78,6 @@ m_loop_4x4x4:
 		loop_mac_4x4x4_end_m_ae32:
 
 		addi a3,  a3,  4  // increment input pointer B 
-//        addi a2,  a2, 16   // increment input pointer A
 		addi a4, a4, 4
 		addi a7, a7, -1
 	bnez    a7, m_loop_4x4x4

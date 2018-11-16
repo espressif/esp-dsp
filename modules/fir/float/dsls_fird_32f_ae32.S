@@ -85,7 +85,6 @@ second_fird_loop:
 		// and after end
 		// Store result
 		ssi     f2, a4, 0
-		//s32i    a13, a4, 0// just for debug *a4 = a13
 		addi    a4, a4, 4 // y++ - increment output pointer
 next_itt_fir32:        
 		// Check loop 

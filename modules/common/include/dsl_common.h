@@ -23,6 +23,15 @@ extern "C"
 {
 #endif
 
+/**
+ * @function is_power_of_two
+ * The function check if the argument is power of 2.
+ * The implementation use ANSI C and could be compiled and run on any platform
+ *
+ * @return
+ *      - 1 if x is power of two
+ *      - 0 if no
+ */
 uint8_t is_power_of_two(int x);
 
 #ifdef __cplusplus

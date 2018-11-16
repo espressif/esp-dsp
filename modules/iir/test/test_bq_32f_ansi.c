@@ -41,7 +41,7 @@ TEST_CASE("dsls_biquad_32f_ansi functionality", "[dsls]")
     int len = sizeof(x) / sizeof(float);
 
     dsls_tone_gen_f32(x, len, 1, 0.1, 0);
-//    dsls_d_gen_f32(x, len, 0);
+
     float coeffs[5];
     float w1[2] = {0};
     float w2[2] = {0};
@@ -67,13 +67,3 @@ TEST_CASE("dsls_biquad_32f_ansi functionality", "[dsls]")
         TEST_ASSERT_MESSAGE (false, "LPF attenuation is less then expected");
     }
 }
-
-// TEST_CASE("partition parameters", "[dsl][ignore]")
-// {
-//     size_t size_before = xPortGetFreeHeapSize();
-//     size_t size_after = xPortGetFreeHeapSize();
-
-//     ptrdiff_t stack_diff = size_before - size_after;
-//     stack_diff = abs(stack_diff);
-//     if (stack_diff > 8) TEST_ASSERT_EQUAL(0, stack_diff);
-// }

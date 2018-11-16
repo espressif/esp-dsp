@@ -59,10 +59,10 @@ TEST_CASE("dsls_fir_32f_ae32 functionality", "[dsls]")
     dsls_fir_init_32f(&fir1, coeffs, delay, fir_len);
     dsls_fir_32f_ae32(&fir1, x, y, len);
     int32_t *ttt = (int32_t *)y;
-    // for (int i=0 ; i< fir_len*3 ; i++)
-    // {
-    //     printf("fir[%i] = 0x%08x\n", i, ttt[i]);
-    // }
+    for (int i=0 ; i< fir_len*3 ; i++)
+    {
+        ESP_LOGD(TAG, "fir[%i] = 0x%08x\n", i, ttt[i]);
+    }
 
     for (int i = 0 ; i < fir_len ; i++) {
         if (y[i] != i) {
@@ -94,10 +94,6 @@ TEST_CASE("dsls_fir_32f_ae32 functionality", "[dsls]")
         if (y[i] != y_compare[i]) {
             TEST_ASSERT_EQUAL(y[i], y_compare[i]);
         }
-        // else
-        // {
-        //     printf("data[%i] = %f, %f\n", i, y[i], y_compare[i]);
-        // }
     }
 }
 

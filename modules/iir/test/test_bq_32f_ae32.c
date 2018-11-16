@@ -41,7 +41,6 @@ TEST_CASE("dsls_biquad_32f_ae32 functionality", "[dsls]")
     // Result must be better then 24 dB
     int len = sizeof(x) / sizeof(float);
 
-//    dsls_tone_gen_f32(x, len, 1, 0.1, 0);
     dsls_d_gen_f32(x, len, 0);
     float coeffs[5];
     float w1[2] = {0};

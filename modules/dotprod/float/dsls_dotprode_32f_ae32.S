@@ -42,7 +42,6 @@ dsls_dotprode_32f_ae32:
 	entry	a1, 32
 	// Array increment for floating point data should be 4
 	
-//    movi.n	a8, 4
 	slli    a6,a6, 2
 	slli    a7,a7, 2
 	// Clear initial state of the result register

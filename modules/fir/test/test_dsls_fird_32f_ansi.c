@@ -58,10 +58,10 @@ TEST_CASE("dsls_fird_32f_ansi functionality", "[dsls]")
     int total = dsls_fird_32f_ansi(&fir1, x, y, len);
     ESP_LOGI(TAG, "Total result = %i from %i", total, len);
     TEST_ASSERT_EQUAL(total, len / decim);
-    // for (int i=0 ; i< total ; i++)
-    // {
-    //     printf("data[%i] = %f\n", i, y[i]);
-    // }
+    for (int i=0 ; i< total ; i++)
+    {
+        ESP_LOGD(TAG, "data[%i] = %f\n", i, y[i]);
+    }
     for (int i = 0 ; i < total ; i++) {
         if (y[i] != (decim - 1)) {
             TEST_ASSERT_EQUAL(y[i], (decim - 1));

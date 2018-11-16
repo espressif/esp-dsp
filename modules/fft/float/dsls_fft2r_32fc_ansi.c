@@ -175,25 +175,3 @@ esp_err_t dsls_cplx2reC_32fc(float *input, int N)
 
     return result;
 }
-
-// =============== How to use: ==========================================
-// float FFT::CFFT_Coeffs_Table[1024];
-// bool FFT::initialized = false;
-
-// int FFT::InitFFT()
-// {
-//  if (false == this->initialized) // The buffers will be initialized only once
-//  {
-//      gen_w_r2(FFT::CFFT_Coeffs_Table, 512);   //Generate coefficient table
-//      bit_rev(FFT::CFFT_Coeffs_Table, 512 >> 1); //Bitreverse coefficient table
-//      this->initialized = true;
-//  }
-//  return 0;
-// }
-
-// int FFT::fft(float *in_buff, int size, float *out_buff)
-// {
-//  DSPF_sp_cfftr2_ditSLOW(in_buff, FFT::CFFT_Coeffs_Table, size);
-//  bit_rev(in_buff, size);
-//  return 0;
-// }
