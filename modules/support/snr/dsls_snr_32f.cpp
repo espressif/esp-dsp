@@ -66,7 +66,7 @@ float dsls_snr_32f(float *input, int32_t len, uint8_t use_dc)
             ESP_LOGD(TAG, "FFT Data[%i] =%8.4f dB, maX=%f, max_pos=%i, noise_power=%f", i, temp_array[i], max, max_pos, noise_power);
         }
     }
-//    noise_power = noise_power/(len/2 - 15 + 5*use_dc);
+
     noise_power += std::numeric_limits<float>::min();
     if (noise_power < max * 0.00000000001) {
         return 192;
