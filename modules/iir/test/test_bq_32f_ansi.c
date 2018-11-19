@@ -45,7 +45,7 @@ TEST_CASE("dsls_biquad_32f_ansi functionality", "[dsls]")
     float coeffs[5];
     float w1[2] = {0};
     float w2[2] = {0};
-    dsls_biquad_gen_lpf_32f(coeffs, 0.1, 1, 1);
+    dsls_biquad_gen_lpf_32f(coeffs, 0.1, 1);
     dsls_biquad_32f_ansi(x, y, len, coeffs, w1);
     float pow_band = 0;
     for (int i = len / 2 ; i < len ; i++) {

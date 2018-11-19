@@ -45,7 +45,7 @@ TEST_CASE("dsls_biquad_32f_ae32 functionality", "[dsls]")
     float coeffs[5];
     float w1[2] = {0};
     float w2[2] = {0};
-    dsls_biquad_gen_lpf_32f(coeffs, 0.1, 1, 1);
+    dsls_biquad_gen_lpf_32f(coeffs, 0.1, 1);
     dsls_biquad_32f_ae32(x, y, len, coeffs, w1);
     dsls_biquad_32f_ansi(x, z, len, coeffs, w2);
 
@@ -65,7 +65,7 @@ TEST_CASE("dsls_biquad_32f_ae32 benchmark", "[dsls]")
     int repeat_count = 1024;
     dsls_d_gen_f32(x, len, 0);
     float coeffs[5];
-    dsls_biquad_gen_lpf_32f(coeffs, 0.1, 1, 1);
+    dsls_biquad_gen_lpf_32f(coeffs, 0.1, 1);
 
 
     unsigned int start_b = xthal_get_ccount();
