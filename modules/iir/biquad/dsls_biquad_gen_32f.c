@@ -16,7 +16,7 @@
 #include <math.h>
 #include "esp_log.h"
 
-esp_err_t dsls_biquad_gen_lpf_32f(float *coeffs, float f, float gain, float qFactor)
+esp_err_t dsls_biquad_gen_lpf_32f(float *coeffs, float f, float qFactor)
 {
     if (qFactor <= 0.0001) {
         qFactor = 0.0001;
@@ -43,7 +43,7 @@ esp_err_t dsls_biquad_gen_lpf_32f(float *coeffs, float f, float gain, float qFac
     return ESP_OK;
 }
 
-esp_err_t dsls_biquad_gen_hpf_32f(float *coeffs, float f, float gain, float qFactor)
+esp_err_t dsls_biquad_gen_hpf_32f(float *coeffs, float f, float qFactor)
 {
     if (qFactor <= 0.0001) {
         qFactor = 0.0001;
@@ -70,7 +70,7 @@ esp_err_t dsls_biquad_gen_hpf_32f(float *coeffs, float f, float gain, float qFac
     return ESP_OK;
 }
 
-esp_err_t dsls_biquad_gen_bpf_32f(float *coeffs, float f, float gain, float qFactor)
+esp_err_t dsls_biquad_gen_bpf_32f(float *coeffs, float f, float qFactor)
 {
     if (qFactor <= 0.0001) {
         qFactor = 0.0001;
@@ -97,7 +97,7 @@ esp_err_t dsls_biquad_gen_bpf_32f(float *coeffs, float f, float gain, float qFac
     return ESP_OK;
 }
 
-esp_err_t dsls_biquad_gen_bpf0db_32f(float *coeffs, float f, float gain, float qFactor)
+esp_err_t dsls_biquad_gen_bpf0db_32f(float *coeffs, float f, float qFactor)
 {
     if (qFactor <= 0.0001) {
         qFactor = 0.0001;
@@ -152,7 +152,7 @@ esp_err_t dsls_biquad_gen_notch_32f(float *coeffs, float f, float gain, float qF
     return ESP_OK;
 }
 
-esp_err_t dsls_biquad_gen_allpass360_32f(float *coeffs, float f, float gain, float qFactor)
+esp_err_t dsls_biquad_gen_allpass360_32f(float *coeffs, float f, float qFactor)
 {
     if (qFactor <= 0.0001) {
         qFactor = 0.0001;
@@ -179,7 +179,7 @@ esp_err_t dsls_biquad_gen_allpass360_32f(float *coeffs, float f, float gain, flo
     return ESP_OK;
 }
 
-esp_err_t dsls_biquad_gen_allpass180_32f(float *coeffs, float f, float gain, float qFactor)
+esp_err_t dsls_biquad_gen_allpass180_32f(float *coeffs, float f, float qFactor)
 {
     if (qFactor <= 0.0001) {
         qFactor = 0.0001;
@@ -206,7 +206,7 @@ esp_err_t dsls_biquad_gen_allpass180_32f(float *coeffs, float f, float gain, flo
     return ESP_OK;
 }
 
-esp_err_t dsls_biquad_gen_peakingEQ_32f(float *coeffs, float f, float gain, float qFactor)
+esp_err_t dsls_biquad_gen_peakingEQ_32f(float *coeffs, float f, float qFactor)
 {
     if (qFactor <= 0.0001) {
         qFactor = 0.0001;

@@ -36,65 +36,61 @@ extern "C"
  *
  * @param coeffs: result coefficients. b0,b1,b2,a1,a2, a0 expected as 1
  * @param f: filter cut off frequency in range of 0..0.5 (normalized to sample frequency)
- * @param gain: gain in passband in dB
  * @param qFactor: Q factor of filter
  *
  * @return
  *      - ESP_OK on success
  *      - One of the error codes from DSP library
  */
-esp_err_t dsls_biquad_gen_lpf_32f(float *coeffs, float f, float gain, float qFactor);
+esp_err_t dsls_biquad_gen_lpf_32f(float *coeffs, float f, float qFactor);
 
 /**
- * @function dsls_biquad_gen_lpf_32f
+ * @function dsls_biquad_gen_hpf_32f
  * Coefficients for high pass 2nd order IIR filter (bi-quad)
  * The implementation use ANSI C and could be compiled and run on any platform
  *
  * @param coeffs: result coefficients. b0,b1,b2,a1,a2, a0 expected as 1
  * @param f: filter cut off frequency in range of 0..0.5 (normalized to sample frequency)
- * @param gain: gain in passband in dB
  * @param qFactor: Q factor of filter
  *
  * @return
  *      - ESP_OK on success
  *      - One of the error codes from DSP library
  */
-esp_err_t dsls_biquad_gen_hpf_32f(float *coeffs, float f, float gain, float qFactor);
+esp_err_t dsls_biquad_gen_hpf_32f(float *coeffs, float f, float qFactor);
 
 /**
- * @function dsls_biquad_gen_lpf_32f
+ * @function dsls_biquad_gen_bpf_32f
  * Coefficients for band pass 2nd order IIR filter (bi-quad)
  * The implementation use ANSI C and could be compiled and run on any platform
  *
  * @param coeffs: result coefficients. b0,b1,b2,a1,a2, a0 expected as 1
  * @param f: filter center frequency in range of 0..0.5 (normalized to sample frequency)
- * @param gain: gain in passband in dB
  * @param qFactor: Q factor of filter
  *
  * @return
  *      - ESP_OK on success
  *      - One of the error codes from DSP library
  */
-esp_err_t dsls_biquad_gen_bpf_32f(float *coeffs, float f, float gain, float qFactor);
+esp_err_t dsls_biquad_gen_bpf_32f(float *coeffs, float f, float qFactor);
 
 /**
- * @function dsls_biquad_gen_lpf_32f
+ * @function dsls_biquad_gen_bpf0db_32f
  * Coefficients for band pass 2nd order IIR filter (bi-quad) with 0 dB gain in passband
  * The implementation use ANSI C and could be compiled and run on any platform
  *
  * @param coeffs: result coefficients. b0,b1,b2,a1,a2, a0 expected as 1
  * @param f: filter center frequency in range of 0..0.5 (normalized to sample frequency)
- * @param gain: gain in stopband in dB
  * @param qFactor: Q factor of filter
  *
  * @return
  *      - ESP_OK on success
  *      - One of the error codes from DSP library
  */
-esp_err_t dsls_biquad_gen_bpf0db_32f(float *coeffs, float f, float gain, float qFactor);
+esp_err_t dsls_biquad_gen_bpf0db_32f(float *coeffs, float f, float qFactor);
 
 /**
- * @function dsls_biquad_gen_lpf_32f
+ * @function dsls_biquad_gen_notch_32f
  * Coefficients for notch 2nd order IIR filter (bi-quad)
  * The implementation use ANSI C and could be compiled and run on any platform
  *
@@ -109,52 +105,49 @@ esp_err_t dsls_biquad_gen_bpf0db_32f(float *coeffs, float f, float gain, float q
  */
 esp_err_t dsls_biquad_gen_notch_32f(float *coeffs, float f, float gain, float qFactor);
 /**
- * @function dsls_biquad_gen_lpf_32f
+ * @function dsls_biquad_gen_allpass360_32f
  * Coefficients for all pass 2nd order IIR filter (bi-quad) with 360 degree phase shift
  * The implementation use ANSI C and could be compiled and run on any platform
  *
  * @param coeffs: result coefficients. b0,b1,b2,a1,a2, a0 expected as 1
  * @param f: filter notch frequency in range of 0..0.5 (normalized to sample frequency)
- * @param gain: gain in stopband in dB
  * @param qFactor: Q factor of filter
  *
  * @return
  *      - ESP_OK on success
  *      - One of the error codes from DSP library
  */
-esp_err_t dsls_biquad_gen_allpass360_32f(float *coeffs, float f, float gain, float qFactor);
+esp_err_t dsls_biquad_gen_allpass360_32f(float *coeffs, float f, float qFactor);
 /**
- * @function dsls_biquad_gen_lpf_32f
+ * @function dsls_biquad_gen_allpass180_32f
  * Coefficients for all pass 2nd order IIR filter (bi-quad) with 180 degree phase shift
  * The implementation use ANSI C and could be compiled and run on any platform
  *
  * @param coeffs: result coefficients. b0,b1,b2,a1,a2, a0 expected as 1
  * @param f: filter notch frequency in range of 0..0.5 (normalized to sample frequency)
- * @param gain: gain in stopband in dB
  * @param qFactor: Q factor of filter
  *
  * @return
  *      - ESP_OK on success
  *      - One of the error codes from DSP library
  */
-esp_err_t dsls_biquad_gen_allpass180_32f(float *coeffs, float f, float gain, float qFactor);
+esp_err_t dsls_biquad_gen_allpass180_32f(float *coeffs, float f, float qFactor);
 /**
- * @function dsls_biquad_gen_lpf_32f
+ * @function dsls_biquad_gen_peakingEQ_32f
  * Coefficients for peak 2nd order IIR filter (bi-quad)
  * The implementation use ANSI C and could be compiled and run on any platform
  *
  * @param coeffs: result coefficients. b0,b1,b2,a1,a2, a0 expected as 1
  * @param f: filter notch frequency in range of 0..0.5 (normalized to sample frequency)
- * @param gain: gain in stopband in dB
  * @param qFactor: Q factor of filter
  *
  * @return
  *      - ESP_OK on success
  *      - One of the error codes from DSP library
  */
-esp_err_t dsls_biquad_gen_peakingEQ_32f(float *coeffs, float f, float gain, float qFactor);
+esp_err_t dsls_biquad_gen_peakingEQ_32f(float *coeffs, float f, float qFactor);
 /**
- * @function dsls_biquad_gen_lpf_32f
+ * @function dsls_biquad_gen_lowShelf_32f
  * Coefficients for low pass Shelf 2nd order IIR filter (bi-quad)
  * The implementation use ANSI C and could be compiled and run on any platform
  *
@@ -169,7 +162,7 @@ esp_err_t dsls_biquad_gen_peakingEQ_32f(float *coeffs, float f, float gain, floa
  */
 esp_err_t dsls_biquad_gen_lowShelf_32f(float *coeffs, float f, float gain, float qFactor);
 /**
- * @function dsls_biquad_gen_lpf_32f
+ * @function dsls_biquad_gen_highShelf_32f
  * Coefficients for high pass Shelf 2nd order IIR filter (bi-quad)
  * The implementation use ANSI C and could be compiled and run on any platform
  *

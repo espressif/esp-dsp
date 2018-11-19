@@ -32,10 +32,17 @@ extern "C"
 #include "dsls_mulC.h"
 #include "dsls_wind_Barrel.h"
 
+#include "dsls_d_gen.h"
+#include "dsls_h_gen.h"
+#include "dsls_tone_gen.h"
+
+#include "dsls_fft2r.h"
+
 // Matrix operations
 #include "dslm_mult.h"
 
-
+// Support functions
+#include "dsls_view.h"
 
 
 #ifdef __cplusplus
