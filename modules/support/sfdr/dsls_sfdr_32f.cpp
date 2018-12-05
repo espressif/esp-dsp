@@ -37,7 +37,7 @@ float dsls_sfdr_32f(float *input, int32_t len, int8_t use_dc)
     dsls_fft2r_init_32fc();
 
     dsls_fft2r_32fc_ansi(temp_array, len);
-    dsls_bit_rev_32fc(temp_array, len);
+    dsls_bit_rev_32fc_ansi(temp_array, len);
 
     float min = std::numeric_limits<float>::max();
     float max = std::numeric_limits<float>::min();

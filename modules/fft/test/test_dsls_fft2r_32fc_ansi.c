@@ -42,7 +42,10 @@ TEST_CASE("dsls_fft2r_32fc functionality", "[dsls]")
     dsls_fft2r_init_32fc();
 
     dsls_fft2r_32fc_ansi(data, N);
-    dsls_bit_rev_32fc(data, N);
+    unsigned int start_b = xthal_get_ccount();
+    dsls_bit_rev_32fc_ansi(data, N);
+    unsigned int end_b = xthal_get_ccount();
+
     float min = 10000;
     float max = -10000;
     int max_pos = 0;
@@ -63,4 +66,5 @@ TEST_CASE("dsls_fft2r_32fc functionality", "[dsls]")
     float round_pow = round(max * 10);
     TEST_ASSERT_EQUAL( 6 * 10, round_pow);
     ESP_LOGI(TAG, "Calculation error is less then 0.1 dB");
+    ESP_LOGI(TAG, "cycles - %i", end_b - start_b);
 }

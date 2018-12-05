@@ -54,7 +54,7 @@ esp_err_t dsls_fft2r_init_32fc();
  */
 esp_err_t dsls_fft2r_32fc_ansi(float *input, int N);
 /**
- * @function dsls_bit_rev_32fc
+ * @function dsls_bit_rev_32fc_ansi
  * Bit reverse operation for the complex input array
  * The implementation use ANSI C and could be compiled and run on any platform
  *
@@ -66,7 +66,7 @@ esp_err_t dsls_fft2r_32fc_ansi(float *input, int N);
  *      - ESP_OK on success
  *      - One of the error codes from DSP library
  */
-esp_err_t dsls_bit_rev_32fc(float *input, int N);
+esp_err_t dsls_bit_rev_32fc_ansi(float *input, int N);
 
 /**
  * @function dsls_gen_w_r2_32fc

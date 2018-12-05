@@ -69,7 +69,7 @@ void app_main()
     // FFT
     dsls_fft2r_32fc_ansi(y_cf, N);
     // Bit reverse 
-    dsls_bit_rev_32fc(y_cf, N);
+    dsls_bit_rev_32fc_ansi(y_cf, N);
     // Convert one complex vector to two complex vectors
     dsls_cplx2reC_32fc(y_cf, N);
 

@@ -69,7 +69,7 @@ void ShowIIRfilter(float freq, float qFactor)
     // We making FFT transform
     dsls_fft2r_32fc_ansi(y_cf, N);
     // Bit reverse 
-    dsls_bit_rev_32fc(y_cf, N);
+    dsls_bit_rev_32fc_ansi(y_cf, N);
     // Calculating power of spectrum in dB
     for (int i = 0 ; i < N/2 ; i++) {
         y_cf[i] = 10 * log10f((y_cf[i * 2 + 0] * y_cf[i * 2 + 0] + y_cf[i * 2 + 1] * y_cf[i * 2 + 1])/N);
