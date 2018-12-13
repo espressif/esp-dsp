@@ -29,7 +29,7 @@ esp_err_t dsls_fft2r_init_32fc()
     if (result != ESP_OK) {
         return result;
     }
-    dsls_bit_rev_32fc_ansi(dsls_fft_w_table_32fc, CONFIG_DSL_MAX_FFT_SIZE >> 1);
+    result = dsls_bit_rev_32fc_ansi(dsls_fft_w_table_32fc, CONFIG_DSL_MAX_FFT_SIZE >> 1);
     if (result != ESP_OK) {
         return result;
     }
@@ -53,10 +53,8 @@ esp_err_t dsls_fft2r_32fc_ansi(float *input, int N)
     int ie, ia, m;
     float re_temp, im_temp;
     float c, s;
-    int N2 = N;
     ie = 1;
-    for (int k = N; k > 1; k >>= 1) {
-        N2 >>= 1;
+	for (int N2 = N/2; N2 > 0; N2 >>= 1) {
         ia = 0;
         for (int j = 0; j < ie; j++) {
             c = w[2 * j];
@@ -106,7 +104,7 @@ esp_err_t dsls_bit_rev_32fc_ansi(float *input, int N)
         return ESP_ERR_DSL_INVALID_LENGTH;
     }
     esp_err_t result = ESP_OK;
-    printf("Start bit rev N=%i  or 0x%08x\n", N, N);
+    
     //float* temp = (float*)malloc(N*2*sizeof(float));
     // for (int i=0 ; i< N ; i++)
     // {

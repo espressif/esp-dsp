@@ -54,6 +54,21 @@ esp_err_t dsls_fft2r_init_32fc();
  */
 esp_err_t dsls_fft2r_32fc_ansi(float *input, int N);
 /**
+ * @function dsls_fft2r_32fc_ae32
+ * Complex FFT of radix 2
+ * The implementation use ANSI C and could be compiled and run on any platform
+ *
+ * @param input: input complex array. An elements located: Re[0], Im[0], ... Re[N-1], Im[N-1]
+ *               result of FFT will be stored to this array.
+ * @param N: size of the complex array
+ *
+ * @return
+ *      - ESP_OK on success
+ *      - One of the error codes from DSP library
+ */
+esp_err_t dsls_fft2r_32fc_ae32(float *input, int N, float* w);
+
+/**
  * @function dsls_bit_rev_32fc_ansi
  * Bit reverse operation for the complex input array
  * The implementation use ANSI C and could be compiled and run on any platform

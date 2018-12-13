@@ -26,25 +26,40 @@
 #include "dsls_view.h"
 #include "dsls_fft2r.h"
 
-static const char *TAG = "dsls_fft2r_ansi";
+static const char *TAG = "fft2r_ae32";
 
 static float data[1024*2];
+static float check_data[1024*2];
+static float data_test[1024*2];
 
-TEST_CASE("dsls_fft2r_32fc_ansi functionality", "[dsls]")
+TEST_CASE("dsls_fft2r_32fc_ae32 functionality", "[dsls]")
 {
     int N = sizeof(data) / sizeof(float) / 2;
     int check_bin = 32;
+    float check_ampl = 2;
     for (int i = 0 ; i < N ; i++) {
-        data[i * 2 + 0] = 2 * sinf(M_PI / N * 32 * 2 * i) / (N / 2);
+        data[i * 2 + 0] = check_ampl * sinf(M_PI / N * check_bin * 2 * i) / (N / 2);
         data[i * 2 + 1] = 0;
     }
+    for (int i = 0 ; i < N*2 ; i++) {
+        check_data[i] = data[i];
+        data_test[i] = -1;
+    }
 
+    // Init FFT tables
     dsls_fft2r_init_32fc();
+    int N_check = N;
 
-    dsls_fft2r_32fc_ansi(data, N);
-    unsigned int start_b = xthal_get_ccount();
+    dsls_fft2r_32fc_ae32(data, N_check, dsls_fft_w_table_32fc);
+    dsls_fft2r_32fc_ansi(check_data, N_check);
+
+    for (int i=0 ; i< N_check ; i++)
+    {
+        if (abs(check_data[i] - data[i]) == 0) ESP_LOGD(TAG, "Data[%i] =%8.4f, %8.4f, %8.4f", i, data[i], check_data[i], check_data[i] - data[i]);
+        else ESP_LOGE(TAG, "Data[%i] =%f, %f, %f", i, data[i], check_data[i], check_data[i] - data[i]);
+    }
+    
     dsls_bit_rev_32fc_ansi(data, N);
-    unsigned int end_b = xthal_get_ccount();
 
     float min = 10000;
     float max = -10000;
@@ -66,24 +81,29 @@ TEST_CASE("dsls_fft2r_32fc_ansi functionality", "[dsls]")
     float round_pow = round(max * 10);
     TEST_ASSERT_EQUAL( 6 * 10, round_pow);
     ESP_LOGI(TAG, "Calculation error is less then 0.1 dB");
-    ESP_LOGI(TAG, "cycles - %i", end_b - start_b);
 }
 
-TEST_CASE("dsls_fft2r_32fc_ansi benchmark", "[dsls]")
-{    
+TEST_CASE("dsls_fft2r_32fc_ae32 benchmark", "[dsls]")
+{
     dsls_fft2r_init_32fc();
     for (int i= 5 ; i< 10 ; i++)
     {
         int N_check = 2<<i;
+        int check_bin = 4;
+        for (int i = 0 ; i < N_check ; i++) {
+            data[i * 2 + 0] = 4 * sinf(M_PI / N_check * 32 * 2 * i) / (N_check / 2);
+            data[i * 2 + 1] = 0;
+        }
+
         unsigned int start_b = xthal_get_ccount();
-        dsls_fft2r_32fc_ansi(data, N_check);
+        dsls_fft2r_32fc_ae32(data, N_check, dsls_fft_w_table_32fc);
 
         unsigned int end_b = xthal_get_ccount();
         float total_b = end_b - start_b;
         float cycles = total_b;
-        ESP_LOGI(TAG, "Benchmark dsls_fft2r_32fc_ansi - %6i cycles for %6i points FFT.", (int)cycles, N_check);
+        ESP_LOGI(TAG, "Benchmark dsls_fft2r_32fc_ae32 - %6i cycles for %6i points FFT.", (int)cycles, N_check);
         float min_exec = 3;
-        float max_exec = 330000*3;
+        float max_exec = 330000;
         if (cycles >= max_exec) {
             TEST_ASSERT_MESSAGE (false, "Exec time takes more then expected!");
         }
@@ -91,5 +111,4 @@ TEST_CASE("dsls_fft2r_32fc_ansi benchmark", "[dsls]")
             TEST_ASSERT_MESSAGE (false, "Exec time takes less then expected!");
         }
     }
-
 }
