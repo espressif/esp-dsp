@@ -16,13 +16,12 @@
 #include "dsls_dotprode_32f_m_ae32.S"
 
 // This is matrix multipliction function for Esp32 processor.
-
 	.text
 	.align  4
-	.global dsls_fft2r_32fc_ae32
-	.type   dsls_fft2r_32fc_ae32,@function
+	.global dsls_fft2r_32fc_ae32_
+	.type   dsls_fft2r_32fc_ae32_,@function
 
-    //.extern dsls_fft_w_table_32fc;
+//    .extern dsls_fft_w_table_32fc;
     .global dsls_fft_w_table_32fc;
 
 // The function implements next C code:
@@ -58,7 +57,7 @@
 //}
 
 
-dsls_fft2r_32fc_ae32: 
+dsls_fft2r_32fc_ae32_: 
 //esp_err_t dsls_fft2r_32fc_ansi(float *input, int N, float* dsls_fft_w_table_32fc)
 
 	entry	a1, 32
@@ -84,7 +83,8 @@ dsls_fft2r_32fc_ae32:
 // a15 - debug
 
     // This instruction are not working. Have to be fixed!!!
-    #l32r    a4, dsls_fft_w_table_32fc
+    // For now theres no solution...
+//    l32r    a4, dsls_fft_w_table_32fc_ae32
     
     // Load shift register with 1
     movi.n  a5, 1   // a5 = 1;

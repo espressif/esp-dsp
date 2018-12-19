@@ -33,8 +33,7 @@ float dsls_snr_32f(float *input, int32_t len, uint8_t use_dc)
         temp_array[i * 2 + 0] = input[i] * wind;
         temp_array[i * 2 + 1] = 0;
     }
-
-    dsls_fft2r_init_32fc();
+    dsls_fft2r_init_32fc(NULL, CONFIG_DSL_MAX_FFT_SIZE);
 
     dsls_fft2r_32fc_ansi(temp_array, len);
     dsls_bit_rev_32fc_ansi(temp_array, len);

@@ -82,7 +82,7 @@ void app_main()
 {
     esp_err_t ret;
     ESP_LOGI(TAG, "Start Example.");
-    ret = dsls_fft2r_init_32fc();
+    ret = dsls_fft2r_init_32fc(NULL, CONFIG_DSL_MAX_FFT_SIZE);
     if (ret  != ESP_OK)
     {
         ESP_LOGE(TAG, "Not possible to initialize FFT. Error = %i", ret);

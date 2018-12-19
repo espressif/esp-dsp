@@ -26,18 +26,37 @@ extern "C"
 {
 #endif
 
-extern float dsls_fft_w_table_32fc[CONFIG_DSL_MAX_FFT_SIZE];
+extern float* dsls_fft_w_table_32fc;
+extern int dsls_fft_w_table_size;
+extern uint8_t dsls_fft2r_initialized;
 
 /**
- * @function dsls_fft2r_init_32fc
  * Initialization of Complex FFT. This function initialize coefficients table.
  * The implementation use ANSI C and could be compiled and run on any platform
- *
+ * 
+ * @param fft_table_buff: pointer to floating point buffer where sin/cos table will be stored
+ *                          if this parameter set to NULL, and table_size value is more then 0, then 
+ *                          dsls_fft2r_init_32fc will allocate buffer internally
+ * @param table_size: size of the buffer in float words  
+ *                      if fft_table_buff is NULL and table_size is not 0, buffer will be allocated internally.
+ *                      If table_size is 0, buffer will not be allocated. 
+ * 
  * @return
  *      - ESP_OK on success
+ *      - ESP_ERR_DSL_PARAM_OUTOFRANGE if table_size > CONFIG_DSL_MAX_FFT_SIZE
+ *      - ESP_ERR_DSL_REINITIALIZED if buffer already allocated internally by other function
  *      - One of the error codes from DSP library
  */
-esp_err_t dsls_fft2r_init_32fc();
+esp_err_t dsls_fft2r_init_32fc(float* fft_table_buff, int table_size);
+
+/**
+ * Free resources of Complex FFT. This function delete coefficients table if it was allocated by dsls_fft2r_init_32fc.
+ * The implementation use ANSI C and could be compiled and run on any platform
+ * 
+ * 
+ * @return
+ */
+void dsls_fft2r_deinit();
 
 /**
  * @function dsls_fft2r_32fc_ansi
@@ -66,7 +85,10 @@ esp_err_t dsls_fft2r_32fc_ansi(float *input, int N);
  *      - ESP_OK on success
  *      - One of the error codes from DSP library
  */
-esp_err_t dsls_fft2r_32fc_ae32(float *input, int N, float* w);
+// This is workaround because linker generates permanent error when assembler uses 
+// direct access to the table pointer
+#define dsls_fft2r_32fc_ae32(x,y) dsls_fft2r_32fc_ae32_(x,y, dsls_fft_w_table_32fc)
+esp_err_t dsls_fft2r_32fc_ae32_(float *input, int N, float* w);
 
 /**
  * @function dsls_bit_rev_32fc_ansi

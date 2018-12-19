@@ -16,15 +16,41 @@
 #include "dsl_common.h"
 #include <math.h>
 
-float dsls_fft_w_table_32fc[CONFIG_DSL_MAX_FFT_SIZE];
+float* dsls_fft_w_table_32fc;
+int dsls_fft_w_table_size;
 uint8_t dsls_fft2r_initialized = 0;
-
-esp_err_t dsls_fft2r_init_32fc()
+uint8_t dsls_fft2r_mem_allocated = 0;
+esp_err_t dsls_fft2r_init_32fc(float* fft_table_buff, int table_size)
 {
     esp_err_t result = ESP_OK;
     if (dsls_fft2r_initialized != 0) {
         return result;
     }
+    if (table_size > CONFIG_DSL_MAX_FFT_SIZE)
+    {
+        return ESP_ERR_DSL_PARAM_OUTOFRANGE;
+    }
+    if (table_size == 0){
+        return result;
+    }
+    if (fft_table_buff != NULL)
+    {
+        if (dsls_fft2r_mem_allocated)
+        {
+            return ESP_ERR_DSL_REINITIALIZED;
+        }
+        dsls_fft_w_table_32fc = fft_table_buff;
+        dsls_fft_w_table_size = table_size;
+    } else 
+    {
+        if (!dsls_fft2r_mem_allocated) 
+        {
+            dsls_fft_w_table_32fc = (float*)malloc(CONFIG_DSL_MAX_FFT_SIZE*sizeof(float));
+        }
+        dsls_fft_w_table_size = CONFIG_DSL_MAX_FFT_SIZE;
+        dsls_fft2r_mem_allocated = 1;
+    }
+
     result = dsls_gen_w_r2_32fc(dsls_fft_w_table_32fc, CONFIG_DSL_MAX_FFT_SIZE);
     if (result != ESP_OK) {
         return result;
@@ -35,6 +61,16 @@ esp_err_t dsls_fft2r_init_32fc()
     }
     dsls_fft2r_initialized = 1;
     return ESP_OK;
+}
+
+void dsls_fft2r_deinit()
+{
+    if (dsls_fft2r_mem_allocated)
+    {
+        free(dsls_fft_w_table_32fc);
+    }
+    dsls_fft2r_mem_allocated = 0;
+    dsls_fft2r_initialized = 0;
 }
 
 esp_err_t dsls_fft2r_32fc_ansi(float *input, int N)

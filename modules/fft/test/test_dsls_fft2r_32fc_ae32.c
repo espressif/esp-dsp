@@ -47,10 +47,15 @@ TEST_CASE("dsls_fft2r_32fc_ae32 functionality", "[dsls]")
     }
 
     // Init FFT tables
-    dsls_fft2r_init_32fc();
+    esp_err_t ret = dsls_fft2r_init_32fc(NULL, CONFIG_DSL_MAX_FFT_SIZE);
+    if (ret  != ESP_OK)
+    {
+        ESP_LOGE(TAG, "Not possible to initialize FFT. Error = %i", ret);
+        return;
+    }
     int N_check = N;
 
-    dsls_fft2r_32fc_ae32(data, N_check, dsls_fft_w_table_32fc);
+    dsls_fft2r_32fc_ae32(data, N_check);
     dsls_fft2r_32fc_ansi(check_data, N_check);
 
     for (int i=0 ; i< N_check ; i++)
@@ -81,22 +86,28 @@ TEST_CASE("dsls_fft2r_32fc_ae32 functionality", "[dsls]")
     float round_pow = round(max * 10);
     TEST_ASSERT_EQUAL( 6 * 10, round_pow);
     ESP_LOGI(TAG, "Calculation error is less then 0.1 dB");
+    dsls_fft2r_deinit();
 }
 
 TEST_CASE("dsls_fft2r_32fc_ae32 benchmark", "[dsls]")
 {
-    dsls_fft2r_init_32fc();
+    esp_err_t ret = dsls_fft2r_init_32fc(NULL, CONFIG_DSL_MAX_FFT_SIZE);
+    if (ret  != ESP_OK)
+    {
+        ESP_LOGE(TAG, "Not possible to initialize FFT. Error = %i", ret);
+        return;
+    }
     for (int i= 5 ; i< 10 ; i++)
     {
         int N_check = 2<<i;
-        int check_bin = 4;
+        int check_bin = 32;
         for (int i = 0 ; i < N_check ; i++) {
-            data[i * 2 + 0] = 4 * sinf(M_PI / N_check * 32 * 2 * i) / (N_check / 2);
+            data[i * 2 + 0] = 4 * sinf(M_PI / N_check * check_bin * 2 * i) / (N_check / 2);
             data[i * 2 + 1] = 0;
         }
 
         unsigned int start_b = xthal_get_ccount();
-        dsls_fft2r_32fc_ae32(data, N_check, dsls_fft_w_table_32fc);
+        dsls_fft2r_32fc_ae32(data, N_check);
 
         unsigned int end_b = xthal_get_ccount();
         float total_b = end_b - start_b;
@@ -111,4 +122,5 @@ TEST_CASE("dsls_fft2r_32fc_ae32 benchmark", "[dsls]")
             TEST_ASSERT_MESSAGE (false, "Exec time takes less then expected!");
         }
     }
+    dsls_fft2r_deinit();
 }
