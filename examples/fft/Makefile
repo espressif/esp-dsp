@@ -3,7 +3,7 @@
 # project subdirectory.
 #
 
-PROJECT_NAME := iir
+PROJECT_NAME := fft2r
 
 # This line has to be included into the make file
 # to include components that are located somewhere 

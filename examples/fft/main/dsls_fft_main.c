@@ -46,7 +46,7 @@ void app_main()
 {
     esp_err_t ret;
     ESP_LOGI(TAG, "Start Example.");
-    ret = dsls_fft2r_init_32fc();
+    ret = dsls_fft2r_init_32fc(NULL, CONFIG_DSL_MAX_FFT_SIZE);
     if (ret  != ESP_OK)
     {
         ESP_LOGE(TAG, "Not possible to initialize FFT. Error = %i", ret);
@@ -67,9 +67,9 @@ void app_main()
         y_cf[i*2 + 1] = x2[i] * wind[i];
     }
     // FFT
-    dsls_fft2r_32fc_ansi(y_cf, N);
+    dsls_fft2r_32fc_ae32(y_cf, N);
     // Bit reverse 
-    dsls_bit_rev_32fc(y_cf, N);
+    dsls_bit_rev_32fc_ansi(y_cf, N);
     // Convert one complex vector to two complex vectors
     dsls_cplx2reC_32fc(y_cf, N);
 

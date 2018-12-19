@@ -25,6 +25,7 @@
 
 #include "dsls_view.h"
 #include "dsls_sfdr.h"
+#include "dsls_fft2r.h"
 
 
 static const char *TAG = "dsls_sfdr_32f";
@@ -40,7 +41,9 @@ TEST_CASE("dsls_sfdr_32f functionality", "[dsls]")
         data[i] = 4 * sinf(M_PI / N * check_bin * i) / (N / 2);
         data[i] += sinf(M_PI / N * check_bin * i * 2) / (N / 2);
     }
+    
     float sfdr = dsls_sfdr_32f(data, N, 1);
     TEST_ASSERT_EQUAL( (int)20 * log10(sfdr_exp), (int)sfdr);
     ESP_LOGI(TAG, "dsls_sfdr_32f = %f dB", sfdr);
+    dsls_fft2r_deinit();
 }

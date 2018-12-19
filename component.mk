@@ -41,4 +41,13 @@ COMPONENT_PRIV_INCLUDEDIRS := 	modules/dotprod/float \
 								modules/dotprod/fixed				
 					
 #COMPONENT_ADD_LDFLAGS = -g -O2 -c -fverbose-asm
+
+# This is flags to compile assembler files without error: danger relocation...
+#modules/fft/float/dsls_fft2r_32fc_ansi.o: CFLAGS += -mtext-section-literals
+#modules/fft/float/dsls_fft2r_32fc_ansi.o: CPPFLAGS += -mtext-section-literals
+#modules/fft/float/dsls_fft2r_32fc_ae32.o: CFLAGS += -mtext-section-literals
+#modules/fft/float/dsls_fft2r_32fc_ae32.o: CPPFLAGS += -mtext-section-literals
+#modules/fft/float/dsls_fft2r_32fc_ae32.o: ARFLAGS += -mtext-section-literals
+#modules/fft/float/dsls_fft2r_32fc_ansi.o: CPPFLAGS += -mtext-section-literals
+
 #-Wl,--whole-archive -l$(COMPONENT_NAME) -Wl,--no-whole-archive
