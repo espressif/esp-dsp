@@ -17,8 +17,12 @@
 
 #include "dsl_err.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 /**
- * @function dslm_mult_32f_ansi
  * Matrix multiplication for two floating point matrices: C[m][k] = A[m][n] * B[n][k]
  * The implementation use ANSI C and could be compiled and run on any platform
  *
@@ -35,9 +39,8 @@
 esp_err_t dslm_mult_32f_ansi(float *A, float *B, float *C, int m, int n, int k);
 
 /**
- * @function dslm_mult_32f_ae32
  * Matrix multiplication for two floating point matrices: C[m][k] = A[m][n] * B[n][k]
- * The implementation optimized for Esp32 platform
+ * The implementation is optimized for ESP32 chip.
  *
  * @param A  input matrix A[m][n]
  * @param B  input matrix B[n][k]
@@ -52,9 +55,8 @@ esp_err_t dslm_mult_32f_ansi(float *A, float *B, float *C, int m, int n, int k);
 esp_err_t dslm_mult_32f_ae32(float *A, float *B, float *C, int m, int n, int k);
 
 /**
- * @function dslm_mult_3x3x1_32f_ae32
  * Matrix multiplication for two floating point matrices 3x3 and 3x1: C[1][3] = A[3][3] * B[3][1]
- * The implementation optimized for Esp32 platform
+ * The implementation is optimized for ESP32 chip.
  *
  * @param A  input matrix A[3][3]
  * @param B  input matrix/vector B[3][1]
@@ -66,9 +68,8 @@ esp_err_t dslm_mult_32f_ae32(float *A, float *B, float *C, int m, int n, int k);
 esp_err_t dslm_mult_3x3x1_32f_ae32(float *A, float *B, float *C);
 
 /**
- * @function dslm_mult_3x3x3_32f_ae32
  * Matrix multiplication for two square 3x3 floating point matrices: C[3][3] = A[3][3] * B[3][3]
- * The implementation optimized for Esp32 platform
+ * The implementation is optimized for ESP32 chip.
  *
  * @param A  input matrix A[3][3]
  * @param B  input matrix B[3][3]
@@ -79,9 +80,8 @@ esp_err_t dslm_mult_3x3x1_32f_ae32(float *A, float *B, float *C);
  */
 esp_err_t dslm_mult_3x3x3_32f_ae32(float *A, float *B, float *C);
 /**
- * @function dslm_mult_4x4x1_32f_ae32
  * Matrix multiplication for two floating point matrices 4x4 and 4x1: C[1][4] = A[4][4] * B[4][1]
- * The implementation optimized for Esp32 platform
+ * The implementation is optimized for ESP32 chip.
  *
  * @param A  input matrix A[4][4]
  * @param B  input matrix/vector B[4][1]
@@ -93,9 +93,8 @@ esp_err_t dslm_mult_3x3x3_32f_ae32(float *A, float *B, float *C);
 
 esp_err_t dslm_mult_4x4x1_32f_ae32(float *A, float *B, float *C);
 /**
- * @function dslm_mult_4x4x4_32f_ae32
  * Matrix multiplication for two square 3x3 floating point matrices: C[4][4] = A[4][4] * B[4][4]
- * The implementation optimized for Esp32 platform
+ * The implementation is optimized for ESP32 chip.
  *
  * @param A  input matrix A[4][4]
  * @param B  input matrix B[4][4]
@@ -107,7 +106,6 @@ esp_err_t dslm_mult_4x4x1_32f_ae32(float *A, float *B, float *C);
 esp_err_t dslm_mult_4x4x4_32f_ae32(float *A, float *B, float *C);
 
 /**
- * @function dslm_mult_16s_ansi
  * Matrix multiplication for two signed 16 bit fixed point matrices: C[m][k] = (A[m][n] * B[n][k]) >> (15- shift)
  * The implementation use ANSI C and could be compiled and run on any platform
  *
@@ -125,9 +123,8 @@ esp_err_t dslm_mult_4x4x4_32f_ae32(float *A, float *B, float *C);
 esp_err_t dslm_mult_16s_ansi(int16_t *A, int16_t *B, int16_t *C, int m, int n, int k, int shift);
 
 /**
- * @function dslm_mult_16s_ae32
  * Matrix multiplication for two signed 16 bit fixed point matrices: C[m][k] = (A[m][n] * B[n][k]) >> (15- shift)
- * The implementation optimized for Esp32 platform
+ * The implementation is optimized for ESP32 chip.
  *
  * @param A  input matrix A[m][n]
  * @param B  input matrix B[n][k]
@@ -141,5 +138,29 @@ esp_err_t dslm_mult_16s_ansi(int16_t *A, int16_t *B, int16_t *C, int m, int n, i
  *      - One of the error codes from DSP library
  */
 esp_err_t dslm_mult_16s_ae32(int16_t *A, int16_t *B, int16_t *C, int m, int n, int k, int shift);
+
+#ifdef __cplusplus
+}
+#endif
+
+
+#ifdef CONFIG_DSP_OPTIMIZED
+#define dslm_mult_32f dslm_mult_32f_ae32
+#define dslm_mult_16s dslm_mult_16s_ae32
+#define dslm_mult_3x3x1_32f dslm_mult_3x3x1_32f_ae32
+#define dslm_mult_3x3x3_32f dslm_mult_3x3x3_32f_ae32
+#define dslm_mult_4x4x1_32f dslm_mult_4x4x1_32f_ae32
+#define dslm_mult_4x4x4_32f dslm_mult_4x4x4_32f_ae32
+#endif
+#ifdef CONFIG_DSP_ANSI
+#define dslm_mult_32f dslm_mult_32f_ansi
+#define dslm_mult_16s dslm_mult_16s_ansi
+
+#define dslm_mult_3x3x1_32f(A,B,C) dslm_mult_32f_ansi(A,B,C, 3, 3, 1)
+#define dslm_mult_3x3x3_32f(A,B,C) dslm_mult_32f_ansi(A,B,C, 3, 3, 3)
+#define dslm_mult_4x4x1_32f(A,B,C) dslm_mult_32f_ansi(A,B,C, 4, 4, 1)
+#define dslm_mult_4x4x4_32f(A,B,C) dslm_mult_32f_ansi(A,B,C, 4, 4, 4)
+#endif
+
 
 #endif // _dslm_mult_H_

@@ -23,7 +23,6 @@ extern "C"
 #endif
 
 /**
- * @function dsls_h_gen_f32
  * The Heviside function.
  * x[i]=0, if i=[0..pos)
  * x[i]=1, if i=[pos..N)

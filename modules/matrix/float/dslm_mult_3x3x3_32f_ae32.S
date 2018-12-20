@@ -15,7 +15,7 @@
 //#include "../../dotprod/float/dsls_dotprod_32f_m_ae32.S"
 #include "dsls_dotprod_32f_m_ae32.S"
 
-// This is matrix multipliction function for Esp32 processor.
+// This is matrix multipliction function for ESP32 processor.
 	.text
 	.align  4
 	.global dslm_mult_3x3x3_32f_ae32

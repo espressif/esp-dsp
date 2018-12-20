@@ -23,7 +23,6 @@ extern "C"
 #endif
 
 /**
- * @function dsls_mulC_f32_ansi
  * The function multiplies input array to the constant value
  * x[i*step1] = y[i*step2]*C; i=[0..len)
  * The implementation use ANSI C and could be compiled and run on any platform
@@ -43,6 +42,14 @@ esp_err_t dsls_mulC_f32_ansi(float *x, float *y, int len, float C, int step1, in
 
 #ifdef __cplusplus
 }
+#endif
+
+
+#ifdef CONFIG_DSP_OPTIMIZED
+#define dsls_mulC_f32 dsls_mulC_f32_ansi
+#endif
+#ifdef CONFIG_DSP_ANSI
+#define dsls_mulC_f32 dsls_mulC_f32_ansi
 #endif
 
 #endif // _dsls_mulC_H_

@@ -26,7 +26,7 @@ esp_err_t dsls_fft2r_init_32fc(float* fft_table_buff, int table_size)
     if (dsls_fft2r_initialized != 0) {
         return result;
     }
-    if (table_size > CONFIG_DSL_MAX_FFT_SIZE)
+    if (table_size > CONFIG_DSP_MAX_FFT_SIZE)
     {
         return ESP_ERR_DSL_PARAM_OUTOFRANGE;
     }
@@ -45,17 +45,17 @@ esp_err_t dsls_fft2r_init_32fc(float* fft_table_buff, int table_size)
     {
         if (!dsls_fft2r_mem_allocated) 
         {
-            dsls_fft_w_table_32fc = (float*)malloc(CONFIG_DSL_MAX_FFT_SIZE*sizeof(float));
+            dsls_fft_w_table_32fc = (float*)malloc(CONFIG_DSP_MAX_FFT_SIZE*sizeof(float));
         }
-        dsls_fft_w_table_size = CONFIG_DSL_MAX_FFT_SIZE;
+        dsls_fft_w_table_size = CONFIG_DSP_MAX_FFT_SIZE;
         dsls_fft2r_mem_allocated = 1;
     }
 
-    result = dsls_gen_w_r2_32fc(dsls_fft_w_table_32fc, CONFIG_DSL_MAX_FFT_SIZE);
+    result = dsls_gen_w_r2_32fc(dsls_fft_w_table_32fc, CONFIG_DSP_MAX_FFT_SIZE);
     if (result != ESP_OK) {
         return result;
     }
-    result = dsls_bit_rev_32fc_ansi(dsls_fft_w_table_32fc, CONFIG_DSL_MAX_FFT_SIZE >> 1);
+    result = dsls_bit_rev_32fc_ansi(dsls_fft_w_table_32fc, CONFIG_DSP_MAX_FFT_SIZE >> 1);
     if (result != ESP_OK) {
         return result;
     }

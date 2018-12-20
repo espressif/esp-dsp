@@ -23,7 +23,6 @@ extern "C"
 #endif
 
 /**
- * @function dsls_tone_gen_f32
  * The function generate a tone signal.
  * x[i]=A*sin(2*PI*i + ph/180*PI)
  * The implementation use ANSI C and could be compiled and run on any platform

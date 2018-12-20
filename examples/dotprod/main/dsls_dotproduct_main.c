@@ -43,7 +43,7 @@ void app_main()
         input2[i] = i;
     }
     float result1 = 0;
-    ret = dsls_dotprod_32f_ae32(input1, input2, &result1, 101);
+    ret = dsls_dotprod_32f(input1, input2, &result1, 101);
     if (ret != ESP_OK)
     {
         ESP_LOGE(TAG, "Operation error = %i", ret);

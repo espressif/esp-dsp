@@ -30,7 +30,6 @@ extern "C"
 // a0 - always == 1
 
 /**
- * @function dsls_biquad_gen_lpf_32f
  * Coefficients for low pass 2nd order IIR filter (bi-quad)
  * The implementation use ANSI C and could be compiled and run on any platform
  *
@@ -45,7 +44,6 @@ extern "C"
 esp_err_t dsls_biquad_gen_lpf_32f(float *coeffs, float f, float qFactor);
 
 /**
- * @function dsls_biquad_gen_hpf_32f
  * Coefficients for high pass 2nd order IIR filter (bi-quad)
  * The implementation use ANSI C and could be compiled and run on any platform
  *
@@ -60,7 +58,6 @@ esp_err_t dsls_biquad_gen_lpf_32f(float *coeffs, float f, float qFactor);
 esp_err_t dsls_biquad_gen_hpf_32f(float *coeffs, float f, float qFactor);
 
 /**
- * @function dsls_biquad_gen_bpf_32f
  * Coefficients for band pass 2nd order IIR filter (bi-quad)
  * The implementation use ANSI C and could be compiled and run on any platform
  *
@@ -75,7 +72,6 @@ esp_err_t dsls_biquad_gen_hpf_32f(float *coeffs, float f, float qFactor);
 esp_err_t dsls_biquad_gen_bpf_32f(float *coeffs, float f, float qFactor);
 
 /**
- * @function dsls_biquad_gen_bpf0db_32f
  * Coefficients for band pass 2nd order IIR filter (bi-quad) with 0 dB gain in passband
  * The implementation use ANSI C and could be compiled and run on any platform
  *
@@ -90,7 +86,6 @@ esp_err_t dsls_biquad_gen_bpf_32f(float *coeffs, float f, float qFactor);
 esp_err_t dsls_biquad_gen_bpf0db_32f(float *coeffs, float f, float qFactor);
 
 /**
- * @function dsls_biquad_gen_notch_32f
  * Coefficients for notch 2nd order IIR filter (bi-quad)
  * The implementation use ANSI C and could be compiled and run on any platform
  *
@@ -105,7 +100,6 @@ esp_err_t dsls_biquad_gen_bpf0db_32f(float *coeffs, float f, float qFactor);
  */
 esp_err_t dsls_biquad_gen_notch_32f(float *coeffs, float f, float gain, float qFactor);
 /**
- * @function dsls_biquad_gen_allpass360_32f
  * Coefficients for all pass 2nd order IIR filter (bi-quad) with 360 degree phase shift
  * The implementation use ANSI C and could be compiled and run on any platform
  *
@@ -119,7 +113,6 @@ esp_err_t dsls_biquad_gen_notch_32f(float *coeffs, float f, float gain, float qF
  */
 esp_err_t dsls_biquad_gen_allpass360_32f(float *coeffs, float f, float qFactor);
 /**
- * @function dsls_biquad_gen_allpass180_32f
  * Coefficients for all pass 2nd order IIR filter (bi-quad) with 180 degree phase shift
  * The implementation use ANSI C and could be compiled and run on any platform
  *
@@ -133,7 +126,6 @@ esp_err_t dsls_biquad_gen_allpass360_32f(float *coeffs, float f, float qFactor);
  */
 esp_err_t dsls_biquad_gen_allpass180_32f(float *coeffs, float f, float qFactor);
 /**
- * @function dsls_biquad_gen_peakingEQ_32f
  * Coefficients for peak 2nd order IIR filter (bi-quad)
  * The implementation use ANSI C and could be compiled and run on any platform
  *
@@ -147,7 +139,6 @@ esp_err_t dsls_biquad_gen_allpass180_32f(float *coeffs, float f, float qFactor);
  */
 esp_err_t dsls_biquad_gen_peakingEQ_32f(float *coeffs, float f, float qFactor);
 /**
- * @function dsls_biquad_gen_lowShelf_32f
  * Coefficients for low pass Shelf 2nd order IIR filter (bi-quad)
  * The implementation use ANSI C and could be compiled and run on any platform
  *
@@ -162,7 +153,6 @@ esp_err_t dsls_biquad_gen_peakingEQ_32f(float *coeffs, float f, float qFactor);
  */
 esp_err_t dsls_biquad_gen_lowShelf_32f(float *coeffs, float f, float gain, float qFactor);
 /**
- * @function dsls_biquad_gen_highShelf_32f
  * Coefficients for high pass Shelf 2nd order IIR filter (bi-quad)
  * The implementation use ANSI C and could be compiled and run on any platform
  *

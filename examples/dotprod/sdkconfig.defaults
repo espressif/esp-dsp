@@ -1,2 +1,3 @@
-# Override some defaults so BT stack is enabled
-# by default in this example
+# Default CPU frequency set to 240 MHz
+CONFIG_ESP32_DEFAULT_CPU_FREQ_240=y
+CONFIG_ESP32_DEFAULT_CPU_FREQ_MHZ=240

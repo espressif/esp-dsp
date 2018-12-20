@@ -14,7 +14,7 @@
 
 #include "dsls_dotprode_32f_m_ae32.S"
 
-// This is dot product function for Esp32 processor.
+// This is dot product function for ESP32 processor.
 	.text
 	.align  4
 	.global dsls_dotprode_32f_ae32

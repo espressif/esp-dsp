@@ -17,9 +17,9 @@
 #include "dsl_err.h"
 #include "sdkconfig.h"
 
-#ifndef CONFIG_DSL_MAX_FFT_SIZE
-#define CONFIG_DSL_MAX_FFT_SIZE 4096
-#endif // CONFIG_DSL_MAX_FFT_SIZE
+#ifndef CONFIG_DSP_MAX_FFT_SIZE
+#define CONFIG_DSP_MAX_FFT_SIZE 4096
+#endif // CONFIG_DSP_MAX_FFT_SIZE
 
 #ifdef __cplusplus
 extern "C"
@@ -43,7 +43,7 @@ extern uint8_t dsls_fft2r_initialized;
  * 
  * @return
  *      - ESP_OK on success
- *      - ESP_ERR_DSL_PARAM_OUTOFRANGE if table_size > CONFIG_DSL_MAX_FFT_SIZE
+ *      - ESP_ERR_DSL_PARAM_OUTOFRANGE if table_size > CONFIG_DSP_MAX_FFT_SIZE
  *      - ESP_ERR_DSL_REINITIALIZED if buffer already allocated internally by other function
  *      - One of the error codes from DSP library
  */
@@ -59,7 +59,6 @@ esp_err_t dsls_fft2r_init_32fc(float* fft_table_buff, int table_size);
 void dsls_fft2r_deinit();
 
 /**
- * @function dsls_fft2r_32fc_ansi
  * Complex FFT of radix 2
  * The implementation use ANSI C and could be compiled and run on any platform
  *
@@ -73,7 +72,6 @@ void dsls_fft2r_deinit();
  */
 esp_err_t dsls_fft2r_32fc_ansi(float *input, int N);
 /**
- * @function dsls_fft2r_32fc_ae32
  * Complex FFT of radix 2
  * The implementation use ANSI C and could be compiled and run on any platform
  *
@@ -91,7 +89,6 @@ esp_err_t dsls_fft2r_32fc_ansi(float *input, int N);
 esp_err_t dsls_fft2r_32fc_ae32_(float *input, int N, float* w);
 
 /**
- * @function dsls_bit_rev_32fc_ansi
  * Bit reverse operation for the complex input array
  * The implementation use ANSI C and could be compiled and run on any platform
  *
@@ -106,7 +103,6 @@ esp_err_t dsls_fft2r_32fc_ae32_(float *input, int N, float* w);
 esp_err_t dsls_bit_rev_32fc_ansi(float *input, int N);
 
 /**
- * @function dsls_gen_w_r2_32fc
  * Generate coefficients table for the FFT radix 2. This function called inside init.
  * The implementation use ANSI C and could be compiled and run on any platform
  *
@@ -122,7 +118,6 @@ esp_err_t dsls_bit_rev_32fc_ansi(float *input, int N);
 esp_err_t dsls_gen_w_r2_32fc(float *w, int N);
 
 /**
- * @function dsls_cplx2reC_32fc
  * Convert complex array to two real arrays in case if input was two real arrays.
  * This function have to be used if FFT used to process real data.
  * The implementation use ANSI C and could be compiled and run on any platform
@@ -137,10 +132,22 @@ esp_err_t dsls_gen_w_r2_32fc(float *w, int N);
  *      - ESP_OK on success
  *      - One of the error codes from DSP library
  */
-esp_err_t dsls_cplx2reC_32fc(float *input, int N);
+esp_err_t dsls_cplx2reC_32fc_ansi(float *input, int N);
 
 #ifdef __cplusplus
 }
 #endif
+
+#ifdef CONFIG_DSP_OPTIMIZED
+#define dsls_fft2r_32fc dsls_fft2r_32fc_ae32
+#define dsls_bit_rev_32fc dsls_bit_rev_32fc_ansi
+#define dsls_cplx2reC_32fc dsls_cplx2reC_32fc_ansi
+#endif
+#ifdef CONFIG_DSP_ANSI
+#define dsls_fft2r_32fc dsls_fft2r_32fc_ansi
+#define dsls_bit_rev_32fc dsls_bit_rev_32fc_ansi
+#define dsls_cplx2reC_32fc dsls_cplx2reC_32fc_ansi
+#endif
+
 
 #endif // _dsls_fft2r_cf_H_

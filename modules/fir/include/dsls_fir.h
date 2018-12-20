@@ -34,7 +34,6 @@ typedef struct fir_32f_s {
 } fir_32f_t;
 
 /**
- * @function dsls_fir_init_32f
  * Function initialize structure for 32 bit floating point FIR filter
  * The implementation use ANSI C and could be compiled and run on any platform
  *
@@ -50,7 +49,6 @@ typedef struct fir_32f_s {
 esp_err_t dsls_fir_init_32f(fir_32f_t *fir, float *coeffs, float *delay, int N);
 
 /**
- * @function dsls_fird_init_32f
  * Function initialize structure for 32 bit floating point FIR filter with decimation
  * The implementation use ANSI C and could be compiled and run on any platform
  *
@@ -69,7 +67,6 @@ esp_err_t dsls_fird_init_32f(fir_32f_t *fir, float *coeffs, float *delay, int N,
 
 
 /**
- * @function dsls_fir_32f_ansi
  * Function implements FIR filter
  * The implementation use ANSI C and could be compiled and run on any platform
  *
@@ -84,9 +81,8 @@ esp_err_t dsls_fird_init_32f(fir_32f_t *fir, float *coeffs, float *delay, int N,
  */
 esp_err_t dsls_fir_32f_ansi(fir_32f_t *fir, float *x, float *y, int len);
 /**
- * @function dsls_fir_32f_ansi
  * Function implements FIR filter
- * The implementation optimized for Esp32 platform
+ * The implementation is optimized for ESP32 chip.
  *
  * @param fir: pointer to fir filter structure, that must be initialized before
  * @param x: input array
@@ -100,7 +96,6 @@ esp_err_t dsls_fir_32f_ansi(fir_32f_t *fir, float *x, float *y, int len);
 esp_err_t dsls_fir_32f_ae32(fir_32f_t *fir, float *x, float *y, int len);
 
 /**
- * @function dsls_fir_32f_ansi
  * Function implements FIR filter with decimation
  * The implementation use ANSI C and could be compiled and run on any platform
  *
@@ -115,9 +110,8 @@ esp_err_t dsls_fir_32f_ae32(fir_32f_t *fir, float *x, float *y, int len);
 int dsls_fird_32f_ansi(fir_32f_t *fir, float *x, float *y, int len);
 
 /**
- * @function dsls_fir_32f_ansi
  * Function implements FIR filter with decimation
- * The implementation optimized for Esp32 platform
+ * The implementation is optimized for ESP32 chip.
  *
  * @param fir: pointer to fir filter structure, that must be initialized before
  * @param x: input array
@@ -131,6 +125,16 @@ int dsls_fird_32f_ae32(fir_32f_t *fir, float *x, float *y, int len);
 
 #ifdef __cplusplus
 }
+#endif
+
+
+#ifdef CONFIG_DSP_OPTIMIZED
+#define dsls_fir_32f dsls_fir_32f_ae32
+#define dsls_fird_32f dsls_fird_32f_ae32
+#endif
+#ifdef CONFIG_DSP_ANSI
+#define dsls_fir_32f dsls_fir_32f_ansi
+#define dsls_fird_32f dsls_fird_32f_ansi
 #endif
 
 #endif // _dsls_fir_H_

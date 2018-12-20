@@ -25,7 +25,6 @@ extern "C"
 #endif
 
 /**
- * @function dsls_biquad_32f_ansi
  * IIR filter 2nd order direct form II (bi quad)
  * The implementation use ANSI C and could be compiled and run on any platform
  *
@@ -42,9 +41,8 @@ extern "C"
 esp_err_t dsls_biquad_32f_ansi(float *x, float *y, int len, float *coef, float *w);
 
 /**
- * @function dsls_biquad_32f_ansi
  * IIR filter 2nd order direct form II (bi quad)
- * The implementation optimized for Esp32 platform
+ * The implementation is optimized for ESP32 chip.
  *
  * @param x: input array
  * @param y: output array
@@ -60,6 +58,14 @@ esp_err_t dsls_biquad_32f_ae32(float *x, float *y, int len, float *coef, float *
 
 #ifdef __cplusplus
 }
+#endif
+
+
+#ifdef CONFIG_DSP_OPTIMIZED
+#define dsls_biquad_32f dsls_biquad_32f_ae32
+#endif
+#ifdef CONFIG_DSP_ANSI
+#define dsls_biquad_32f dsls_biquad_32f_ansi
 #endif
 
 #endif // _dsls_biquad_H_

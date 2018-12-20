@@ -24,7 +24,6 @@ extern "C"
 #endif
 
 /**
- * @function dsls_sfdr_32f
  * The function calculates Spurious-Free Dynamic Range.
  * The function makes FFT of the input, then search a spectrum maximum, and then compare
  * maximum value with all others. Result calculated as minimum value.

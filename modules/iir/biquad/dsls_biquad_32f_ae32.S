@@ -14,7 +14,7 @@
 
 #include "dsls_dotprod_32f_m_ae32.S"
 
-// This is bi quad filter form II for Esp32 processor.
+// This is bi quad filter form II for ESP32 processor.
 	.text
 	.align  4
 	.global dsls_biquad_32f_ae32

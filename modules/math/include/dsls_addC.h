@@ -24,7 +24,6 @@ extern "C"
 
 
 /**
- * @function dsls_addC_32f_ansi
  * The function adds constant to the input array
  * x[i*step1] = y[i*step2] + C; i=[0..len)
  * The implementation use ANSI C and could be compiled and run on any platform
@@ -44,6 +43,14 @@ esp_err_t dsls_addC_32f_ansi(float *x, float *y, int len, float C, int step1, in
 
 #ifdef __cplusplus
 }
+#endif
+
+
+#ifdef CONFIG_DSP_OPTIMIZED
+#define dsls_addC_32f dsls_addC_32f_ansi
+#endif
+#ifdef CONFIG_DSP_ANSI
+#define dsls_addC_32f dsls_addC_32f_ansi
 #endif
 
 #endif // _dsls_addC_H_

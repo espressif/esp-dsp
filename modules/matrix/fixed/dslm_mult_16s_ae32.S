@@ -17,7 +17,7 @@
 #include "dslm_mult_16s_m_ae32_vector.S"
 //esp_err_t dslm_mult_16s_ae32(int16_t* A, int16_t* B, int16_t* C, int m, int n, int k, int shift);
 
-// This is matrix multipliction function for Esp32 processor.
+// This is matrix multipliction function for ESP32 processor.
 	.text
 	.align  4
 	.global dslm_mult_16s_ae32

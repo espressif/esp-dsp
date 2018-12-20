@@ -23,7 +23,6 @@ extern "C"
 #endif
 
 /**
- * @function dsls_view
  * Generic view function.
  * This function takes input samples and show then in console view as a plot.
  * The main purpose to give and draft debug information to the DSP developer.
@@ -41,7 +40,6 @@ extern "C"
 void dsls_view(float *data, int32_t len, int width, int height, float min, float max, char view_char);
 
 /**
- * @function dsls_view_spectrum
  * The view function to show spectrum values  in 64x10 screen.
  * The function based on dsls_view.
  *

@@ -14,7 +14,7 @@
 
 #include "dsls_dotprod_32f_m_ae32.S"
 
-// This is FIR filter for Esp32 processor.
+// This is FIR filter for ESP32 processor.
 	.text
 	.align  4
 	.global dsls_fird_32f_ae32

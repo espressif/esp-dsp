@@ -23,7 +23,6 @@ extern "C"
 #endif
 
 /**
- * @function dsls_d_gen_f32
  * The function generate delta function.
  * x[i]=0, if i=[0..N)
  * x[i]=1, if i=pos, pos: [0..N-1)

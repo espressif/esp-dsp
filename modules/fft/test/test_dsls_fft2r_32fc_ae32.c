@@ -47,7 +47,7 @@ TEST_CASE("dsls_fft2r_32fc_ae32 functionality", "[dsls]")
     }
 
     // Init FFT tables
-    esp_err_t ret = dsls_fft2r_init_32fc(NULL, CONFIG_DSL_MAX_FFT_SIZE);
+    esp_err_t ret = dsls_fft2r_init_32fc(NULL, CONFIG_DSP_MAX_FFT_SIZE);
     if (ret  != ESP_OK)
     {
         ESP_LOGE(TAG, "Not possible to initialize FFT. Error = %i", ret);
@@ -91,7 +91,7 @@ TEST_CASE("dsls_fft2r_32fc_ae32 functionality", "[dsls]")
 
 TEST_CASE("dsls_fft2r_32fc_ae32 benchmark", "[dsls]")
 {
-    esp_err_t ret = dsls_fft2r_init_32fc(NULL, CONFIG_DSL_MAX_FFT_SIZE);
+    esp_err_t ret = dsls_fft2r_init_32fc(NULL, CONFIG_DSP_MAX_FFT_SIZE);
     if (ret  != ESP_OK)
     {
         ESP_LOGE(TAG, "Not possible to initialize FFT. Error = %i", ret);

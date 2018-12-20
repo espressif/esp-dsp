@@ -25,7 +25,6 @@ extern "C"
 // These functions calculates dotproduct of two vectors.
 
 /**
- * @function dsls_dotprod_16s_ae32
  * Dot product calculation for two signed 16 bit arrays: *dest += (src1[i] * src2[i]) >> (15-shift); i= [0..N)
  * The implementation use ANSI C and could be compiled and run on any platform
  *
@@ -41,9 +40,8 @@ extern "C"
 esp_err_t dsls_dotprod_16s_ansi(int16_t *src1, int16_t *src2, int16_t *dest, int len, int8_t shift);
 
 /**
- * @function dsls_dotprod_16s_ae32
  * Dot product calculation for two signed 16 bit arrays: *dest += (src1[i] * src2[i]) >> (15-shift); i= [0..N)
- * The implementation optimized for Esp32 platform
+ * The implementation is optimized for ESP32 chip.
  *
  * @note this function will work correct when length is > 4. If application requires less then 5 please use generic a function dsls_dotprod_16s_ansi.
  *
@@ -58,10 +56,7 @@ esp_err_t dsls_dotprod_16s_ansi(int16_t *src1, int16_t *src2, int16_t *dest, int
  */
 esp_err_t dsls_dotprod_16s_ae32(int16_t *src1, int16_t *src2, int16_t *dest, int len, int8_t shift);
 
-esp_err_t dsls_dotprod_16sc(int16_t *src1, int16_t *src2, int16_t *dest, int len, int8_t shift);
-
 /**
- * @function dsls_dotprod_16s_ae32
  * Dot product calculation for two floating point arrays: *dest += (src1[i] * src2[i]); i= [0..N)
  * The implementation use ANSI C and could be compiled and run on any platform
  *
@@ -76,7 +71,6 @@ esp_err_t dsls_dotprod_16sc(int16_t *src1, int16_t *src2, int16_t *dest, int len
 esp_err_t dsls_dotprod_32f_ansi(float *src1, float *src2, float *dest, int len);
 
 /**
- * @function dsls_dotprode_32f_ansi
  * Dot product calculation for two floating point arrays: *dest += (src1[i*step1] * src2[i*step2]); i= [0..N)
  * The implementation use ANSI C and could be compiled and run on any platform
  *
@@ -93,9 +87,8 @@ esp_err_t dsls_dotprod_32f_ansi(float *src1, float *src2, float *dest, int len);
 esp_err_t dsls_dotprode_32f_ansi(float *src1, float *src2, float *dest, int len, int step1, int step2);
 
 /**
- * @function dsls_dotprod_32f_ae32
  * Dot product calculation for two floating point arrays: *dest += (src1[i] * src2[i]); i= [0..N)
- * The implementation optimized for Esp32 platform
+ * The implementation is optimized for ESP32 chip.
  *
  * @param src1  source array 1
  * @param src2  source array 2
@@ -108,9 +101,8 @@ esp_err_t dsls_dotprode_32f_ansi(float *src1, float *src2, float *dest, int len,
 esp_err_t dsls_dotprod_32f_ae32(float *src1, float *src2, float *dest, int len);
 
 /**
- * @function dsls_dotprode_32f_ae32
  * Dot product calculation for two floating point arrays: *dest += (src1[i*step1] * src2[i*step2]); i= [0..N)
- * The implementation optimized for Esp32 platform
+ * The implementation is optimized for ESP32 chip.
  *
  * @param src1  source array 1
  * @param src2  source array 2
@@ -124,13 +116,21 @@ esp_err_t dsls_dotprod_32f_ae32(float *src1, float *src2, float *dest, int len);
  */
 esp_err_t dsls_dotprode_32f_ae32(float *src1, float *src2, float *dest, int len, int step1, int step2);
 
-
-esp_err_t dsls_dotprod_32fc(float *src1, float *src2, float *dest, int len);
-
-//#define dsls_dotprod_16s dsls_dotprod_16s_asm
-
 #ifdef __cplusplus
 }
 #endif
+
+#ifdef CONFIG_DSP_OPTIMIZED
+#define dsls_dotprod_16s dsls_dotprod_16s_ae32
+#define dsls_dotprod_32f dsls_dotprod_32f_ae32
+#define dsls_dotprode_32f dsls_dotprode_32f_ae32
+#endif
+#ifdef CONFIG_DSP_ANSI
+#define dsls_dotprod_16s dsls_dotprod_16s_ansi
+#define dsls_dotprod_32f dsls_dotprod_32f_ansi
+#define dsls_dotprode_32f dsls_dotprode_32f_ansi
+#endif
+
+
 
 #endif // _DSPI_DOTPROD_H_

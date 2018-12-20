@@ -24,7 +24,6 @@ extern "C"
 #endif
 
 /**
- * @function is_power_of_two
  * The function check if the argument is power of 2.
  * The implementation use ANSI C and could be compiled and run on any platform
  *
