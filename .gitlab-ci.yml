@@ -63,18 +63,41 @@ build:
     GIT_STRATEGY: fetch
 
   script:
-    # Build ESP32 Eclipse Plugins
     - echo "Hello Dmitry!"
-    # The way how to copy saved state archive to the commponent folder
-    # - cd ./esp-idf/components
-    # - ls
-    # - tar xf ../../dsp.tar.gz
-    # - cd dsp
-    # - ls
-    # - cd $IDF_PATH/components/dsp/examples/dotprod
+    # Try to build example
     - ls
     - cd $PROJECT_PATH/examples/dotprod
     - ls
     - make defconfig
     - echo $IDF_PATH
     - make -j4 all
+
+build_docs:
+  stage: build
+  image: $CI_DOCKER_REGISTRY/esp32-ci-env$BOT_DOCKER_IMAGE_TAG
+  tags:
+    - build_docs
+
+  artifacts:
+    when: always
+    paths:
+      # English version of documentation
+      # These lines copy content to the dist folder
+      - docs/doxygen-warning-log.txt
+      - docs/sphinx-warning-log.txt
+      - docs/_build/html
+    expire_in: 1 day
+  only:
+    variables:
+      - $BOT_TRIGGER_WITH_LABEL == null
+      - $BOT_LABEL_BUILD
+      - $BOT_LABEL_BUILD_DOCS
+      - $BOT_LABEL_REGULAR_TEST
+  script:
+    - echo "Hello Dmitry!"
+    # Here I will try to build documentation
+    - ls
+    - cd $PROJECT_PATH/docs
+    - ls
+    - make gh-linkcheck
+    - make html
