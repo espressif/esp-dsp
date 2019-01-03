@@ -11,7 +11,6 @@ COMPONENT_ADD_INCLUDEDIRS := modules/dotprod/include \
 COMPONENT_SRCDIRS :=. \
 					modules/common \
 					modules/common/misc \
-					modules/misc \
 					modules/dotprod \
 					modules/dotprod/float \
 					modules/dotprod/fixed \
