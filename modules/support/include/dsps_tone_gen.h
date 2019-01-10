@@ -12,44 +12,37 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef _esp_dsp_H_
-#define _esp_dsp_H_
+#ifndef _dsps_tone_gen_H_
+#define _dsps_tone_gen_H_
+#include "dsp_err.h"
+
 
 #ifdef __cplusplus
 extern "C"
 {
 #endif
 
-// Common includes
-#include "dsp_common.h"
-
-// Signal processing
-#include "dsps_dotprod.h"
-#include "dsps_fir.h"
-#include "dsps_biquad.h"
-#include "dsps_biquad_gen.h"
-#include "dsps_addC.h"
-#include "dsps_mulC.h"
-#include "dsps_wind_Barrel.h"
-
-#include "dsps_d_gen.h"
-#include "dsps_h_gen.h"
-#include "dsps_tone_gen.h"
-#include "dsps_snr.h"
-#include "dsps_sfdr.h"
-
-#include "dsps_fft2r.h"
-
-// Matrix operations
-#include "dspm_mult.h"
-
-// Support functions
-#include "dsps_view.h"
-
+/**
+ * @brief   tone
+ * 
+ * The function generate a tone signal.
+ * x[i]=A*sin(2*PI*i + ph/180*PI)
+ * The implementation use ANSI C and could be compiled and run on any platform
+ *
+ * @param output: output array.
+ * @param len: length of the input signal
+ * @param A: amplitude
+ * @param f: frequency -1..1
+ * @param ph: phase in degree
+ *
+ * @return
+ *      - ESP_OK on success
+ *      - One of the error codes from DSP library
+ */
+esp_err_t dsps_tone_gen_f32(float *output, int len, float A, float f, float ph);
 
 #ifdef __cplusplus
 }
 #endif
 
-
-#endif // _esp_dsp_H_
+#endif // _dsps_tone_gen_H_

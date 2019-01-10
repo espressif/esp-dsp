@@ -12,44 +12,36 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef _esp_dsp_H_
-#define _esp_dsp_H_
+#ifndef _dsps_d_gen_H_
+#define _dsps_d_gen_H_
+#include "dsp_err.h"
+
 
 #ifdef __cplusplus
 extern "C"
 {
 #endif
 
-// Common includes
-#include "dsp_common.h"
-
-// Signal processing
-#include "dsps_dotprod.h"
-#include "dsps_fir.h"
-#include "dsps_biquad.h"
-#include "dsps_biquad_gen.h"
-#include "dsps_addC.h"
-#include "dsps_mulC.h"
-#include "dsps_wind_Barrel.h"
-
-#include "dsps_d_gen.h"
-#include "dsps_h_gen.h"
-#include "dsps_tone_gen.h"
-#include "dsps_snr.h"
-#include "dsps_sfdr.h"
-
-#include "dsps_fft2r.h"
-
-// Matrix operations
-#include "dspm_mult.h"
-
-// Support functions
-#include "dsps_view.h"
-
+/**
+ * @brief   delta function 
+ * 
+ * The function generate delta function.
+ * output[i]=0, if i=[0..N)
+ * output[i]=1, if i=pos, pos: [0..N-1)
+ * The implementation use ANSI C and could be compiled and run on any platform
+ *
+ * @param output: output array.
+ * @param len: length of the input signal
+ * @param pos: delta function position
+ *
+ * @return
+ *      - ESP_OK on success
+ *      - One of the error codes from DSP library
+ */
+esp_err_t dsps_d_gen_f32(float *output, int len, int pos);
 
 #ifdef __cplusplus
 }
 #endif
 
-
-#endif // _esp_dsp_H_
+#endif // _dsps_d_gen_H_

@@ -12,44 +12,31 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef _esp_dsp_H_
-#define _esp_dsp_H_
+#include <string.h>
+#include "unity.h"
+#include "test_utils.h"
+#include "freertos/FreeRTOS.h"
+#include "freertos/portable.h"
+#include "freertos/task.h"
+#include "freertos/semphr.h"
+#include "esp_clk.h"
+#include "esp_log.h"
+#include "soc/cpu.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-
-// Common includes
-#include "dsp_common.h"
-
-// Signal processing
-#include "dsps_dotprod.h"
-#include "dsps_fir.h"
-#include "dsps_biquad.h"
-#include "dsps_biquad_gen.h"
-#include "dsps_addC.h"
-#include "dsps_mulC.h"
-#include "dsps_wind_Barrel.h"
-
-#include "dsps_d_gen.h"
-#include "dsps_h_gen.h"
-#include "dsps_tone_gen.h"
-#include "dsps_snr.h"
-#include "dsps_sfdr.h"
-
-#include "dsps_fft2r.h"
-
-// Matrix operations
-#include "dspm_mult.h"
-
-// Support functions
 #include "dsps_view.h"
 
 
-#ifdef __cplusplus
+static const char *TAG = "dsps_view";
+
+static float data[1024];
+
+TEST_CASE("dsps_view functionality", "[dsps]")
+{
+    for (int i = 0 ; i < 1024 ; i++) {
+        data[i] = -100;
+    }
+    data[256] = 0;
+    dsps_view_spectrum(data, 1024, -100, 0);
+
+    ESP_LOGI(TAG, "Just a check\n");
 }
-#endif
-
-
-#endif // _esp_dsp_H_

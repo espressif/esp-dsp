@@ -12,44 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef _esp_dsp_H_
-#define _esp_dsp_H_
-
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-
-// Common includes
-#include "dsp_common.h"
-
-// Signal processing
-#include "dsps_dotprod.h"
-#include "dsps_fir.h"
-#include "dsps_biquad.h"
-#include "dsps_biquad_gen.h"
-#include "dsps_addC.h"
 #include "dsps_mulC.h"
-#include "dsps_wind_Barrel.h"
 
-#include "dsps_d_gen.h"
-#include "dsps_h_gen.h"
-#include "dsps_tone_gen.h"
-#include "dsps_snr.h"
-#include "dsps_sfdr.h"
-
-#include "dsps_fft2r.h"
-
-// Matrix operations
-#include "dspm_mult.h"
-
-// Support functions
-#include "dsps_view.h"
-
-
-#ifdef __cplusplus
+esp_err_t dsps_mulC_f32_ansi(const float *input, float *output, int len, float C, int step1, int step2)
+{
+    for (int i = 0 ; i < len ; i++) {
+        output[i * step2] = input[i * step1] * C;
+    }
+    return ESP_OK;
 }
-#endif
-
-
-#endif // _esp_dsp_H_

@@ -12,44 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef _esp_dsp_H_
-#define _esp_dsp_H_
-
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-
-// Common includes
-#include "dsp_common.h"
-
-// Signal processing
 #include "dsps_dotprod.h"
-#include "dsps_fir.h"
-#include "dsps_biquad.h"
-#include "dsps_biquad_gen.h"
-#include "dsps_addC.h"
-#include "dsps_mulC.h"
-#include "dsps_wind_Barrel.h"
 
-#include "dsps_d_gen.h"
-#include "dsps_h_gen.h"
-#include "dsps_tone_gen.h"
-#include "dsps_snr.h"
-#include "dsps_sfdr.h"
+esp_err_t dsps_dotprod_s16_ansi(const int16_t *src1, const int16_t *src2, int16_t *dest, int len, int8_t shift)
+{
+    // To make correct round operation we have to shift round value
+    long long acc = 0x7fff >> shift;
+    
+    for (int i = 0 ; i < len ; i++) {
+        acc += (int32_t)src1[i] * (int32_t)src2[i];
+    }
 
-#include "dsps_fft2r.h"
-
-// Matrix operations
-#include "dspm_mult.h"
-
-// Support functions
-#include "dsps_view.h"
-
-
-#ifdef __cplusplus
+    int final_shift = shift - 15;
+    if (final_shift > 0) {
+        *dest = (acc << final_shift);
+    } else {
+        *dest = (acc >> (-final_shift));
+    }
+    return ESP_OK;
 }
-#endif
 
-
-#endif // _esp_dsp_H_

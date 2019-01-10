@@ -12,44 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef _esp_dsp_H_
-#define _esp_dsp_H_
+#ifndef _DSP_TESTS_H_
+#define _DSP_TESTS_H_
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-
-// Common includes
-#include "dsp_common.h"
-
-// Signal processing
-#include "dsps_dotprod.h"
-#include "dsps_fir.h"
-#include "dsps_biquad.h"
-#include "dsps_biquad_gen.h"
-#include "dsps_addC.h"
-#include "dsps_mulC.h"
-#include "dsps_wind_Barrel.h"
-
-#include "dsps_d_gen.h"
-#include "dsps_h_gen.h"
-#include "dsps_tone_gen.h"
-#include "dsps_snr.h"
-#include "dsps_sfdr.h"
-
-#include "dsps_fft2r.h"
-
-// Matrix operations
-#include "dspm_mult.h"
-
-// Support functions
-#include "dsps_view.h"
+#define TEST_ASSERT_EXEC_IN_RANGE(min_exec, max_exec, actual) \
+    if (cycles >= max_exec) { \
+        TEST_ASSERT_MESSAGE (false, "Exec time takes more than expected!");\
+    }\
+    if (cycles < min_exec) {\
+        TEST_ASSERT_MESSAGE (false, "Exec time takes less then expected!");\
+    }
 
 
-#ifdef __cplusplus
-}
-#endif
-
-
-#endif // _esp_dsp_H_
+#endif // _DSP_TESTS_H_

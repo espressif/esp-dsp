@@ -12,44 +12,31 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef _esp_dsp_H_
-#define _esp_dsp_H_
+#ifndef _dsp_common_H_
+#define _dsp_common_H_
+#include <stdint.h>
+#include <stdbool.h>
+#include "dsp_err.h"
+
 
 #ifdef __cplusplus
 extern "C"
 {
 #endif
 
-// Common includes
-#include "dsp_common.h"
-
-// Signal processing
-#include "dsps_dotprod.h"
-#include "dsps_fir.h"
-#include "dsps_biquad.h"
-#include "dsps_biquad_gen.h"
-#include "dsps_addC.h"
-#include "dsps_mulC.h"
-#include "dsps_wind_Barrel.h"
-
-#include "dsps_d_gen.h"
-#include "dsps_h_gen.h"
-#include "dsps_tone_gen.h"
-#include "dsps_snr.h"
-#include "dsps_sfdr.h"
-
-#include "dsps_fft2r.h"
-
-// Matrix operations
-#include "dspm_mult.h"
-
-// Support functions
-#include "dsps_view.h"
-
+/**
+ * @brief      check power of two
+ * The function check if the argument is power of 2.
+ * The implementation use ANSI C and could be compiled and run on any platform
+ *
+ * @return
+ *      - true if x is power of two
+ *      - false if no
+ */
+bool dsp_is_power_of_two(int x);
 
 #ifdef __cplusplus
 }
 #endif
 
-
-#endif // _esp_dsp_H_
+#endif // _dsp_common_H_

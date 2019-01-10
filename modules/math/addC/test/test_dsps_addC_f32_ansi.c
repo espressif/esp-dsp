@@ -12,44 +12,33 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef _esp_dsp_H_
-#define _esp_dsp_H_
+#include <string.h>
+#include "unity.h"
+#include "test_utils.h"
+#include "freertos/FreeRTOS.h"
+#include "freertos/portable.h"
+#include "freertos/task.h"
+#include "freertos/semphr.h"
+#include "esp_clk.h"
+#include "soc/cpu.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-
-// Common includes
-#include "dsp_common.h"
-
-// Signal processing
-#include "dsps_dotprod.h"
-#include "dsps_fir.h"
-#include "dsps_biquad.h"
-#include "dsps_biquad_gen.h"
 #include "dsps_addC.h"
-#include "dsps_mulC.h"
-#include "dsps_wind_Barrel.h"
-
-#include "dsps_d_gen.h"
-#include "dsps_h_gen.h"
-#include "dsps_tone_gen.h"
-#include "dsps_snr.h"
-#include "dsps_sfdr.h"
-
-#include "dsps_fft2r.h"
-
-// Matrix operations
-#include "dspm_mult.h"
-
-// Support functions
-#include "dsps_view.h"
+#include "esp_attr.h"
 
 
-#ifdef __cplusplus
+TEST_CASE("dsps_addC_f32_ansi functionality", "[dsps]")
+{
+    int n = 64;
+    float x[n];
+    float y[n];
+    for (int i = 0 ; i < n ; i++) {
+        x[i] = i;
+        y[i] = i + 10;
+    }
+    dsps_addC_f32_ansi(x, x, n, 10, 1, 1);
+    for (int i = 0 ; i < n ; i++) {
+        if (x[i] != y[i]) {
+            TEST_ASSERT_EQUAL(x[i], y[i]);
+        }
+    }
 }
-#endif
-
-
-#endif // _esp_dsp_H_

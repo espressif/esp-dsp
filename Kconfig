@@ -1,35 +1,53 @@
-menu "DSP Standard Library"
+menu "DSP Library"
 
-choice DSL_MAX_FFT_SIZE
+
+choice DSP_OPTIMIZATION
+   bool "Optimization for ESP32"
+   default DSP_OPTIMIZED
+   help
+        An Ansi C version could be used for verification and debug purpose.
+       
+config DSP_ANSI
+   bool "Ansi C"
+config DSP_OPTIMIZED
+   bool "ESP32 optimized"
+endchoice
+
+config DSP_OPTIMIZATION
+    int
+    default 0 if DSP_ANSI
+    default 1 if DSP_OPTIMIZED
+
+choice DSP_MAX_FFT_SIZE
    bool "Maximum fft length"
-   default DSL_MAX_FFT_SIZE_4096
+   default DSP_MAX_FFT_SIZE_4096
    help
         This is default fft size for internal usage.
        
-config DSL_MAX_FFT_SIZE_512
+config DSP_MAX_FFT_SIZE_512
    bool "512"
-config DSL_MAX_FFT_SIZE_1024
+config DSP_MAX_FFT_SIZE_1024
    bool "1024"
-config DSL_MAX_FFT_SIZE_2048
+config DSP_MAX_FFT_SIZE_2048
    bool "2048"
-config DSL_MAX_FFT_SIZE_4096
+config DSP_MAX_FFT_SIZE_4096
    bool "4096"
-config DSL_MAX_FFT_SIZE_8192
+config DSP_MAX_FFT_SIZE_8192
    bool "8192"
-config DSL_MAX_FFT_SIZE_16384
+config DSP_MAX_FFT_SIZE_16384
    bool "16384"
-config DSL_MAX_FFT_SIZE_32768
+config DSP_MAX_FFT_SIZE_32768
    bool "32768"
 endchoice
 
-config DSL_MAX_FFT_SIZE
+config DSP_MAX_FFT_SIZE
     int
-    default 512 if DSL_MAX_FFT_SIZE_512
-    default 1024 if DSL_MAX_FFT_SIZE_1024
-    default 2048 if DSL_MAX_FFT_SIZE_2048
-    default 4096 if DSL_MAX_FFT_SIZE_4096
-    default 8192 if DSL_MAX_FFT_SIZE_8192
-    default 16384 if DSL_MAX_FFT_SIZE_16384
-    default 32768 if DSL_MAX_FFT_SIZE_32768
+    default 512 if DSP_MAX_FFT_SIZE_512
+    default 1024 if DSP_MAX_FFT_SIZE_1024
+    default 2048 if DSP_MAX_FFT_SIZE_2048
+    default 4096 if DSP_MAX_FFT_SIZE_4096
+    default 8192 if DSP_MAX_FFT_SIZE_8192
+    default 16384 if DSP_MAX_FFT_SIZE_16384
+    default 32768 if DSP_MAX_FFT_SIZE_32768
 
 endmenu

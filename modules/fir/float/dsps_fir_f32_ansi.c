@@ -12,44 +12,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef _esp_dsp_H_
-#define _esp_dsp_H_
-
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-
-// Common includes
-#include "dsp_common.h"
-
-// Signal processing
-#include "dsps_dotprod.h"
 #include "dsps_fir.h"
-#include "dsps_biquad.h"
-#include "dsps_biquad_gen.h"
-#include "dsps_addC.h"
-#include "dsps_mulC.h"
-#include "dsps_wind_Barrel.h"
 
-#include "dsps_d_gen.h"
-#include "dsps_h_gen.h"
-#include "dsps_tone_gen.h"
-#include "dsps_snr.h"
-#include "dsps_sfdr.h"
-
-#include "dsps_fft2r.h"
-
-// Matrix operations
-#include "dspm_mult.h"
-
-// Support functions
-#include "dsps_view.h"
-
-
-#ifdef __cplusplus
+esp_err_t dsps_fir_f32_ansi(fir_f32_t *fir, const float *input, float *output, int len)
+{
+    for (int i = 0 ; i < len ; i++) {
+        float acc = 0;
+        int coeff_pos = fir->N - 1;
+        fir->delay[fir->pos] = input[i];
+        fir->pos++;
+        if (fir->pos >= fir->N) {
+            fir->pos = 0;
+        }
+        for (int n = fir->pos; n < fir->N ; n++) {
+            acc += fir->coeffs[coeff_pos--] * fir->delay[n];
+        }
+        for (int n = 0; n < fir->pos ; n++) {
+            acc += fir->coeffs[coeff_pos--] * fir->delay[n];
+        }
+        output[i] = acc;
+    }
+    return ESP_OK;
 }
-#endif
 
-
-#endif // _esp_dsp_H_
