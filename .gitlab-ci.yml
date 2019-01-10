@@ -71,12 +71,12 @@ build:
     - make defconfig
     - echo $IDF_PATH
     - make -j4 all
-    #- make clean
-    #- ls
-    #- echo "Try to build with cmake!"
-    #- export PATH="$IDF_PATH/tools:$PATH"
-    #- idf.py all
-    #- idf.py clean
+    - make clean
+    - ls
+    - echo "Try to build with cmake!"
+    - export PATH="$IDF_PATH/tools:$PATH"
+    - idf.py all
+    - idf.py clean
 
 build_docs:
   stage: build
