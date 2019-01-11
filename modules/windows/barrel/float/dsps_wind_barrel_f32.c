@@ -12,33 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include <string.h>
-#include "unity.h"
-#include "test_utils.h"
-#include "freertos/FreeRTOS.h"
-#include "freertos/portable.h"
-#include "freertos/task.h"
-#include "freertos/semphr.h"
-#include "esp_clk.h"
-#include "soc/cpu.h"
+#define _USE_MATH_DEFINES
+#include "dsps_wind_barrel.h"
+#include <math.h>
 
-#include "dsps_addC.h"
-#include "esp_attr.h"
-
-
-TEST_CASE("dsps_addC_f32_ansi functionality", "[dsps]")
+void dsps_wind_barrel_f32(float *window, int len)
 {
-    int n = 64;
-    float x[n];
-    float y[n];
-    for (int i = 0 ; i < n ; i++) {
-        x[i] = i;
-        y[i] = i + 10;
-    }
-    dsps_addC_f32_ansi(x, x, n, 10, 1, 1);
-    for (int i = 0 ; i < n ; i++) {
-        if (x[i] != y[i]) {
-            TEST_ASSERT_EQUAL(x[i], y[i]);
-        }
+    for (int i = 0; i < len; i++) {
+        window[i] = 0.5 * (1 - cosf(i * 2 * M_PI / (float)len));
     }
 }

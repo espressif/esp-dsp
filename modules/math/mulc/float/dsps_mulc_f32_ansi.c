@@ -12,12 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "dsps_addC.h"
+#include "dsps_mulc.h"
 
-esp_err_t dsps_addC_f32_ansi(const float *input, float *output, int len, float C, int step1, int step2)
+esp_err_t dsps_mulc_f32_ansi(const float *input, float *output, int len, float C, int step1, int step2)
 {
     for (int i = 0 ; i < len ; i++) {
-        output[i * step2] = input[i * step1] + C;
+        output[i * step2] = input[i * step1] * C;
     }
     return ESP_OK;
 }

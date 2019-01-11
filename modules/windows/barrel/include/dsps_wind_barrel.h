@@ -12,13 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "dsps_wind_Barrel.h"
-#include <math.h>
 
-void dsps_wind_Barrel_f32(float *window, int len)
+#ifndef _dsps_wind_barrel_H_
+#define _dsps_wind_barrel_H_
+
+#ifdef __cplusplus
+extern "C"
 {
-    float pi = 4.0 * atan(1.0);
-    for (int i = 0; i < len; i++) {
-        window[i] = 0.5 * (1 - cosf(i * 2 * pi / (float)len));
-    }
+#endif
+
+/**
+ * @brief   Barrel window
+ * 
+ * The function generates Barrel window.
+ *
+ * @param window: buffer to store window array.
+ * @param len: length of the window array
+ *
+ */
+void dsps_wind_barrel_f32(float *window, int len);
+
+#ifdef __cplusplus
 }
+#endif
+#endif // _dsps_wind_barrel_H_

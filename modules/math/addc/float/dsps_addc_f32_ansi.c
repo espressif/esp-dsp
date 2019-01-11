@@ -12,33 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include <string.h>
-#include "unity.h"
-#include "test_utils.h"
-#include "freertos/FreeRTOS.h"
-#include "freertos/portable.h"
-#include "freertos/task.h"
-#include "freertos/semphr.h"
-#include "esp_clk.h"
-#include "soc/cpu.h"
+#include "dsps_addc.h"
 
-#include "dsps_mulC.h"
-#include "esp_attr.h"
-
-
-TEST_CASE("dsps_mulC_f32_ansi functionality", "[dsps]")
+esp_err_t dsps_addc_f32_ansi(const float *input, float *output, int len, float C, int step1, int step2)
 {
-    int n = 64;
-    float x[n];
-    float y[n];
-    for (int i = 0 ; i < n ; i++) {
-        x[i] = i;
-        y[i] = i * 10;
+    for (int i = 0 ; i < len ; i++) {
+        output[i * step2] = input[i * step1] + C;
     }
-    dsps_mulC_f32_ansi(x, x, n, 10, 1, 1);
-    for (int i = 0 ; i < n ; i++) {
-        if (x[i] != y[i]) {
-            TEST_ASSERT_EQUAL(x[i], y[i]);
-        }
-    }
+    return ESP_OK;
 }
