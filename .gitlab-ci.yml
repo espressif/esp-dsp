@@ -107,3 +107,4 @@ build_docs:
     - ls
     - make gh-linkcheck
     - make html
+    - ./check_doc_warnings.sh

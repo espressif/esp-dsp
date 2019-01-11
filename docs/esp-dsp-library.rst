@@ -1,15 +1,15 @@
 Espressif DSP Library
-==============================
+=====================
 
 Overview
 --------
-A Espressif DSP Library (esp-dsp) it's library of functions, modules and components that provides possibility 
-to use Espressifs CPUs as a DSPs in efficient way.
+An Espressif DSP Library (esp-dsp) it's library of functions, modules and components that provides possibility 
+to use Espressif's CPUs as DSPs in efficient way.
 
 
 Function Naming
 ---------------
-Naming conventions for the Library functions are similar for all covered domains. You can distinguish signal processing functions by the dsds prefix, while image and video processing functions have dspi prefix, 
+Naming conventions for the Library functions are similar for all covered domains. You can distinguish signal processing functions by the dsps prefix, while image and video processing functions have dspi prefix, 
 and functions that are specific for operations on small matrices have dspm prefix in their names. Function names in Library have the following general format:
 
 dsp<data-domain>_<name>_<datatype1><datatype_ext>_<datatype2><datatype_ext>[_<descriptor>]<_impl>(<parameters>);
