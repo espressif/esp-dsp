@@ -14,7 +14,6 @@
 
 #include <string.h>
 #include "unity.h"
-#include "test_utils.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/portable.h"
 #include "freertos/task.h"
@@ -29,14 +28,14 @@ static const char *TAG = "common";
 // This is template test for future extensions
 // Test on this level should test complex functionality 
 // for many modules 
-TEST_CASE("DSP Libary doesn't leak memory", "[dsp]")
+TEST_CASE("test template", "[dsp][ignore]")
 {
 	size_t size_before = xPortGetFreeHeapSize();
 	size_t size_after = xPortGetFreeHeapSize();
 
-	ptrdiff_t stack_diff = size_before - size_after; 
-	stack_diff = abs(stack_diff);
-	if (stack_diff > 8) TEST_ASSERT_EQUAL(0, stack_diff);
+	ptrdiff_t heap_diff = size_before - size_after; 
+	heap_diff = abs(heap_diff);
+	if (heap_diff > 8) TEST_ASSERT_EQUAL(0, heap_diff);
 }
 
 #define TEST_SIZE 1024
@@ -81,8 +80,7 @@ TEST_CASE("DSP Libary benchmark table", "[dsp]")
     float coeffs[5];
     dsps_biquad_gen_lpf_f32(coeffs, 0.1, 1);
 
-    if (ret  != ESP_OK)
-    {
+    if (ret != ESP_OK) {
         ESP_LOGE(TAG, "Not possible to initialize FFT. Error = %i", ret);
         return;
     }

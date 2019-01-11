@@ -24,10 +24,7 @@ import shlex
 # Note: If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute
-
-idf_path = os.getenv("IDF_PATH")
-docs_path=idf_path + '/docs'
-sys.path.insert(0, os.path.abspath(docs_path))
+sys.path.insert(0, os.path.abspath('.'))
 from local_util import run_cmd_get_output, copy_if_modified
 
 # build_docs on the CI server sometimes fails under Python3. This is a workaround:
@@ -37,12 +34,6 @@ try:
     builddir = os.environ['BUILDDIR']
 except KeyError:
     builddir = '_build'
-
-# Fill in a default IDF_PATH if it's missing (ie when Read The Docs is building the docs)
-try:
-    idf_path = os.environ['IDF_PATH']
-except KeyError:
-    idf_path = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
 
 def call_with_python(cmd):
     # using sys.executable ensures that the scripts are called with the same Python interpreter
@@ -61,64 +52,6 @@ copy_if_modified('xml/', 'xml_in/')
 # Generate 'api_name.inc' files using the XML files by Doxygen
 call_with_python('gen-dxd.py')
 
-def find_component_files(parent_dir, target_filename):
-    parent_dir = os.path.abspath(parent_dir)
-    result = []
-    for (dirpath, dirnames, filenames) in os.walk(parent_dir):
-        try:
-            # note: trimming "examples" dir as MQTT submodule
-            # has its own examples directory in the submodule, not part of IDF
-            dirnames.remove("examples")
-        except ValueError:
-            pass
-        if target_filename in filenames:
-            result.append(os.path.join(dirpath, target_filename))
-    print("List of %s: %s" % (target_filename, ", ".join(result)))
-    return result
-
-# # Generate 'kconfig.inc' file from components' Kconfig files
-print("Generating kconfig.inc from kconfig contents")
-kconfig_inc_path = '{}/inc/kconfig.inc'.format(builddir)
-temp_sdkconfig_path = '{}/sdkconfig.tmp'.format(builddir)
-
-kconfigs = find_component_files("../modules", "Kconfig")
-kconfig_projbuilds = find_component_files("../modules", "Kconfig.projbuild")
-
-confgen_args = [sys.executable,
-                idf_path + "/tools/kconfig_new/confgen.py",
-                "--kconfig", "../Kconfig",
-#                "--config", temp_sdkconfig_path,
-                "--create-config-if-missing",
-                "--env", "COMPONENT_KCONFIGS={}".format(" ".join(kconfigs)),
-                "--env", "COMPONENT_KCONFIGS_PROJBUILD={}".format(" ".join(kconfig_projbuilds)),
-                "--env", "IDF_PATH={}".format(idf_path),
-                "--output", "docs", kconfig_inc_path + '.in'
-]
-subprocess.check_call(confgen_args)
-copy_if_modified(kconfig_inc_path + '.in', kconfig_inc_path)
-
-# Generate 'esp_err_defs.inc' file with ESP_ERR_ error code definitions
-esp_err_inc_path = '{}/inc/esp_err_defs.inc'.format(builddir)
-call_with_python(idf_path + '/tools/gen_esp_err_to_name.py --rst_output ' + esp_err_inc_path + '.in')
-copy_if_modified(esp_err_inc_path + '.in', esp_err_inc_path)
-
-# Generate version-related includes
-#
-# (Note: this is in a function as it needs to access configuration to get the language)
-def generate_version_specific_includes(app):
-    print("Generating version-specific includes...")
-    version_tmpdir = '{}/version_inc'.format(builddir)
-    call_with_python(idf_path + '/docs/gen-version-specific-includes.py {} {}'.format(app.config.language, version_tmpdir))
-    copy_if_modified(version_tmpdir, '{}/inc'.format(builddir))
-
-# Generate toolchain download links
-# print("Generating toolchain download links")
-# base_url = 'https://dl.espressif.com/dl/'
-# toolchain_tmpdir = '{}/toolchain_inc'.format(builddir)
-# toolchain_path = idf_path + '/tools/toolchain_versions.mk';
-# call_with_python(idf_path + '/docs/gen-toolchain-links.py {} {} {}'.format(toolchain_path,base_url, toolchain_tmpdir))
-# copy_if_modified(toolchain_tmpdir, '{}/inc'.format(builddir))
-# print("Generating toolchain download links done!!! ==================")
 
 # http://stackoverflow.com/questions/12772927/specifying-an-online-image-in-sphinx-restructuredtext-format
 # 
@@ -132,23 +65,7 @@ suppress_warnings = ['image.nonlocal_uri']
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = ['breathe',
-                   'link-roles',
-                   'sphinxcontrib.blockdiag',
-                   'sphinxcontrib.seqdiag',
-                   'sphinxcontrib.actdiag',
-                   'sphinxcontrib.nwdiag',
-                   'sphinxcontrib.rackdiag',
-                   'sphinxcontrib.packetdiag'
-                  ]
-
-# Set up font for blockdiag, nwdiag, rackdiag and packetdiag
-blockdiag_fontpath = idf_path + '/docs/_static/DejaVuSans.ttf'
-seqdiag_fontpath = idf_path + '/docs/_static/DejaVuSans.ttf'
-actdiag_fontpath = idf_path + '/docs/_static/DejaVuSans.ttf'
-nwdiag_fontpath = idf_path + '/docs/_static/DejaVuSans.ttf'
-rackdiag_fontpath = idf_path + '/docs/_static/DejaVuSans.ttf'
-packetdiag_fontpath = idf_path + '/docs/_static/DejaVuSans.ttf'
+extensions = ['breathe', 'link-roles' ]
 
 # Enabling this fixes cropping of blockdiag edge labels
 seqdiag_antialias = True
@@ -203,7 +120,7 @@ print('Version: {0}  Release: {1}'.format(version, release))
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
-exclude_patterns = ['_build','README.md']
+exclude_patterns = ['_build', 'issue_template.md']
 
 # The reST default role (used for this markup: `text`) to use for all
 # documents.
@@ -253,7 +170,7 @@ html_theme = 'sphinx_rtd_theme'
 
 # The name of an image file (relative to this directory) to place at the top
 # of the sidebar.
-html_logo = idf_path + "/docs/_static/espressif-logo.svg"
+#html_logo = idf_path + "/docs/_static/espressif-logo.svg"
 
 # The name of an image file (within the static path) to use as favicon of the
 # docs.  This file should be a Windows icon file (.ico) being 16x16 or 32x32
@@ -263,7 +180,7 @@ html_logo = idf_path + "/docs/_static/espressif-logo.svg"
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path =  [idf_path + '/docs/_static']
+#html_static_path =  [idf_path + '/docs/_static']
 
 # Add any extra paths that contain custom files (such as robots.txt or
 # .htaccess) here, relative to this directory. These files are copied
@@ -395,6 +312,6 @@ texinfo_documents = [
 
 # Override RTD CSS theme to introduce the theme corrections
 # https://github.com/rtfd/sphinx_rtd_theme/pull/432
-def setup(app):
-    app.add_stylesheet('theme_overrides.css')
-    generate_version_specific_includes(app)
+# def setup(app):
+#     app.add_stylesheet('theme_overrides.css')
+#     generate_version_specific_includes(app)

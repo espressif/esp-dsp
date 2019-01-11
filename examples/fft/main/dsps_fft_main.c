@@ -60,7 +60,7 @@ void app_main()
     }
 
     // Generate Barrel window
-    dsps_wind_Barrel_f32(wind, N);
+    dsps_wind_barrel_f32(wind, N);
     // Generate input signal for x1 A=1 , F=0.1
     dsps_tone_gen_f32(x1, N, 1.0, 0.16,  0);
     // Generate input signal for x2 A=0.1,F=0.2

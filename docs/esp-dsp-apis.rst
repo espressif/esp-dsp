@@ -45,8 +45,8 @@ IIR
 
 Math
 ^^^^^^^^^^^
-.. include:: /_build/inc/dsps_addC.inc
-.. include:: /_build/inc/dsps_mulC.inc
+.. include:: /_build/inc/dsps_addc.inc
+.. include:: /_build/inc/dsps_mulc.inc
 
 Support
 ^^^^^^^^^^^
@@ -59,7 +59,7 @@ Support
 
 Windows
 ^^^^^^^^^^^
-.. include:: /_build/inc/dsps_wind_Barrel.inc
+.. include:: /_build/inc/dsps_wind_barrel.inc
 
 Matrix Operations APIs 
 -----------------------------

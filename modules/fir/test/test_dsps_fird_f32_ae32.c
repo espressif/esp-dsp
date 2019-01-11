@@ -14,7 +14,6 @@
 
 #include <string.h>
 #include "unity.h"
-#include "test_utils.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/portable.h"
 #include "freertos/task.h"

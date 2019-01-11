@@ -12,27 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include "dsps_mulc.h"
 
-#ifndef _dsps_wind_Barrel_H_
-#define _dsps_wind_Barrel_H_
-
-#ifdef __cplusplus
-extern "C"
+esp_err_t dsps_mulc_f32_ansi(const float *input, float *output, int len, float C, int step1, int step2)
 {
-#endif
-
-/**
- * @brief   Barrel window
- * 
- * The function generates Burrel window.
- *
- * @param window: buffer to store window array.
- * @param len: length of the window array
- *
- */
-void dsps_wind_Barrel_f32(float *window, int len);
-
-#ifdef __cplusplus
+    for (int i = 0 ; i < len ; i++) {
+        output[i * step2] = input[i * step1] * C;
+    }
+    return ESP_OK;
 }
-#endif
-#endif // _dsps_wind_Barrel_H_

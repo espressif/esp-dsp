@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef _dsps_addC_H_
-#define _dsps_addC_H_
+#ifndef _dsps_addc_H_
+#define _dsps_addc_H_
 #include "dsp_err.h"
 
 
@@ -41,7 +41,7 @@ extern "C"
  *      - ESP_OK on success
  *      - One of the error codes from DSP library
  */
-esp_err_t dsps_addC_f32_ansi(const float *input, float *output, int len, float C, int step1, int step2);
+esp_err_t dsps_addc_f32_ansi(const float *input, float *output, int len, float C, int step1, int step2);
 
 #ifdef __cplusplus
 }
@@ -49,10 +49,10 @@ esp_err_t dsps_addC_f32_ansi(const float *input, float *output, int len, float C
 
 
 #ifdef CONFIG_DSP_OPTIMIZED
-#define dsps_addC_f32 dsps_addC_f32_ansi
+#define dsps_addc_f32 dsps_addc_f32_ansi
 #endif
 #ifdef CONFIG_DSP_ANSI
-#define dsps_addC_f32 dsps_addC_f32_ansi
+#define dsps_addc_f32 dsps_addc_f32_ansi
 #endif
 
-#endif // _dsps_addC_H_
+#endif // _dsps_addc_H_

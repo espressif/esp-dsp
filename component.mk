@@ -1,6 +1,6 @@
 COMPONENT_ADD_INCLUDEDIRS := modules/dotprod/include \
 							modules/support/include \
-							modules/windows/Barrel/include \
+							modules/windows/barrel/include \
 							modules/iir/include \
 							modules/fir/include \
 							modules/math/include \
@@ -18,19 +18,19 @@ COMPONENT_SRCDIRS :=. \
 					modules/matrix/float \
 					modules/matrix/fixed \
 					modules/math \
-					modules/math/mulC \
-					modules/math/mulC/float \
-					modules/math/addC \
-					modules/math/addC/float \
+					modules/math/mulc \
+					modules/math/mulc/float \
+					modules/math/addc \
+					modules/math/addc/float \
 					modules/fft/float \
 					modules/support \
 					modules/support/snr/float \
 					modules/support/sfdr/float \
 					modules/support/misc \
 					modules/support/view \
-					modules/windows/Barrel \
-					modules/windows/Barrel/float \
-					modules/windows/Barrel/fixed \
+					modules/windows/barrel \
+					modules/windows/barrel/float \
+					modules/windows/barrel/fixed \
 					modules/iir \
 					modules/iir/biquad \
 					modules/fir \

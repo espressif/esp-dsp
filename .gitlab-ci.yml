@@ -8,18 +8,12 @@ variables:
   # Common parameters for the 'make' during CI tests
   MAKEFLAGS: "-j5 --no-keep-going"
 
-# GitLab-CI environment
-
-  # more attempts for more robust
+  # GitLab-CI environment
   GET_SOURCES_ATTEMPTS: "10"
   ARTIFACT_DOWNLOAD_ATTEMPTS: "10"
-
-  # We use get_sources.sh script to fetch the submodules and/or re-fetch the repo
-  # if it was corrupted (if submodule update fails this can happen)
   GIT_STRATEGY: clone
   GIT_SUBMODULE_STRATEGY: none
-  #IDF_PATH: "$CI_PROJECT_DIR/esp-idf"
-  
+
   # Docker images
   BOT_DOCKER_IMAGE_TAG: ":latest"
 
@@ -31,52 +25,42 @@ before_script:
   - base64 --decode --ignore-garbage ~/.ssh/id_rsa_base64 > ~/.ssh/id_rsa
   - chmod 600 ~/.ssh/id_rsa
   - echo -e "Host gitlab.espressif.cn\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
-  # replace submodule esp-idf to internal repository to speedup cloning
-  # - sed -i "s%https://github.com/espressif/esp-idf%${GITLAB_SSH_SERVER}/idf/esp-idf.git%" .gitmodules
-  #- mkdir -p ~/esp
-  #- cd ~/esp
-  # Download binary toolchain for the ESP32
-  #- wget https://dl.espressif.com/dl/xtensa-esp32-elf-linux64-1.22.0-61-gab8375a-5.2.0.tar.gz
-  #- tar -xzf xtensa-esp32-elf-linux64-1.22.0-61-gab8375a-5.2.0.tar.gz
-  # Make xtensa-esp32-elf available for all terminal sessions
-  #- export PATH=$PATH:$HOME/esp/xtensa-esp32-elf/bin
-  # 
-  # this is how we can save current git state and then copy it to somewhere
-  #- git archive --format=tar.gz --prefix="dsp/" -o dsp.tar.gz HEAD
-  # Get ESP-IDF from github
-  - git clone --recursive https://github.com/espressif/esp-idf.git
-  # Set the path to ESP-IDF directory
-  - git submodule update --init
-  - PROJECT_PATH=$(pwd)
-  - export IDF_PATH=$PROJECT_PATH/esp-idf
-  - ls
-  - echo $IDF_PATH
+
+.do_nothing_before:
+  before_script: &do_nothing_before
+    - echo "Not setting up GitLab key"
+
 
 build:
   stage: build
-  #image: ${CI_DOCKER_REGISTRY}/esp32-ci-env
   image: $CI_DOCKER_REGISTRY/esp32-ci-env$BOT_DOCKER_IMAGE_TAG
   tags:
     - build
-
-  variables:
-    GIT_STRATEGY: fetch
-
   script:
-    - echo "Hello Dmitry!"
-    # Try to build example
-    - ls
-    - cd $PROJECT_PATH/examples/dotprod
-    - ls
-    - make defconfig
-    - echo $IDF_PATH
-    - make -j4 all
-    #- make clean
-    #- ls
-    #- echo "Try to build with cmake!"
-    #- export PATH="$IDF_PATH/tools:$PATH"
-    #- idf.py all
-    #- idf.py clean
+    # Get ESP-IDF and submodules
+    - git clone ${GITLAB_SSH_SERVER}/idf/esp-idf esp-idf
+    - pushd esp-idf
+    - tools/ci/mirror-submodule-update.sh
+    - export IDF_PATH=$PWD
+    - export PATH=$IDF_PATH/tools:$PATH
+    - popd
+
+    # Create a copy of the project in "esp-dsp" directory.
+    # This is needed because CMake build system can not build a component
+    # when ESP-IDF directory is inside the component.
+    # After cloning, we will have two directories at the same level: "esp-idf" and "esp-dsp"
+    - git clone $PWD esp-dsp
+    - cd esp-dsp
+
+    # Build test app
+    - pushd test_app
+    - make defconfig && make -j4
+    - rm -rf build
+    - idf.py build
+    - popd
+
+    # Build examples
+    - ./build_examples.sh
 
 build_docs:
   stage: build
@@ -87,24 +71,11 @@ build_docs:
   artifacts:
     when: always
     paths:
-      # English version of documentation
-      # These lines copy content to the dist folder
       - docs/doxygen-warning-log.txt
       - docs/sphinx-warning-log.txt
       - docs/_build/html
     expire_in: 1 day
-  only:
-    variables:
-      - $BOT_TRIGGER_WITH_LABEL == null
-      - $BOT_LABEL_BUILD
-      - $BOT_LABEL_BUILD_DOCS
-      - $BOT_LABEL_REGULAR_TEST
   script:
-    - echo "Hello Dmitry!"
-    # Here I will try to build documentation
-    - ls
-    - cd $PROJECT_PATH/docs
-    - ls
-    - make gh-linkcheck
+    - cd docs
     - make html
     - ./check_doc_warnings.sh

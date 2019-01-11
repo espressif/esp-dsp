@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef _dsps_mulC_H_
-#define _dsps_mulC_H_
+#ifndef _dsps_mulc_H_
+#define _dsps_mulc_H_
 #include "dsp_err.h"
 
 
@@ -40,7 +40,7 @@ extern "C"
  *      - ESP_OK on success
  *      - One of the error codes from DSP library
  */
-esp_err_t dsps_mulC_f32_ansi(const float *input, float *output, int len, float C, int step1, int step2);
+esp_err_t dsps_mulc_f32_ansi(const float *input, float *output, int len, float C, int step1, int step2);
 
 #ifdef __cplusplus
 }
@@ -48,10 +48,10 @@ esp_err_t dsps_mulC_f32_ansi(const float *input, float *output, int len, float C
 
 
 #ifdef CONFIG_DSP_OPTIMIZED
-#define dsps_mulC_f32 dsps_mulC_f32_ansi
+#define dsps_mulc_f32 dsps_mulc_f32_ansi
 #endif
 #ifdef CONFIG_DSP_ANSI
-#define dsps_mulC_f32 dsps_mulC_f32_ansi
+#define dsps_mulc_f32 dsps_mulc_f32_ansi
 #endif
 
-#endif // _dsps_mulC_H_
+#endif // _dsps_mulc_H_

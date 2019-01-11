@@ -35,8 +35,8 @@ INPUT = \
     ../modules/iir/include/dsps_biquad_gen.h \
     ../modules/iir/include/dsps_biquad.h \
     ## Math - API Reference
-    ../modules/math/include/dsps_mulC.h \
-    ../modules/math/include/dsps_addC.h \
+    ../modules/math/include/dsps_mulc.h \
+    ../modules/math/include/dsps_addc.h \
     ## Matrix - API Reference
     ../modules/matrix/include/dspm_mult.h \
     ## Support - API Reference
@@ -47,7 +47,7 @@ INPUT = \
     ../modules/support/include/dsps_d_gen.h \
     ../modules/support/include/dsps_h_gen.h \
     ## Windows - API Reference
-    ../modules/windows/Barrel/include/dsps_wind_Barrel.h
+    ../modules/windows/barrel/include/dsps_wind_barrel.h
 
 
 ## Get warnings for functions that have no documentation for their parameters or return value
