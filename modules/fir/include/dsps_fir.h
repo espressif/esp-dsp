@@ -24,13 +24,20 @@ extern "C"
 {
 #endif
 
+/**
+ * @brief Data struct of f32 fir filter
+ * 
+ * This structure used by filter internally. User should access this structure only in case of 
+ * extensions for the DSP Library.
+ * All fields of this structure initialized by dsps_fir_init_f32(...) function.
+ */
 typedef struct fir_f32_s {
-    float  *coeffs;
-    float  *delay;
-    int     N;
-    int     pos;
-    int     decim;
-    int     d_pos;
+    float  *coeffs;     /*!< Pointer to the coefficient buffer.*/
+    float  *delay;      /*!< Pointer to the delay line buffer.*/
+    int     N;          /*!< FIR filter coefficients amount.*/
+    int     pos;        /*!< Position in delay line.*/
+    int     decim;      /*!< Decimation factor.*/
+    int     d_pos;      /*!< Actual decimation counter.*/
 } fir_f32_t;
 
 /**
