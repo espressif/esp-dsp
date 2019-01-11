@@ -99,8 +99,8 @@ esp_err_t dsps_fir_f32_ae32(fir_f32_t *fir, const float *input, float *output, i
  * The extension (_ae32) is optimized for ESP32 chip.
  *
  * @param fir: pointer to fir filter structure, that must be initialized before
- * @param x: input array
- * @param y: array with result of FIR filter
+ * @param input: input array
+ * @param output: array with result of FIR filter
  * @param len: length of input and result arrays
  *
  * @return: function returns amount of samples stored to the output array
