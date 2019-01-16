@@ -56,7 +56,7 @@ void app_main()
     {
         ESP_LOGE(TAG, "Operation error = %i", ret);
     }
-    ESP_LOGI(TAG, "The (101)! = %f", result1);
+    ESP_LOGI(TAG, "The sum of 101 elements from 0..100 = %f", result1);
     ESP_LOGI(TAG, "Operation for 101 samples take %i cycles", end_b - start_b);
 
     ESP_LOGI(TAG, "End Example.");
