@@ -44,7 +44,7 @@ Here is an typical example console output.
 
 ```
 I (55) main: Start Example.
-I (55) main: The (101)! = 5050.000000
+I (55) main: The sum of 101 elements from 0..100 = 5050.000000
 I (55) main: Operation for 101 samples took 1381 cycles
 I (65) main: End Example.
 ```
