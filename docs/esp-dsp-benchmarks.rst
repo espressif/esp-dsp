@@ -63,4 +63,4 @@ The table bellow contains benchmarks of functions provided by ESP-DSP library. T
 |dspm_mult_4x4x4_f32 - C[4,4] = A[4,4]*B[4,4];             |       404|      1632|
 +----------------------------------------------------------+----------+----------+
 
-The benchmark test could be reproduced by executing test cases found in ``test/test_dsp.c``.
+The benchmark test could be reproduced by executing test cases found in :repo_file:`test/test_dsp.c`.

@@ -6,7 +6,7 @@ Header Files
 
 To use the library, include ``esp_dsp.h`` header file into the source code.
 
-* :component_file:`esp_dsp.h`
+* :repo_file:`modules/common/include/esp_dsp.h`
 
 
 Signal (1D) Processing APIs
