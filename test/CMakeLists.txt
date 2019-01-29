@@ -13,4 +13,6 @@ set(COMPONENT_SRCDIRS
 )
 set(COMPONENT_REQUIRES unity esp-dsp)
 
+set(COMPONENT_ADD_LDFRAGMENTS linker.lf)
+
 register_component()
