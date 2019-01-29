@@ -1,13 +1,12 @@
 Espressif DSP Library Benchmarks
 ================================
 
-The table bellow contains performance measurements for Eso32 CPU.
-First column contains function name and it's parameters, second 
-amount of cycles for Esp32 optimized version, and third amount of 
-cycles for Anis C version. 
+The table bellow contains benchmarks of functions provided by ESP-DSP library. The values are CPU cycle counts taken to execute each of the functions. Values in "ESP32" column are for the optimized (assembly) implementation, values in "ANSI C" column are for the non-optimized implementation.
 
 +----------------------------------------------------------+----------+----------+
-+Function description/ execution time in CPU cycles        |   Esp32  |  Ansi    +
++ Function name and arguments                              |     CPU cycles      +
++----------------------------------------------------------+----------+----------+
++                                                          |   ESP32  |  ANSI C  +
 +==========================================================+==========+==========+
 |                                                          |          |          |
 +----------------------------------------------------------+----------+----------+
@@ -64,4 +63,4 @@ cycles for Anis C version.
 |dspm_mult_4x4x4_f32 - C[4,4] = A[4,4]*B[4,4];             |       404|      1632|
 +----------------------------------------------------------+----------+----------+
 
-The benchmark test could be reproduced by executing test under: esp-dsp/test/test_dsp.c 
+The benchmark test could be reproduced by executing test cases found in ``test/test_dsp.c``.
