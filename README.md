@@ -2,32 +2,70 @@
 
 ESP-DSP is the official DSP library for the [ESP32](https://espressif.com/en/products/hardware/esp32/overview) chip.
 
-The esp-dsp library is designed as an extension for the [ESP-IDF](https://github.com/espressif/esp-idf) library and could be used together with it.
+## Overview
 
-The esp-dsp library contains Signal (1D) Application APIs:
+ESP-DSP is intended to be used as an [ESP-IDF](https://github.com/espressif/esp-idf) component. For the introduction to ESP-IDF, refer to the [ESP-IDF Programming Guide](https://docs.espressif.com/projects/esp-idf/en/latest/).
 
- - Common APIs - common APIs that could be used by any domain
- - Dot-product - calculates dot-product of two vectors
- - FFT - Fast Frequency Transform functionality
- - IIR - IIR Filter functionality
- - FIR - FIR Filter functionality
- - Math - Basic Vector operations
- - Support - Support functions
- - Windows - window generating functions
+The ESP-DSP library includes implementations of the following functions:
+- Matrix multiplication: [reference](https://docs.espressif.com/projects/esp-dsp/en/latest/esp-dsp-apis.html#matrix-operations-apis)
+- Dot product: [reference](https://docs.espressif.com/projects/esp-dsp/en/latest/esp-dsp-apis.html#dot-product), [example](https://github.com/espressif/esp-dsp/tree/master/examples/dotprod)
+- FFT: [reference](https://docs.espressif.com/projects/esp-dsp/en/latest/esp-dsp-apis.html#fft), [example](https://github.com/espressif/esp-dsp/tree/master/examples/fft)
+- IIR: [reference](https://docs.espressif.com/projects/esp-dsp/en/latest/esp-dsp-apis.html#iir), [example](https://github.com/espressif/esp-dsp/tree/master/examples/iir)
+- FIR: [reference](https://docs.espressif.com/projects/esp-dsp/en/latest/esp-dsp-apis.html#fir)
+- Vector math operations: [reference](https://docs.espressif.com/projects/esp-dsp/en/latest/esp-dsp-apis.html#math)
 
-The esp-dsp library contains ANSI C implementation of the core DSP functions and Esp32 optimized implementation. The implementation to be used can be switched by KConfig option.
+Many of the library functions are written in assembly and are optimized for the CPU configuration used in the ESP32. In addition to the optimized implementations, reference implementations written in ANSI C are provided.
 
-The esp-dsp library is a component that have to be placed as submodule project into the user project components folder, and handle it there:  
- 
-    cd $(your project path)/components
-    git clone https://github.com/espressif/esp-dsp.git dsp
+Function implementations are provided for single precision floating point (32-bit float), and 16-bit signed integers.
 
-The esp-dsp library contains the documentation in esp-dsp/docs folder.
+## Documentation
 
-The esp-dsp library contains next examples that could be used to get an overview of the library:
+- [ESP-DSP Overview](https://docs.espressif.com/projects/esp-dsp/en/latest/esp-dsp-library.html)
+- [ESP-DSP API Reference](https://docs.espressif.com/projects/esp-dsp/en/latest/esp-dsp-apis.html)
+- [ESP-DSP Benchmarks](https://docs.espressif.com/projects/esp-dsp/en/latest/esp-dsp-benchmarks.html)
 
-- Dotprod - demonstrates how to use dotprod dsps_dotprod_f32 from esp-dsp library.
-- IIR - demonstrates how to use IIR filters functionality from esp-dsp library.
-- FFT - demonstrates how to use FFT functionality from esp-dsp library.
+Documentation found in the above links is automatically generated from the contents of this repository. If you find that some information is missing or incomplete, please report an issue.
 
-For more details please read README.md for each example.
+## Installation and Usage
+
+The ESP-DSP library is a component for the [ESP-IDF build system](https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/build-system.html). It also works with the [new CMake-based build system](https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/build-system-cmake.html).
+
+### Trying out ESP-DSP examples
+
+If you haven't created an ESP-IDF project yet, and wish to try the examples provided with ESP-DSP, you can clone ESP-DSP repository into any directory, and then run examples from there:
+
+    cd ~/esp
+    git clone https://github.com/espressif/esp-dsp.git
+    cd esp-dsp/examples/dotprod
+    make -j4 flash monitor ESPPORT=PORT
+
+or, if you are using CMake based build system,
+
+    idf.py -p PORT flash monitor
+
+where `PORT` is the UART port name of your development board, such as `/dev/ttyUSB0` or `COM1`. 
+
+Note that you need to set up environment variables (`IDF_PATH`, `PATH`) before building the project. Refer to the [ESP-IDF Getting Started Guide](https://docs.espressif.com/projects/esp-idf/en/latest/get-started/index.html) if you don't have the environment set up yet.
+
+For the list of the examples, please see [README.md](examples/README.md) in the examples directory.
+
+### Including ESP-DSP into your own project
+
+To include ESP-DSP into your ESP-IDF project, clone ESP-DSP repository (or add it as a submodule) into the components directory of the project:
+
+    cd your-project-directory
+    mkdir -p components
+    cd components
+    git clone https://github.com/espressif/esp-dsp.git
+
+ESP-IDF build system also allows including components which are not located in the project components directory, using `EXTRA_COMPONENT_DIRS` project variable. Please refer to the [ESP-IDF build system documentation](https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/build-system.html) for details.
+
+## Reporting Issues
+
+If you have found an issue in ESP-DSP, or wish to submit an enhancement request, please use the [Issues](https://github.com/espressif/esp-dsp/issues) section on Github.
+
+For general questions related to this library, please use the [esp32.com forum](https://esp32.com/).
+
+## Copyrights and License
+
+All original source code in this repository is Copyright (C) 2018-2019 Espressif Systems. This source code is licensed under the Apache License 2.0 as described in the file LICENSE.

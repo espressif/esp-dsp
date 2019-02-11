@@ -1,6 +1,7 @@
 # ESP-DSP Examples
 
-This directory contains a range of example ESP-DSP projects. 
+This directory contains a range of examples for ESP-DSP library.
+
 These examples are intended to demonstrate part of ESP-DSP functionality (e.g. initialization, execution) and to provide code that you can copy and adapt into your own projects.
 
 See the [README.md](../README.md) file in the upper level directory for more information about ESP-DSP.
