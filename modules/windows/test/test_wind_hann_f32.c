@@ -36,5 +36,5 @@ TEST_CASE("dsps_wind_hann_f32: test Hann window for symmetry", "[dsps]")
         hann_diff += fabs(data[i] - data[length - 1 -i]);
     }
 	
-	if (hann_diff > 8) TEST_ASSERT_EQUAL(0, hann_diff);
+	if (hann_diff > 0) TEST_ASSERT_EQUAL(0, hann_diff);
 }
