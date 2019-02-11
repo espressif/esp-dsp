@@ -14,12 +14,19 @@ if [ -s doxygen-warning-log.txt ]; then
     RESULT=1
 fi
 
+
+SED=sed
+os_name=`uname -s`
+if [[ "${os_name}" == "Darwin" ]]; then
+    SED=gsed
+fi
+
 # Remove escape characters, file paths, line numbers from
 # the Sphinx warning log
 # (escape char removal from https://www.commandlinefu.com/commands/view/6141/remove-color-codes-special-characters-with-sed
-gsed -r 's:\x1B\[[0-9;]*[mK]::g' sphinx-warning-log.txt | \
-    gsed -E "s~${IDF_PATH}~\${IDF_PATH}~" | \
-    gsed -E "s/:[0-9]+:/:line:/" > sphinx-warning-log-sanitized.txt
+${SED} -r 's:\x1B\[[0-9;]*[mK]::g' sphinx-warning-log.txt | \
+    ${SED} -E "s~${IDF_PATH}~\${IDF_PATH}~" | \
+    ${SED} -E "s/:[0-9]+:/:line:/" > sphinx-warning-log-sanitized.txt
 
 # diff sanitized warnings, ignoring lines which only appear in ../sphinx-known-warnings.txt
 
@@ -37,4 +44,3 @@ if ! [ -z "$SPHINX_WARNINGS" ]; then
 fi
 
 exit $RESULT
-

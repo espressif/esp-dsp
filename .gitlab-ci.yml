@@ -30,6 +30,14 @@ before_script:
   before_script: &do_nothing_before
     - echo "Not setting up GitLab key"
 
+.add_gh_key_remote: &add_gh_key_remote |
+  command -v ssh-agent >/dev/null || exit 1
+  eval $(ssh-agent -s)
+  printf '%s\n' "${GH_PUSH_KEY}" | tr -d '\r' | ssh-add - > /dev/null
+  mkdir -p ~/.ssh && chmod 700 ~/.ssh
+  [[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config || ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
+  git remote remove github || true
+  git remote add github ${GH_PUSH_REPO}
 
 build:
   stage: build
@@ -79,3 +87,18 @@ build_docs:
     - cd docs
     - make html
     - ./check_doc_warnings.sh
+
+push_master_to_github:
+  stage: deploy
+  image: $CI_DOCKER_REGISTRY/esp32-ci-env$BOT_DOCKER_IMAGE_TAG
+  tags:
+    - deploy
+  only:
+    - master
+    - /^release\/v/
+    - /^v\d+\.\d+(\.\d+)?($|-)/
+  when: on_success
+  script:
+    - git clone --depth 1 ${GITLAB_SSH_SERVER}/idf/esp-idf esp-idf
+    - *add_gh_key_remote
+    - esp-idf/tools/ci/push_to_github.sh
