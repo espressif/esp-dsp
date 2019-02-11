@@ -13,8 +13,8 @@
 // limitations under the License.
 
 
-#ifndef _dsps_wind_barrel_H_
-#define _dsps_wind_barrel_H_
+#ifndef _dsps_wind_hann_H_
+#define _dsps_wind_hann_H_
 
 #ifdef __cplusplus
 extern "C"
@@ -22,17 +22,17 @@ extern "C"
 #endif
 
 /**
- * @brief   Barrel window
+ * @brief   Hann window
  * 
- * The function generates Barrel window.
+ * The function generates Hann window.
  *
  * @param window: buffer to store window array.
  * @param len: length of the window array
  *
  */
-void dsps_wind_barrel_f32(float *window, int len);
+void dsps_wind_hann_f32(float *window, int len);
 
 #ifdef __cplusplus
 }
 #endif
-#endif // _dsps_wind_barrel_H_
+#endif // _dsps_wind_hann_H_

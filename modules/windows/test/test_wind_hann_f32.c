@@ -12,13 +12,29 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#define _USE_MATH_DEFINES
-#include "dsps_wind_barrel.h"
-#include <math.h>
+#include <string.h>
+#include "unity.h"
+#include "freertos/FreeRTOS.h"
+#include "freertos/portable.h"
+#include "freertos/task.h"
+#include "freertos/semphr.h"
+#include "esp_clk.h"
+#include "soc/cpu.h"
 
-void dsps_wind_barrel_f32(float *window, int len)
+#include "esp_dsp.h"
+
+static const int length = 1024;
+static float data[1024];
+
+// This test check if the window is symmetric
+TEST_CASE("dsps_wind_hann_f32: test Hann window for symmetry", "[dsps]")
 {
-    for (int i = 0; i < len; i++) {
-        window[i] = 0.5 * (1 - cosf(i * 2 * M_PI / (float)len));
+    dsps_wind_hann_f32(data, length);
+    float hann_diff = 0;
+    for (int i=0 ; i< length/2 ; i++)
+    {
+        hann_diff += fabs(data[i] - data[length - 1 -i]);
     }
+	
+	if (hann_diff > 0) TEST_ASSERT_EQUAL(0, hann_diff);
 }

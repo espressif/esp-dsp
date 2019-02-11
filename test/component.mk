@@ -9,6 +9,7 @@ COMPONENT_SRCDIRS := \
 					../modules/support/view/test \
 					../modules/support/snr/test \
 					../modules/support/sfdr/test \
+					../modules/windows/test \
 					../modules/fft/test
 
 COMPONENT_ADD_LDFLAGS = -Wl,--whole-archive -l$(COMPONENT_NAME) -Wl,--no-whole-archive

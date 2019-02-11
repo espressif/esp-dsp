@@ -12,44 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef _esp_dsp_H_
-#define _esp_dsp_H_
-
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-
-// Common includes
-#include "dsp_common.h"
-
-// Signal processing
-#include "dsps_dotprod.h"
-#include "dsps_fir.h"
-#include "dsps_biquad.h"
-#include "dsps_biquad_gen.h"
-#include "dsps_addc.h"
-#include "dsps_mulc.h"
+#define _USE_MATH_DEFINES
 #include "dsps_wind_hann.h"
+#include <math.h>
 
-#include "dsps_d_gen.h"
-#include "dsps_h_gen.h"
-#include "dsps_tone_gen.h"
-#include "dsps_snr.h"
-#include "dsps_sfdr.h"
-
-#include "dsps_fft2r.h"
-
-// Matrix operations
-#include "dspm_mult.h"
-
-// Support functions
-#include "dsps_view.h"
-
-
-#ifdef __cplusplus
+void dsps_wind_hann_f32(float *window, int len)
+{
+    float len_mult = 1/(float)(len-1);
+    for (int i = 0; i < len; i++) {
+        window[i] = 0.5 * (1 - cosf(i * 2 * M_PI * len_mult));
+    }
 }
-#endif
-
-
-#endif // _esp_dsp_H_

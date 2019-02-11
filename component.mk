@@ -1,6 +1,6 @@
 COMPONENT_ADD_INCLUDEDIRS := modules/dotprod/include \
 							modules/support/include \
-							modules/windows/barrel/include \
+							modules/windows/hann/include \
 							modules/iir/include \
 							modules/fir/include \
 							modules/math/include \
@@ -28,9 +28,9 @@ COMPONENT_SRCDIRS :=. \
 					modules/support/sfdr/float \
 					modules/support/misc \
 					modules/support/view \
-					modules/windows/barrel \
-					modules/windows/barrel/float \
-					modules/windows/barrel/fixed \
+					modules/windows/hann \
+					modules/windows/hann/float \
+					modules/windows/hann/fixed \
 					modules/iir \
 					modules/iir/biquad \
 					modules/fir \
