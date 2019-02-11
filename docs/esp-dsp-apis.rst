@@ -62,7 +62,7 @@ Support
 Window Functions
 ++++++++++++++++
 
-.. include:: /_build/inc/dsps_wind_barrel.inc
+.. include:: /_build/inc/dsps_wind_hann.inc
 
 Matrix Operations APIs
 ----------------------

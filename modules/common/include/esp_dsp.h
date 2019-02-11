@@ -30,7 +30,7 @@ extern "C"
 #include "dsps_biquad_gen.h"
 #include "dsps_addc.h"
 #include "dsps_mulc.h"
-#include "dsps_wind_barrel.h"
+#include "dsps_wind_hann.h"
 
 #include "dsps_d_gen.h"
 #include "dsps_h_gen.h"

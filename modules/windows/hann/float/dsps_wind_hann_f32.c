@@ -13,12 +13,13 @@
 // limitations under the License.
 
 #define _USE_MATH_DEFINES
-#include "dsps_wind_barrel.h"
+#include "dsps_wind_hann.h"
 #include <math.h>
 
-void dsps_wind_barrel_f32(float *window, int len)
+void dsps_wind_hann_f32(float *window, int len)
 {
+    float len_mult = 1/(float)(len-1);
     for (int i = 0; i < len; i++) {
-        window[i] = 0.5 * (1 - cosf(i * 2 * M_PI / (float)len));
+        window[i] = 0.5 * (1 - cosf(i * 2 * M_PI * len_mult));
     }
 }

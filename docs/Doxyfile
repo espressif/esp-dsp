@@ -47,7 +47,7 @@ INPUT = \
     ../modules/support/include/dsps_d_gen.h \
     ../modules/support/include/dsps_h_gen.h \
     ## Windows - API Reference
-    ../modules/windows/barrel/include/dsps_wind_barrel.h
+    ../modules/windows/hann/include/dsps_wind_hann.h
 
 
 ## Get warnings for functions that have no documentation for their parameters or return value
