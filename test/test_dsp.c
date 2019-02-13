@@ -99,11 +99,6 @@ TEST_CASE("DSP Libary benchmark table", "[dsp]")
                      &fir1, data1, data2, 1024);
 
     REPORT_BENCHMARK("dsps_fird_f32 1024 samples, 256 coeffs and decimation 4",
-                     dsps_fir_f32_ae32,
-                     dsps_fir_f32_ansi,
-                     &fir1, data1, data2, 1024);
-
-    REPORT_BENCHMARK("dsps_fird_f32 1024 samples, 256 coeffs and decimation 4",
                      dsps_fird_f32_ae32,
                      dsps_fird_f32_ansi,
                      &fir1, data1, data2, 1024);
@@ -153,7 +148,7 @@ TEST_CASE("DSP Libary benchmark table", "[dsp]")
                      dspm_mult_s16_ae32,
                      dspm_mult_s16_ansi,
                      (int16_t *)data1, (int16_t *)data2, (int16_t *)data3, 16, 16, 16, 0);
-    
+
     REPORT_BENCHMARK("dspm_mult_3x3x1_f32 - C[3,1] = A[3,3]*B[3,1];",
                      dspm_mult_3x3x1_f32_ae32,
                      dspm_mult_3x3x1_f32_ansi,
