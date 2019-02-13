@@ -69,8 +69,8 @@ esp_err_t dsps_fft2r_init_sc16(int16_t* fft_table_buff, int table_size);
  * 
  * @return
  */
-void dsps_fft2r_deinit();
-void dsps_fft2r_sc16_deinit();
+void dsps_fft2r_deinit_fc32();
+void dsps_fft2r_deinit_sc16();
 /**@}*/ 
 
 /**@{*/
@@ -92,10 +92,12 @@ void dsps_fft2r_sc16_deinit();
 esp_err_t dsps_fft2r_fc32_ansi(float *data, int N);
 esp_err_t dsps_fft2r_fc32_ae32_(float *data, int N, float* w);
 esp_err_t dsps_fft2r_sc16_ansi(int16_t *data, int N);
+esp_err_t dsps_fft2r_sc16_ae32_(int16_t *data, int N, int16_t* w);
 /**@}*/ 
 // This is workaround because linker generates permanent error when assembler uses 
 // direct access to the table pointer
 #define dsps_fft2r_fc32_ae32(data, N) dsps_fft2r_fc32_ae32_(data, N, dsps_fft_w_table_fc32)
+#define dsps_fft2r_sc16_ae32(data, N) dsps_fft2r_sc16_ae32_(data, N, dsps_fft_w_table_sc16)
 
 
 /**@{*/
@@ -167,11 +169,13 @@ esp_err_t dsps_cplx2reC_sc16(int16_t *data, int N);
 #define dsps_fft2r_fc32 dsps_fft2r_fc32_ae32
 #define dsps_bit_rev_fc32 dsps_bit_rev_fc32_ansi
 #define dsps_cplx2reC_fc32 dsps_cplx2reC_fc32_ansi
+#define dsps_fft2r_sc16 dsps_fft2r_sc16_ae32
 #endif
 #ifdef CONFIG_DSP_ANSI
 #define dsps_fft2r_fc32 dsps_fft2r_fc32_ansi
 #define dsps_bit_rev_fc32 dsps_bit_rev_fc32_ansi
 #define dsps_cplx2reC_fc32 dsps_cplx2reC_fc32_ansi
+#define dsps_fft2r_sc16 dsps_fft2r_sc16_ansi
 #endif
 
 

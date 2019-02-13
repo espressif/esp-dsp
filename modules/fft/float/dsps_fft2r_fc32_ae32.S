@@ -13,7 +13,7 @@
 // limitations under the License. 
 
 //#include "../../dotprod/float/dsps_dotprod_f32_m_ae32.S"
-#include "dsps_dotprode_f32_m_ae32.S"
+//#include "dsps_dotprode_f32_m_ae32.S"
 
 // This is matrix multipliction function for ESP32 processor.
 	.text

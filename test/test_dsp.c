@@ -52,7 +52,12 @@ TEST_CASE("DSP Libary benchmark table", "[dsp]")
 
     esp_err_t ret = dsps_fft2r_init_fc32(NULL, CONFIG_DSP_MAX_FFT_SIZE);
     if (ret != ESP_OK) {
-        ESP_LOGE(TAG, "Not possible to initialize FFT. Error = 0x%x", ret);
+        ESP_LOGE(TAG, "Not possible to initialize floating point FFT. Error = 0x%x", ret);
+        abort();
+    }
+    ret = dsps_fft2r_init_sc16(NULL, CONFIG_DSP_MAX_FFT_SIZE);
+    if (ret != ESP_OK) {
+        ESP_LOGE(TAG, "Not possible to initialize fixed point FFT. Error = 0x%x", ret);
         abort();
     }
 
@@ -103,7 +108,7 @@ TEST_CASE("DSP Libary benchmark table", "[dsp]")
                      dsps_fird_f32_ansi,
                      &fir1, data1, data2, 1024);
 
-    REPORT_SECTION("**FFTs**");
+    REPORT_SECTION("**FFTs 32 bit Floating Point**");
 
     REPORT_BENCHMARK("dsps_fft2r_fc32 for  64 complex points",
                      dsps_fft2r_fc32_ae32,
@@ -129,6 +134,33 @@ TEST_CASE("DSP Libary benchmark table", "[dsp]")
                      dsps_fft2r_fc32_ae32,
                      dsps_fft2r_fc32_ansi,
                      data1, 1024);
+
+    REPORT_SECTION("**FFTs 16 bit Fixed Point**");
+
+    REPORT_BENCHMARK("dsps_fft2r_sc16 for  64 complex points",
+                     dsps_fft2r_sc16_ae32,
+                     dsps_fft2r_sc16_ansi,
+                     (int16_t*)data1, 64);
+
+    REPORT_BENCHMARK("dsps_fft2r_sc16 for 128 complex points",
+                     dsps_fft2r_sc16_ae32,
+                     dsps_fft2r_sc16_ansi,
+                     (int16_t*)data1, 128);
+
+    REPORT_BENCHMARK("dsps_fft2r_sc16 for 256 complex points",
+                     dsps_fft2r_sc16_ae32,
+                     dsps_fft2r_sc16_ansi,
+                     (int16_t*)data1, 256);
+
+    REPORT_BENCHMARK("dsps_fft2r_sc16 for 512 complex points",
+                     dsps_fft2r_sc16_ae32,
+                     dsps_fft2r_sc16_ansi,
+                     (int16_t*)data1, 512);
+
+    REPORT_BENCHMARK("dsps_fft2r_sc16 for 1024 complex points",
+                     dsps_fft2r_sc16_ae32,
+                     dsps_fft2r_sc16_ansi,
+                     (int16_t*)data1, 1024);
 
     REPORT_SECTION("**IIR Filters**");
 
@@ -169,7 +201,8 @@ TEST_CASE("DSP Libary benchmark table", "[dsp]")
                      dspm_mult_4x4x4_f32_ansi,
                      data1, data2, data3);
 
-    dsps_fft2r_deinit();
+    dsps_fft2r_deinit_fc32();
+    dsps_fft2r_deinit_sc16();
     free(data1);
     free(data2);
     free(data3);

@@ -26,58 +26,75 @@
 #include "dsps_fft2r.h"
 #include "dsp_tests.h"
 
-static const char *TAG = "dsps_fft2r_ansi";
+static const char *TAG = "dsps_fft2r_ansi_s16";
 
-static float data[1024*2];
+static int16_t data[1024*2];
+static float result_data[1024*2];
 
-TEST_CASE("dsps_fft2r_fc32_ansi functionality", "[dsps]")
+TEST_CASE("dsps_fft2r_sc16_ansi functionality", "[dsps]")
 {
     int N = sizeof(data) / sizeof(float) / 2;
-    int check_bin = 32;
+    N = 1024;
+    int check_bin = 64;
     for (int i = 0 ; i < N ; i++) {
-        data[i * 2 + 0] = 2 * sinf(M_PI / N * check_bin * 2 * i) / (N / 2);
+        data[i * 2 + 0] = (INT16_MAX)*sin(M_PI / N * check_bin *2* i)*0.5 * (1 - cosf(i * 2 * M_PI / (float)(N-1)));
         data[i * 2 + 1] = 0;
     }
 
-    esp_err_t ret = dsps_fft2r_init_fc32(NULL, CONFIG_DSP_MAX_FFT_SIZE);
+    esp_err_t ret = dsps_fft2r_init_sc16(NULL, CONFIG_DSP_MAX_FFT_SIZE);
     if (ret  != ESP_OK)
     {
         ESP_LOGE(TAG, "Not possible to initialize FFT. Error = %i", ret);
         return;
     }
 
-    dsps_fft2r_fc32_ansi(data, N);
+    dsps_fft2r_sc16_ansi(data, N);
     unsigned int start_b = xthal_get_ccount();
-    dsps_bit_rev_fc32_ansi(data, N);
+    dsps_bit_rev_sc16_ansi(data, N);
     unsigned int end_b = xthal_get_ccount();
+
+
+    for (int i=0 ; i< N ; i++)
+    {
+        ESP_LOGD(TAG, "Data[%i] %i\n", i/2, data[i]);
+    }
 
     float min = 10000;
     float max = -10000;
     int max_pos = 0;
+    for (int i = 0 ; i < (N*2) ; i++)
+    {
+        result_data[i] = data[i];
+        result_data[i] = result_data[i]/INT16_MAX;
+    }
+    
     for (int i = 0 ; i < N ; i++) {
-        data[i] = 10 * log10f(data[i * 2 + 0] * data[i * 2 + 0] + data[i * 2 + 1] * data[i * 2 + 1]);
-        if (data[i] < min) {
-            min = data[i];
+        result_data[i] = 10 * log10f(0.0000000000001 + result_data[i * 2 + 0] * result_data[i * 2 + 0] + result_data[i * 2 + 1] * result_data[i * 2 + 1]);
+        if (result_data[i] < min) {
+            min = result_data[i];
         }
-        if (data[i] > max) {
-            max = data[i];
+        if (result_data[i] > max) {
+            max = result_data[i];
             max_pos = i;
         }
-        ESP_LOGD(TAG, "FFT Data[%i] =%8.4f dB", i, data[i]);
+        ESP_LOGD(TAG, "FFT Data[%i] =%8.4f dB", i, result_data[i]);
     }
-    dsps_view_spectrum(data, 256, -160, 40);
+    dsps_view_spectrum(result_data, N, -100, 0);
+    float round_pow = round(max*5);
 
-    TEST_ASSERT_EQUAL( check_bin, max_pos);
-    float round_pow = round(max * 10);
-    TEST_ASSERT_EQUAL( 6 * 10, round_pow);
-    ESP_LOGI(TAG, "Calculation error is less then 0.1 dB");
+    ESP_LOGI(TAG, "max_bin=%i, check_bin=%i, round_pow=%f\n", max_pos, check_bin, round_pow);
+
+    if (max_pos < N/2) TEST_ASSERT_EQUAL( check_bin, max_pos);
+    else TEST_ASSERT_EQUAL( N - check_bin, max_pos);
+    TEST_ASSERT_EQUAL( -12*5, round_pow);
+    ESP_LOGI(TAG, "Calculation error is less then 0.2 dB");
     ESP_LOGI(TAG, "cycles - %i", end_b - start_b);
-    dsps_fft2r_deinit_fc32();
+    dsps_fft2r_deinit_sc16();
 }
 
-TEST_CASE("dsps_fft2r_fc32_ansi benchmark", "[dsps]")
+TEST_CASE("dsps_fft2r_sc16_ansi benchmark", "[dsps]")
 {    
-    esp_err_t ret = dsps_fft2r_init_fc32(NULL, CONFIG_DSP_MAX_FFT_SIZE);
+    esp_err_t ret = dsps_fft2r_init_sc16(NULL, CONFIG_DSP_MAX_FFT_SIZE);
     if (ret  != ESP_OK)
     {
         ESP_LOGE(TAG, "Not possible to initialize FFT. Error = %i", ret);
@@ -87,15 +104,15 @@ TEST_CASE("dsps_fft2r_fc32_ansi benchmark", "[dsps]")
     {
         int N_check = 2<<i;
         unsigned int start_b = xthal_get_ccount();
-        dsps_fft2r_fc32_ansi(data, N_check);
+        dsps_fft2r_sc16_ansi(data, N_check);
 
         unsigned int end_b = xthal_get_ccount();
         float total_b = end_b - start_b;
         float cycles = total_b;
-        ESP_LOGI(TAG, "Benchmark dsps_fft2r_fc32_ansi - %6i cycles for %6i points FFT.", (int)cycles, N_check);
+        ESP_LOGI(TAG, "Benchmark dsps_fft2r_sc16_ansi - %6i cycles for %6i points FFT.", (int)cycles, N_check);
         float min_exec = 3;
         float max_exec = 330000*3;
         TEST_ASSERT_EXEC_IN_RANGE(min_exec, max_exec, cycles);
     }
-    dsps_fft2r_deinit_fc32();
+    dsps_fft2r_deinit_sc16();
 }
