@@ -44,5 +44,5 @@ TEST_CASE("dsps_snr_f32 functionality", "[dsps]")
     float snr = dsps_snr_f32(data, N, 1);
     TEST_ASSERT_EQUAL(-round(20 * log10(snr_exp) + 3), (int)round(snr));
     ESP_LOGI(TAG, "dsps_snr_f32 = %f dB", snr);
-    dsps_fft2r_deinit();
+    dsps_fft2r_deinit_fc32();
 }

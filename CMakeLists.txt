@@ -22,6 +22,8 @@ set(COMPONENT_SRCS  "modules/common/misc/dsps_pwroftwo.cpp"
                     "modules/math/addc/float/dsps_addc_f32_ansi.c"
                     "modules/fft/float/dsps_fft2r_fc32_ae32.S"
                     "modules/fft/float/dsps_fft2r_fc32_ansi.c"
+                    "modules/fft/fixed/dsps_fft2r_sc16_ae32.S"
+                    "modules/fft/fixed/dsps_fft2r_sc16_ansi.c"
                     "modules/support/snr/float/dsps_snr_f32.cpp"
                     "modules/support/sfdr/float/dsps_sfdr_f32.cpp"
                     "modules/support/misc/dsps_d_gen.c"
@@ -50,6 +52,7 @@ set(COMPONENT_ADD_INCLUDEDIRS   "modules/dotprod/include"
                                 "modules/common/include")
 
 set(COMPONENT_PRIV_INCLUDEDIRS  "modules/dotprod/float"
-                                "modules/dotprod/fixed")
+                                "modules/dotprod/fixed"
+                                "modules/common/private_include")
 
 register_component()

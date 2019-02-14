@@ -86,7 +86,7 @@ TEST_CASE("dsps_fft2r_fc32_ae32 functionality", "[dsps]")
     float round_pow = round(max * 10);
     TEST_ASSERT_EQUAL( 6 * 10, round_pow);
     ESP_LOGI(TAG, "Calculation error is less then 0.1 dB");
-    dsps_fft2r_deinit();
+    dsps_fft2r_deinit_fc32();
 }
 
 TEST_CASE("dsps_fft2r_fc32_ae32 benchmark", "[dsps]")
@@ -117,5 +117,5 @@ TEST_CASE("dsps_fft2r_fc32_ae32 benchmark", "[dsps]")
         float max_exec = 330000;
         TEST_ASSERT_EXEC_IN_RANGE(min_exec, max_exec, cycles);
     }
-    dsps_fft2r_deinit();
+    dsps_fft2r_deinit_fc32();
 }

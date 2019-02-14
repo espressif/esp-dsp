@@ -63,7 +63,7 @@ esp_err_t dsps_fft2r_init_fc32(float* fft_table_buff, int table_size)
     return ESP_OK;
 }
 
-void dsps_fft2r_deinit()
+void dsps_fft2r_deinit_fc32()
 {
     if (dsps_fft2r_mem_allocated)
     {

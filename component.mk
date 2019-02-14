@@ -23,6 +23,7 @@ COMPONENT_SRCDIRS :=. \
 					modules/math/addc \
 					modules/math/addc/float \
 					modules/fft/float \
+					modules/fft/fixed \
 					modules/support \
 					modules/support/snr/float \
 					modules/support/sfdr/float \
@@ -37,5 +38,6 @@ COMPONENT_SRCDIRS :=. \
 					modules/fir/float
 					
 COMPONENT_PRIV_INCLUDEDIRS := 	modules/dotprod/float \
-								modules/dotprod/fixed				
+								modules/dotprod/fixed \
+								modules/common/private_include 
 					
