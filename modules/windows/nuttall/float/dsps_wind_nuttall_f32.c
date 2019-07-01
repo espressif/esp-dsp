@@ -12,44 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef _esp_dsp_H_
-#define _esp_dsp_H_
+#define _USE_MATH_DEFINES
+#include "dsps_wind_nuttall.h"
+#include <math.h>
 
-#ifdef __cplusplus
-extern "C"
+void dsps_wind_nuttall_f32(float *window, int len)
 {
-#endif
+    const float a0=0.355768; 
+    const float a1=0.487396;
+    const float a2=0.144232;
+    const float a3=0.012604;
 
-// Common includes
-#include "dsp_common.h"
-
-// Signal processing
-#include "dsps_dotprod.h"
-#include "dsps_fir.h"
-#include "dsps_biquad.h"
-#include "dsps_biquad_gen.h"
-#include "dsps_addc.h"
-#include "dsps_mulc.h"
-#include "dsps_wind.h"
-
-#include "dsps_d_gen.h"
-#include "dsps_h_gen.h"
-#include "dsps_tone_gen.h"
-#include "dsps_snr.h"
-#include "dsps_sfdr.h"
-
-#include "dsps_fft2r.h"
-
-// Matrix operations
-#include "dspm_mult.h"
-
-// Support functions
-#include "dsps_view.h"
-
-
-#ifdef __cplusplus
+    float len_mult = 1/(float)(len-1);
+    for (int i = 0; i < len; i++) {
+        window[i] = a0 
+                    - a1 * cosf(i * 2 * M_PI * len_mult) 
+                    + a2 * cosf(i * 4 * M_PI * len_mult) 
+                    - a3 * cosf(i * 6 * M_PI * len_mult);
+    }
 }
-#endif
-
-
-#endif // _esp_dsp_H_

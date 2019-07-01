@@ -12,25 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include <string.h>
-#include "unity.h"
-#include "dsp_platform.h"
-#include "esp_log.h"
+#define _USE_MATH_DEFINES
+#include "dsps_wind_blackman_nuttall.h"
+#include <math.h>
 
-#include "esp_dsp.h"
-
-static const int length = 1024;
-static float data[1024];
-
-// This test check if the window is symmetric
-TEST_CASE("dsps_wind_hann_f32: test Hann window for symmetry", "[dsps]")
+void dsps_wind_blackman_nuttall_f32(float *window, int len)
 {
-    dsps_wind_hann_f32(data, length);
-    float hann_diff = 0;
-    for (int i=0 ; i< length/2 ; i++)
-    {
-        hann_diff += fabs(data[i] - data[length - 1 -i]);
+    const float a0=0.3635819; 
+    const float a1=0.4891775;
+    const float a2=0.1365995;
+    const float a3=0.0106411;
+    
+    float len_mult = 1/(float)(len-1);
+    for (int i = 0; i < len; i++) {
+        window[i] = a0 
+                    - a1 * cosf(i * 2 * M_PI * len_mult) 
+                    + a2 * cosf(i * 4 * M_PI * len_mult) 
+                    - a3 * cosf(i * 6 * M_PI * len_mult);
     }
-	
-	if (hann_diff > 0) TEST_ASSERT_EQUAL(0, hann_diff);
 }

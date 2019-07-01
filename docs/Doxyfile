@@ -47,7 +47,12 @@ INPUT = \
     ../modules/support/include/dsps_d_gen.h \
     ../modules/support/include/dsps_h_gen.h \
     ## Windows - API Reference
-    ../modules/windows/hann/include/dsps_wind_hann.h
+    ../modules/windows/hann/include/dsps_wind_hann.h \
+    ../modules/windows/blackman/include/dsps_wind_blackman.h \
+    ../modules/windows/blackman_harris/include/dsps_wind_blackman_harris.h \
+    ../modules/windows/blackman_nuttall/include/dsps_wind_blackman_nuttall.h \
+    ../modules/windows/nuttall/include/dsps_wind_nuttall.h \
+    ../modules/windows/flat_top/include/dsps_wind_flat_top.h
 
 
 ## Get warnings for functions that have no documentation for their parameters or return value

@@ -1,6 +1,12 @@
 COMPONENT_ADD_INCLUDEDIRS := modules/dotprod/include \
 							modules/support/include \
+							modules/windows/include \
 							modules/windows/hann/include \
+							modules/windows/blackman/include \
+							modules/windows/blackman_harris/include \
+							modules/windows/blackman_nuttall/include \
+							modules/windows/nuttall/include \
+							modules/windows/flat_top/include \
 							modules/iir/include \
 							modules/fir/include \
 							modules/math/include \
@@ -32,6 +38,21 @@ COMPONENT_SRCDIRS :=. \
 					modules/windows/hann \
 					modules/windows/hann/float \
 					modules/windows/hann/fixed \
+					modules/windows/blackman \
+					modules/windows/blackman/float \
+					modules/windows/blackman/fixed \
+					modules/windows/blackman_harris \
+					modules/windows/blackman_harris/float \
+					modules/windows/blackman_harris/fixed \
+					modules/windows/blackman_nuttall \
+					modules/windows/blackman_nuttall/float \
+					modules/windows/blackman_nuttall/fixed \
+					modules/windows/nuttall \
+					modules/windows/nuttall/float \
+					modules/windows/nuttall/fixed \
+					modules/windows/flat_top \
+					modules/windows/flat_top/float \
+					modules/windows/flat_top/fixed \
 					modules/iir \
 					modules/iir/biquad \
 					modules/fir \
