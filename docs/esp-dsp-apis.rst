@@ -46,6 +46,9 @@ IIR
 Math
 ++++
 
+.. include:: /_build/inc/dsps_add.inc
+.. include:: /_build/inc/dsps_sub.inc
+.. include:: /_build/inc/dsps_mul.inc
 .. include:: /_build/inc/dsps_addc.inc
 .. include:: /_build/inc/dsps_mulc.inc
 

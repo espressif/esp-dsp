@@ -14,10 +14,13 @@
 
 #include "dsps_addc.h"
 
-esp_err_t dsps_addc_f32_ansi(const float *input, float *output, int len, float C, int step1, int step2)
+esp_err_t dsps_addc_f32_ansi(const float *input, float *output, int len, float C, int step_in, int step_out)
 {
+    if (NULL == input) return ESP_ERR_DSP_PARAM_OUTOFRANGE;
+    if (NULL == output) return ESP_ERR_DSP_PARAM_OUTOFRANGE;
+
     for (int i = 0 ; i < len ; i++) {
-        output[i * step2] = input[i * step1] + C;
+        output[i * step_out] = input[i * step_in] + C;
     }
     return ESP_OK;
 }

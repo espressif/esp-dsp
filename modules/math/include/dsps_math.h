@@ -12,28 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "dsps_tone_gen.h"
-#include <math.h>
+#ifndef _dsps_math_H_
+#define _dsps_math_H_
 
-esp_err_t dsps_tone_gen_f32(float *output, int len, float Ampl, float freq, float phase)
-{
-    if (freq >= 1) {
-        return ESP_ERR_DSP_INVALID_PARAM;
-    }
-    if (freq <= -1) {
-        return ESP_ERR_DSP_INVALID_PARAM;
-    }
-    float ph = phase / 180 * M_PI;
-    float fr  = 2 * M_PI * freq;
-    for (int i = 0 ; i < len ; i++) {
-        output[i] = Ampl * sin(ph);
-        ph += fr;
-        if (ph > 2 * M_PI) {
-            ph -= 2 * M_PI;
-        }
-        if (ph < -2 * M_PI) {
-            ph += 2 * M_PI;
-        }
-    }
-    return ESP_OK;
-}
+#include "dsps_add.h"
+#include "dsps_sub.h"
+#include "dsps_mul.h"
+#include "dsps_addc.h"
+#include "dsps_mulc.h"
+
+#endif // _dsps_math_H_

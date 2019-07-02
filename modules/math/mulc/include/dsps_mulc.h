@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef _dsps_tone_gen_H_
-#define _dsps_tone_gen_H_
+#ifndef _dsps_mulc_H_
+#define _dsps_mulc_H_
 #include "dsp_err.h"
 
 
@@ -22,27 +22,39 @@ extern "C"
 {
 #endif
 
+/**@{*/
 /**
- * @brief   tone
+ * @brief   multiply constant
  * 
- * The function generate a tone signal.
- * x[i]=A*sin(2*PI*i + ph/180*PI)
+ * The function multiplies input array to the constant value
+ * x[i*step_out] = y[i*step_in]*C; i=[0..len)
  * The implementation use ANSI C and could be compiled and run on any platform
  *
- * @param output: output array.
- * @param len: length of the input signal
- * @param Ampl: amplitude
- * @param freq: Naiquist frequency -1..1
- * @param phase: phase in degree
- *
+ * @param[in] input: input array
+ * @param output: output array
+ * @param len: amount of operations for arrays
+ * @param C: constant value
+ * @param step_in: step over input array (by default should be 1)
+ * @param step_out: step over output array (by default should be 1)
+ * 
  * @return
  *      - ESP_OK on success
  *      - One of the error codes from DSP library
  */
-esp_err_t dsps_tone_gen_f32(float *output, int len, float Ampl, float freq, float phase);
+esp_err_t dsps_mulc_f32_ansi(const float *input, float *output, int len, float C, int step_in, int step_out);
+esp_err_t dsps_mulc_f32_ae32(const float *input, float *output, int len, float C, int step_in, int step_out);
+/**@}*/
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // _dsps_tone_gen_H_
+
+#ifdef CONFIG_DSP_OPTIMIZED
+#define dsps_mulc_f32 dsps_mulc_f32_ae32
+#endif
+#ifdef CONFIG_DSP_ANSI
+#define dsps_mulc_f32 dsps_mulc_f32_ansi
+#endif
+
+#endif // _dsps_mulc_H_

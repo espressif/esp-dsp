@@ -155,7 +155,7 @@ TEST_CASE("dsps_dotprode_f32_ansi benchmark", "[dsps]")
     float cycles = total_b / (1024 * repeat_count);
     printf("Benchmark dsps_dotprode_f32_ansi - %f per sample + overhead.\n", cycles);
     float min_exec = 10;
-    float max_exec = 20;
+    float max_exec = 25;
     TEST_ASSERT_EXEC_IN_RANGE(min_exec, max_exec, cycles);
 
     free(x);
