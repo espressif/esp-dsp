@@ -14,13 +14,8 @@
 
 #include <string.h>
 #include "unity.h"
-#include "freertos/FreeRTOS.h"
-#include "freertos/portable.h"
-#include "freertos/task.h"
-#include "freertos/semphr.h"
-#include "esp_clk.h"
+#include "dsp_platform.h"
 #include "esp_log.h"
-#include "soc/cpu.h"
 
 #include "dsps_view.h"
 #include "dsps_snr.h"
