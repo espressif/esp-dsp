@@ -12,25 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include <string.h>
-#include "unity.h"
-#include "dsp_platform.h"
-#include "esp_log.h"
 
-#include "esp_dsp.h"
+#ifndef dsp_platform_h_
+#define dsp_platform_h_
+#include "esp32/clk.h"
+#include "soc/cpu.h"
 
-static const int length = 1024;
-static float data[1024];
+#include "freertos/FreeRTOS.h"
+#include "freertos/portable.h"
+#include "freertos/task.h"
+#include "freertos/semphr.h"
 
-// This test check if the window is symmetric
-TEST_CASE("dsps_wind_hann_f32: test Hann window for symmetry", "[dsps]")
-{
-    dsps_wind_hann_f32(data, length);
-    float hann_diff = 0;
-    for (int i=0 ; i< length/2 ; i++)
-    {
-        hann_diff += fabs(data[i] - data[length - 1 -i]);
-    }
-	
-	if (hann_diff > 0) TEST_ASSERT_EQUAL(0, hann_diff);
-}
+#endif // dsp_platform_h_

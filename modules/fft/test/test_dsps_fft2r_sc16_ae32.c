@@ -14,13 +14,8 @@
 
 #include <string.h>
 #include "unity.h"
-#include "freertos/FreeRTOS.h"
-#include "freertos/portable.h"
-#include "freertos/task.h"
-#include "freertos/semphr.h"
-#include "esp_clk.h"
+#include "dsp_platform.h"
 #include "esp_log.h"
-#include "soc/cpu.h"
 
 #include "dsps_view.h"
 #include "dsps_fft2r.h"
@@ -48,7 +43,7 @@ TEST_CASE("dsps_fft2r_sc16_ae32 functionality", "[dsps]")
         return;
     }
 
-    int res_ = dsps_fft2r_sc16_ae32(data, N);
+    dsps_fft2r_sc16_ae32(data, N);
     unsigned int start_b = xthal_get_ccount();
     dsps_bit_rev_sc16_ansi(data, N);
     unsigned int end_b = xthal_get_ccount();
@@ -116,7 +111,7 @@ TEST_CASE("dsps_fft2r_sc16_ae32 overflow check", "[dsps]")
         return;
     }
 
-    int res_ = dsps_fft2r_sc16_ae32(data, N);
+    dsps_fft2r_sc16_ae32(data, N);
     unsigned int start_b = xthal_get_ccount();
     dsps_bit_rev_sc16_ansi(data, N);
     unsigned int end_b = xthal_get_ccount();
