@@ -50,5 +50,8 @@ extern "C"
 }
 #endif
 
+#ifdef __cplusplus
+#include "mat.h"
+#endif
 
 #endif // _esp_dsp_H_

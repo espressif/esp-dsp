@@ -79,6 +79,11 @@ Matrix Multiplication
 
 .. include:: /_build/inc/dspm_mult.inc
 
+Matrix Operations
++++++++++++++++++++++
+
+.. include:: /_build/inc/mat.inc
+
 Miscellaneous
 -------------
 

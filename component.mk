@@ -28,6 +28,7 @@ COMPONENT_SRCDIRS :=. \
 					modules/matrix \
 					modules/matrix/float \
 					modules/matrix/fixed \
+					modules/matrix/mat \
 					modules/math \
 					modules/math/mulc \
 					modules/math/mulc/float \
