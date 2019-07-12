@@ -12,44 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef _esp_dsp_H_
-#define _esp_dsp_H_
+
+#ifndef _dsps_wind_blackman_harris_H_
+#define _dsps_wind_blackman_harris_H_
 
 #ifdef __cplusplus
 extern "C"
 {
 #endif
 
-// Common includes
-#include "dsp_common.h"
-
-// Signal processing
-#include "dsps_dotprod.h"
-#include "dsps_fir.h"
-#include "dsps_biquad.h"
-#include "dsps_biquad_gen.h"
-#include "dsps_addc.h"
-#include "dsps_mulc.h"
-#include "dsps_wind.h"
-
-#include "dsps_d_gen.h"
-#include "dsps_h_gen.h"
-#include "dsps_tone_gen.h"
-#include "dsps_snr.h"
-#include "dsps_sfdr.h"
-
-#include "dsps_fft2r.h"
-
-// Matrix operations
-#include "dspm_mult.h"
-
-// Support functions
-#include "dsps_view.h"
-
+/**
+ * @brief   Blackman-Harris window
+ * 
+ * The function generates Blackman-Harris window.
+ *
+ * @param window: buffer to store window array.
+ * @param len: length of the window array
+ *
+ */
+void dsps_wind_blackman_harris_f32(float *window, int len);
 
 #ifdef __cplusplus
 }
 #endif
-
-
-#endif // _esp_dsp_H_
+#endif // _dsps_wind_blackman_harris_H_

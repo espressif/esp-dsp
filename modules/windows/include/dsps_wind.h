@@ -12,44 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef _esp_dsp_H_
-#define _esp_dsp_H_
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif
+#ifndef _dsps_wind_H_
+#define _dsps_wind_H_
 
-// Common includes
-#include "dsp_common.h"
+#include "dsps_wind_hann.h"
+#include "dsps_wind_blackman.h"
+#include "dsps_wind_blackman_harris.h"
+#include "dsps_wind_blackman_nuttall.h"
+#include "dsps_wind_nuttall.h"
+#include "dsps_wind_flat_top.h"
 
-// Signal processing
-#include "dsps_dotprod.h"
-#include "dsps_fir.h"
-#include "dsps_biquad.h"
-#include "dsps_biquad_gen.h"
-#include "dsps_addc.h"
-#include "dsps_mulc.h"
-#include "dsps_wind.h"
-
-#include "dsps_d_gen.h"
-#include "dsps_h_gen.h"
-#include "dsps_tone_gen.h"
-#include "dsps_snr.h"
-#include "dsps_sfdr.h"
-
-#include "dsps_fft2r.h"
-
-// Matrix operations
-#include "dspm_mult.h"
-
-// Support functions
-#include "dsps_view.h"
-
-
-#ifdef __cplusplus
-}
-#endif
-
-
-#endif // _esp_dsp_H_
+#endif // _dsps_wind_H_
