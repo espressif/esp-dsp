@@ -2,6 +2,8 @@ stages:
   - build
   - deploy
 
+image: $CI_DOCKER_REGISTRY/esp32-ci-env:latest
+
 variables:
   # System environment
 
@@ -11,24 +13,12 @@ variables:
   # GitLab-CI environment
   GET_SOURCES_ATTEMPTS: "10"
   ARTIFACT_DOWNLOAD_ATTEMPTS: "10"
-  GIT_STRATEGY: clone
   GIT_SUBMODULE_STRATEGY: none
 
-  # Docker images
-  BOT_DOCKER_IMAGE_TAG: ":latest"
+  ESP_IDF_GIT: "https://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HTTPS_SERVER}/espressif/esp-idf.git"
 
-before_script:
-  # add gitlab ssh key
-  - mkdir -p ~/.ssh
-  - chmod 700 ~/.ssh
-  - echo -n $GITLAB_KEY > ~/.ssh/id_rsa_base64
-  - base64 --decode --ignore-garbage ~/.ssh/id_rsa_base64 > ~/.ssh/id_rsa
-  - chmod 600 ~/.ssh/id_rsa
-  - echo -e "Host gitlab.espressif.cn\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
-
-.do_nothing_before:
-  before_script: &do_nothing_before
-    - echo "Not setting up GitLab key"
+.setup_idf_tools: &setup_idf_tools |
+  tools/idf_tools.py --non-interactive install && eval "$(tools/idf_tools.py --non-interactive export)" || exit 1
 
 .add_gh_key_remote: &add_gh_key_remote |
   command -v ssh-agent >/dev/null || exit 1
@@ -39,18 +29,22 @@ before_script:
   git remote remove github || true
   git remote add github ${GH_PUSH_REPO}
 
+after_script:
+  # Just for cleaning space, no other causes
+  - git clean -ffdx
+
 build:
   stage: build
-  image: $CI_DOCKER_REGISTRY/esp32-ci-env$BOT_DOCKER_IMAGE_TAG
   tags:
     - build
   script:
-    # Get ESP-IDF and submodules
-    - git clone ${GITLAB_SSH_SERVER}/idf/esp-idf esp-idf
+    # Get ESP-IDF
+    - git clone ${ESP_IDF_GIT} esp-idf
     - pushd esp-idf
-    - tools/ci/mirror-submodule-update.sh
+    # Non-recursive getting its submodules
+    - git submodule update --init
     - export IDF_PATH=$PWD
-    - export PATH=$IDF_PATH/tools:$PATH
+    - *setup_idf_tools
     - popd
 
     # Create a copy of the project in "esp-dsp" directory.
@@ -60,9 +54,9 @@ build:
     - git clone $PWD esp-dsp
     - cd esp-dsp
 
-    # Build test app
+    # Build test app by both Makefiles and CMake ways
     - pushd test_app
-    - make defconfig && make -j4
+    - make defconfig && make
     - rm -rf build
     - idf.py build
     - popd
@@ -72,10 +66,8 @@ build:
 
 build_docs:
   stage: build
-  image: $CI_DOCKER_REGISTRY/esp32-ci-env$BOT_DOCKER_IMAGE_TAG
   tags:
     - build_docs
-
   artifacts:
     when: always
     paths:
@@ -83,6 +75,8 @@ build_docs:
       - docs/sphinx-warning-log.txt
       - docs/_build/html
     expire_in: 1 day
+  # No cleaning when the artifacts
+  after_script: []
   script:
     - cd docs
     - make html
@@ -90,7 +84,6 @@ build_docs:
 
 push_master_to_github:
   stage: deploy
-  image: $CI_DOCKER_REGISTRY/esp32-ci-env$BOT_DOCKER_IMAGE_TAG
   tags:
     - deploy
   only:
@@ -99,6 +92,7 @@ push_master_to_github:
     - /^v\d+\.\d+(\.\d+)?($|-)/
   when: on_success
   script:
-    - git clone --depth 1 ${GITLAB_SSH_SERVER}/idf/esp-idf esp-idf
+    # Just for a helper script
+    - git clone --depth 1 ${ESP_IDF_GIT} esp-idf
     - *add_gh_key_remote
     - esp-idf/tools/ci/push_to_github.sh
