@@ -35,8 +35,11 @@ INPUT = \
     ../modules/iir/include/dsps_biquad_gen.h \
     ../modules/iir/include/dsps_biquad.h \
     ## Math - API Reference
-    ../modules/math/include/dsps_mulc.h \
-    ../modules/math/include/dsps_addc.h \
+    ../modules/math/mulc/include/dsps_mulc.h \
+    ../modules/math/addc/include/dsps_addc.h \
+    ../modules/math/add/include/dsps_add.h \
+    ../modules/math/sub/include/dsps_sub.h \
+    ../modules/math/mul/include/dsps_mul.h \
     ## Matrix - API Reference
     ../modules/matrix/include/dspm_mult.h \
     ## Support - API Reference

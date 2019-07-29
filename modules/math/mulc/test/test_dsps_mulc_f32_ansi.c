@@ -20,6 +20,7 @@
 #include "dsps_mulc.h"
 #include "esp_attr.h"
 
+static const char *TAG = "dsps_mulc";
 
 TEST_CASE("dsps_mulc_f32_ansi functionality", "[dsps]")
 {
@@ -36,4 +37,33 @@ TEST_CASE("dsps_mulc_f32_ansi functionality", "[dsps]")
             TEST_ASSERT_EQUAL(x[i], y[i]);
         }
     }
+}
+
+TEST_CASE("dsps_mulc_f32_ae32 functionality", "[dsps]")
+{
+    int n = 64;
+    float x[n];
+    float y[n];
+    for (int i = 0 ; i < n ; i++) {
+        x[i] = i;
+        y[i] = i*10;
+    }
+    dsps_mulc_f32_ae32(x, x, n, 10, 1, 1);
+    for (int i = 0 ; i < n ; i++) {
+        if (x[i] != y[i]) {
+            TEST_ASSERT_EQUAL(x[i], y[i]);
+        }
+    }
+
+    int repeat_count = 1;
+
+    dsps_mulc_f32_ae32(x, x, n, 10, 1, 1);
+
+    unsigned int start_b = xthal_get_ccount();
+    dsps_mulc_f32_ae32(x, x, n, 10, 1, 1);
+    unsigned int end_b = xthal_get_ccount();
+
+    float total_b = end_b - start_b;
+    float cycles = total_b / (n * repeat_count);
+    ESP_LOGI(TAG, "dsps_mulc_f32_ae32 - %f cycles per sample \n", cycles);
 }

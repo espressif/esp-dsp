@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef _dsps_mulc_H_
-#define _dsps_mulc_H_
+#ifndef _dsps_addc_H_
+#define _dsps_addc_H_
 #include "dsp_err.h"
 
 
@@ -22,25 +22,29 @@ extern "C"
 {
 #endif
 
+
+/**@{*/
 /**
- * @brief   multiply constant
+ * @brief   add constant
  * 
- * The function multiplies input array to the constant value
- * x[i*step1] = y[i*step2]*C; i=[0..len)
+ * The function adds constant to the input array
+ * x[i*step_out] = y[i*step_in] + C; i=[0..len)
  * The implementation use ANSI C and could be compiled and run on any platform
  *
  * @param[in] input: input array
  * @param output: output array
  * @param len: amount of operations for arrays
  * @param C: constant value
- * @param step1: step over x array (by default should be 1)
- * @param step2: step over y array (by default should be 1)
+ * @param step_in: step over input array (by default should be 1)
+ * @param step_out: step over output array (by default should be 1)
  * 
  * @return
  *      - ESP_OK on success
  *      - One of the error codes from DSP library
  */
-esp_err_t dsps_mulc_f32_ansi(const float *input, float *output, int len, float C, int step1, int step2);
+esp_err_t dsps_addc_f32_ansi(const float *input, float *output, int len, float C, int step_in, int step_out);
+esp_err_t dsps_addc_f32_ae32(const float *input, float *output, int len, float C, int step_in, int step_out);
+/**@}*/
 
 #ifdef __cplusplus
 }
@@ -48,10 +52,10 @@ esp_err_t dsps_mulc_f32_ansi(const float *input, float *output, int len, float C
 
 
 #ifdef CONFIG_DSP_OPTIMIZED
-#define dsps_mulc_f32 dsps_mulc_f32_ansi
+#define dsps_addc_f32 dsps_addc_f32_ae32
 #endif
 #ifdef CONFIG_DSP_ANSI
-#define dsps_mulc_f32 dsps_mulc_f32_ansi
+#define dsps_addc_f32 dsps_addc_f32_ansi
 #endif
 
-#endif // _dsps_mulc_H_
+#endif // _dsps_addc_H_

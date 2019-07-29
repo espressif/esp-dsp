@@ -10,6 +10,8 @@ See the [README.md](../README.md) file in the upper level directory for more inf
 
 The examples are grouped into subdirectories by category. Each category directory contains one or more example projects:
 
-* [Dot Product Calculation](./dotprod/README.md) example
-* [FFT](./fft/README.md) example
-* [IIR Filter](./iir/README.md) example
+* [Dot Product Calculation](./dotprod/README.md) Example
+* [Basic Math Operations](./basic_math/README.md) Example
+* [FFT](./fft/README.md) Example
+* [FFT Window](./fft_window/README.md) Example
+* [IIR Filter](./iir/README.md) Example

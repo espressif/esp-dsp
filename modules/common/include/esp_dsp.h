@@ -25,11 +25,10 @@ extern "C"
 
 // Signal processing
 #include "dsps_dotprod.h"
+#include "dsps_math.h"
 #include "dsps_fir.h"
 #include "dsps_biquad.h"
 #include "dsps_biquad_gen.h"
-#include "dsps_addc.h"
-#include "dsps_mulc.h"
 #include "dsps_wind.h"
 
 #include "dsps_d_gen.h"
