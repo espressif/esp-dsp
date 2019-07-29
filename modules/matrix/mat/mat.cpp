@@ -17,6 +17,7 @@
 #include "mat.h"
 #include "esp_log.h"
 
+#include "dsps_math.h"
 #include "dspm_mult.h"
 
 
@@ -35,11 +36,7 @@ Mat::Mat(int rows, int cols)
     this->rows = rows;
     this->cols = cols;
     allocate();
-    for (int i = 0; i < this->rows; ++i) {
-        for (int j = 0; j < this->cols; ++j) {
-            this->mdata[i * this->cols + j] = 0;
-        }
-    }
+    memset(this->data, 0, this->length * sizeof(float));
 }
 
 Mat::Mat(float *data, int rows, int cols)
@@ -48,12 +45,9 @@ Mat::Mat(float *data, int rows, int cols)
     this->ext_buff = true;
     this->rows = rows;
     this->cols = cols;
-    this->mdata = data;
-    for (int i = 0; i < this->rows; ++i) {
-        for (int j = 0; j < this->cols; ++j) {
-            this->mdata[i * this->cols + j] = data[i * this->cols + j];
-        }
-    }
+    this->data = data;
+    this->length = this->rows * this->cols;
+    memcpy(this->data, data, this->length * sizeof(float));
 }
 
 
@@ -64,14 +58,14 @@ Mat::Mat()
     ESP_LOGD("Mat", "Mat()");
 
     allocate();
-    this->mdata[0] = 0;
+    this->data[0] = 0;
 }
 
 Mat::~Mat()
 {
-    ESP_LOGD("Mat", "~Mat(%i, %i), ext_buff=%i, mdata=0x%8.8x", this->rows, this->cols, this->ext_buff, (uint32_t)this->mdata);
+    ESP_LOGD("Mat", "~Mat(%i, %i), ext_buff=%i, data=0x%8.8x", this->rows, this->cols, this->ext_buff, (uint32_t)this->data);
     if (false == this->ext_buff) {
-        delete mdata;
+        delete data;
     }
 }
 
@@ -81,7 +75,7 @@ Mat::Mat(const Mat &m)
     this->cols = m.cols;
 
     allocate();
-    memcpy(this->mdata, m.mdata, this->rows * this->cols * sizeof(float));
+    memcpy(this->data, m.data, this->length * sizeof(float));
 }
 
 Mat &Mat::operator=(const Mat &m)
@@ -92,77 +86,57 @@ Mat &Mat::operator=(const Mat &m)
 
     if (this->rows != m.rows || this->cols != m.cols) {
         if (!this->ext_buff) {
-            delete this->mdata;
+            delete this->data;
         }
         this->ext_buff = false;
         this->rows = m.rows;
         this->cols = m.cols;
         allocate();
     }
-    memcpy(this->mdata, m.mdata, this->rows * this->cols * sizeof(float));
+    memcpy(this->data, m.data, this->length * sizeof(float));
     return *this;
 }
 
 Mat &Mat::operator+=(const Mat &m)
 {
-    for (int i = 0; i < this->rows; i++) {
-        for (int j = 0; j < this->cols ; j++) {
-            this->mdata[i * this->cols + j] += m(i, j);
-        }
-    }
+    dsps_add_f32(this->data, m.data, this->data, this->length, 1, 1, 1);
     return *this;
 }
 
 Mat &Mat::operator+=(float C)
 {
-    for (int i = 0; i < this->rows; i++) {
-        for (int j = 0; j < this->cols ; j++) {
-            this->mdata[i * this->cols + j] += C;
-        }
-    }
+    dsps_addc_f32_ansi(this->data, this->data, this->length, C, 1, 1);
     return *this;
 }
 
 Mat &Mat::operator-=(const Mat &m)
 {
-    for (int i = 0; i < this->rows; i++) {
-        for (int j = 0; j < this->cols; j++) {
-            this->mdata[i * this->cols + j] -= m(i, j);
-        }
-    }
+    dsps_sub_f32(this->data, m.data, this->data, this->length, 1, 1, 1);
     return *this;
 }
 
 Mat &Mat::operator-=(float C)
 {
-    for (int i = 0; i < this->rows; i++) {
-        for (int j = 0; j < this->cols ; j++) {
-            this->mdata[i * this->cols + j] -= C;
-        }
-    }
+    dsps_addc_f32_ansi(this->data, this->data, this->length, -C, 1, 1);
     return *this;
 }
 
 Mat &Mat::operator*=(const Mat &m)
 {
     Mat temp = *this;
-    dspm_mult_f32(temp.mdata, m.mdata, this->mdata, temp.rows, temp.cols, m.cols);
+    dspm_mult_f32(temp.data, m.data, this->data, temp.rows, temp.cols, m.cols);
     return (*this);
 }
 
 Mat &Mat::operator*=(float num)
 {
-    for (int i = 0; i < this->rows * this->cols; i++) {
-        this->mdata[i] *= num;
-    }
+    dsps_mulc_f32_ansi(this->data, this->data, this->length, num, 1, 1);
     return *this;
 }
 
 Mat &Mat::operator/=(float num)
 {
-    for (int i = 0; i < this->rows * this->cols; i++) {
-        this->mdata[i] /= num;
-    }
+    dsps_mulc_f32_ansi(this->data, this->data, this->length, 1/num, 1, 1);
     return *this;
 }
 
@@ -175,9 +149,9 @@ Mat Mat::operator^(int num)
 void Mat::swapRows(int r1, int r2)
 {
     for (int i = 0; i < this->cols; i++) {
-        float temp = this->mdata[r1 * this->cols + i];
-        this->mdata[r1 * this->cols + i] = this->mdata[r2 * this->cols + i];
-        this->mdata[r2 * this->cols + i] = temp;
+        float temp = this->data[r1 * this->cols + i];
+        this->data[r1 * this->cols + i] = this->data[r2 * this->cols + i];
+        this->data[r2 * this->cols + i] = temp;
     }
 }
 
@@ -186,7 +160,7 @@ Mat Mat::transpose()
     Mat ret(this->cols, this->rows);
     for (int i = 0; i < this->rows; ++i) {
         for (int j = 0; j < this->cols; ++j) {
-            ret(j, i) = this->mdata[i * this->cols + j];
+            ret(j, i) = this->data[i * this->cols + j];
         }
     }
     return ret;
@@ -217,14 +191,16 @@ Mat Mat::solve(Mat A, Mat b)
             Mat err_result(0, 0);
             return err_result;
         }
+        float a_ii = 1/A(i, i);
         for (int j = i + 1; j < A.rows; ++j) {
+            float a_ji = A(j, i) * a_ii;
             for (int k = i + 1; k < A.cols; ++k) {
-                A(j, k) -= A(i, k) * (A(j, i) / A(i, i));
+                A(j, k) -= A(i, k) * a_ji;
                 if ((A(j, k) < eps) && (A(j, k) > -1 * eps)) {
                     A(j, k) = 0;
                 }
             }
-            b(j, 0) -= b(i, 0) * (A(j, i) / A(i, i));
+            b(j, 0) -= b(i, 0) * a_ji;
             if (A(j, 0) < eps && A(j, 0) > -1 * eps) {
                 A(j, 0) = 0;
             }
@@ -260,16 +236,17 @@ Mat Mat::bandSolve(Mat A, Mat b, int k)
             // pivot 0 - error
             ESP_LOGW("Mat", "Error: the coefficient matrix has 0 as a pivot. Please fix the input and try again.");
          Mat err_result(b.rows, 1);
-         memset(err_result.mdata, 0, b.rows * sizeof(float));
+         memset(err_result.data, 0, b.rows * sizeof(float));
          return err_result;
         }
+        float a_ii = 1/A(i,i);
         for (int j = i + 1; j < A.rows && j <= i + bandsBelow; ++j) {
             int k = i + 1;
             while (k < A.cols && A(j,k)) {
-                A(j,k) -= A(i,k) * (A(j,i) / A(i,i));
+                A(j,k) -= A(i,k) * (A(j,i) * a_ii);
                 k++;
             }
-            b(j,0) -= b(i,0) * (A(j,i) / A(i,i));
+            b(j,0) -= b(i,0) * (A(j,i) * a_ii);
             A(j,i) = 0;
         }
     }
@@ -296,9 +273,10 @@ Mat Mat::roots(Mat A, Mat y)
 
     Mat g_m = Mat::augment(A, y);
     for (int j = 0; j < A.cols; j++) {
+        float g_jj = 1/g_m(j, j);
         for (int i = 0; i < A.cols; i++) {
             if (i != j) {
-                float c = g_m(i, j) / g_m(j, j);
+                float c = g_m(i, j) * g_jj;
                 for (int k = 0; k < n; k++) {
                     g_m(i, k) = g_m(i, k) - c * g_m(j, k);
                 }
@@ -306,7 +284,7 @@ Mat Mat::roots(Mat A, Mat y)
         }
     }
     for (int i = 0; i < A.rows; i++) {
-        result(i, 0) = g_m(i, A.cols) / g_m(i, i);
+        result(i, 0) = g_m(i, A.cols)/ g_m(i, i);
     }
     return result;
 }
@@ -460,8 +438,9 @@ Mat Mat::inverse()
 void Mat::allocate()
 {
     this->ext_buff = false;
-    mdata = new float[this->rows * this->cols];
-    ESP_LOGD("Mat", "allocate(%i) = 0x%8.8x", this->rows * this->cols, (uint32_t)this->mdata);
+    this->length = this->rows * this->cols;
+    data = new float[this->length];
+    ESP_LOGD("Mat", "allocate(%i) = 0x%8.8x", this->length, (uint32_t)this->data);
 }
 
 Mat Mat::expHelper(const Mat &m, int num)
@@ -495,8 +474,8 @@ bool operator==(const Mat &m1, const Mat &m2)
         return false;
     }
     for (int i = 0 ; i < (m1.cols * m1.rows) ; i++) {
-        if (m1.mdata[i] != m2.mdata[i]) {
-            printf("Error: %i, m1.mdata=%f, m2.mdata=%f \n", i, m1.mdata[i], m2.mdata[i]);
+        if (m1.data[i] != m2.data[i]) {
+            printf("Error: %i, m1.data=%f, m2.data=%f \n", i, m1.data[i], m2.data[i]);
             return false;
         }
     }
@@ -518,7 +497,7 @@ Mat operator-(const Mat &m1, float C)
 Mat operator*(const Mat &m1, const Mat &m2)
 {
     Mat temp(m1.rows, m2.cols);
-    dspm_mult_f32(m1.mdata, m2.mdata, temp.mdata, m1.rows, m1.cols, m2.cols);
+    dspm_mult_f32(m1.data, m2.data, temp.data, m1.rows, m1.cols, m2.cols);
     return temp;
 }
 

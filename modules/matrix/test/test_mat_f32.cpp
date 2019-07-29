@@ -106,19 +106,6 @@ TEST_CASE("Mat class basic operations", "[dspm]")
     }
 }
 
-static void InitMatrices(dspm::Mat &m1, dspm::Mat &m2, dspm::Mat &m3)
-{
-    for (int m=0 ; m < m1.rows ; m++)
-    {
-        for (int n=0 ; n< m1.cols ; n++)
-        {
-            m1(m,n) = m*m1.cols + n;
-            m2(m,n) = m*m1.cols + n;
-            m3(m,n) = 0;
-        }
-    }
-}
-
 TEST_CASE("Mat class operators", "[dspm]")
 {
     int M = 4;
@@ -145,7 +132,7 @@ TEST_CASE("Mat class operators", "[dspm]")
         {
             if ((result(m,n) != 2*test1(m,n)) || 
                 (result(m,n) != 2*(m*N + n)) || 
-                (result.mdata[m*N + n] != 2*(m*N + n)))
+                (result.data[m*N + n] != 2*(m*N + n)))
             {
                 TEST_ASSERT_MESSAGE (false, "Error in + operator!");
             }
@@ -158,7 +145,7 @@ TEST_CASE("Mat class operators", "[dspm]")
         {
             if ((result(m,n) != (test1(m,n) - test2(m,n))) || 
                 (result(m,n) != 0) || 
-                (result.mdata[m*N + n] != 0))
+                (result.data[m*N + n] != 0))
             {
                 TEST_ASSERT_MESSAGE (false, "Error in - operator!");
             }
@@ -178,7 +165,7 @@ TEST_CASE("Mat class operators", "[dspm]")
         {
             if ((result(m,n) != test2(m,n)) || 
                 (result(m,n) != (m*N + n)) || 
-                (result.mdata[m*N + n] != (m*N + n)))
+                (result.data[m*N + n] != (m*N + n)))
             {
                 TEST_ASSERT_MESSAGE (false, "Error in * operator!");
             }
@@ -203,7 +190,7 @@ TEST_CASE("Mat class operators", "[dspm]")
         {
             if ((result(m,n) != test2(m,n)) || 
                 (result(m,n) != (m*N + n)) || 
-                (result.mdata[m*N + n] != (m*N + n))
+                (result.data[m*N + n] != (m*N + n))
                 )
             {
                 TEST_ASSERT_MESSAGE (false, "Error in + * const operator!");
