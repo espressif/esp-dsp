@@ -137,6 +137,7 @@ public:
     /**
      * *= operator
      * The operator use DSP optimized implementation of multiplication.
+     * 
      * @param[in] A: source matrix
      * 
      * @return
@@ -146,6 +147,7 @@ public:
     /**
      * += with constant operator
      * The operator use DSP optimized implementation of multiplication.
+     * 
      * @param[in] C: constant value
      * 
      * @return
@@ -155,12 +157,22 @@ public:
     /**
      * /= with constant operator
      * The operator use DSP optimized implementation of multiplication.
+     * 
      * @param[in] C: constant value
      * 
      * @return
      *      - result matrix: result /= C
      */
     Mat &operator/=(float C);
+    /**
+     * /= operator
+     * 
+     * @param[in] B: source matrix
+     * 
+     * @return
+     *      - result matrix: result[i,j] = result[i,j]/B[i,j]
+     */
+    Mat &operator/=(const Mat &B);
     /**
      * ^= xor with constant operator
      * The operator use DSP optimized implementation of multiplication.
@@ -200,7 +212,7 @@ public:
      * @return
      *      - transposed matrix
      */
-    Mat transpose();
+    Mat t();
 
     /**
      * Create identity matrix.
@@ -211,7 +223,19 @@ public:
      * @return
      *      - matrix [N]x[N] with 1 in diagonal
      */
-    static Mat createIdentity(int size);
+    static Mat eye(int size);
+
+    /**
+     * Create matrix with all elements 1.
+     * Create a square matrix and fill all elements with 1.
+     * 
+     * @param[in] size: matrix size
+     * 
+     * @return
+     *      - matrix [N]x[N] with 1 in all elements
+     */
+    static Mat ones(int size);
+
     /**
      * @brief   Solve the matrix
      *
@@ -306,7 +330,7 @@ public:
     float *data; /*!< Buffer with matrix data*/
     int length; /*!< Total amount of data in data array*/
 
-    static float eps; /*!< Max acceptable error epsilon*/
+    static float abs_tol; /*!< Max acceptable absolute tolerance*/
 private:
 
     void allocate(); // Allocate buffer
@@ -406,6 +430,17 @@ public:
      *     - result matrix A*B
     */
     friend Mat operator/(const Mat &A, float C);
+
+    /**
+     * / operator, divide matrix A by matrix B
+     * 
+     * @param[in] A: Input matrix A
+     * @param[in] B: Input matrix B
+     * 
+     * @return
+     *     - result matrix C, where C[i,j] = A[i,j]/B[i,j]
+    */
+    friend Mat operator/(const Mat &A, const Mat &B);
 
     /**
      * == operator, compare two matrices 

@@ -43,12 +43,12 @@ TEST_CASE("Mat class check solve ", "[dspm]")
     dspm::Mat b(data_b, m, 1);
     dspm::Mat x1 = dspm::Mat::solve(A, b);
     std::cout << "Solve result matrix: rows: " << x1.rows << ", columns: " << x1.cols << std::endl;
-    std::cout << (x1*12).transpose();
+    std::cout << (x1*12).t();
     dspm::Mat x2 = dspm::Mat::roots(A, b);
     std::cout << "Roots result matrix: rows: " << x2.rows << ", columns: " << x2.cols << std::endl;
-    std::cout << (x2*12).transpose();
+    std::cout << (x2*12).t();
     dspm::Mat diff_b = x1 - x2;
-    std::cout << diff_b.transpose();
+    std::cout << "Difference between solve() abd roots(): " << diff_b.t();
     for (int m=0 ; m < diff_b.rows; m++)
     {
         for (int n=0 ; n < diff_b.cols ; n++)
@@ -89,16 +89,16 @@ TEST_CASE("Mat class basic operations", "[dspm]")
     // ESP_LOGI(TAG, "Matrix b:");
     // std::cout << b;
     ESP_LOGI(TAG, "Solve result:");
-    std::cout << x1_.transpose();
+    std::cout << x1_.t();
     ESP_LOGI(TAG, "Roots result:");
-    std::cout << x2_.transpose();
+    std::cout << x2_.t();
     dspm::Mat check_b = A*x1_;
     dspm::Mat diff_b = check_b - b;
     for (int m=0 ; m < diff_b.rows; m++)
     {
         for (int n=0 ; n < diff_b.cols ; n++)
         {
-            if (fabs(diff_b(m, n)) > (dspm::Mat::eps*10))
+            if (fabs(diff_b(m, n)) > (dspm::Mat::abs_tol*10))
             {
                 TEST_ASSERT_MESSAGE (false, "Calculation is incorrect! Error more then expected!");
             }
@@ -154,7 +154,7 @@ TEST_CASE("Mat class operators", "[dspm]")
     // Check * operator (result = A*B;)
     // result = I*test2
     // result == test2
-    test1 = test1.createIdentity(test1.rows);
+    test1 = test1.eye(test1.rows);
     result = test1 * test2;
     dspm::Mat result2 = test1;
     result2 *= test2;

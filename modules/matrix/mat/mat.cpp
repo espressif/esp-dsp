@@ -28,7 +28,7 @@ using std::endl;
 namespace dspm
 {
 
-float Mat::eps = 1e-10;
+float Mat::abs_tol = 1e-10;
 
 Mat::Mat(int rows, int cols)
 {
@@ -140,6 +140,13 @@ Mat &Mat::operator/=(float num)
     return *this;
 }
 
+Mat &Mat::operator/=(const Mat &B)
+{
+    Mat temp = *this;
+    *this = temp/B; 
+    return (*this);
+}
+
 Mat Mat::operator^(int num)
 {
     Mat temp(*this);
@@ -155,7 +162,7 @@ void Mat::swapRows(int r1, int r2)
     }
 }
 
-Mat Mat::transpose()
+Mat Mat::t()
 {
     Mat ret(this->cols, this->rows);
     for (int i = 0; i < this->rows; ++i) {
@@ -166,7 +173,7 @@ Mat Mat::transpose()
     return ret;
 }
 
-Mat Mat::createIdentity(int size)
+Mat Mat::eye(int size)
 {
     Mat temp(size, size);
     for (int i = 0; i < temp.rows; ++i) {
@@ -176,6 +183,17 @@ Mat Mat::createIdentity(int size)
             } else {
                 temp(i, j) = 0;
             }
+        }
+    }
+    return temp;
+}
+
+Mat Mat::ones(int size)
+{
+    Mat temp(size, size);
+    for (int i = 0; i < temp.rows; ++i) {
+        for (int j = 0; j < temp.cols; ++j) {
+            temp(i, j) = 1;
         }
     }
     return temp;
@@ -196,12 +214,12 @@ Mat Mat::solve(Mat A, Mat b)
             float a_ji = A(j, i) * a_ii;
             for (int k = i + 1; k < A.cols; ++k) {
                 A(j, k) -= A(i, k) * a_ji;
-                if ((A(j, k) < eps) && (A(j, k) > -1 * eps)) {
+                if ((A(j, k) < abs_tol) && (A(j, k) > -1 * abs_tol)) {
                     A(j, k) = 0;
                 }
             }
             b(j, 0) -= b(i, 0) * a_ji;
-            if (A(j, 0) < eps && A(j, 0) > -1 * eps) {
+            if (A(j, 0) < abs_tol && A(j, 0) > -1 * abs_tol) {
                 A(j, 0) = 0;
             }
             A(j, i) = 0;
@@ -211,7 +229,7 @@ Mat Mat::solve(Mat A, Mat b)
     // Back substitution
     Mat x(b.rows, 1);
     x((x.rows - 1), 0) = b((x.rows - 1), 0) / A((x.rows - 1), (x.rows - 1));
-    if (x((x.rows - 1), 0) < eps && x((x.rows - 1), 0) > -1 * eps) {
+    if (x((x.rows - 1), 0) < abs_tol && x((x.rows - 1), 0) > -1 * abs_tol) {
         x((x.rows - 1), 0) = 0;
     }
     for (int i = x.rows - 2; i >= 0; --i) {
@@ -220,7 +238,7 @@ Mat Mat::solve(Mat A, Mat b)
             sum += A(i, j) * x(j, 0);
         }
         x(i, 0) = (b(i, 0) - sum) / A(i, i);
-        if (x(i, 0) < eps && x(i, 0) > -1 * eps) {
+        if (x(i, 0) < abs_tol && x(i, 0) > -1 * abs_tol) {
             x(i, 0) = 0;
         }
     }
@@ -354,7 +372,7 @@ Mat Mat::gaussianEliminate()
             for (int t = i + 1; t < rows; ++t) {
                 for (int s = j + 1; s < cols; ++s) {
                     Ab(t, s) = Ab(t, s) - Ab(i, s) * (Ab(t, j) / Ab(i, j));
-                    if (Ab(t, s) < eps && Ab(t, s) > -1 * eps) {
+                    if (Ab(t, s) < abs_tol && Ab(t, s) > -1 * abs_tol) {
                         Ab(t, s) = 0;
                     }
                 }
@@ -395,7 +413,7 @@ Mat Mat::rowReduceFromGaussian()
                 for (int s = 0; s < cols; ++s) {
                     if (s != j) {
                         R(t, s) = R(t, s) - R(i, s) * (R(t, j) / R(i, j));
-                        if (R(t, s) < eps && R(t, s) > -1 * eps) {
+                        if (R(t, s) < abs_tol && R(t, s) > -1 * abs_tol) {
                             R(t, s) = 0;
                         }
                     }
@@ -406,7 +424,7 @@ Mat Mat::rowReduceFromGaussian()
             // divide row by pivot
             for (int k = j + 1; k < cols; ++k) {
                 R(i, k) = R(i, k) / R(i, j);
-                if (R(i, k) < eps && R(i, k) > -1 * eps) {
+                if (R(i, k) < abs_tol && R(i, k) > -1 * abs_tol) {
                     R(i, k) = 0;
                 }
             }
@@ -422,7 +440,7 @@ Mat Mat::rowReduceFromGaussian()
 
 Mat Mat::inverse()
 {
-    Mat I = Mat::createIdentity(this->rows);
+    Mat I = Mat::eye(this->rows);
     Mat AI = Mat::augment(*this, I);
     Mat U = AI.gaussianEliminate();
     Mat IAInverse = U.rowReduceFromGaussian();
@@ -446,7 +464,7 @@ void Mat::allocate()
 Mat Mat::expHelper(const Mat &m, int num)
 {
     if (num == 0) {
-        return createIdentity(m.rows);
+        return Mat::eye(m.rows);
     } else if (num == 1) {
         return m;
     } else if (num % 2 == 0) {  // num is even
@@ -516,6 +534,17 @@ Mat operator/(const Mat &m, float num)
 {
     Mat temp(m);
     return (temp /= num);
+}
+
+Mat operator/(const Mat &A, const Mat &B)
+{
+    Mat temp(A);
+    for (int i = 0; i < A.rows; ++i) {
+        for (int j = 1; j < A.cols; ++j) {
+            temp(i, j) = A(i,j)/ B(i,j);
+        }
+    }
+    return (temp);
 }
 
 ostream &operator<<(ostream &os, const Mat &m)
