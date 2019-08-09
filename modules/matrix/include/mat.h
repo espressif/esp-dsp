@@ -235,8 +235,29 @@ public:
      *      - matrix [N]x[N] with 1 in all elements
      */
     static Mat ones(int size);
+    
+    /**
+     * Return part of matrix from defined position (startRow, startCol) as a matrix[blockRows x blockCols].
+     * 
+     * @param[in] startRow: start row position
+     * @param[in] startCol: start column position
+     * @param[in] blockRows: amount of rows in result matrix
+     * @param[in] blockCols: amount of columns in the result matrix
+     * 
+     * @return
+     *      - matrix [blockRows]x[blockCols] 
+     */
+    Mat block(int startRow, int startCol, int blockRows, int blockCols);
 
     /**
+     * Normalizes the vector, i.e. divides it by its own norm.
+     * If it's matrix, calculate matrix norm
+     * 
+     * @return
+     *      - matrix [rows]x[cols] 
+     */
+    Mat normalize(void);
+        /**
      * @brief   Solve the matrix
      *
      * Solve matrix. Find roots for the matrix A*x = b

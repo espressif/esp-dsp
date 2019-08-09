@@ -19,6 +19,7 @@
 
 #include "dsps_math.h"
 #include "dspm_mult.h"
+#include <math.h>
 
 
 using std::ostream;
@@ -197,6 +198,30 @@ Mat Mat::ones(int size)
         }
     }
     return temp;
+}
+
+Mat Mat::block(int startRow, int startCol, int blockRows, int blockCols)
+{
+    Mat result(blockRows, blockCols);
+    for (int i = 0; i < blockRows; ++i) {
+        for (int j = 0; j < blockCols; ++j) {
+            result(i, j) = (*this)(startRow+i, startCol+j);
+        }
+    }
+    return result;
+}
+
+Mat Mat::normalize(void)
+{
+    float sqr_norm = 0;
+    for (int i = 0; i < this->rows; ++i) {
+        for (int j = 0; j < this->cols; ++j) {
+            sqr_norm += (*this)(i, j) * (*this)(i, j);
+        }
+    }
+    sqr_norm = sqrtf(sqr_norm);
+    Mat result = *this/sqr_norm;
+    return result;
 }
 
 Mat Mat::solve(Mat A, Mat b)

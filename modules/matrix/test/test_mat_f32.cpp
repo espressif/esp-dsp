@@ -197,6 +197,42 @@ TEST_CASE("Mat class operators", "[dspm]")
             }
         }
     }
+    // Test block(...):
+    int count = 0;
+    for (int m=0 ; m < M ; m++)
+    {
+        for (int n=0 ; n < N ; n++)
+        {
+            result(m,n) = count++;
+        }
+    }
+    std::cout << "Original matrix: " <<  std::endl;
+    std::cout << result << std::endl;
+    std::cout << "block: " << std::endl;
+    std::cout << result.block(1,1,M-1, N-1) << std::endl;
+    // Test normalize()
+    result = dspm::Mat(2,2);
+    for (int m=0 ; m < result.rows ; m++)
+    {
+        for (int n=0 ; n < result.cols ; n++)
+        {
+            result(m,n) = 1;
+        }
+    }
+    result = result.normalize();
+    std::cout << "normalize: " << std::endl;
+    std::cout << result << std::endl;
+
+    for (int m=0 ; m < result.rows ; m++)
+    {
+        for (int n=0 ; n < result.cols ; n++)
+        {
+            if (std::abs(result(m,n) - 0.5) > dspm::Mat::abs_tol)
+            {
+                TEST_ASSERT_MESSAGE (false, "Error in normalize() operation!");
+            }
+        }
+    }
 
     delete check_array;
 }
