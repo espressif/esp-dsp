@@ -211,7 +211,7 @@ Mat Mat::block(int startRow, int startCol, int blockRows, int blockCols)
     return result;
 }
 
-Mat Mat::normalize(void)
+void Mat::normalize(void)
 {
     float sqr_norm = 0;
     for (int i = 0; i < this->rows; ++i) {
@@ -219,9 +219,8 @@ Mat Mat::normalize(void)
             sqr_norm += (*this)(i, j) * (*this)(i, j);
         }
     }
-    sqr_norm = sqrtf(sqr_norm);
-    Mat result = *this/sqr_norm;
-    return result;
+    sqr_norm = 1/sqrtf(sqr_norm);
+    *this *= sqr_norm;
 }
 
 Mat Mat::solve(Mat A, Mat b)
@@ -285,7 +284,7 @@ Mat Mat::bandSolve(Mat A, Mat b, int k)
         float a_ii = 1/A(i,i);
         for (int j = i + 1; j < A.rows && j <= i + bandsBelow; ++j) {
             int k = i + 1;
-            while (k < A.cols && A(j,k)) {
+            while ((k < A.cols) && (std::abs(A(j,k)) > abs_tol)) {
                 A(j,k) -= A(i,k) * (A(j,i) * a_ii);
                 k++;
             }
@@ -463,19 +462,112 @@ Mat Mat::rowReduceFromGaussian()
     return R;
 }
 
+Mat Mat::cofactor(int row, int col, int n)
+{
+	int i = 0, j = 0;
+	Mat result(n, n);
+	// Looping for each element of the matrix
+	for (int r = 0; r < n; r++)
+	{
+		for (int c = 0; c < n; c++)
+		{
+			//  Copying into temporary matrix only those element
+			//  which are not in given row and column
+			if (r != row && c != col)
+			{
+				result(i,j++) = (*this)(r,c);
+
+				// Row is filled, so increase row index and
+				// reset col index
+				if (j == this->rows - 1)
+				{
+					j = 0;
+					i++;
+				}
+			}
+		}
+	}
+	return result;
+}
+
+float Mat::det(int n)
+{
+	float D = 0; // Initialize result
+
+    //  Base case : if matrix contains single element
+	if (n == 1)
+		return (*this)(0,0);
+
+	Mat temp(this->rows, this->rows); // To store cofactors
+
+	int sign = 1;  // To store sign multiplier
+
+	 // Iterate for each element of first row
+	for (int f = 0; f < n; f++)
+	{
+		// Getting Cofactor of A[0][f]
+		Mat temp = this->cofactor(0, f, n);
+		D += (*this)(0,f) * temp.det(n-1) * sign;
+
+		// terms are to be added with alternate sign
+		sign = -sign;
+	}
+
+	return D;
+}
+
+Mat Mat::adjoint()
+{
+	Mat adj(this->rows, this->cols);
+	if (this->rows == 1)
+	{
+		adj(0,0) = 1;
+		return adj;
+	}
+
+	// temp is used to store cofactors of A(,)
+	int sign = 1;
+	Mat temp(this->rows, this->cols);
+
+	for (int i = 0; i < this->rows; i++)
+	{
+		for (int j = 0; j < this->cols; j++)
+		{
+			// Get cofactor of A(i,j)
+			temp = this->cofactor( i, j, this->rows);
+
+			// sign of adj(j,i) positive if sum of row
+			// and column indexes is even.
+			sign = ((i + j) % 2 == 0) ? 1 : -1;
+
+			// Interchanging rows and columns to get the
+			// transpose of the cofactor matrix
+			adj(j,i) = (sign)*(temp.det(this->rows - 1));
+		}
+	}
+	return adj;
+}
+
 Mat Mat::inverse()
 {
-    Mat I = Mat::eye(this->rows);
-    Mat AI = Mat::augment(*this, I);
-    Mat U = AI.gaussianEliminate();
-    Mat IAInverse = U.rowReduceFromGaussian();
-    Mat AInverse(this->rows, this->cols);
-    for (int i = 0; i < AInverse.rows; ++i) {
-        for (int j = 0; j < AInverse.cols; ++j) {
-            AInverse(i, j) = IAInverse(i, j + this->cols);
-        }
-    }
-    return AInverse;
+	Mat result(this->rows, this->cols);
+	// Find determinant of matrix
+	float det = this->det(this->rows);
+	if (det == 0)
+	{
+		//std::cout << "Singular matrix, can't find its inverse";
+		return result;
+	}
+
+	// Find adjoint
+	Mat adj = this->adjoint();
+
+	// Find Inverse using formula "inverse(A) = adj(A)/det(A)"
+	for (int i = 0; i < this->rows; i++)
+		for (int j = 0; j < this->cols; j++)
+			result(i,j) = adj(i,j) / float(det);
+
+	return result;
 }
 
 void Mat::allocate()

@@ -253,11 +253,10 @@ public:
      * Normalizes the vector, i.e. divides it by its own norm.
      * If it's matrix, calculate matrix norm
      * 
-     * @return
-     *      - matrix [rows]x[cols] 
      */
-    Mat normalize(void);
-        /**
+    void normalize(void);
+
+    /**
      * @brief   Solve the matrix
      *
      * Solve matrix. Find roots for the matrix A*x = b
@@ -353,6 +352,9 @@ public:
 
     static float abs_tol; /*!< Max acceptable absolute tolerance*/
 private:
+	Mat cofactor(int row, int col, int n);
+	float det(int n);
+	Mat adjoint();
 
     void allocate(); // Allocate buffer
     Mat expHelper(const Mat &m, int num);

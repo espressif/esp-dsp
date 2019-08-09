@@ -219,7 +219,7 @@ TEST_CASE("Mat class operators", "[dspm]")
             result(m,n) = 1;
         }
     }
-    result = result.normalize();
+    result.normalize();
     std::cout << "normalize: " << std::endl;
     std::cout << result << std::endl;
 
@@ -231,6 +231,25 @@ TEST_CASE("Mat class operators", "[dspm]")
             {
                 TEST_ASSERT_MESSAGE (false, "Error in normalize() operation!");
             }
+        }
+    }
+    // Test inverse()
+    float m_data[] = {2,5,7,
+              6,3,4,
+              5,-2,-3};
+    float m_result[] = {  1.0000,   -1.0000,    1.0000,
+                        -38.0000,   41.0000,  -34.0000,
+                         27.0000,  -29.0000,   24.0000};
+    result = dspm::Mat(m_data, 3,3);
+    result = result.inverse();
+    std::cout << "inverse: " << std::endl;
+    std::cout << result << std::endl;
+    for (int i=0 ; i< 3*3 ; i++)
+    {
+        if (std::abs(result.data[i] - m_result[i]) > 1e-8)
+        {
+            printf("Error at[%i] = %f, expected= %f, calculated = %f \n", i, std::abs(result.data[i] - m_result[i]), m_result[i], result.data[i]);
+            TEST_ASSERT_MESSAGE (false, "Error in inverse() operation!\n");
         }
     }
 
