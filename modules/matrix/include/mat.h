@@ -184,22 +184,6 @@ public:
     Mat  operator^(int C);
 
     /**
-     * Print matrix to the standard iostream.
-     * @param[in] os: output stream
-     * @param[in] m: matrix to print
-     * 
-     * @return
-     *      - output stream
-     */
-    friend std::ostream &operator<<(std::ostream &os, const Mat &m);
-    /**
-     * Fill the matrix from iostream.
-     * @param[in] is: input stream
-     * @param[in] m: matrix to fill
-     */
-    friend std::istream &operator>>(std::istream &is, Mat &m);
-
-    /**
      * Swap two rows between each other.
      * @param[in] row1: position of first row
      * @param[in] row2: position of second row
@@ -358,8 +342,26 @@ private:
 
     void allocate(); // Allocate buffer
     Mat expHelper(const Mat &m, int num);
+};
+    /**
+     * Print matrix to the standard iostream.
+     * @param[in] os: output stream
+     * @param[in] m: matrix to print
+     * 
+     * @return
+     *      - output stream
+     */
+    std::ostream &operator<<(std::ostream &os, const Mat &m);
+    /**
+     * Fill the matrix from iostream.
+     * @param[in] is: input stream
+     * @param[in] m: matrix to fill
+     * 
+     * @return
+     *      - input stream
+     */
+    std::istream &operator>>(std::istream &is, Mat &m);
 
-public:    
     /**
      * + operator, sum of two matrices
      * The operator use DSP optimized implementation of multiplication.
@@ -370,7 +372,7 @@ public:
      * @return
      *     - result matrix A+B
     */
-    friend Mat operator+(const Mat &A, const Mat &B);
+    Mat operator+(const Mat &A, const Mat &B);
     /**
      * + operator, sum of matrix with constant
      * The operator use DSP optimized implementation of multiplication.
@@ -381,7 +383,7 @@ public:
      * @return
      *     - result matrix A+C
     */
-    friend Mat operator+(const Mat &A, float C);
+    Mat operator+(const Mat &A, float C);
 
     /**
      * - operator, subtraction of two matrices
@@ -393,7 +395,7 @@ public:
      * @return
      *     - result matrix A-B
     */
-    friend Mat operator-(const Mat &A, const Mat &B);
+    Mat operator-(const Mat &A, const Mat &B);
     /**
      * - operator, sum of matrix with constant
      * The operator use DSP optimized implementation of multiplication.
@@ -404,7 +406,7 @@ public:
      * @return
      *     - result matrix A+C
     */
-    friend Mat operator-(const Mat &A, float C);
+    Mat operator-(const Mat &A, float C);
 
     /**
      * * operator, multiplication of two matrices. 
@@ -416,7 +418,7 @@ public:
      * @return
      *     - result matrix A*B
     */
-    friend Mat operator*(const Mat &A, const Mat &B);
+    Mat operator*(const Mat &A, const Mat &B);
 
     /**
      * * operator, multiplication of matrix with constant
@@ -428,7 +430,7 @@ public:
      * @return
      *     - result matrix A*B
     */
-    friend Mat operator*(const Mat &A, float C);
+    Mat operator*(const Mat &A, float C);
 
     /**
      * * operator, multiplication of matrix with constant 
@@ -440,7 +442,7 @@ public:
      * @return
      *     - result matrix A*B
     */
-    friend Mat operator*(float C, const Mat &A);
+    Mat operator*(float C, const Mat &A);
 
     /**
      * / operator, divide of matrix by constant 
@@ -452,7 +454,7 @@ public:
      * @return
      *     - result matrix A*B
     */
-    friend Mat operator/(const Mat &A, float C);
+    Mat operator/(const Mat &A, float C);
 
     /**
      * / operator, divide matrix A by matrix B
@@ -463,7 +465,7 @@ public:
      * @return
      *     - result matrix C, where C[i,j] = A[i,j]/B[i,j]
     */
-    friend Mat operator/(const Mat &A, const Mat &B);
+    Mat operator/(const Mat &A, const Mat &B);
 
     /**
      * == operator, compare two matrices 
@@ -475,9 +477,7 @@ public:
      *      - true if matrices are the same
      *      - false if matrices are different 
     */
-    friend bool operator==(const Mat &A, const Mat &B);
-};
-
+    bool operator==(const Mat &A, const Mat &B);
 
 }
 #endif //_dspm_mat_h_
