@@ -42,6 +42,7 @@ INPUT = \
     ../modules/math/mul/include/dsps_mul.h \
     ## Matrix - API Reference
     ../modules/matrix/include/dspm_mult.h \
+    ../modules/matrix/include/mat.h \
     ## Support - API Reference
     ../modules/support/include/dsps_view.h \
     ../modules/support/include/dsps_tone_gen.h \

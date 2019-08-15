@@ -25,9 +25,9 @@ extern "C"
 /**@{*/
 /**
  * @brief   Matrix multiplication
- * 
+ *
  * Matrix multiplication for two floating point matrices: C[m][k] = A[m][n] * B[n][k]
- * The extension (_ansi) use ANSI C and could be compiled and run on any platform. 
+ * The extension (_ansi) use ANSI C and could be compiled and run on any platform.
  * The extension (_ae32) is optimized for ESP32 chip.
  *
  * @param[in] A  input matrix A[m][n]
@@ -42,12 +42,12 @@ extern "C"
  */
 esp_err_t dspm_mult_f32_ansi(const float *A, const float *B, float *C, int m, int n, int k);
 esp_err_t dspm_mult_f32_ae32(const float *A, const float *B, float *C, int m, int n, int k);
-/**@}*/ 
+/**@}*/
 
 
 /**
  * @brief   Matrix multiplication A[3x3]xB[3x1]
- * 
+ *
  * Matrix multiplication for two floating point matrices 3x3 and 3x1: C[1][3] = A[3][3] * B[3][1]
  * The implementation is optimized for ESP32 chip.
  *
@@ -62,7 +62,7 @@ esp_err_t dspm_mult_3x3x1_f32_ae32(const float *A, const float *B, float *C);
 
 /**
  * @brief   Matrix multiplication A[3x3]xB[3x3]
- * 
+ *
  * Matrix multiplication for two square 3x3 floating point matrices: C[3][3] = A[3][3] * B[3][3]
  * The implementation is optimized for ESP32 chip.
  *
@@ -77,7 +77,7 @@ esp_err_t dspm_mult_3x3x3_f32_ae32(const float *A, const float *B, float *C);
 
 /**
  * @brief   Matrix multiplication A[4x4]xB[4x1]
- * 
+ *
  * Matrix multiplication for two floating point matrices 4x4 and 4x1: C[1][4] = A[4][4] * B[4][1]
  * The implementation is optimized for ESP32 chip.
  *
@@ -93,7 +93,7 @@ esp_err_t dspm_mult_4x4x1_f32_ae32(const float *A, const float *B, float *C);
 
 /**
  * @brief   Matrix multiplication A[4x4]xB[4x4]
- * 
+ *
  * Matrix multiplication for two square 3x3 floating point matrices: C[4][4] = A[4][4] * B[4][4]
  * The implementation is optimized for ESP32 chip.
  *
@@ -108,10 +108,10 @@ esp_err_t dspm_mult_4x4x4_f32_ae32(const float *A, const float *B, float *C);
 
 /**@{*/
 /**
- * @brief   Matrix multiplication 16 bit signeg int 
- * 
+ * @brief   Matrix multiplication 16 bit signeg int
+ *
  * Matrix multiplication for two signed 16 bit fixed point matrices: C[m][k] = (A[m][n] * B[n][k]) >> (15- shift)
- * The extension (_ansi) use ANSI C and could be compiled and run on any platform. 
+ * The extension (_ansi) use ANSI C and could be compiled and run on any platform.
  * The extension (_ae32) is optimized for ESP32 chip.
  *
  * @param[in] A  input matrix A[m][n]
@@ -127,7 +127,7 @@ esp_err_t dspm_mult_4x4x4_f32_ae32(const float *A, const float *B, float *C);
  */
 esp_err_t dspm_mult_s16_ansi(const int16_t *A, const int16_t *B, int16_t *C, int m, int n, int k, int shift);
 esp_err_t dspm_mult_s16_ae32(const int16_t *A, const int16_t *B, int16_t *C, int m, int n, int k, int shift);
-/**@}*/ 
+/**@}*/
 
 #ifdef __cplusplus
 }
