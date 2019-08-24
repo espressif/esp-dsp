@@ -223,6 +223,18 @@ void Mat::normalize(void)
     *this *= sqr_norm;
 }
 
+float Mat::norm(void)
+{
+	float sqr_norm = 0;
+	for (int i = 0; i < this->rows; ++i) {
+		for (int j = 0; j < this->cols; ++j) {
+			sqr_norm += (*this)(i, j) * (*this)(i, j);
+		}
+	}
+	sqr_norm = sqrtf(sqr_norm);
+	return sqr_norm;
+}
+
 Mat Mat::solve(Mat A, Mat b)
 {
     // Gaussian elimination
@@ -460,6 +472,21 @@ Mat Mat::rowReduceFromGaussian()
     }
 
     return R;
+}
+
+Mat Mat::pinv()
+{
+    Mat I = Mat::eye(this->rows);
+    Mat AI = Mat::augment(*this, I);
+    Mat U = AI.gaussianEliminate();
+    Mat IAInverse = U.rowReduceFromGaussian();
+    Mat AInverse(this->rows, this->cols);
+    for (int i = 0; i < this->rows; ++i) {
+        for (int j = 0; j < this->cols; ++j) {
+            AInverse(i, j) = IAInverse(i, j + this->cols);
+        }
+    }
+    return AInverse;
 }
 
 Mat Mat::cofactor(int row, int col, int n)
