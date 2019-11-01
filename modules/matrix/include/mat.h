@@ -241,6 +241,15 @@ public:
     void normalize(void);
 
     /**
+     * Return  norm of the vector.
+     * If it's matrix, calculate matrix norm
+     * 
+     * @return
+     *      - matrix norm 
+     */
+    float norm(void);
+
+    /**
      * @brief   Solve the matrix
      *
      * Solve matrix. Find roots for the matrix A*x = b
@@ -328,6 +337,14 @@ public:
      *      - inverse matrix
      */
     Mat inverse();
+
+    /**
+     * Find pseudo inverse matrix
+     *
+     * @return
+     *      - inverse matrix
+     */
+    Mat pinv();
 
     int rows; /*!< Amount of rows*/
     int cols; /*!< Amount of columns*/
