@@ -296,7 +296,7 @@ Mat Mat::bandSolve(Mat A, Mat b, int k)
         float a_ii = 1/A(i,i);
         for (int j = i + 1; j < A.rows && j <= i + bandsBelow; ++j) {
             int k = i + 1;
-            while ((k < A.cols) && (std::abs(A(j,k)) > abs_tol)) {
+            while ((k < A.cols) && (fabs(A(j,k)) > abs_tol)) {
                 A(j,k) -= A(i,k) * (A(j,i) * a_ii);
                 k++;
             }
