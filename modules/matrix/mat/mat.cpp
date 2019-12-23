@@ -26,8 +26,7 @@ using std::ostream;
 using std::istream;
 using std::endl;
 
-namespace dspm
-{
+namespace dspm {
 
 float Mat::abs_tol = 1e-10;
 
@@ -137,14 +136,14 @@ Mat &Mat::operator*=(float num)
 
 Mat &Mat::operator/=(float num)
 {
-    dsps_mulc_f32_ansi(this->data, this->data, this->length, 1/num, 1, 1);
+    dsps_mulc_f32_ansi(this->data, this->data, this->length, 1 / num, 1, 1);
     return *this;
 }
 
 Mat &Mat::operator/=(const Mat &B)
 {
     Mat temp = *this;
-    *this = temp/B; 
+    *this = temp / B;
     return (*this);
 }
 
@@ -200,12 +199,17 @@ Mat Mat::ones(int size)
     return temp;
 }
 
+void Mat::clear()
+{
+    memset(this->data, 0, this->length * sizeof(float));
+}
+
 Mat Mat::block(int startRow, int startCol, int blockRows, int blockCols)
 {
     Mat result(blockRows, blockCols);
     for (int i = 0; i < blockRows; ++i) {
         for (int j = 0; j < blockCols; ++j) {
-            result(i, j) = (*this)(startRow+i, startCol+j);
+            result(i, j) = (*this)(startRow + i, startCol + j);
         }
     }
     return result;
@@ -219,20 +223,20 @@ void Mat::normalize(void)
             sqr_norm += (*this)(i, j) * (*this)(i, j);
         }
     }
-    sqr_norm = 1/sqrtf(sqr_norm);
+    sqr_norm = 1 / sqrtf(sqr_norm);
     *this *= sqr_norm;
 }
 
 float Mat::norm(void)
 {
-	float sqr_norm = 0;
-	for (int i = 0; i < this->rows; ++i) {
-		for (int j = 0; j < this->cols; ++j) {
-			sqr_norm += (*this)(i, j) * (*this)(i, j);
-		}
-	}
-	sqr_norm = sqrtf(sqr_norm);
-	return sqr_norm;
+    float sqr_norm = 0;
+    for (int i = 0; i < this->rows; ++i) {
+        for (int j = 0; j < this->cols; ++j) {
+            sqr_norm += (*this)(i, j) * (*this)(i, j);
+        }
+    }
+    sqr_norm = sqrtf(sqr_norm);
+    return sqr_norm;
 }
 
 Mat Mat::solve(Mat A, Mat b)
@@ -245,7 +249,7 @@ Mat Mat::solve(Mat A, Mat b)
             Mat err_result(0, 0);
             return err_result;
         }
-        float a_ii = 1/A(i, i);
+        float a_ii = 1 / A(i, i);
         for (int j = i + 1; j < A.rows; ++j) {
             float a_ji = A(j, i) * a_ii;
             for (int k = i + 1; k < A.cols; ++k) {
@@ -286,22 +290,22 @@ Mat Mat::bandSolve(Mat A, Mat b, int k)
     // optimized Gaussian elimination
     int bandsBelow = (k - 1) / 2;
     for (int i = 0; i < A.rows; ++i) {
-        if (A(i,i) == 0) {
+        if (A(i, i) == 0) {
             // pivot 0 - error
             ESP_LOGW("Mat", "Error: the coefficient matrix has 0 as a pivot. Please fix the input and try again.");
-         Mat err_result(b.rows, 1);
-         memset(err_result.data, 0, b.rows * sizeof(float));
-         return err_result;
+            Mat err_result(b.rows, 1);
+            memset(err_result.data, 0, b.rows * sizeof(float));
+            return err_result;
         }
-        float a_ii = 1/A(i,i);
+        float a_ii = 1 / A(i, i);
         for (int j = i + 1; j < A.rows && j <= i + bandsBelow; ++j) {
             int k = i + 1;
-            while ((k < A.cols) && (fabs(A(j,k)) > abs_tol)) {
-                A(j,k) -= A(i,k) * (A(j,i) * a_ii);
+            while ((k < A.cols) && (fabs(A(j, k)) > abs_tol)) {
+                A(j, k) -= A(i, k) * (A(j, i) * a_ii);
                 k++;
             }
-            b(j,0) -= b(i,0) * (A(j,i) * a_ii);
-            A(j,i) = 0;
+            b(j, 0) -= b(i, 0) * (A(j, i) * a_ii);
+            A(j, i) = 0;
         }
     }
 
@@ -327,7 +331,7 @@ Mat Mat::roots(Mat A, Mat y)
 
     Mat g_m = Mat::augment(A, y);
     for (int j = 0; j < A.cols; j++) {
-        float g_jj = 1/g_m(j, j);
+        float g_jj = 1 / g_m(j, j);
         for (int i = 0; i < A.cols; i++) {
             if (i != j) {
                 float c = g_m(i, j) * g_jj;
@@ -338,7 +342,7 @@ Mat Mat::roots(Mat A, Mat y)
         }
     }
     for (int i = 0; i < A.rows; i++) {
-        result(i, 0) = g_m(i, A.cols)/ g_m(i, i);
+        result(i, 0) = g_m(i, A.cols) / g_m(i, i);
     }
     return result;
 }
@@ -491,110 +495,103 @@ Mat Mat::pinv()
 
 Mat Mat::cofactor(int row, int col, int n)
 {
-	int i = 0, j = 0;
-	Mat result(n, n);
-	// Looping for each element of the matrix
-	for (int r = 0; r < n; r++)
-	{
-		for (int c = 0; c < n; c++)
-		{
-			//  Copying into temporary matrix only those element
-			//  which are not in given row and column
-			if (r != row && c != col)
-			{
-				result(i,j++) = (*this)(r,c);
+    int i = 0, j = 0;
+    Mat result(n, n);
+    // Looping for each element of the matrix
+    for (int r = 0; r < n; r++) {
+        for (int c = 0; c < n; c++) {
+            //  Copying into temporary matrix only those element
+            //  which are not in given row and column
+            if (r != row && c != col) {
+                result(i, j++) = (*this)(r, c);
 
-				// Row is filled, so increase row index and
-				// reset col index
-				if (j == this->rows - 1)
-				{
-					j = 0;
-					i++;
-				}
-			}
-		}
-	}
-	return result;
+                // Row is filled, so increase row index and
+                // reset col index
+                if (j == this->rows - 1) {
+                    j = 0;
+                    i++;
+                }
+            }
+        }
+    }
+    return result;
 }
 
 float Mat::det(int n)
 {
-	float D = 0; // Initialize result
+    float D = 0; // Initialize result
 
     //  Base case : if matrix contains single element
-	if (n == 1)
-		return (*this)(0,0);
+    if (n == 1) {
+        return (*this)(0, 0);
+    }
 
-	Mat temp(this->rows, this->rows); // To store cofactors
+    Mat temp(this->rows, this->rows); // To store cofactors
 
-	int sign = 1;  // To store sign multiplier
+    int sign = 1;  // To store sign multiplier
 
-	 // Iterate for each element of first row
-	for (int f = 0; f < n; f++)
-	{
-		// Getting Cofactor of A[0][f]
-		Mat temp = this->cofactor(0, f, n);
-		D += (*this)(0,f) * temp.det(n-1) * sign;
+    // Iterate for each element of first row
+    for (int f = 0; f < n; f++) {
+        // Getting Cofactor of A[0][f]
+        Mat temp = this->cofactor(0, f, n);
+        D += (*this)(0, f) * temp.det(n - 1) * sign;
 
-		// terms are to be added with alternate sign
-		sign = -sign;
-	}
+        // terms are to be added with alternate sign
+        sign = -sign;
+    }
 
-	return D;
+    return D;
 }
 
 Mat Mat::adjoint()
 {
-	Mat adj(this->rows, this->cols);
-	if (this->rows == 1)
-	{
-		adj(0,0) = 1;
-		return adj;
-	}
+    Mat adj(this->rows, this->cols);
+    if (this->rows == 1) {
+        adj(0, 0) = 1;
+        return adj;
+    }
 
-	// temp is used to store cofactors of A(,)
-	int sign = 1;
-	Mat temp(this->rows, this->cols);
+    // temp is used to store cofactors of A(,)
+    int sign = 1;
+    Mat temp(this->rows, this->cols);
 
-	for (int i = 0; i < this->rows; i++)
-	{
-		for (int j = 0; j < this->cols; j++)
-		{
-			// Get cofactor of A(i,j)
-			temp = this->cofactor( i, j, this->rows);
+    for (int i = 0; i < this->rows; i++) {
+        for (int j = 0; j < this->cols; j++) {
+            // Get cofactor of A(i,j)
+            temp = this->cofactor( i, j, this->rows);
 
-			// sign of adj(j,i) positive if sum of row
-			// and column indexes is even.
-			sign = ((i + j) % 2 == 0) ? 1 : -1;
+            // sign of adj(j,i) positive if sum of row
+            // and column indexes is even.
+            sign = ((i + j) % 2 == 0) ? 1 : -1;
 
-			// Interchanging rows and columns to get the
-			// transpose of the cofactor matrix
-			adj(j,i) = (sign)*(temp.det(this->rows - 1));
-		}
-	}
-	return adj;
+            // Interchanging rows and columns to get the
+            // transpose of the cofactor matrix
+            adj(j, i) = (sign) * (temp.det(this->rows - 1));
+        }
+    }
+    return adj;
 }
 
 Mat Mat::inverse()
 {
-	Mat result(this->rows, this->cols);
-	// Find determinant of matrix
-	float det = this->det(this->rows);
-	if (det == 0)
-	{
-		//std::cout << "Singular matrix, can't find its inverse";
-		return result;
-	}
+    Mat result(this->rows, this->cols);
+    // Find determinant of matrix
+    float det = this->det(this->rows);
+    if (det == 0) {
+        //std::cout << "Singular matrix, can't find its inverse";
+        return result;
+    }
 
-	// Find adjoint
-	Mat adj = this->adjoint();
+    // Find adjoint
+    Mat adj = this->adjoint();
 
-	// Find Inverse using formula "inverse(A) = adj(A)/det(A)"
-	for (int i = 0; i < this->rows; i++)
-		for (int j = 0; j < this->cols; j++)
-			result(i,j) = adj(i,j) / float(det);
+    // Find Inverse using formula "inverse(A) = adj(A)/det(A)"
+    for (int i = 0; i < this->rows; i++)
+        for (int j = 0; j < this->cols; j++) {
+            result(i, j) = adj(i, j) / float(det);
+        }
 
-	return result;
+    return result;
 }
 
 void Mat::allocate()
@@ -685,7 +682,7 @@ Mat operator/(const Mat &A, const Mat &B)
     Mat temp(A);
     for (int i = 0; i < A.rows; ++i) {
         for (int j = 1; j < A.cols; ++j) {
-            temp(i, j) = A(i,j)/ B(i,j);
+            temp(i, j) = A(i, j) / B(i, j);
         }
     }
     return (temp);

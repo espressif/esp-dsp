@@ -18,6 +18,7 @@
 
 #include "dsp_err.h"
 
+#include "dsps_add_platform.h"
 
 #ifdef __cplusplus
 extern "C"
@@ -27,9 +28,9 @@ extern "C"
 /**@{*/
 /**
  * @brief   IIR filter
- * 
+ *
  * IIR filter 2nd order direct form II (bi quad)
- * The extension (_ansi) use ANSI C and could be compiled and run on any platform. 
+ * The extension (_ansi) use ANSI C and could be compiled and run on any platform.
  * The extension (_ae32) is optimized for ESP32 chip.
  *
  * @param[in] input: input array
@@ -44,19 +45,22 @@ extern "C"
  */
 esp_err_t dsps_biquad_f32_ansi(const float *input, float *output, int len, float *coef, float *w);
 esp_err_t dsps_biquad_f32_ae32(const float *input, float *output, int len, float *coef, float *w);
-/**@}*/ 
+/**@}*/
 
 
 #ifdef __cplusplus
 }
 #endif
 
-
-#ifdef CONFIG_DSP_OPTIMIZED
+#if CONFIG_DSP_OPTIMIZED
+#if (dsps_biquad_f32_ae32_enabled == 1)
 #define dsps_biquad_f32 dsps_biquad_f32_ae32
-#endif
-#ifdef CONFIG_DSP_ANSI
+#else
 #define dsps_biquad_f32 dsps_biquad_f32_ansi
 #endif
+#else // CONFIG_DSP_OPTIMIZED
+#define dsps_biquad_f32 dsps_biquad_f32_ansi
+#endif // CONFIG_DSP_OPTIMIZED
+
 
 #endif // _dsps_biquad_H_

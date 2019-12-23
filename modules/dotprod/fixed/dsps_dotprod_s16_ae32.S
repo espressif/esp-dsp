@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License. 
 
+#include "dsps_dotprod_platform.h"
+#if (dsps_dotprod_s16_ae32_enabled == 1)
 #include "dsps_dotprod_s16_m_ae32.S"
 #include "dsp_err_codes.h"
 
@@ -74,3 +76,5 @@ dsps_dotprod_s16_ae32:
 dsps_dotprod_s16_ae32_error:
 	movi.n	a2, ESP_ERR_DSP_INVALID_LENGTH
 	retw.n
+
+#endif // dsps_dotprod_s16_ae32_enabled

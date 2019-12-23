@@ -18,6 +18,8 @@
 #include "esp_log.h"
 #include "dsp_err.h"
 
+#include "dsps_dotprod_platform.h"
+
 #ifdef __cplusplus
 extern "C"
 {
@@ -28,7 +30,7 @@ extern "C"
 /**
  * @brief      dot product of two 16 bit vectors
  * Dot product calculation for two signed 16 bit arrays: *dest += (src1[i] * src2[i]) >> (15-shift); i= [0..N)
- * The extension (_ansi) use ANSI C and could be compiled and run on any platform. 
+ * The extension (_ansi) use ANSI C and could be compiled and run on any platform.
  * The extension (_ae32) is optimized for ESP32 chip.
  *
  * @param[in] src1  source array 1
@@ -42,14 +44,14 @@ extern "C"
  */
 esp_err_t dsps_dotprod_s16_ansi(const int16_t *src1, const int16_t *src2, int16_t *dest, int len, int8_t shift);
 esp_err_t dsps_dotprod_s16_ae32(const int16_t *src1, const int16_t *src2, int16_t *dest, int len, int8_t shift);
-/**@}*/ 
+/**@}*/
 
 
 /**@{*/
 /**
  * @brief      dot product of two float vectors
  * Dot product calculation for two floating point arrays: *dest += (src1[i] * src2[i]); i= [0..N)
- * The extension (_ansi) use ANSI C and could be compiled and run on any platform. 
+ * The extension (_ansi) use ANSI C and could be compiled and run on any platform.
  * The extension (_ae32) is optimized for ESP32 chip.
  *
  * @param[in] src1  source array 1
@@ -62,13 +64,13 @@ esp_err_t dsps_dotprod_s16_ae32(const int16_t *src1, const int16_t *src2, int16_
  */
 esp_err_t dsps_dotprod_f32_ansi(const float *src1, const float *src2, float *dest, int len);
 esp_err_t dsps_dotprod_f32_ae32(const float *src1, const float *src2, float *dest, int len);
-/**@}*/ 
+/**@}*/
 
 /**@{*/
 /**
  * @brief      dot product of two float vectors with step
  * Dot product calculation for two floating point arrays: *dest += (src1[i*step1] * src2[i*step2]); i= [0..N)
- * The extension (_ansi) use ANSI C and could be compiled and run on any platform. 
+ * The extension (_ansi) use ANSI C and could be compiled and run on any platform.
  * The extension (_ae32) is optimized for ESP32 chip.
  *
  * @param[in] src1  source array 1
@@ -83,23 +85,33 @@ esp_err_t dsps_dotprod_f32_ae32(const float *src1, const float *src2, float *des
  */
 esp_err_t dsps_dotprode_f32_ansi(const float *src1, const float *src2, float *dest, int len, int step1, int step2);
 esp_err_t dsps_dotprode_f32_ae32(const float *src1, const float *src2, float *dest, int len, int step1, int step2);
-/**@}*/ 
+/**@}*/
 
 #ifdef __cplusplus
 }
 #endif
 
-#ifdef CONFIG_DSP_OPTIMIZED
+#if CONFIG_DSP_OPTIMIZED
+#if (dsps_dotprod_s16_ae32_enabled == 1)
 #define dsps_dotprod_s16 dsps_dotprod_s16_ae32
+#else
+#define dsps_dotprod_s16 dsps_dotprod_s16_ansi
+#endif // dsps_dotprod_s16_ae32_enabled
+#if (dsps_dotprod_f32_ae32_enabled == 1)
 #define dsps_dotprod_f32 dsps_dotprod_f32_ae32
+#else
+#define dsps_dotprod_f32 dsps_dotprod_f32_ansi
+#endif // dsps_dotprod_f32_ae32_enabled
+#if (dsps_dotprode_f32_ae32_enabled == 1)
 #define dsps_dotprode_f32 dsps_dotprode_f32_ae32
-#endif
-#ifdef CONFIG_DSP_ANSI
+#else
+#define dsps_dotprode_f32 dsps_dotprode_f32_ansi
+#endif // dsps_dotprode_f32_ae32_enabled
+
+#else // CONFIG_DSP_OPTIMIZED
 #define dsps_dotprod_s16 dsps_dotprod_s16_ansi
 #define dsps_dotprod_f32 dsps_dotprod_f32_ansi
 #define dsps_dotprode_f32 dsps_dotprode_f32_ansi
-#endif
-
-
+#endif // CONFIG_DSP_OPTIMIZED
 
 #endif // _DSPI_DOTPROD_H_

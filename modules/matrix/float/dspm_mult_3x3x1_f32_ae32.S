@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License. 
 
-//#include "../../dotprod/float/dsps_dotprod_f32_m_ae32.S"
-#include "dsps_dotprod_f32_m_ae32.S"
+#include "dspm_mult_platform.h"
+#if (dspm_mult_3x3x1_f32_ae32_enabled == 1)
 
 // This is matrix multipliction function for ESP32 processor.
 	.text
@@ -71,3 +71,5 @@ dspm_mult_3x3x1_f32_ae32:
 
 	movi.n	a2, 0 // return status ESP_OK
 	retw.n
+
+#endif //

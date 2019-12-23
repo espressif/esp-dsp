@@ -12,7 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License. 
 
-//#include "../../dotprod/float/dsps_dotprod_f32_m_ae32.S"
+#include "dspm_mult_platform.h"
+#if (dspm_mult_s16_ae32_enabled == 1)
+
 #include "dsps_dotprod_s16_m_ae32.S"
 #include "dspm_mult_s16_m_ae32_vector.S"
 //esp_err_t dspm_mult_s16_ae32(const int16_t* A, const int16_t* B, int16_t* C, int m, int n, int k, int shift);
@@ -165,3 +167,6 @@ k_loop_mmult_even:
 // The path where n > 1
 vector_mult:
 	dspm_mult_s16_m_ae32_vector;
+
+
+#endif // dspm_mult_s16_ae32_enabled

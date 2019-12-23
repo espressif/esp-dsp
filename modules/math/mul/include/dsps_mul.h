@@ -16,6 +16,7 @@
 #define _dsps_mul_H_
 #include "dsp_err.h"
 
+#include "dsps_mul_platform.h"
 
 #ifdef __cplusplus
 extern "C"
@@ -26,7 +27,7 @@ extern "C"
 /**@{*/
 /**
  * @brief   Multiply two arrays
- * 
+ *
  * The function multiply one input array to another and store result to other array
  * out[i*step_out] = input1[i*step1] * input2[i*step2]; i=[0..len)
  * The implementation use ANSI C and could be compiled and run on any platform
@@ -38,7 +39,7 @@ extern "C"
  * @param step1: step over input array 1 (by default should be 1)
  * @param step2: step over input array 2 (by default should be 1)
  * @param step_out: step over output array (by default should be 1)
- * 
+ *
  * @return
  *      - ESP_OK on success
  *      - One of the error codes from DSP library
@@ -51,7 +52,7 @@ esp_err_t dsps_mul_f32_ae32(const float *input1, const float *input2, float *out
 /**@{*/
 /**
  * @brief   Multiply two arrays
- * 
+ *
  * The function multiply one input array to another and store result to other array
  * out[i*step_out] = input1[i*step1] * input2[i*step2]; i=[0..len)
  * The implementation use ANSI C and could be compiled and run on any platform
@@ -64,7 +65,7 @@ esp_err_t dsps_mul_f32_ae32(const float *input1, const float *input2, float *out
  * @param step2: step over input array 2 (by default should be 1)
  * @param step_out: step over output array (by default should be 1)
  * @param shift: output shift after multiplication (by default should be 15)
- * 
+ *
  * @return
  *      - ESP_OK on success
  *      - One of the error codes from DSP library
@@ -77,15 +78,15 @@ esp_err_t dsps_mul_s16_ansi(const int16_t *input1, const int16_t *input2, int16_
 }
 #endif
 
-
-#ifdef CONFIG_DSP_OPTIMIZED
+#if CONFIG_DSP_OPTIMIZED
+#if (dsps_mul_f32_ae32_enabled == 1)
 #define dsps_mul_f32 dsps_mul_f32_ae32
+#else
+#define dsps_mul_f32 dsps_mul_f32_ansi
+#endif //
 #define dsps_mul_s16 dsps_mul_s16_ansi
-
-#endif
-#ifdef CONFIG_DSP_ANSI
+#else // CONFIG_DSP_OPTIMIZED
 #define dsps_mul_f32 dsps_mul_f32_ansi
 #define dsps_mul_s16 dsps_mul_s16_ansi
 #endif
-
 #endif // _dsps_mul_H_

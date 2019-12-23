@@ -15,7 +15,6 @@
 
 #ifndef dsp_platform_h_
 #define dsp_platform_h_
-#include "esp32/clk.h"
 #include "soc/cpu.h"
 
 #include "freertos/FreeRTOS.h"

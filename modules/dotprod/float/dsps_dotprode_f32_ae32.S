@@ -12,6 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License. 
 
+#include "dsps_dotprod_platform.h"
+#if (dotprode_f32_ae32_enabled == 1)
+
 #include "dsps_dotprode_f32_m_ae32.S"
 
 // This is dot product function for ESP32 processor.
@@ -57,3 +60,5 @@ dsps_dotprode_f32_ae32:
 	
 	movi.n	a2, 0 // return status ESP_OK
 	retw.n
+
+#endif //dotprode_f32_ae32_enabled

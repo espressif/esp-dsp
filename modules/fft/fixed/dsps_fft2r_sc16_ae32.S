@@ -12,6 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License. 
 
+#include "dsps_fft2r_platform.h"
+#if (dsps_fft2r_sc16_ae32_enabled == 1)
+
 // This is matrix multipliction function for ESP32 processor.
 	.text
 	.align  4
@@ -173,3 +176,5 @@ fft2r_l3:
 
 	movi.n	a2, 0 // return status ESP_OK
 	retw.n
+
+#endif // dsps_fft2r_sc16_ae32_enabled

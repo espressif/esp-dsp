@@ -72,6 +72,7 @@ By default all functions could be used without extensions. The option that selec
 Inside library the extensions means:
  - _ansi - a universal function where body of function implemented on ANSI C. This implementation not includes any hardware optimization
  - _ae32 - written on ESP32 assembler and optimized for ESP32
+ - _platform - header file with definitions of available CPUs instructions for different functions  
  - others- depends on amount of supported CPUs. This list will be extended in future
 
 

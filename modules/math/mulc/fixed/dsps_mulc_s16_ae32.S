@@ -12,6 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License. 
 
+#include "dsps_mulc_platform.h"
+#if (dsps_mulc_s16_ae32_enabled == 1)
+
     .text
     .align  4
     .global dsps_mulc_s16_ae32
@@ -70,3 +73,5 @@ dsps_mulc_s16_ae32:
 loop_end_mulc_f32_ae32:
     movi.n	a2, 0 // return status ESP_OK
     retw.n
+    
+#endif // dsps_mulc_s16_ae32_enabled

@@ -16,6 +16,7 @@
 #define _dspm_mult_H_
 
 #include "dsp_err.h"
+#include "dspm_mult_platform.h"
 
 #ifdef __cplusplus
 extern "C"
@@ -133,24 +134,49 @@ esp_err_t dspm_mult_s16_ae32(const int16_t *A, const int16_t *B, int16_t *C, int
 }
 #endif
 
+#if CONFIG_DSP_OPTIMIZED
 
-#ifdef CONFIG_DSP_OPTIMIZED
-#define dspm_mult_f32 dspm_mult_f32_ae32
+#if (dspm_mult_s16_ae32_enabled == 1)
 #define dspm_mult_s16 dspm_mult_s16_ae32
-#define dspm_mult_3x3x1_f32 dspm_mult_3x3x1_f32_ae32
-#define dspm_mult_3x3x3_f32 dspm_mult_3x3x3_f32_ae32
-#define dspm_mult_4x4x1_f32 dspm_mult_4x4x1_f32_ae32
-#define dspm_mult_4x4x4_f32 dspm_mult_4x4x4_f32_ae32
-#endif
-#ifdef CONFIG_DSP_ANSI
-#define dspm_mult_f32 dspm_mult_f32_ansi
+#else
 #define dspm_mult_s16 dspm_mult_s16_ansi
+#endif
 
+#if (dspm_mult_f32_ae32_enabled == 1)
+#define dspm_mult_f32 dspm_mult_f32_ae32
+#else
+#define dspm_mult_f32 dspm_mult_f32_ansi
+#endif
+
+#if (dspm_mult_3x3x1_f32_ae32_enabled == 1)
+#define dspm_mult_3x3x1_f32 dspm_mult_3x3x1_f32_ae32
+#else
 #define dspm_mult_3x3x1_f32(A,B,C) dspm_mult_f32_ansi(A,B,C, 3, 3, 1)
+#endif
+#if (dspm_mult_3x3x3_f32_ae32_enabled == 1)
 #define dspm_mult_3x3x3_f32(A,B,C) dspm_mult_f32_ansi(A,B,C, 3, 3, 3)
+#else
+#define dsps_sub_f32 dsps_sub_f32_ansi
+#endif
+#if (dspm_mult_4x4x1_f32_ae32_enabled == 1)
 #define dspm_mult_4x4x1_f32(A,B,C) dspm_mult_f32_ansi(A,B,C, 4, 4, 1)
+#else
+#define dsps_sub_f32 dsps_sub_f32_ansi
+#endif
+#if (dspm_mult_4x4x4_f32_ae32_enabled == 1)
+#define dspm_mult_4x4x4_f32 dspm_mult_4x4x4_f32_ae32
+#else
 #define dspm_mult_4x4x4_f32(A,B,C) dspm_mult_f32_ansi(A,B,C, 4, 4, 4)
 #endif
+
+#else
+#define dspm_mult_s16 dspm_mult_s16_ansi
+#define dspm_mult_f32 dspm_mult_f32_ansi
+#define dspm_mult_3x3x1_f32(A,B,C) dspm_mult_f32_ansi(A,B,C, 3, 3, 1)
+#define dsps_sub_f32 dsps_sub_f32_ansi
+#define dsps_sub_f32 dsps_sub_f32_ansi
+#define dspm_mult_4x4x4_f32(A,B,C) dspm_mult_f32_ansi(A,B,C, 4, 4, 4)
+#endif // CONFIG_DSP_OPTIMIZED
 
 
 #endif // _dspm_mult_H_

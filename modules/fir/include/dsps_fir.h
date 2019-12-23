@@ -18,6 +18,7 @@
 
 #include "dsp_err.h"
 
+#include "dsps_fir_platform.h"
 
 #ifdef __cplusplus
 extern "C"
@@ -26,8 +27,8 @@ extern "C"
 
 /**
  * @brief Data struct of f32 fir filter
- * 
- * This structure used by filter internally. User should access this structure only in case of 
+ *
+ * This structure used by filter internally. User should access this structure only in case of
  * extensions for the DSP Library.
  * All fields of this structure initialized by dsps_fir_init_f32(...) function.
  */
@@ -42,7 +43,7 @@ typedef struct fir_f32_s {
 
 /**
  * @brief   initialize structure for 32 bit FIR filter
- * 
+ *
  * Function initialize structure for 32 bit floating point FIR filter
  * The implementation use ANSI C and could be compiled and run on any platform
  *
@@ -79,9 +80,9 @@ esp_err_t dsps_fird_init_f32(fir_f32_t *fir, float *coeffs, float *delay, int N,
 /**@{*/
 /**
  * @brief   FIR filter
- * 
+ *
  * Function implements FIR filter
- * The extension (_ansi) use ANSI C and could be compiled and run on any platform. 
+ * The extension (_ansi) use ANSI C and could be compiled and run on any platform.
  * The extension (_ae32) is optimized for ESP32 chip.
  *
  * @param fir: pointer to fir filter structure, that must be initialized before
@@ -95,14 +96,14 @@ esp_err_t dsps_fird_init_f32(fir_f32_t *fir, float *coeffs, float *delay, int N,
  */
 esp_err_t dsps_fir_f32_ansi(fir_f32_t *fir, const float *input, float *output, int len);
 esp_err_t dsps_fir_f32_ae32(fir_f32_t *fir, const float *input, float *output, int len);
-/**@}*/ 
+/**@}*/
 
 /**@{*/
 /**
  *  @brief   Decimation FIR filter
- * 
+ *
  * Function implements FIR filter with decimation
- * The extension (_ansi) use ANSI C and could be compiled and run on any platform. 
+ * The extension (_ansi) use ANSI C and could be compiled and run on any platform.
  * The extension (_ae32) is optimized for ESP32 chip.
  *
  * @param fir: pointer to fir filter structure, that must be initialized before
@@ -115,20 +116,31 @@ esp_err_t dsps_fir_f32_ae32(fir_f32_t *fir, const float *input, float *output, i
  */
 int dsps_fird_f32_ansi(fir_f32_t *fir, const float *input, float *output, int len);
 int dsps_fird_f32_ae32(fir_f32_t *fir, const float *input, float *output, int len);
-/**@}*/ 
+/**@}*/
 
 
 #ifdef __cplusplus
 }
 #endif
 
-#ifdef CONFIG_DSP_OPTIMIZED
+
+#if CONFIG_DSP_OPTIMIZED
+
+#if (dsps_fir_f32_ae32_enabled == 1)
 #define dsps_fir_f32 dsps_fir_f32_ae32
-#define dsps_fird_f32 dsps_fird_f32_ae32
-#endif
-#ifdef CONFIG_DSP_ANSI
+#else
 #define dsps_fir_f32 dsps_fir_f32_ansi
+#endif
+
+#if (dsps_fird_f32_ae32_enabled == 1)
+#define dsps_fird_f32 dsps_fird_f32_ae32
+#else
 #define dsps_fird_f32 dsps_fird_f32_ansi
 #endif
+
+#else // CONFIG_DSP_OPTIMIZED
+#define dsps_fir_f32 dsps_fir_f32_ansi
+#define dsps_fird_f32 dsps_fird_f32_ansi
+#endif // CONFIG_DSP_OPTIMIZED
 
 #endif // _dsps_fir_H_
