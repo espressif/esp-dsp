@@ -29,6 +29,8 @@ INPUT = \
     ../modules/dotprod/include/dsps_dotprod.h \
     ## FFT - API Reference
     ../modules/fft/include/dsps_fft2r.h \
+    ## DCT - API Reference
+    ../modules/dct/include/dsps_dct.h \
     ## FIR Filter - API Reference
     ../modules/fir/include/dsps_fir.h \
     ## IIR Filter - API Reference
@@ -43,6 +45,9 @@ INPUT = \
     ## Matrix - API Reference
     ../modules/matrix/include/dspm_mult.h \
     ../modules/matrix/include/mat.h \
+    ## Convolution/Cprrelation - API Reference
+    ../modules/conv/include/dsps_conv.h \
+    ../modules/conv/include/dsps_corr.h \
     ## Support - API Reference
     ../modules/support/include/dsps_view.h \
     ../modules/support/include/dsps_tone_gen.h \

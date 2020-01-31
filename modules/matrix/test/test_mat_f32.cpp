@@ -65,41 +65,51 @@ TEST_CASE("Mat class basic operations", "[dspm]")
 {
     int M = 4;
     int N = 4;
+
     dspm::Mat A(M, N);
     dspm::Mat x(N, 1);
     for (int m=0 ; m < M ; m++)
     {
         for (int n=0 ; n < N ; n++)
         {
-            A(m,n) = N*m + n;
+            A(m,n) = N*(m + 1) + (n + 1);
         }
-        x(m, 0) = m;
+        x(m, 0) = m + 2;
     }
+    
     A(0,0) = 10;
     A(0,1) = 11;
-
+    
+    
     dspm::Mat b = A*x;
     dspm::Mat x1_ = dspm::Mat::solve(A, b);
     dspm::Mat x2_ = dspm::Mat::roots(A, b);
 
-    // ESP_LOGI(TAG, "Matrix A:");
-    // std::cout << A;
-    // ESP_LOGI(TAG, "Matrix x:");
-    // std::cout << x;
-    // ESP_LOGI(TAG, "Matrix b:");
-    // std::cout << b;
+    ESP_LOGI(TAG, "Matrix A:");
+    std::cout << A;
+    ESP_LOGI(TAG, "Matrix x.t():");
+    std::cout << x.t();
+    ESP_LOGI(TAG, "Matrix b.t():");
+    std::cout << b.t();
     ESP_LOGI(TAG, "Solve result:");
     std::cout << x1_.t();
     ESP_LOGI(TAG, "Roots result:");
     std::cout << x2_.t();
     dspm::Mat check_b = A*x1_;
+    ESP_LOGI(TAG, "Result b.t():");
+    std::cout << check_b.t();
     dspm::Mat diff_b = check_b - b;
+    ESP_LOGI(TAG, "Difference:");
+    std::cout << diff_b.t();
+
     for (int m=0 ; m < diff_b.rows; m++)
     {
         for (int n=0 ; n < diff_b.cols ; n++)
         {
-            if (fabs(diff_b(m, n)) > (dspm::Mat::abs_tol*10))
+            float error = fabs(diff_b(m, n)); 
+            if (fabs(diff_b(m, n)) > 0.0001)
             {
+                ESP_LOGE(TAG,"Solve calculation error: %f", error);
                 TEST_ASSERT_MESSAGE (false, "Calculation is incorrect! Error more then expected!");
             }
         }
@@ -259,7 +269,7 @@ TEST_CASE("Mat class operators", "[dspm]")
     std::cout << result << std::endl;
     for (int i=0 ; i< 3*3 ; i++)
     {
-        if (std::abs(result.data[i] - m_result[i]) > 1e-3)
+        if (std::abs(result.data[i] - m_result[i]) > 1e-2)
         {
             printf("Error at[%i] = %f, expected= %f, calculated = %f \n", i, std::abs(result.data[i] - m_result[i]), m_result[i], result.data[i]);
             TEST_ASSERT_MESSAGE (false, "Error in pinv() operation!\n");

@@ -17,6 +17,8 @@ COMPONENT_ADD_INCLUDEDIRS := modules/dotprod/include \
 							modules/math/mulc/include \
 							modules/matrix/include \
 							modules/fft/include \
+							modules/dct/include \
+							modules/conv/include \
 							modules/common/include 
 
 COMPONENT_SRCDIRS :=. \
@@ -65,6 +67,10 @@ COMPONENT_SRCDIRS :=. \
 					modules/windows/flat_top \
 					modules/windows/flat_top/float \
 					modules/windows/flat_top/fixed \
+					modules/conv \
+					modules/conv/float \
+					modules/dct \
+					modules/dct/float \
 					modules/iir \
 					modules/iir/biquad \
 					modules/fir \
