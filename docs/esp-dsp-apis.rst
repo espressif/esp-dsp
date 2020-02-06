@@ -16,9 +16,11 @@ Signal processing APIs use ``dsps`` prefix. The following modules are available:
 
 - Dot-product_ - Calculates dot-product of two vectors
 - FFT_ - Fast Fourier Transform functionality
+- DCT_ - Discrete Cosine Transform functionality
 - IIR_ - IIR filter functionality
 - FIR_ - FIR filter functionality
 - Math_ - Basic vector operations
+- Conv_ - Convolution/correlation functionality 
 - Support_ - Support functions
 - `Window functions`_ - FFT window generation functions
 
@@ -31,6 +33,11 @@ FFT
 +++
 
 .. include:: /_build/inc/dsps_fft2r.inc
+
+DCT
++++
+
+.. include:: /_build/inc/dsps_dct.inc
 
 FIR
 +++
@@ -51,6 +58,12 @@ Math
 .. include:: /_build/inc/dsps_mul.inc
 .. include:: /_build/inc/dsps_addc.inc
 .. include:: /_build/inc/dsps_mulc.inc
+
+Conv
+++++
+
+.. include:: /_build/inc/dsps_conv.inc
+.. include:: /_build/inc/dsps_corr.inc
 
 Support
 +++++++

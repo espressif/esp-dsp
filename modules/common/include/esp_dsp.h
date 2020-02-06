@@ -30,6 +30,8 @@ extern "C"
 #include "dsps_biquad.h"
 #include "dsps_biquad_gen.h"
 #include "dsps_wind.h"
+#include "dsps_conv.h"
+#include "dsps_corr.h"
 
 #include "dsps_d_gen.h"
 #include "dsps_h_gen.h"
@@ -38,6 +40,7 @@ extern "C"
 #include "dsps_sfdr.h"
 
 #include "dsps_fft2r.h"
+#include "dsps_dct.h"
 
 // Matrix operations
 #include "dspm_mult.h"

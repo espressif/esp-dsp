@@ -13,8 +13,10 @@ set(COMPONENT_SRCDIRS
                     "../modules/support/snr/test"
                     "../modules/support/sfdr/test"
                     "../modules/fft/test"
+                    "../modules/dct/test"
+                    "../modules/conv/test"
 )
-set(COMPONENT_REQUIRES unity esp-dsp)
+set(COMPONENT_REQUIRES unity dsp)
 
 set(COMPONENT_ADD_LDFRAGMENTS linker.lf)
 
