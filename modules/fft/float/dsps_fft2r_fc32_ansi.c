@@ -51,11 +51,11 @@ esp_err_t dsps_fft2r_init_fc32(float* fft_table_buff, int table_size)
         dsps_fft2r_mem_allocated = 1;
     }
 
-    result = dsps_gen_w_r2_fc32(dsps_fft_w_table_fc32, CONFIG_DSP_MAX_FFT_SIZE);
+    result = dsps_gen_w_r2_fc32(dsps_fft_w_table_fc32, dsps_fft_w_table_size);
     if (result != ESP_OK) {
         return result;
     }
-    result = dsps_bit_rev_fc32_ansi(dsps_fft_w_table_fc32, CONFIG_DSP_MAX_FFT_SIZE >> 1);
+    result = dsps_bit_rev_fc32_ansi(dsps_fft_w_table_fc32, dsps_fft_w_table_size >> 1);
     if (result != ESP_OK) {
         return result;
     }
