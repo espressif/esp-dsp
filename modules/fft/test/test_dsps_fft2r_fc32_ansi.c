@@ -41,11 +41,11 @@ TEST_CASE("dsps_fft2r_fc32_ansi functionality", "[dsps]")
         return;
     }
 
-    dsps_fft2r_fc32_ansi(data, N);
     unsigned int start_b = xthal_get_ccount();
+    dsps_fft2r_fc32_ansi(data, N);
+	unsigned int end_b = xthal_get_ccount();
     dsps_bit_rev_fc32_ansi(data, N);
-    unsigned int end_b = xthal_get_ccount();
-
+    
     float min = 10000;
     float max = -10000;
     int max_pos = 0;

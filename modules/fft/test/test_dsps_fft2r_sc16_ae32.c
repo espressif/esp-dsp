@@ -43,11 +43,10 @@ TEST_CASE("dsps_fft2r_sc16_ae32 functionality", "[dsps]")
         return;
     }
 
+	unsigned int start_b = xthal_get_ccount();
     dsps_fft2r_sc16_ae32(data, N);
-    unsigned int start_b = xthal_get_ccount();
+    unsigned int end_b = xthal_get_ccount();	
     dsps_bit_rev_sc16_ansi(data, N);
-    unsigned int end_b = xthal_get_ccount();
-
 
     for (int i=0 ; i< N ; i++)
     {
