@@ -88,15 +88,15 @@ esp_err_t dsps_fft2r_init_sc16(int16_t* fft_table_buff, int table_size)
         {
             dsps_fft_w_table_sc16 = (int16_t*)malloc(CONFIG_DSP_MAX_FFT_SIZE*sizeof(int16_t));
         }
-        dsps_fft_w_table_size = CONFIG_DSP_MAX_FFT_SIZE;
+        dsps_fft_w_table_sc16_size = CONFIG_DSP_MAX_FFT_SIZE;
         dsps_fft2r_sc16_mem_allocated = 1;
     }
 
-    result = dsps_gen_w_r2_sc16(dsps_fft_w_table_sc16, CONFIG_DSP_MAX_FFT_SIZE);
+    result = dsps_gen_w_r2_sc16(dsps_fft_w_table_sc16, dsps_fft_w_table_sc16_size);
     if (result != ESP_OK) {
         return result;
     }
-    result = dsps_bit_rev_sc16_ansi(dsps_fft_w_table_sc16, CONFIG_DSP_MAX_FFT_SIZE >> 1);
+    result = dsps_bit_rev_sc16_ansi(dsps_fft_w_table_sc16, dsps_fft_w_table_sc16_size >> 1);
     if (result != ESP_OK) {
         return result;
     }

@@ -34,7 +34,11 @@ TEST_CASE("dsps_fft2r_fc32_ansi functionality", "[dsps]")
         data[i * 2 + 1] = 0;
     }
 
-    esp_err_t ret = dsps_fft2r_init_fc32(NULL, CONFIG_DSP_MAX_FFT_SIZE);
+    float* fft_table_buff = (float*)malloc((N+2)*sizeof(float));
+    fft_table_buff[0] = 1234;
+    fft_table_buff[N+1] = 5678;
+
+    esp_err_t ret = dsps_fft2r_init_fc32(&fft_table_buff[1], N);
     if (ret  != ESP_OK)
     {
         ESP_LOGE(TAG, "Not possible to initialize FFT. Error = %i", ret);
@@ -67,6 +71,12 @@ TEST_CASE("dsps_fft2r_fc32_ansi functionality", "[dsps]")
     TEST_ASSERT_EQUAL( 6 * 10, round_pow);
     ESP_LOGI(TAG, "Calculation error is less then 0.1 dB");
     ESP_LOGI(TAG, "cycles - %i", end_b - start_b);
+
+    ESP_LOGI(TAG, "fft_table_buff[0] = %f, fft_table_buff[N+1] = %f", fft_table_buff[0], fft_table_buff[N+1]);
+    TEST_ASSERT_EQUAL( fft_table_buff[0],  1234);
+    TEST_ASSERT_EQUAL( fft_table_buff[N+1],  5678);
+    free(fft_table_buff);
+
     dsps_fft2r_deinit_fc32();
 }
 
