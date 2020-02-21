@@ -37,16 +37,13 @@ TEST_CASE("dsps_conv_f32_ae32 test output", "[dsps]")
     int la = 3;
     int lb = 2;
 
-    for (int i = 0; i < lenA; i++)
-    {
+    for (int i = 0; i < lenA; i++) {
         inputA[i] = 10 + i;
     }
-    for (int i = 0; i < lenB; i++)
-    {
+    for (int i = 0; i < lenB; i++) {
         inputB[i] = 20 + i;
     }
-    for (int i = 0; i < (lenA + lenB - 1 + 2); i++)
-    {
+    for (int i = 0; i < (lenA + lenB - 1 + 2); i++) {
         output_ref[i] = -1;
         output_fwd[i] = -1;
         output_back[i] = -1;
@@ -54,15 +51,12 @@ TEST_CASE("dsps_conv_f32_ae32 test output", "[dsps]")
     dsps_conv_f32_ansi(inputA, la, inputB, lb, &output_ref[1]);
     dsps_conv_f32_ae32(inputA, la, inputB, lb, &output_fwd[1]);
 
-    for (size_t i = 0; i < (la + lb + 1); i++)
-    {
-        ESP_LOGI(TAG, "la=%i, lb=%i, i=%i, ref=%2.3f, fwd=%2.3f", la, lb, i, output_ref[i], output_fwd[i]);
+    for (size_t i = 0; i < (la + lb + 1); i++) {
+        ESP_LOGD(TAG, "la=%i, lb=%i, i=%i, ref=%2.3f, fwd=%2.3f", la, lb, i, output_ref[i], output_fwd[i]);
     }
     float max_eps = 0.000001;
-    for (size_t i = 0; i < (la + lb + 1); i++)
-    {
-        if (abs(output_ref[i] - output_fwd[i]) > max_eps)
-        {
+    for (size_t i = 0; i < (la + lb + 1); i++) {
+        if (abs(output_ref[i] - output_fwd[i]) > max_eps) {
             ESP_LOGE(TAG, "la=%i, lb=%i, i=%i, ref=%2.3f, fwd=%2.3f", la, lb, i, output_ref[i], output_fwd[i]);
         }
         TEST_ASSERT_EQUAL(output_ref[i], output_fwd[i]);

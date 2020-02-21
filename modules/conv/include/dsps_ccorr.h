@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef _dsps_corr_H_
-#define _dsps_corr_H_
+#ifndef _dsps_ccorr_H_
+#define _dsps_ccorr_H_
 #include "dsp_err.h"
 
 
@@ -25,23 +25,23 @@ extern "C"
 
 /**@{*/
 /**
- * @brief   Correlation with pattern
+ * @brief   Cross correlation
  *
- * The function correlate input sigla array with pattern array.
+ * The function make cross correlate between two ignals.
  * The implementation use ANSI C and could be compiled and run on any platform
  *
- * @param[in] Signal: input array with signal values
- * @param[in] siglen: length of the signal array
- * @param[in] Pattern: input array with pattern values
- * @param[in] patlen: length of the pattern array. The siglen must be bigger then patlen!
- * @param dest: output array with result of correlation
+ * @param[in] Signal1: input array with input 1 signal values
+ * @param[in] siglen1: length of the input 1 signal array
+ * @param[in] Signal2: input array with input 2 signal values
+ * @param[in] siglen2: length of the input  signal array
+ * @param corrout: output array with result of cross correlation. The size of dest array must be (siglen1 + siglen2 - 1) !!!
  *
  * @return
  *      - ESP_OK on success
  *      - One of the error codes from DSP library (one of the input array are NULL, or if (siglen < patlen))
  */
-esp_err_t dsps_corr_f32_ansi(const float *Signal, const int siglen, const float *Pattern, const int patlen, float *dest);
-esp_err_t dsps_corr_f32_ae32(const float *Signal, const int siglen, const float *Pattern, const int patlen, float *dest);
+esp_err_t dsps_ccorr_f32_ansi(const float *Signal, const int siglen, const float *Pattern, const int patlen, float *corrout);
+esp_err_t dsps_ccorr_f32_ae32(const float *Signal, const int siglen, const float *Pattern, const int patlen, float *corrout);
 /**}@*/
 
 #ifdef __cplusplus
@@ -50,10 +50,10 @@ esp_err_t dsps_corr_f32_ae32(const float *Signal, const int siglen, const float 
 
 
 #ifdef CONFIG_DSP_OPTIMIZED
-#define dsps_corr_f32 dsps_corr_f32_ae32
+#define dsps_ccorr_f32 dsps_ccorr_f32_ae32
 #endif
 #ifdef CONFIG_DSP_ANSI
-#define dsps_corr_f32 dsps_corr_f32_ansi
+#define dsps_ccorr_f32 dsps_ccorr_f32_ansi
 #endif
 
-#endif // _dsps_corr_H_
+#endif // _dsps_conv_H_

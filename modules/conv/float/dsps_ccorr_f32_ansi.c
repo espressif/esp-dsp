@@ -17,7 +17,7 @@
 
 static const char *TAG = "dsps_conv";
 
-esp_err_t dsps_conv_f32_ansi(const float *Signal, const int siglen, const float *Kernel, const int kernlen, float *convout)
+esp_err_t dsps_ccorr_f32_ansi(const float *Signal, const int siglen, const float *Kernel, const int kernlen, float *corrvout)
 {
     if (NULL == Signal) {
         return ESP_ERR_DSP_PARAM_OUTOFRANGE;
@@ -25,7 +25,7 @@ esp_err_t dsps_conv_f32_ansi(const float *Signal, const int siglen, const float 
     if (NULL == Kernel) {
         return ESP_ERR_DSP_PARAM_OUTOFRANGE;
     }
-    if (NULL == convout) {
+    if (NULL == corrvout) {
         return ESP_ERR_DSP_PARAM_OUTOFRANGE;
     }
 
@@ -43,39 +43,39 @@ esp_err_t dsps_conv_f32_ansi(const float *Signal, const int siglen, const float 
 
     for (int n = 0; n < lkern; n++) {
         size_t k;
-
-        convout[n] = 0;
+        size_t kmin = lkern - 1 - n;
+        corrvout[n] = 0;
 
         for (k = 0; k <= n; k++) {
-            convout[n] += sig[k] * kern[n - k];
+            corrvout[n] += sig[k] * kern[kmin + k];
         }
-        ESP_LOGV(TAG,"L1 kmin = %i, kmax = %i , n-kmin = %i", 0, n, n);
+        ESP_LOGV(TAG, "L1 k = %i, n = %i , kmin= %i, kmax= %i", 0, n, kmin, kmin + n);
     }
     for (int n = lkern; n < lsig; n++) {
         size_t kmin, kmax, k;
 
-        convout[n] = 0;
+        corrvout[n] = 0;
 
         kmin = n - lkern + 1;
         kmax = n;
-        ESP_LOGV(TAG,"L2 n=%i, kmin = %i, kmax = %i , n-kmin = %i", n, kmin, kmax, n-kmin);
         for (k = kmin; k <= kmax; k++) {
-            convout[n] += sig[k] * kern[n - k];
+            corrvout[n] += sig[k] * kern[k - kmin];
         }
+        ESP_LOGV(TAG, "L2 n=%i, kmin = %i, kmax = %i , k-kmin = %i", n, kmin, kmax, 0);
     }
 
     for (int n = lsig; n < lsig + lkern - 1; n++) {
         size_t kmin, kmax, k;
 
-        convout[n] = 0;
+        corrvout[n] = 0;
 
         kmin = n - lkern + 1;
         kmax =  lsig - 1;
 
         for (k = kmin; k <= kmax; k++) {
-            convout[n] += sig[k] * kern[n - k];
+            corrvout[n] += sig[k] * kern[k - kmin];
         }
-        ESP_LOGV(TAG,"L3 n=%i, kmin = %i, kmax = %i , n-kmin = %i", n, kmin, kmax, n-kmin);
+        ESP_LOGV(TAG, "L3 n=%i, kmin = %i, kmax = %i , k - kmin = %i", n, kmin, kmax, kmax - kmin);
     }
     return ESP_OK;
 }
