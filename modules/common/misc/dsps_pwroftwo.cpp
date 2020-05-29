@@ -18,3 +18,13 @@ bool dsp_is_power_of_two(int x)
 {
     return (x != 0) && ((x & (x - 1)) == 0);
 }
+
+int dsp_power_of_two(int x)
+{
+    for (size_t i = 0; i < 16; i++)
+    {
+        x = x >> 1;
+        if(0 == x) return i;
+    }
+    return 0;
+}

@@ -9,6 +9,7 @@ COMPONENT_SRCDIRS := \
 					../modules/math/add/test \
 					../modules/math/sub/test \
 					../modules/math/mul/test \
+					../modules/math/sqrt/test \
 					../modules/support/view/test \
 					../modules/support/snr/test \
 					../modules/support/sfdr/test \

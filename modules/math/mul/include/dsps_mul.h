@@ -47,6 +47,32 @@ esp_err_t dsps_mul_f32_ansi(const float *input1, const float *input2, float *out
 esp_err_t dsps_mul_f32_ae32(const float *input1, const float *input2, float *output, int len, int step1, int step2, int step_out);
 /**@}*/
 
+
+/**@{*/
+/**
+ * @brief   Multiply two arrays
+ * 
+ * The function multiply one input array to another and store result to other array
+ * out[i*step_out] = input1[i*step1] * input2[i*step2]; i=[0..len)
+ * The implementation use ANSI C and could be compiled and run on any platform
+ *
+ * @param[in] input1: input array 1
+ * @param[in] input2: input array 2
+ * @param output: output array
+ * @param len: amount of operations for arrays
+ * @param step1: step over input array 1 (by default should be 1)
+ * @param step2: step over input array 2 (by default should be 1)
+ * @param step_out: step over output array (by default should be 1)
+ * @param shift: output shift after multiplication (by default should be 15)
+ * 
+ * @return
+ *      - ESP_OK on success
+ *      - One of the error codes from DSP library
+ */
+esp_err_t dsps_mul_s16_ansi(const int16_t *input1, const int16_t *input2, int16_t *output, int len, int step1, int step2, int step_out, int shift);
+
+/**@}*/
+
 #ifdef __cplusplus
 }
 #endif
@@ -54,9 +80,12 @@ esp_err_t dsps_mul_f32_ae32(const float *input1, const float *input2, float *out
 
 #ifdef CONFIG_DSP_OPTIMIZED
 #define dsps_mul_f32 dsps_mul_f32_ae32
+#define dsps_mul_s16 dsps_mul_s16_ansi
+
 #endif
 #ifdef CONFIG_DSP_ANSI
 #define dsps_mul_f32 dsps_mul_f32_ansi
+#define dsps_mul_s16 dsps_mul_s16_ansi
 #endif
 
 #endif // _dsps_mul_H_

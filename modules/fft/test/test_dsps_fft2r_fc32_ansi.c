@@ -23,11 +23,12 @@
 
 static const char *TAG = "dsps_fft2r_ansi";
 
-static float data[1024*2];
-
 TEST_CASE("dsps_fft2r_fc32_ansi functionality", "[dsps]")
 {
-    int N = sizeof(data) / sizeof(float) / 2;
+    float* data = (float*)malloc(2*4096*sizeof(float));
+    float* check_data = (float*)malloc(2*4096*sizeof(float));
+
+    int N = 1024;
     int check_bin = 32;
     for (int i = 0 ; i < N ; i++) {
         data[i * 2 + 0] = 2 * sinf(M_PI / N * check_bin * 2 * i) / (N / 2);
@@ -77,6 +78,8 @@ TEST_CASE("dsps_fft2r_fc32_ansi functionality", "[dsps]")
     TEST_ASSERT_EQUAL( fft_table_buff[N+1],  5678);
     free(fft_table_buff);
 
+    free(data);
+    free(check_data);
     dsps_fft2r_deinit_fc32();
 }
 
@@ -88,6 +91,8 @@ TEST_CASE("dsps_fft2r_fc32_ansi benchmark", "[dsps]")
         ESP_LOGE(TAG, "Not possible to initialize FFT. Error = %i", ret);
         return;
     }
+    float* data = (float*)malloc(2*4096*sizeof(float));
+    float* check_data = (float*)malloc(2*4096*sizeof(float));
     for (int i= 5 ; i< 10 ; i++)
     {
         int N_check = 2<<i;
@@ -102,5 +107,16 @@ TEST_CASE("dsps_fft2r_fc32_ansi benchmark", "[dsps]")
         float max_exec = 330000*3;
         TEST_ASSERT_EXEC_IN_RANGE(min_exec, max_exec, cycles);
     }
+    free(data);
+    free(check_data);
     dsps_fft2r_deinit_fc32();
+}
+
+TEST_CASE("dsps_gen_bitrev2r_table bitrev table generation.", "[dsps]")
+{
+    for (int i= 4 ; i< 13 ; i++)
+    {
+        int N_check = 1<<i;
+        dsps_gen_bitrev2r_table(N_check, 8, "fc32");
+    }    
 }

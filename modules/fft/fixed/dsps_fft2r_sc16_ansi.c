@@ -16,11 +16,14 @@
 #include "dsp_common.h"
 #include "dsp_types.h"
 #include <math.h>
+#include "esp_attr.h"
 
 int16_t* dsps_fft_w_table_sc16;
 int dsps_fft_w_table_sc16_size;
 uint8_t dsps_fft2r_sc16_initialized = 0;
 uint8_t dsps_fft2r_sc16_mem_allocated = 0;
+
+unsigned short reverse(unsigned short x, unsigned short N, int order);
 
 static const int add_rount_mult = 0x7fff;
 static const int mult_shift_const = 0x7fff; // Used to shift data << 15
@@ -114,7 +117,7 @@ void dsps_fft2r_deinit_sc16()
     dsps_fft2r_sc16_initialized = 0;
 }
 
-esp_err_t dsps_fft2r_sc16_ansi(int16_t *data, int N)
+esp_err_t dsps_fft2r_sc16_ansi_(int16_t *data, int N, int16_t* sc_table)
 {
     if (!dsp_is_power_of_two(N)) {
         return ESP_ERR_DSP_INVALID_LENGTH;
@@ -125,9 +128,8 @@ esp_err_t dsps_fft2r_sc16_ansi(int16_t *data, int N)
 
     esp_err_t result = ESP_OK;
 
-    uint32_t *w = (uint32_t*)dsps_fft_w_table_sc16;
+    uint32_t *w = (uint32_t*)sc_table;
     uint32_t *in_data = (uint32_t *)data;
-
 
 	int ie, ia, m;
 	sc16_t cs;// c - re, s - im
@@ -265,4 +267,54 @@ esp_err_t dsps_cplx2reC_sc16(int16_t *data, int N)
     data[N + 1] = 0;
 
     return result;
+}
+
+esp_err_t dsps_cplx2real_sc16_ansi(int16_t *data, int N)
+{
+    
+    int order = dsp_power_of_two(N);
+    sc16_t* table = (sc16_t*)dsps_fft_w_table_sc16;
+    sc16_t* result = (sc16_t*)data;
+    // Original formula...
+    // result[0].re = result[0].re + result[0].im;
+    // result[N].re = result[0].re - result[0].im;
+    // result[0].im = 0;
+    // result[N].im = 0;
+    // Optimized one:
+    int16_t tmp_re = result[0].re;
+    result[0].re = (tmp_re + result[0].im)>>1;
+    result[0].im = (tmp_re - result[0].im)>>1;
+
+    sc16_t f1k, f2k;
+    for (int k=1;k <= N/2 ; ++k ) 
+    {
+        sc16_t fpk = result[k];
+        sc16_t fpnk;
+        fpnk.re = result[N - k].re;
+        fpnk.im = result[N - k].im;
+        f1k.re = fpk.re + fpnk.re;
+        f1k.im = fpk.im - fpnk.im;
+        f2k.re = fpk.re - fpnk.re;
+        f2k.im = fpk.im + fpnk.im;
+
+        int table_index = reverse(k, N, order);
+
+        // float c = -dsps_fft_w_table_fc32[table_index*2+1];
+        // float s = -dsps_fft_w_table_fc32[table_index*2+0];
+        sc16_t w = table[table_index];
+        
+        sc16_t tw;
+        {
+            int re = (w.re*f2k.im - w.im*f2k.re)>>15;
+            int im = (+w.re*f2k.re + w.im*f2k.im)>>15;
+            tw.re = re;
+            tw.im = im;
+        }
+
+        result[k].re = (f1k.re + tw.re)>>2;
+        result[k].im = (f1k.im - tw.im)>>2;
+        result[N - k].re = (f1k.re - tw.re)>>2;
+        result[N - k].im = -(f1k.im + tw.im)>>2;
+    }
+    return ESP_OK;
 }

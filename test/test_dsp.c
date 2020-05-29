@@ -47,12 +47,18 @@ TEST_CASE("DSP Libary benchmark table", "[dsp]")
 
     esp_err_t ret = dsps_fft2r_init_fc32(NULL, CONFIG_DSP_MAX_FFT_SIZE);
     if (ret != ESP_OK) {
-        ESP_LOGE(TAG, "Not possible to initialize floating point FFT. Error = 0x%x", ret);
+        ESP_LOGE(TAG, "Not possible to initialize floating point FFT-R2. Error = 0x%x", ret);
         abort();
     }
     ret = dsps_fft2r_init_sc16(NULL, CONFIG_DSP_MAX_FFT_SIZE);
     if (ret != ESP_OK) {
-        ESP_LOGE(TAG, "Not possible to initialize fixed point FFT. Error = 0x%x", ret);
+        ESP_LOGE(TAG, "Not possible to initialize fixed point FFT-R2. Error = 0x%x", ret);
+        abort();
+    }
+
+    ret = dsps_fft4r_init_fc32(NULL, CONFIG_DSP_MAX_FFT_SIZE);
+    if (ret != ESP_OK) {
+        ESP_LOGE(TAG, "Not possible to initialize fixed point FFT-R4. Error = 0x%x", ret);
         abort();
     }
 
@@ -103,7 +109,7 @@ TEST_CASE("DSP Libary benchmark table", "[dsp]")
                      dsps_fird_f32_ansi,
                      &fir1, data1, data2, 1024);
 
-    REPORT_SECTION("**FFTs 32 bit Floating Point**");
+    REPORT_SECTION("**FFTs Radix-2 32 bit Floating Point**");
 
     REPORT_BENCHMARK("dsps_fft2r_fc32 for  64 complex points",
                      dsps_fft2r_fc32_ae32,
@@ -128,6 +134,23 @@ TEST_CASE("DSP Libary benchmark table", "[dsp]")
     REPORT_BENCHMARK("dsps_fft2r_fc32 for 1024 complex points",
                      dsps_fft2r_fc32_ae32,
                      dsps_fft2r_fc32_ansi,
+                     data1, 1024);
+
+    REPORT_SECTION("**FFTs Radix-4 32 bit Floating Point**");
+
+    REPORT_BENCHMARK("dsps_fft4r_fc32 for  64 complex points",
+                     dsps_fft4r_fc32_ae32,
+                     dsps_fft4r_fc32_ansi,
+                     data1, 64);
+
+    REPORT_BENCHMARK("dsps_fft4r_fc32 for 256 complex points",
+                     dsps_fft4r_fc32_ae32,
+                     dsps_fft4r_fc32_ansi,
+                     data1, 256);
+
+    REPORT_BENCHMARK("dsps_fft4r_fc32 for 1024 complex points",
+                     dsps_fft4r_fc32_ae32,
+                     dsps_fft4r_fc32_ansi,
                      data1, 1024);
 
     REPORT_SECTION("**FFTs 16 bit Fixed Point**");
@@ -197,6 +220,7 @@ TEST_CASE("DSP Libary benchmark table", "[dsp]")
                      data1, data2, data3);
 
     dsps_fft2r_deinit_fc32();
+    dsps_fft4r_deinit_fc32();
     dsps_fft2r_deinit_sc16();
     free(data1);
     free(data2);
