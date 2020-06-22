@@ -8,6 +8,18 @@ set(COMPONENT_SRCS  "modules/common/misc/dsps_pwroftwo.cpp"
                     "modules/dotprod/fixed/dsps_dotprod_s16_ae32.S"
                     "modules/dotprod/fixed/dsps_dotprod_s16_m_ae32.S"
                     "modules/dotprod/fixed/dsps_dotprod_s16_ansi.c"
+
+                    "modules/dotprod/float/dspi_dotprod_f32_ansi.c"
+                    "modules/dotprod/float/dspi_dotprod_off_f32_ansi.c"
+                    "modules/dotprod/fixed/dspi_dotprod_s16_ansi.c"
+                    "modules/dotprod/fixed/dspi_dotprod_u16_ansi.c"
+                    "modules/dotprod/fixed/dspi_dotprod_s8_ansi.c"
+                    "modules/dotprod/fixed/dspi_dotprod_u8_ansi.c"
+                    "modules/dotprod/fixed/dspi_dotprod_off_s16_ansi.c"
+                    "modules/dotprod/fixed/dspi_dotprod_off_u16_ansi.c"
+                    "modules/dotprod/fixed/dspi_dotprod_off_s8_ansi.c"
+                    "modules/dotprod/fixed/dspi_dotprod_off_u8_ansi.c"
+
                     "modules/matrix/float/dspm_mult_3x3x1_f32_ae32.S"
                     "modules/matrix/float/dspm_mult_3x3x3_f32_ae32.S"
                     "modules/matrix/float/dspm_mult_4x4x1_f32_ae32.S"
@@ -100,8 +112,7 @@ set(COMPONENT_ADD_INCLUDEDIRS   "modules/dotprod/include"
                                 "modules/common/include")
 
 set(COMPONENT_PRIV_INCLUDEDIRS  "modules/dotprod/float"
-                                "modules/dotprod/fixed"
-                                "modules/common/private_include")
+                                "modules/dotprod/fixed")
 
 register_component()
 
