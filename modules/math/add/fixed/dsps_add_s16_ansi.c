@@ -12,18 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef _DSP_TESTS_H_
-#define _DSP_TESTS_H_
+#include "dsps_add.h"
 
-#define TEST_ASSERT_EXEC_IN_RANGE(min_exec, max_exec, actual) \
-    if (actual >= max_exec) { \
-        ESP_LOGE("", "Time error. Expected max: %i, reached: %i", (int)max_exec, (int)actual);\
-        TEST_ASSERT_MESSAGE (false, "Exec time takes more than expected! ");\
-    }\
-    if (actual < min_exec) {\
-        ESP_LOGE("", "Time error. Expected min: %i, reached: %i", (int)min_exec, (int)actual);\
-        TEST_ASSERT_MESSAGE (false, "Exec time takes less then expected!");\
+esp_err_t dsps_add_s16_ansi(const int16_t *input1, const int16_t *input2, int16_t *output, int len, int step1, int step2, int step_out, int shift)
+{
+    if (NULL == input1) return ESP_ERR_DSP_PARAM_OUTOFRANGE;
+    if (NULL == input2) return ESP_ERR_DSP_PARAM_OUTOFRANGE;
+    if (NULL == output) return ESP_ERR_DSP_PARAM_OUTOFRANGE;
+
+    for (int i = 0 ; i < len ; i++) {
+        int32_t acc = (int32_t)input1[i * step1] + (int32_t)input2[i * step2];
+        output[i * step_out] = acc >> shift;
     }
-
-
-#endif // _DSP_TESTS_H_
+    return ESP_OK;
+}

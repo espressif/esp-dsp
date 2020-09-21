@@ -5,6 +5,13 @@ entries:
     * (noflash_data)
     * (noflash_text)
 
+[mapping:dsp2]
+archive: libdsp.a
+entries: 
+    * (noflash)
+    * (noflash_data)
+    * (noflash_text)
+
 [mapping:dsp_test]
 archive: libesp-dsp_test.a
 entries:

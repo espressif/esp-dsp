@@ -20,5 +20,6 @@
 #include "dsps_mul.h"
 #include "dsps_addc.h"
 #include "dsps_mulc.h"
+#include "dsps_sqrt.h"
 
 #endif // _dsps_math_H_

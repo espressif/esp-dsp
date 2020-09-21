@@ -22,6 +22,7 @@ extern "C"
 {
 #endif
 
+/**@{*/
 /**
  * @brief   plot view
  * 
@@ -38,8 +39,9 @@ extern "C"
  * @param view_char: character to draw the plot calues ('.' or '|' etc)
  *
  */
-
 void dsps_view(const float *data, int32_t len, int width, int height, float min, float max, char view_char);
+void dsps_view_s16(const int16_t *data, int32_t len, int width, int height, float min, float max, char view_char);
+/**@}*/ 
 
 /**
  * @brief   spectrum view

@@ -23,17 +23,17 @@
 #include "dsps_biquad.h"
 
 static const char *TAG = "dsps_biquad_f32_ae32";
-
-float x[1024];
-float y[1024];
-float z[1024];
-
+const int bq_len = 1024;
 TEST_CASE("dsps_biquad_f32_ae32 functionality", "[dsps]")
 {
+    float* x = calloc(bq_len,sizeof(float));
+    float* y = calloc(bq_len,sizeof(float));
+    float* z = calloc(bq_len,sizeof(float));
+
     // In the test we generate filter with cutt off frequency 0.1
     // and then filtering 0.1 and 0.3 frequencis.
     // Result must be better then 24 dB
-    int len = sizeof(x) / sizeof(float);
+    int len = bq_len;
 
     dsps_d_gen_f32(x, len, 0);
     float coeffs[5];
@@ -49,12 +49,19 @@ TEST_CASE("dsps_biquad_f32_ae32 functionality", "[dsps]")
             TEST_ASSERT_EQUAL( y[i], z[i]);
         }
     }
+    free(x);
+    free(y);
+    free(z);
 }
 
 TEST_CASE("dsps_biquad_f32_ae32 benchmark", "[dsps]")
 {
+    float* x = calloc(bq_len,sizeof(float));
+    float* y = calloc(bq_len,sizeof(float));
+    float* z = calloc(bq_len,sizeof(float));
+
     float w1[2] = {0};
-    int len = sizeof(x) / sizeof(float);
+    int len = bq_len;
     int repeat_count = 1024;
     dsps_d_gen_f32(x, len, 0);
     float coeffs[5];
@@ -88,5 +95,8 @@ TEST_CASE("dsps_biquad_f32_ae32 benchmark", "[dsps]")
     // if (cycles < min_exec) {
     //     TEST_ASSERT_MESSAGE (false, "Exec time takes less then expected!");
     // }
+    free(x);
+    free(y);
+    free(z);
 
 }

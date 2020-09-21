@@ -40,6 +40,7 @@ extern "C"
 #include "dsps_sfdr.h"
 
 #include "dsps_fft2r.h"
+#include "dsps_fft4r.h"
 #include "dsps_dct.h"
 
 // Matrix operations

@@ -24,6 +24,7 @@
 static const char *TAG = "dsps_fft2r_ae32_s16";
 
 static int16_t data[1024*2];
+static int16_t check_data[1024*2];
 static float result_data[1024*2];
 
 TEST_CASE("dsps_fft2r_sc16_ae32 functionality", "[dsps]")

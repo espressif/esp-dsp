@@ -114,3 +114,49 @@ TEST_CASE("dsps_fft2r_fc32_ae32 benchmark", "[dsps]")
     }
     dsps_fft2r_deinit_fc32();
 }
+
+TEST_CASE("dsps_bit_rev2r_fc32_ae32 benchmark", "[dsps]")
+{
+    esp_err_t ret = dsps_fft2r_init_fc32(NULL, CONFIG_DSP_MAX_FFT_SIZE);
+    if (ret  != ESP_OK)
+    {
+        ESP_LOGE(TAG, "Not possible to initialize FFT. Error = %i", ret);
+        return;
+    }
+    float* data = (float*)malloc(2*4096*sizeof(float));
+    float* check_data = (float*)malloc(2*4096*sizeof(float));
+    if (data  == NULL)
+    {
+        ESP_LOGE(TAG, "Not possible to allocate memory for data!");
+    }
+    if (check_data  == NULL)
+    {
+        ESP_LOGE(TAG, "Not possible to allocate memory for check_data!");
+    }
+
+    int N_check = 256;
+    for (size_t i = 4; i < 13; i++)
+    {
+        N_check = 1<<i;
+        for (size_t i = 0; i < N_check*2; i++)
+        {
+            data[i] = i;
+            check_data[i] = i;
+        }
+        dsps_bit_rev_fc32_ansi(data, N_check);
+        unsigned int start_b = xthal_get_ccount();
+        dsps_bit_rev2r_fc32(data, N_check);
+        float cycles = xthal_get_ccount() - start_b;
+
+        for (size_t i = 0; i < N_check*2; i++)
+        {
+            TEST_ASSERT_EQUAL( data[i], check_data[i]);
+        }
+        ESP_LOGI(TAG, "Benchmark dsps_bit_rev2r_fc32_ae32 - %6i cycles for %i points.", (int)cycles, N_check);
+    }
+    
+    dsps_fft2r_deinit_fc32();
+    free(data);
+    free(check_data);
+}
+

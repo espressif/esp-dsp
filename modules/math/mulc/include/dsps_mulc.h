@@ -43,6 +43,10 @@ extern "C"
  */
 esp_err_t dsps_mulc_f32_ansi(const float *input, float *output, int len, float C, int step_in, int step_out);
 esp_err_t dsps_mulc_f32_ae32(const float *input, float *output, int len, float C, int step_in, int step_out);
+
+esp_err_t dsps_mulc_s16_ae32(const int16_t *input, int16_t *output, int len, int16_t C, int step_in, int step_out);
+esp_err_t dsps_mulc_s16_ansi(const int16_t *input, int16_t *output, int len, int16_t C, int step_in, int step_out);
+
 /**@}*/
 
 #ifdef __cplusplus
@@ -52,9 +56,11 @@ esp_err_t dsps_mulc_f32_ae32(const float *input, float *output, int len, float C
 
 #ifdef CONFIG_DSP_OPTIMIZED
 #define dsps_mulc_f32 dsps_mulc_f32_ae32
+#define dsps_mulc_s16 dsps_mulc_s16_ae32
 #endif
 #ifdef CONFIG_DSP_ANSI
 #define dsps_mulc_f32 dsps_mulc_f32_ansi
+#define dsps_mulc_s16 dsps_mulc_s16_ansi
 #endif
 
 #endif // _dsps_mulc_H_

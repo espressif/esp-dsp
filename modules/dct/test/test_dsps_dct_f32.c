@@ -24,12 +24,12 @@
 
 static const char *TAG = "dsps_dct";
 
-static float data[1024 * 2];
-static float data_ref[1024 * 2];
-static float data_fft[1024 * 2];
-
 TEST_CASE("dsps_dct_f32 functionality", "[dsps]")
 {
+    float* data = calloc(1024*2, sizeof(float));
+    float* data_ref = calloc(1024*2, sizeof(float));
+    float* data_fft = calloc(1024*2, sizeof(float));
+
     int N = 64;
     int check_bin = 4;
     for (int i = 0 ; i < N ; i++) {
@@ -59,16 +59,24 @@ TEST_CASE("dsps_dct_f32 functionality", "[dsps]")
             TEST_ASSERT_MESSAGE (false, "Result out of range!\n");
         }
     }
+
+    free(data);
+    free(data_ref);
+    free(data_fft);
+
 }
 
 TEST_CASE("dsps_dct_f32 functionality Fast DCT", "[dsps]")
 {
-
     esp_err_t ret = dsps_fft2r_init_fc32(NULL, CONFIG_DSP_MAX_FFT_SIZE);
     if (ret  != ESP_OK) {
         ESP_LOGE(TAG, "Not possible to initialize FFT. Error = %i", ret);
         return;
     }
+
+    float* data = calloc(1024*2, sizeof(float));
+    float* data_ref = calloc(1024*2, sizeof(float));
+    float* data_fft = calloc(1024*2, sizeof(float));
 
     int N = 64;
     int check_bin = 4;
@@ -109,6 +117,9 @@ TEST_CASE("dsps_dct_f32 functionality Fast DCT", "[dsps]")
         }
     }
     dsps_fft2r_deinit_fc32();
+    free(data);
+    free(data_ref);
+    free(data_fft);
 }
 
 TEST_CASE("dsps_dct_f32 benchmark", "[dsps]")
@@ -118,6 +129,10 @@ TEST_CASE("dsps_dct_f32 benchmark", "[dsps]")
         ESP_LOGE(TAG, "Not possible to initialize FFT. Error = %i", ret);
         return;
     }
+
+    float* data = calloc(1024*2, sizeof(float));
+    float* data_ref = calloc(1024*2, sizeof(float));
+    float* data_fft = calloc(1024*2, sizeof(float));
 
     int N = 64;
     int check_bin = 4;
@@ -139,4 +154,7 @@ TEST_CASE("dsps_dct_f32 benchmark", "[dsps]")
     float cycles = total_b;
     ESP_LOGI(TAG, "Benchmark dsps_dct_f32 - %6i cycles for %6i DCT points FFT.", (int)cycles, N);
     dsps_fft2r_deinit_fc32();
+    free(data);
+    free(data_ref);
+    free(data_fft);
 }

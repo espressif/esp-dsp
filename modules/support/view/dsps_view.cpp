@@ -100,6 +100,19 @@ void dsps_view(const float *data, int32_t len, int width, int height, float min,
     delete view_data_max;
 }
 
+void dsps_view_s16(const int16_t *data, int32_t len, int width, int height, float min, float max, char view_char)
+{
+    float *view_data = new float[len];
+    for (size_t i = 0; i < len; i++)
+    {
+//        view_data[i] = ((float)data[i])/32768.0f;
+        view_data[i] = data[i];
+        view_data[i] /=32768;
+    }
+    dsps_view(view_data, len, width, height, min, max, view_char);
+    delete view_data;
+}
+
 void dsps_view_spectrum(const float *data, int32_t len, float min, float max)
 {
     dsps_view(data, len, 64, 10, min, max, '|');

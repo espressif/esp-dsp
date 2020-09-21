@@ -35,6 +35,17 @@ extern "C"
  */
 bool dsp_is_power_of_two(int x);
 
+
+/**
+ * @brief      Power of two
+ * The function return power of 2 for values 2^N.
+ * The implementation use ANSI C and could be compiled and run on any platform
+ *
+ * @return
+ *      - power of two
+ */
+int dsp_power_of_two(int x);
+
 #ifdef __cplusplus
 }
 #endif
