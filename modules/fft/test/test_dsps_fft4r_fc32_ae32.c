@@ -22,7 +22,6 @@
 #include "dsps_fft4r.h"
 #include "dsp_tests.h"
 
-#include "fft.h"
 
 static const char *TAG = "dsps_fft4r_ae32";
 
