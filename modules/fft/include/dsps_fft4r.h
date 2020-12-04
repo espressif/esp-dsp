@@ -124,7 +124,7 @@ esp_err_t dsps_bit_rev4r_sc16_ansi(int16_t *data, int N);
  * called and FFT4 was initialized.
  * The implementation use ANSI C and could be compiled and run on any platform
  *
- * @param[inout] data: Input complex array and result of FFT2R.
+ * @param[inout] data: Input complex array and result of FFT2R/FFT4R.
  *               input has size of 2*N, because contains real and imaginary part.
  *               result will be stored to the same array.
  *               Input1: input[0..N-1], Input2: input[N..2*N-1]
