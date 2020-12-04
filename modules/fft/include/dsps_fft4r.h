@@ -118,8 +118,10 @@ esp_err_t dsps_bit_rev4r_sc16_ansi(int16_t *data, int N);
 /**
  * @brief      Convert complex FFT result to real array
  * 
- * Convert FFT result of complex FFT for resl input to real array.
+ * Convert FFT result of complex FFT for real input to real array.
  * This function have to be used if FFT used to process real data.
+ * This function use tabels inside and can be used only it dsps_fft4r_init_fc32(...) was 
+ * called and FFT4 was initialized.
  * The implementation use ANSI C and could be compiled and run on any platform
  *
  * @param[inout] data: Input complex array and result of FFT2R.
