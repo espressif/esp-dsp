@@ -203,7 +203,7 @@ esp_err_t dsps_gen_w_r2_fc32(float *w, int N)
     return result;
 }
 
-esp_err_t dsps_cplx2reC_fc32(float *data, int N)
+esp_err_t dsps_cplx2reC_fc32_ansi(float *data, int N)
 {
     if (!dsp_is_power_of_two(N)) {
         return ESP_ERR_DSP_INVALID_LENGTH;
