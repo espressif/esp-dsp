@@ -13,6 +13,7 @@ The ESP-DSP library includes implementations of the following functions:
 - IIR: [reference](https://docs.espressif.com/projects/esp-dsp/en/latest/esp-dsp-apis.html#iir), [example](https://github.com/espressif/esp-dsp/tree/master/examples/iir)
 - FIR: [reference](https://docs.espressif.com/projects/esp-dsp/en/latest/esp-dsp-apis.html#fir)
 - Vector math operations: [reference](https://docs.espressif.com/projects/esp-dsp/en/latest/esp-dsp-apis.html#math)
+- Kalman filter: [reference](https://docs.espressif.com/projects/esp-dsp/en/latest/esp-dsp-apis.html#kalman)
 
 Many of the library functions are written in assembly and are optimized for the CPU configuration used in the ESP32. In addition to the optimized implementations, reference implementations written in ANSI C are provided.
 

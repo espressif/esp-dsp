@@ -102,7 +102,11 @@ set(COMPONENT_SRCS  "modules/common/misc/dsps_pwroftwo.cpp"
                     "modules/fir/float/dsps_fir_f32_ansi.c"
                     "modules/fir/float/dsps_fir_init_f32.c"
                     "modules/fir/float/dsps_fird_f32_ansi.c"
-                    "modules/fir/float/dsps_fird_init_f32.c")
+                    "modules/fir/float/dsps_fird_init_f32.c"
+# EKF files
+                    "modules/kalman/ekf/common/ekf.cpp"
+                    "modules/kalman/ekf_imu13states/ekf_imu13states.cpp"
+                    )
 
 set(COMPONENT_ADD_INCLUDEDIRS   "modules/dotprod/include"
                                 "modules/support/include"
@@ -126,7 +130,11 @@ set(COMPONENT_ADD_INCLUDEDIRS   "modules/dotprod/include"
                                 "modules/fft/include"
                                 "modules/dct/include"
                                 "modules/conv/include"
-                                "modules/common/include")
+                                "modules/common/include"
+# EKF files
+                                "modules/kalman/ekf/include"
+                                "modules/kalman/ekf_imu13states/include"
+)
 
 set(COMPONENT_PRIV_INCLUDEDIRS  "modules/dotprod/float"
                                 "modules/dotprod/fixed")

@@ -20,7 +20,9 @@ COMPONENT_ADD_INCLUDEDIRS := modules/dotprod/include \
 							modules/fft/include \
 							modules/dct/include \
 							modules/conv/include \
-							modules/common/include 
+							modules/kalman/ekf/include \
+							modules/kalman/ekf_imu13states/include \
+							modules/common/include
 
 COMPONENT_SRCDIRS :=. \
 					modules/common \
@@ -79,7 +81,9 @@ COMPONENT_SRCDIRS :=. \
 					modules/iir \
 					modules/iir/biquad \
 					modules/fir \
-					modules/fir/float
+					modules/fir/float \
+					modules/kalman/ekf/common \
+					modules/kalman/ekf_imu13states
 					
 COMPONENT_PRIV_INCLUDEDIRS := 	modules/dotprod/float \
 								modules/dotprod/fixed \

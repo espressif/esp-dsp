@@ -78,6 +78,29 @@ Mat::Mat(const Mat &m)
     memcpy(this->data, m.data, this->length * sizeof(float));
 }
 
+void Mat::Copy(const Mat &src, int row_pos, int col_pos)
+{
+    if ((row_pos + src.rows) > this->rows) return;
+    if ((col_pos + src.cols) > this->cols) return;
+    for (size_t r = 0; r < src.rows; r++)
+    {
+        memcpy(&this->data[(r + row_pos) * this->cols + col_pos], &src.data[r*src.cols], src.cols * sizeof(float));
+    }
+}
+
+Mat Mat::Get(int row_start, int row_size, int col_start, int col_size)
+{
+    Mat result(row_size, col_size);
+
+    if ((row_start + row_size) > this->rows) return result;
+    if ((col_start + col_size) > this->cols) return result;
+    for (size_t r = 0; r < result.rows; r++)
+    {
+        memcpy(&result.data[r*result.cols], &this->data[(r + row_start) * this->cols + col_start], result.cols * sizeof(float));
+    }
+    return result;
+}
+
 Mat &Mat::operator=(const Mat &m)
 {
     if (this == &m) {
