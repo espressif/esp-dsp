@@ -16,6 +16,7 @@
 #define _dsps_mulc_H_
 #include "dsp_err.h"
 
+#include "dsps_mulc_platform.h"
 
 #ifdef __cplusplus
 extern "C"
@@ -25,7 +26,7 @@ extern "C"
 /**@{*/
 /**
  * @brief   multiply constant
- * 
+ *
  * The function multiplies input array to the constant value
  * x[i*step_out] = y[i*step_in]*C; i=[0..len)
  * The implementation use ANSI C and could be compiled and run on any platform
@@ -36,7 +37,7 @@ extern "C"
  * @param C: constant value
  * @param step_in: step over input array (by default should be 1)
  * @param step_out: step over output array (by default should be 1)
- * 
+ *
  * @return
  *      - ESP_OK on success
  *      - One of the error codes from DSP library
@@ -53,14 +54,22 @@ esp_err_t dsps_mulc_s16_ansi(const int16_t *input, int16_t *output, int len, int
 }
 #endif
 
-
-#ifdef CONFIG_DSP_OPTIMIZED
+#if CONFIG_DSP_OPTIMIZED
+#if (dsps_mulc_f32_ae32_enabled == 1)
 #define dsps_mulc_f32 dsps_mulc_f32_ae32
-#define dsps_mulc_s16 dsps_mulc_s16_ae32
+#else //
+#define dsps_mulc_f32 dsps_mulc_f32_ansi
 #endif
-#ifdef CONFIG_DSP_ANSI
+#if (dsps_mulc_s16_ae32_enabled == 1)
+#define dsps_mulc_s16 dsps_mulc_s16_ae32
+#else
+#define dsps_mulc_s16 dsps_mulc_s16_ansi
+#endif // dsps_mulc_s16_ae32_enabled
+
+#else
 #define dsps_mulc_f32 dsps_mulc_f32_ansi
 #define dsps_mulc_s16 dsps_mulc_s16_ansi
 #endif
+
 
 #endif // _dsps_mulc_H_

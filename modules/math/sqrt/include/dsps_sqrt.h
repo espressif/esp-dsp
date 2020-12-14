@@ -25,7 +25,7 @@ extern "C"
 /**@{*/
 /**
  * @brief   square root approximation
- * 
+ *
  * The function takes square root approximation
  * x[i] ~ sqrt(y[i]); i=[0..len)
  * The implementation use ANSI C and could be compiled and run on any platform
@@ -33,7 +33,7 @@ extern "C"
  * @param[in] input: input array
  * @param output: output array
  * @param len: amount of operations for arrays
- * 
+ *
  * @return
  *      - ESP_OK on success
  *      - One of the error codes from DSP library
@@ -44,13 +44,13 @@ esp_err_t dsps_sqrt_f32_ansi(const float *input, float *output, int len);
 /**@{*/
 /**
  * @brief   square root approximation
- * 
+ *
  * The function takes square root approximation
  * x ~ sqrt(y);
  * The implementation use ANSI C and could be compiled and run on any platform
  *
  * @param[in] data: input value
- * 
+ *
  * @return
  *      - square root value
  */
@@ -60,13 +60,13 @@ float dsps_sqrtf_f32_ansi(const float data);
 /**@{*/
 /**
  * @brief   inverted square root approximation
- * 
+ *
  * The function takes inverted square root approximation
  * x ~ 1/sqrt(y);
  * The implementation use ANSI C and could be compiled and run on any platform
  *
  * @param[in] data: input value
- * 
+ *
  * @return
  *      - inverted square root value
  */
@@ -82,8 +82,7 @@ float dsps_inverted_sqrtf_f32_ansi(float data );
 #define dsps_sqrt_f32 dsps_sqrt_f32_ansi
 #define dsps_sqrtf_f32 dsps_sqrtf_f32_ansi
 #define dsps_inverted_sqrtf_f32 dsps_inverted_sqrtf_f32_ansi
-#endif
-#ifdef CONFIG_DSP_ANSI
+#else
 #define dsps_sqrt_f32 dsps_sqrt_f32_ansi
 #define dsps_sqrtf_f32 dsps_sqrtf_f32_ansi
 #define dsps_inverted_sqrtf_f32 dsps_inverted_sqrtf_f32_ansi

@@ -22,8 +22,8 @@ extern "C"
 {
 #endif
 
-// Common rules for all generated coefficients. 
-// The coefficients placed to the array as follows: 
+// Common rules for all generated coefficients.
+// The coefficients placed to the array as follows:
 // coeffs[0] = b0;
 // coeffs[1] = b1;
 // coeffs[2] = b2;
@@ -48,7 +48,7 @@ esp_err_t dsps_biquad_gen_lpf_f32(float *coeffs, float f, float qFactor);
 
 /**
  * @brief   HPF IIR filter coefficients
- * 
+ *
  * Coefficients for high pass 2nd order IIR filter (bi-quad)
  * The implementation use ANSI C and could be compiled and run on any platform
  *
@@ -64,7 +64,7 @@ esp_err_t dsps_biquad_gen_hpf_f32(float *coeffs, float f, float qFactor);
 
 /**
  * @brief   BPF IIR filter coefficients
- * 
+ *
  * Coefficients for band pass 2nd order IIR filter (bi-quad)
  * The implementation use ANSI C and could be compiled and run on any platform
  *
@@ -80,7 +80,7 @@ esp_err_t dsps_biquad_gen_bpf_f32(float *coeffs, float f, float qFactor);
 
 /**
  * @brief   0 dB BPF IIR filter coefficients
- * 
+ *
  * Coefficients for band pass 2nd order IIR filter (bi-quad) with 0 dB gain in passband
  * The implementation use ANSI C and could be compiled and run on any platform
  *
@@ -96,7 +96,7 @@ esp_err_t dsps_biquad_gen_bpf0db_f32(float *coeffs, float f, float qFactor);
 
 /**
  * @brief   Notch IIR filter coefficients
- * 
+ *
  * Coefficients for notch 2nd order IIR filter (bi-quad)
  * The implementation use ANSI C and could be compiled and run on any platform
  *
@@ -113,7 +113,7 @@ esp_err_t dsps_biquad_gen_notch_f32(float *coeffs, float f, float gain, float qF
 
 /**
  * @brief   Allpass 360 degree IIR filter coefficients
- * 
+ *
  * Coefficients for all pass 2nd order IIR filter (bi-quad) with 360 degree phase shift
  * The implementation use ANSI C and could be compiled and run on any platform
  *
@@ -129,7 +129,7 @@ esp_err_t dsps_biquad_gen_allpass360_f32(float *coeffs, float f, float qFactor);
 
 /**
  * @brief   Allpass 180 degree IIR filter coefficients
- * 
+ *
  * Coefficients for all pass 2nd order IIR filter (bi-quad) with 180 degree phase shift
  * The implementation use ANSI C and could be compiled and run on any platform
  *
@@ -145,7 +145,7 @@ esp_err_t dsps_biquad_gen_allpass180_f32(float *coeffs, float f, float qFactor);
 
 /**
  * @brief   peak IIR filter coefficients
- * 
+ *
  * Coefficients for peak 2nd order IIR filter (bi-quad)
  * The implementation use ANSI C and could be compiled and run on any platform
  *
@@ -161,7 +161,7 @@ esp_err_t dsps_biquad_gen_peakingEQ_f32(float *coeffs, float f, float qFactor);
 
 /**
  * @brief   low shelf IIR filter coefficients
- * 
+ *
  * Coefficients for low pass Shelf 2nd order IIR filter (bi-quad)
  * The implementation use ANSI C and could be compiled and run on any platform
  *
@@ -178,7 +178,7 @@ esp_err_t dsps_biquad_gen_lowShelf_f32(float *coeffs, float f, float gain, float
 
 /**
  * @brief   high shelf IIR filter coefficients
- * 
+ *
  * Coefficients for high pass Shelf 2nd order IIR filter (bi-quad)
  * The implementation use ANSI C and could be compiled and run on any platform
  *

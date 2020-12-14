@@ -12,7 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License. 
 
-#include "dsps_dotprod_f32_m_ae32.S"
+#include "dsps_mul_platform.h"
+#if (dsps_mul_f32_ae32_enabled == 1)
 
 // This is bi quad filter form II for ESP32 processor.
     .text
@@ -59,3 +60,5 @@ loop_end_mul_f32_ae32:
 
     movi.n	a2, 0 // return status ESP_OK
     retw.n
+
+#endif // dsps_mul_f32_ae32_enabled

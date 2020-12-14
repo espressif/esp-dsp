@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License. 
 
-//#include "../../dotprod/float/dsps_dotprod_f32_m_ae32.S"
-//#include "dsps_dotprode_f32_m_ae32.S"
+#include "dsps_fft2r_platform.h"
+#if (dsps_fft2r_fc32_ae32_enabled == 1)
 
 // This is matrix multipliction function for ESP32 processor.
 	.text
@@ -145,3 +145,5 @@ fft2r_l3:
 
 	movi.n	a2, 0 // return status ESP_OK
 	retw.n
+
+#endif // dsps_fft2r_fc32_ae32_enabled

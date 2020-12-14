@@ -22,42 +22,39 @@
 
 static const char *TAG = "fftr2_ansi";
 
-float* dsps_fft_w_table_fc32;
+float *dsps_fft_w_table_fc32;
 int dsps_fft_w_table_size;
 uint8_t dsps_fft2r_initialized = 0;
 uint8_t dsps_fft2r_mem_allocated = 0;
 
-uint16_t* dsps_fft2r_ram_rev_table = NULL;
+uint16_t *dsps_fft2r_ram_rev_table = NULL;
 
 unsigned short reverse(unsigned short x, unsigned short N, int order);
 
-esp_err_t dsps_fft2r_init_fc32(float* fft_table_buff, int table_size)
+esp_err_t dsps_fft2r_init_fc32(float *fft_table_buff, int table_size)
 {
     esp_err_t result = ESP_OK;
     if (dsps_fft2r_initialized != 0) {
         return result;
     }
-    if (table_size > CONFIG_DSP_MAX_FFT_SIZE)
-    {
+    if (table_size > CONFIG_DSP_MAX_FFT_SIZE) {
         return ESP_ERR_DSP_PARAM_OUTOFRANGE;
     }
-    if (table_size == 0){
+    if (table_size == 0) {
         return result;
     }
-    if (fft_table_buff != NULL)
-    {
-        if (dsps_fft2r_mem_allocated)
-        {
+    if (fft_table_buff != NULL) {
+        if (dsps_fft2r_mem_allocated) {
             return ESP_ERR_DSP_REINITIALIZED;
         }
         dsps_fft_w_table_fc32 = fft_table_buff;
         dsps_fft_w_table_size = table_size;
-    } else 
-    {
-        if (!dsps_fft2r_mem_allocated) 
-        {
-            dsps_fft_w_table_fc32 = (float*)malloc(table_size*sizeof(float));
-            if (dsps_fft_w_table_fc32 == NULL) return ESP_ERR_DSP_PARAM_OUTOFRANGE;
+    } else {
+        if (!dsps_fft2r_mem_allocated) {
+            dsps_fft_w_table_fc32 = (float *)malloc(table_size * sizeof(float));
+            if (dsps_fft_w_table_fc32 == NULL) {
+                return ESP_ERR_DSP_PARAM_OUTOFRANGE;
+            }
         }
         dsps_fft_w_table_size = table_size;
         dsps_fft2r_mem_allocated = 1;
@@ -66,10 +63,11 @@ esp_err_t dsps_fft2r_init_fc32(float* fft_table_buff, int table_size)
 
     // FFT ram_rev table allocated
     int pow = dsp_power_of_two(table_size);
-    if ((pow > 3) && (pow < 13))
-    {
+    if ((pow > 3) && (pow < 13)) {
         dsps_fft2r_ram_rev_table = (uint16_t *)malloc(2 * dsps_fft2r_rev_tables_fc32_size[pow - 4] * sizeof(uint16_t));
-        if (dsps_fft2r_ram_rev_table == NULL) return ESP_ERR_DSP_PARAM_OUTOFRANGE;
+        if (dsps_fft2r_ram_rev_table == NULL) {
+            return ESP_ERR_DSP_PARAM_OUTOFRANGE;
+        }
         memcpy(dsps_fft2r_ram_rev_table, dsps_fft2r_rev_tables_fc32[pow - 4], 2 * dsps_fft2r_rev_tables_fc32_size[pow - 4] * sizeof(uint16_t));
         dsps_fft2r_rev_tables_fc32[pow - 4] = dsps_fft2r_ram_rev_table;
     }
@@ -83,18 +81,16 @@ esp_err_t dsps_fft2r_init_fc32(float* fft_table_buff, int table_size)
         return result;
     }
     dsps_fft2r_initialized = 1;
-    
+
     return ESP_OK;
 }
 
 void dsps_fft2r_deinit_fc32()
 {
-    if (dsps_fft2r_mem_allocated)
-    {
+    if (dsps_fft2r_mem_allocated) {
         free(dsps_fft_w_table_fc32);
     }
-    if (dsps_fft2r_ram_rev_table != NULL)
-    {
+    if (dsps_fft2r_ram_rev_table != NULL) {
         free(dsps_fft2r_ram_rev_table);
         dsps_fft2r_ram_rev_table = NULL;
     }
@@ -104,7 +100,7 @@ void dsps_fft2r_deinit_fc32()
     dsps_fft2r_initialized = 0;
 }
 
-esp_err_t dsps_fft2r_fc32_ansi_(float *data, int N, float* w)
+esp_err_t dsps_fft2r_fc32_ansi_(float *data, int N, float *w)
 {
     if (!dsp_is_power_of_two(N)) {
         return ESP_ERR_DSP_INVALID_LENGTH;
@@ -119,7 +115,7 @@ esp_err_t dsps_fft2r_fc32_ansi_(float *data, int N, float* w)
     float re_temp, im_temp;
     float c, s;
     ie = 1;
-	for (int N2 = N/2; N2 > 0; N2 >>= 1) {
+    for (int N2 = N / 2; N2 > 0; N2 >>= 1) {
         ia = 0;
         for (int j = 0; j < ie; j++) {
             c = w[2 * j];
@@ -145,7 +141,7 @@ esp_err_t dsps_fft2r_fc32_ansi_(float *data, int N, float* w)
 unsigned short reverse(unsigned short x, unsigned short N, int order)
 {
     unsigned short b = x;
-    
+
     b = (b & 0xff00) >> 8 | (b & 0x00fF) << 8;
     b = (b & 0xf0F0) >> 4 | (b & 0x0f0F) << 4;
     b = (b & 0xCCCC) >> 2 | (b & 0x3333) << 2;
@@ -158,9 +154,9 @@ esp_err_t dsps_bit_rev_fc32_ansi(float *data, int N)
     if (!dsp_is_power_of_two(N)) {
         return ESP_ERR_DSP_INVALID_LENGTH;
     }
-    
+
     esp_err_t result = ESP_OK;
-        
+
     int j, k;
     float r_temp, i_temp;
     j = 0;
@@ -171,8 +167,7 @@ esp_err_t dsps_bit_rev_fc32_ansi(float *data, int N)
             k >>= 1;
         }
         j += k;
-        if (i < j) 
-        {
+        if (i < j) {
             r_temp = data[j * 2];
             data[j * 2] = data[i * 2];
             data[i * 2] = r_temp;
@@ -252,12 +247,12 @@ esp_err_t dsps_cplx2reC_fc32_ansi(float *data, int N)
     return result;
 }
 
-esp_err_t dsps_gen_bitrev2r_table(int N, int step, char* name_ext)
+esp_err_t dsps_gen_bitrev2r_table(int N, int step, char *name_ext)
 {
     if (!dsp_is_power_of_two(N)) {
         return ESP_ERR_DSP_INVALID_LENGTH;
     }
-    
+
     int j, k;
     j = 0;
     int items_count = 0;
@@ -269,11 +264,12 @@ esp_err_t dsps_gen_bitrev2r_table(int N, int step, char* name_ext)
             k >>= 1;
         }
         j += k;
-        if (i < j) 
-        {
-            ESP_LOGD(TAG, "%i, %i, ", i*step, j*step);
+        if (i < j) {
+            ESP_LOGD(TAG, "%i, %i, ", i * step, j * step);
             items_count++;
-            if ((items_count %8) == 0) ESP_LOGD(TAG, " ");
+            if ((items_count % 8) == 0) {
+                ESP_LOGD(TAG, " ");
+            }
         }
     }
     ESP_LOGD(TAG, "};");
@@ -286,50 +282,49 @@ esp_err_t dsps_gen_bitrev2r_table(int N, int step, char* name_ext)
 
 esp_err_t dsps_bit_rev2r_fc32(float *data, int N)
 {
-    uint16_t* table;
+    uint16_t *table;
     uint16_t  table_size;
-    switch (N)
-    {
-        case 16:
-            table = (uint16_t*)dsps_fft2r_rev_tables_fc32[0];
-            table_size = dsps_fft2r_rev_tables_fc32_size[0];
-            break;
-        case 32:
-            table = (uint16_t*)dsps_fft2r_rev_tables_fc32[1];
-            table_size = dsps_fft2r_rev_tables_fc32_size[1];
-            break;
-        case 64:
-            table = (uint16_t*)dsps_fft2r_rev_tables_fc32[2];
-            table_size = dsps_fft2r_rev_tables_fc32_size[2];
-            break;
-        case 128:
-            table = (uint16_t*)dsps_fft2r_rev_tables_fc32[3];
-            table_size = dsps_fft2r_rev_tables_fc32_size[3];
-            break;
-        case 256:
-            table = (uint16_t*)dsps_fft2r_rev_tables_fc32[4];
-            table_size = dsps_fft2r_rev_tables_fc32_size[4];
-            break;
-        case 512:
-            table = (uint16_t*)dsps_fft2r_rev_tables_fc32[5];
-            table_size = dsps_fft2r_rev_tables_fc32_size[5];
-            break;
-        case 1024:
-            table = (uint16_t*)dsps_fft2r_rev_tables_fc32[6];
-            table_size = dsps_fft2r_rev_tables_fc32_size[6];
-            break;
-        case 2048:
-            table = (uint16_t*)dsps_fft2r_rev_tables_fc32[7];
-            table_size = dsps_fft2r_rev_tables_fc32_size[7];
-            break;
-        case 4096:
-            table = (uint16_t*)dsps_fft2r_rev_tables_fc32[8];
-            table_size = dsps_fft2r_rev_tables_fc32_size[8];
-            break;
-    
-        default:
-            return dsps_bit_rev_fc32(data, N);
-            break;
+    switch (N) {
+    case 16:
+        table = (uint16_t *)dsps_fft2r_rev_tables_fc32[0];
+        table_size = dsps_fft2r_rev_tables_fc32_size[0];
+        break;
+    case 32:
+        table = (uint16_t *)dsps_fft2r_rev_tables_fc32[1];
+        table_size = dsps_fft2r_rev_tables_fc32_size[1];
+        break;
+    case 64:
+        table = (uint16_t *)dsps_fft2r_rev_tables_fc32[2];
+        table_size = dsps_fft2r_rev_tables_fc32_size[2];
+        break;
+    case 128:
+        table = (uint16_t *)dsps_fft2r_rev_tables_fc32[3];
+        table_size = dsps_fft2r_rev_tables_fc32_size[3];
+        break;
+    case 256:
+        table = (uint16_t *)dsps_fft2r_rev_tables_fc32[4];
+        table_size = dsps_fft2r_rev_tables_fc32_size[4];
+        break;
+    case 512:
+        table = (uint16_t *)dsps_fft2r_rev_tables_fc32[5];
+        table_size = dsps_fft2r_rev_tables_fc32_size[5];
+        break;
+    case 1024:
+        table = (uint16_t *)dsps_fft2r_rev_tables_fc32[6];
+        table_size = dsps_fft2r_rev_tables_fc32_size[6];
+        break;
+    case 2048:
+        table = (uint16_t *)dsps_fft2r_rev_tables_fc32[7];
+        table_size = dsps_fft2r_rev_tables_fc32_size[7];
+        break;
+    case 4096:
+        table = (uint16_t *)dsps_fft2r_rev_tables_fc32[8];
+        table_size = dsps_fft2r_rev_tables_fc32_size[8];
+        break;
+
+    default:
+        return dsps_bit_rev_fc32(data, N);
+        break;
     }
     return dsps_bit_rev_lookup_fc32(data, table_size, table);
 }
@@ -337,16 +332,15 @@ esp_err_t dsps_bit_rev2r_fc32(float *data, int N)
 esp_err_t dsps_bit_rev_lookup_fc32_ansi(float *data, int reverse_size, uint16_t *reverse_tab)
 {
     float r_temp, i_temp;
-    for (int n=0 ; n< reverse_size ; n++)
-    {
-        uint16_t i = reverse_tab[n*2 + 0]>>2;
-        uint16_t j = reverse_tab[n*2 + 1]>>2;
-                r_temp = data[j];
-                data[j] = data[i];
-                data[i] = r_temp;
-                i_temp = data[j + 1];
-                data[j + 1] = data[i + 1];
-                data[i + 1] = i_temp;
+    for (int n = 0 ; n < reverse_size ; n++) {
+        uint16_t i = reverse_tab[n * 2 + 0] >> 2;
+        uint16_t j = reverse_tab[n * 2 + 1] >> 2;
+        r_temp = data[j];
+        data[j] = data[i];
+        data[i] = r_temp;
+        i_temp = data[j + 1];
+        data[j + 1] = data[i + 1];
+        data[i + 1] = i_temp;
     }
     return ESP_OK;
 }

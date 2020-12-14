@@ -12,6 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License. 
 
+#include "dsps_fir_platform.h"
+#if (dsps_fir_f32_ae32_enabled == 1)
+
 #include "dsps_dotprod_f32_m_ae32.S"
 
 // This is FIR filter for ESP32 processor.
@@ -88,3 +91,5 @@ second_fir_loop:
 	s32i    a7,  a2, 12 // pos = a7
 	movi.n	a2, 0 // return status ESP_OK
 	retw.n
+
+#endif // dsps_fir_f32_ae32_enabled

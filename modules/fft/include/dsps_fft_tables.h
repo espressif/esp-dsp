@@ -48,7 +48,7 @@ extern const uint16_t bitrev2r_table_4096_fc32[];
 extern const uint16_t bitrev2r_table_4096_fc32_size;
 
 void dsps_fft2r_rev_tables_init_fc32(void);
-extern uint16_t* dsps_fft2r_rev_tables_fc32[];
+extern uint16_t *dsps_fft2r_rev_tables_fc32[];
 extern const uint16_t dsps_fft2r_rev_tables_fc32_size[];
 
 extern const uint16_t bitrev4r_table_16_fc32[];
@@ -79,7 +79,7 @@ extern const uint16_t bitrev4r_table_4096_fc32[];
 extern const uint16_t bitrev4r_table_4096_fc32_size;
 
 void dsps_fft4r_rev_tables_init_fc32(void);
-extern uint16_t* dsps_fft4r_rev_tables_fc32[];
+extern uint16_t *dsps_fft4r_rev_tables_fc32[];
 extern const uint16_t dsps_fft4r_rev_tables_fc32_size[];
 
 #ifdef __cplusplus

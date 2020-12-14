@@ -16,6 +16,7 @@
 #define _dsps_conv_H_
 #include "dsp_err.h"
 
+#include "dsps_conv_platform.h"
 
 #ifdef __cplusplus
 extern "C"
@@ -50,9 +51,14 @@ esp_err_t dsps_conv_f32_ansi(const float *Signal, const int siglen, const float 
 
 
 #ifdef CONFIG_DSP_OPTIMIZED
+
+#if (dsps_conv_f32_ae32_enabled == 1)
 #define dsps_conv_f32 dsps_conv_f32_ae32
-#endif
-#ifdef CONFIG_DSP_ANSI
+#else
+#define dsps_conv_f32 dsps_conv_f32_ansi
+#endif // dsps_conv_f32_ae32_enabled
+
+#else
 #define dsps_conv_f32 dsps_conv_f32_ansi
 #endif
 

@@ -16,6 +16,7 @@
 #define _dsps_addc_H_
 #include "dsp_err.h"
 
+#include "dsps_addc_platform.h"
 
 #ifdef __cplusplus
 extern "C"
@@ -26,7 +27,7 @@ extern "C"
 /**@{*/
 /**
  * @brief   add constant
- * 
+ *
  * The function adds constant to the input array
  * x[i*step_out] = y[i*step_in] + C; i=[0..len)
  * The implementation use ANSI C and could be compiled and run on any platform
@@ -37,7 +38,7 @@ extern "C"
  * @param C: constant value
  * @param step_in: step over input array (by default should be 1)
  * @param step_out: step over output array (by default should be 1)
- * 
+ *
  * @return
  *      - ESP_OK on success
  *      - One of the error codes from DSP library
@@ -51,11 +52,14 @@ esp_err_t dsps_addc_f32_ae32(const float *input, float *output, int len, float C
 #endif
 
 
-#ifdef CONFIG_DSP_OPTIMIZED
+#if CONFIG_DSP_OPTIMIZED
+#if (dsps_addc_f32_ae32_enabled == 1)
 #define dsps_addc_f32 dsps_addc_f32_ae32
-#endif
-#ifdef CONFIG_DSP_ANSI
+#else
 #define dsps_addc_f32 dsps_addc_f32_ansi
 #endif
+#else
+#define dsps_addc_f32 dsps_addc_f32_ansi
+#endif // CONFIG_DSP_OPTIMIZED
 
 #endif // _dsps_addc_H_

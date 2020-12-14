@@ -21,15 +21,13 @@
  *
  * DSP library matrix namespace.
  */
-namespace dspm
-{
+namespace dspm {
 /**
  * @brief   Matrix
  *
  * The Mat class provides basic matrix operations on single-precision floating point values.
  */
-class Mat
-{
+class Mat {
 public:
     /**
      * Constructor allocate internal buffer.
@@ -56,9 +54,9 @@ public:
     Mat(const Mat &src);
     /**
      * Copy operator
-     * 
+     *
      * @param[in] src: source matrix
-     * 
+     *
      * @return
      *      - matrix copy
      */
@@ -70,7 +68,7 @@ public:
      * Access to the matrix elements.
      * @param[in] row: row position
      * @param[in] col: column position
-     * 
+     *
      * @return
      *      - element of matrix M[row][col]
      */
@@ -82,7 +80,7 @@ public:
      * Access to the matrix elements.
      * @param[in] row: row position
      * @param[in] col: column position
-     * 
+     *
      * @return
      *      - element of matrix M[row][col]
      */
@@ -94,9 +92,9 @@ public:
     /**
      * += operator
      * The operator use DSP optimized implementation of multiplication.
-     * 
+     *
      * @param[in] A: source matrix
-     * 
+     *
      * @return
      *      - result matrix: result += A
      */
@@ -105,9 +103,9 @@ public:
     /**
      * += operator
      * The operator use DSP optimized implementation of multiplication.
-     * 
+     *
      * @param[in] C: constant
-     * 
+     *
      * @return
      *      - result matrix: result += C
      */
@@ -115,9 +113,9 @@ public:
     /**
      * -= operator
      * The operator use DSP optimized implementation of multiplication.
-     * 
+     *
      * @param[in] A: source matrix
-     * 
+     *
      * @return
      *      - result matrix: result -= A
      */
@@ -126,9 +124,9 @@ public:
     /**
      * -= operator
      * The operator use DSP optimized implementation of multiplication.
-     * 
+     *
      * @param[in] C: constant
-     * 
+     *
      * @return
      *      - result matrix: result -= C
      */
@@ -137,9 +135,9 @@ public:
     /**
      * *= operator
      * The operator use DSP optimized implementation of multiplication.
-     * 
+     *
      * @param[in] A: source matrix
-     * 
+     *
      * @return
      *      - result matrix: result -= A
      */
@@ -147,9 +145,9 @@ public:
     /**
      * += with constant operator
      * The operator use DSP optimized implementation of multiplication.
-     * 
+     *
      * @param[in] C: constant value
-     * 
+     *
      * @return
      *      - result matrix: result *= C
      */
@@ -157,18 +155,18 @@ public:
     /**
      * /= with constant operator
      * The operator use DSP optimized implementation of multiplication.
-     * 
+     *
      * @param[in] C: constant value
-     * 
+     *
      * @return
      *      - result matrix: result /= C
      */
     Mat &operator/=(float C);
     /**
      * /= operator
-     * 
+     *
      * @param[in] B: source matrix
-     * 
+     *
      * @return
      *      - result matrix: result[i,j] = result[i,j]/B[i,j]
      */
@@ -177,7 +175,7 @@ public:
      * ^= xor with constant operator
      * The operator use DSP optimized implementation of multiplication.
      * @param[in] C: constant value
-     * 
+     *
      * @return
      *      - result matrix: result ^= C
      */
@@ -192,7 +190,7 @@ public:
     /**
      * Matrix transpose.
      * Change rows and columns between each other.
-     * 
+     *
      * @return
      *      - transposed matrix
      */
@@ -201,9 +199,9 @@ public:
     /**
      * Create identity matrix.
      * Create a square matrix and fill diagonal with 1.
-     * 
+     *
      * @param[in] size: matrix size
-     * 
+     *
      * @return
      *      - matrix [N]x[N] with 1 in diagonal
      */
@@ -212,42 +210,48 @@ public:
     /**
      * Create matrix with all elements 1.
      * Create a square matrix and fill all elements with 1.
-     * 
+     *
      * @param[in] size: matrix size
-     * 
+     *
      * @return
      *      - matrix [N]x[N] with 1 in all elements
      */
     static Mat ones(int size);
-    
+
     /**
      * Return part of matrix from defined position (startRow, startCol) as a matrix[blockRows x blockCols].
-     * 
+     *
      * @param[in] startRow: start row position
      * @param[in] startCol: start column position
      * @param[in] blockRows: amount of rows in result matrix
      * @param[in] blockCols: amount of columns in the result matrix
-     * 
+     *
      * @return
-     *      - matrix [blockRows]x[blockCols] 
+     *      - matrix [blockRows]x[blockCols]
      */
     Mat block(int startRow, int startCol, int blockRows, int blockCols);
 
     /**
      * Normalizes the vector, i.e. divides it by its own norm.
      * If it's matrix, calculate matrix norm
-     * 
+     *
      */
     void normalize(void);
 
     /**
      * Return  norm of the vector.
      * If it's matrix, calculate matrix norm
-     * 
+     *
      * @return
-     *      - matrix norm 
+     *      - matrix norm
      */
     float norm(void);
+
+    /**
+     * The method fill 0 to the matrix structure.
+     *
+     */
+    void clear(void);
 
     /**
      * @brief   Solve the matrix
@@ -353,148 +357,148 @@ public:
 
     static float abs_tol; /*!< Max acceptable absolute tolerance*/
 private:
-	Mat cofactor(int row, int col, int n);
-	float det(int n);
-	Mat adjoint();
+    Mat cofactor(int row, int col, int n);
+    float det(int n);
+    Mat adjoint();
 
     void allocate(); // Allocate buffer
     Mat expHelper(const Mat &m, int num);
 };
-    /**
-     * Print matrix to the standard iostream.
-     * @param[in] os: output stream
-     * @param[in] m: matrix to print
-     * 
-     * @return
-     *      - output stream
-     */
-    std::ostream &operator<<(std::ostream &os, const Mat &m);
-    /**
-     * Fill the matrix from iostream.
-     * @param[in] is: input stream
-     * @param[in] m: matrix to fill
-     * 
-     * @return
-     *      - input stream
-     */
-    std::istream &operator>>(std::istream &is, Mat &m);
+/**
+ * Print matrix to the standard iostream.
+ * @param[in] os: output stream
+ * @param[in] m: matrix to print
+ *
+ * @return
+ *      - output stream
+ */
+std::ostream &operator<<(std::ostream &os, const Mat &m);
+/**
+ * Fill the matrix from iostream.
+ * @param[in] is: input stream
+ * @param[in] m: matrix to fill
+ *
+ * @return
+ *      - input stream
+ */
+std::istream &operator>>(std::istream &is, Mat &m);
 
-    /**
-     * + operator, sum of two matrices
-     * The operator use DSP optimized implementation of multiplication.
-     * 
-     * @param[in] A: Input matrix A
-     * @param[in] B: Input matrix B
-     * 
-     * @return
-     *     - result matrix A+B
-    */
-    Mat operator+(const Mat &A, const Mat &B);
-    /**
-     * + operator, sum of matrix with constant
-     * The operator use DSP optimized implementation of multiplication.
-     * 
-     * @param[in] A: Input matrix A
-     * @param[in] C: Input constant
-     * 
-     * @return
-     *     - result matrix A+C
-    */
-    Mat operator+(const Mat &A, float C);
+/**
+ * + operator, sum of two matrices
+ * The operator use DSP optimized implementation of multiplication.
+ *
+ * @param[in] A: Input matrix A
+ * @param[in] B: Input matrix B
+ *
+ * @return
+ *     - result matrix A+B
+*/
+Mat operator+(const Mat &A, const Mat &B);
+/**
+ * + operator, sum of matrix with constant
+ * The operator use DSP optimized implementation of multiplication.
+ *
+ * @param[in] A: Input matrix A
+ * @param[in] C: Input constant
+ *
+ * @return
+ *     - result matrix A+C
+*/
+Mat operator+(const Mat &A, float C);
 
-    /**
-     * - operator, subtraction of two matrices
-     * The operator use DSP optimized implementation of multiplication.
-     * 
-     * @param[in] A: Input matrix A
-     * @param[in] B: Input matrix B
-     * 
-     * @return
-     *     - result matrix A-B
-    */
-    Mat operator-(const Mat &A, const Mat &B);
-    /**
-     * - operator, sum of matrix with constant
-     * The operator use DSP optimized implementation of multiplication.
-     * 
-     * @param[in] A: Input matrix A
-     * @param[in] C: Input constant
-     * 
-     * @return
-     *     - result matrix A+C
-    */
-    Mat operator-(const Mat &A, float C);
+/**
+ * - operator, subtraction of two matrices
+ * The operator use DSP optimized implementation of multiplication.
+ *
+ * @param[in] A: Input matrix A
+ * @param[in] B: Input matrix B
+ *
+ * @return
+ *     - result matrix A-B
+*/
+Mat operator-(const Mat &A, const Mat &B);
+/**
+ * - operator, sum of matrix with constant
+ * The operator use DSP optimized implementation of multiplication.
+ *
+ * @param[in] A: Input matrix A
+ * @param[in] C: Input constant
+ *
+ * @return
+ *     - result matrix A+C
+*/
+Mat operator-(const Mat &A, float C);
 
-    /**
-     * * operator, multiplication of two matrices. 
-     * The operator use DSP optimized implementation of multiplication.
-     * 
-     * @param[in] A: Input matrix A
-     * @param[in] B: Input matrix B
-     * 
-     * @return
-     *     - result matrix A*B
-    */
-    Mat operator*(const Mat &A, const Mat &B);
+/**
+ * * operator, multiplication of two matrices.
+ * The operator use DSP optimized implementation of multiplication.
+ *
+ * @param[in] A: Input matrix A
+ * @param[in] B: Input matrix B
+ *
+ * @return
+ *     - result matrix A*B
+*/
+Mat operator*(const Mat &A, const Mat &B);
 
-    /**
-     * * operator, multiplication of matrix with constant
-     * The operator use DSP optimized implementation of multiplication.
-     * 
-     * @param[in] A: Input matrix A
-     * @param[in] C: floating point value
-     * 
-     * @return
-     *     - result matrix A*B
-    */
-    Mat operator*(const Mat &A, float C);
+/**
+ * * operator, multiplication of matrix with constant
+ * The operator use DSP optimized implementation of multiplication.
+ *
+ * @param[in] A: Input matrix A
+ * @param[in] C: floating point value
+ *
+ * @return
+ *     - result matrix A*B
+*/
+Mat operator*(const Mat &A, float C);
 
-    /**
-     * * operator, multiplication of matrix with constant 
-     * The operator use DSP optimized implementation of multiplication.
-     * 
-     * @param[in] C: floating point value
-     * @param[in] A: Input matrix A
-     * 
-     * @return
-     *     - result matrix A*B
-    */
-    Mat operator*(float C, const Mat &A);
+/**
+ * * operator, multiplication of matrix with constant
+ * The operator use DSP optimized implementation of multiplication.
+ *
+ * @param[in] C: floating point value
+ * @param[in] A: Input matrix A
+ *
+ * @return
+ *     - result matrix A*B
+*/
+Mat operator*(float C, const Mat &A);
 
-    /**
-     * / operator, divide of matrix by constant 
-     * The operator use DSP optimized implementation of multiplication.
-     * 
-     * @param[in] A: Input matrix A
-     * @param[in] C: floating point value
-     * 
-     * @return
-     *     - result matrix A*B
-    */
-    Mat operator/(const Mat &A, float C);
+/**
+ * / operator, divide of matrix by constant
+ * The operator use DSP optimized implementation of multiplication.
+ *
+ * @param[in] A: Input matrix A
+ * @param[in] C: floating point value
+ *
+ * @return
+ *     - result matrix A*B
+*/
+Mat operator/(const Mat &A, float C);
 
-    /**
-     * / operator, divide matrix A by matrix B
-     * 
-     * @param[in] A: Input matrix A
-     * @param[in] B: Input matrix B
-     * 
-     * @return
-     *     - result matrix C, where C[i,j] = A[i,j]/B[i,j]
-    */
-    Mat operator/(const Mat &A, const Mat &B);
+/**
+ * / operator, divide matrix A by matrix B
+ *
+ * @param[in] A: Input matrix A
+ * @param[in] B: Input matrix B
+ *
+ * @return
+ *     - result matrix C, where C[i,j] = A[i,j]/B[i,j]
+*/
+Mat operator/(const Mat &A, const Mat &B);
 
-    /**
-     * == operator, compare two matrices 
-     * 
-     * @param[in] A: Input matrix A
-     * @param[in] B: Input matrix B
-     * 
-     * @return
-     *      - true if matrices are the same
-     *      - false if matrices are different 
-    */
-    bool operator==(const Mat &A, const Mat &B);
+/**
+ * == operator, compare two matrices
+ *
+ * @param[in] A: Input matrix A
+ * @param[in] B: Input matrix B
+ *
+ * @return
+ *      - true if matrices are the same
+ *      - false if matrices are different
+*/
+bool operator==(const Mat &A, const Mat &B);
 
 }
 #endif //_dspm_mat_h_
