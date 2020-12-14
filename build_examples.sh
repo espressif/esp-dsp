@@ -39,8 +39,13 @@ do
     make defconfig && make || die "Make build for ${NAME} has failed"
     rm -rf build
     echo "$STARS"
-    echo "Building example $NAME with CMake"
-    idf.py build || die "CMake build for ${NAME} has failed"
+    echo "Building example $NAME with CMake for Esp32"
+    idf.py set-target esp32
+    idf.py build || die "CMake build for ${NAME} has failed for Esp32"
+    echo "Building example $NAME with CMake for Esp32-s2"
+    idf.py clean
+    idf.py set-target esp32s2
+    idf.py build || die "CMake build for ${NAME} has failed for Esp32-s2"
     popd
 done
 
