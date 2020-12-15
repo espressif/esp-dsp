@@ -20,13 +20,11 @@
 const uint16_t bitrev2r_table_16_fc32[] = {
     8, 64, 16, 32, 24, 96, 40, 80, 56, 112, 88, 104,
 };
-const uint16_t bitrev2r_table_16_fc32_size = 6;
 
 const uint16_t bitrev2r_table_32_fc32[] = {
     8, 128, 16, 64, 24, 192, 40, 160, 48, 96, 56, 224, 72, 144, 88, 208,
     104, 176, 120, 240, 152, 200, 184, 232,
 };
-const uint16_t bitrev2r_table_32_fc32_size = 12;
 
 const uint16_t bitrev2r_table_64_fc32[] = {
     8, 256, 16, 128, 24, 384, 32, 64, 40, 320, 48, 192, 56, 448, 72, 288,
@@ -34,7 +32,6 @@ const uint16_t bitrev2r_table_64_fc32[] = {
     176, 208, 184, 464, 200, 304, 216, 432, 232, 368, 248, 496, 280, 392, 296, 328,
     312, 456, 344, 424, 376, 488, 440, 472,
 };
-const uint16_t bitrev2r_table_64_fc32_size = 28;
 
 const uint16_t bitrev2r_table_128_fc32[] = {
     8, 512, 16, 256, 24, 768, 32, 128, 40, 640, 48, 384, 56, 896, 72, 576,
@@ -45,7 +42,6 @@ const uint16_t bitrev2r_table_128_fc32[] = {
     456, 624, 472, 880, 488, 752, 504, 1008, 536, 776, 552, 648, 568, 904, 600, 840,
     616, 712, 632, 968, 664, 808, 696, 936, 728, 872, 760, 1000, 824, 920, 888, 984,
 };
-const uint16_t bitrev2r_table_128_fc32_size = 56;
 
 const uint16_t bitrev2r_table_256_fc32[] = {
     8, 1024, 16, 512, 24, 1536, 32, 256, 40, 1280, 48, 768, 56, 1792, 64, 128,
@@ -64,7 +60,6 @@ const uint16_t bitrev2r_table_256_fc32[] = {
     1272, 1992, 1304, 1576, 1336, 1832, 1368, 1704, 1384, 1448, 1400, 1960, 1432, 1640, 1464, 1896,
     1496, 1768, 1528, 2024, 1592, 1816, 1624, 1688, 1656, 1944, 1720, 1880, 1784, 2008, 1912, 1976,
 };
-const uint16_t bitrev2r_table_256_fc32_size = 120;
 
 const uint16_t bitrev2r_table_512_fc32[] = {
     8, 2048, 16, 1024, 24, 3072, 32, 512, 40, 2560, 48, 1536, 56, 3584, 64, 256,
@@ -98,7 +93,6 @@ const uint16_t bitrev2r_table_512_fc32[] = {
     2968, 3304, 3000, 3816, 3032, 3560, 3064, 4072, 3128, 3608, 3160, 3352, 3192, 3864, 3256, 3736,
     3288, 3480, 3320, 3992, 3384, 3672, 3448, 3928, 3512, 3800, 3576, 4056, 3704, 3896, 3832, 4024,
 };
-const uint16_t bitrev2r_table_512_fc32_size = 240;
 
 const uint16_t bitrev2r_table_1024_fc32[] = {
     8, 4096, 16, 2048, 24, 6144, 32, 1024, 40, 5120, 48, 3072, 56, 7168, 64, 512,
@@ -164,7 +158,6 @@ const uint16_t bitrev2r_table_1024_fc32[] = {
     6648, 8088, 6712, 7256, 6776, 7768, 6840, 7512, 6872, 7000, 6904, 8024, 6968, 7384, 7032, 7896,
     7096, 7640, 7160, 8152, 7288, 7736, 7352, 7480, 7416, 7992, 7544, 7864, 7672, 8120, 7928, 8056,
 };
-const uint16_t bitrev2r_table_1024_fc32_size = 496;
 
 const uint16_t bitrev2r_table_2048_fc32[] = {
     8, 8192, 16, 4096, 24, 12288, 32, 2048, 40, 10240, 48, 6144, 56, 14336, 64, 1024,
@@ -292,7 +285,6 @@ const uint16_t bitrev2r_table_2048_fc32[] = {
     14136, 14808, 14200, 15832, 14264, 15320, 14328, 16344, 14456, 15416, 14520, 14904, 14584, 15928, 14712, 15672,
     14776, 15160, 14840, 16184, 14968, 15544, 15096, 16056, 15224, 15800, 15352, 16312, 15608, 15992, 15864, 16248,
 };
-const uint16_t bitrev2r_table_2048_fc32_size = 992;
 
 const uint16_t bitrev2r_table_4096_fc32[] = {
     8, 16384, 16, 8192, 24, 24576, 32, 4096, 40, 20480, 48, 12288, 56, 28672, 64, 2048,
@@ -548,7 +540,6 @@ const uint16_t bitrev2r_table_4096_fc32[] = {
     29688, 32568, 29816, 30904, 29944, 31928, 30072, 31416, 30136, 30392, 30200, 32440, 30328, 31160, 30456, 32184,
     30584, 31672, 30712, 32696, 30968, 31864, 31096, 31352, 31224, 32376, 31480, 32120, 31736, 32632, 32248, 32504,
 };
-const uint16_t bitrev2r_table_4096_fc32_size = 2016;
 
 void dsps_fft2r_rev_tables_init_fc32(void)
 {
@@ -576,14 +567,24 @@ uint16_t *dsps_fft2r_rev_tables_fc32[] = {
     (uint16_t *)bitrev2r_table_4096_fc32,
 };
 
+const uint16_t bitrev2r_table_16_fc32_size = 6;
+const uint16_t bitrev2r_table_32_fc32_size = 12;
+const uint16_t bitrev2r_table_64_fc32_size = 28;
+const uint16_t bitrev2r_table_128_fc32_size = 56;
+const uint16_t bitrev2r_table_256_fc32_size = 120;
+const uint16_t bitrev2r_table_512_fc32_size = 240;
+const uint16_t bitrev2r_table_1024_fc32_size = 496;
+const uint16_t bitrev2r_table_2048_fc32_size = 992;
+const uint16_t bitrev2r_table_4096_fc32_size = 2016;
+
 const uint16_t dsps_fft2r_rev_tables_fc32_size[] = {
-    (uint16_t)bitrev2r_table_16_fc32_size,
-    (uint16_t)bitrev2r_table_32_fc32_size,
-    (uint16_t)bitrev2r_table_64_fc32_size,
-    (uint16_t)bitrev2r_table_128_fc32_size,
-    (uint16_t)bitrev2r_table_256_fc32_size,
-    (uint16_t)bitrev2r_table_512_fc32_size,
-    (uint16_t)bitrev2r_table_1024_fc32_size,
-    (uint16_t)bitrev2r_table_2048_fc32_size,
-    (uint16_t)bitrev2r_table_4096_fc32_size,
+    (const uint16_t)6,   // bitrev2r_table_16_fc32_size,
+    (const uint16_t)12,  // bitrev2r_table_32_fc32_size,
+    (const uint16_t)28,  // bitrev2r_table_64_fc32_size,
+    (const uint16_t)56,  // bitrev2r_table_128_fc32_size,
+    (const uint16_t)120, // bitrev2r_table_256_fc32_size,
+    (const uint16_t)240, // bitrev2r_table_512_fc32_size,
+    (const uint16_t)496, // bitrev2r_table_1024_fc32_size,
+    (const uint16_t)992, // bitrev2r_table_2048_fc32_size,
+    (const uint16_t)2016,// bitrev2r_table_4096_fc32_size,
 };
