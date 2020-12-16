@@ -20,8 +20,6 @@
 const uint16_t bitrev4r_table_16_fc32[] = {
     8, 32, 16, 64, 24, 96, 48, 72, 56, 104, 88, 112,
 };
-const uint16_t bitrev4r_table_16_fc32_size = 6;
-
 extern const uint16_t bitrev4r_table_16_fc32[];
 extern const uint16_t bitrev4r_table_16_fc32_size;
 
@@ -30,8 +28,6 @@ const uint16_t bitrev4r_table_64_fc32[] = {
     88, 448, 104, 224, 112, 352, 120, 480, 144, 264, 152, 392, 176, 296, 184, 424,
     208, 328, 216, 456, 240, 360, 248, 488, 280, 400, 312, 432, 344, 464, 376, 496,
 };
-const uint16_t bitrev4r_table_64_fc32_size = 24;
-
 extern const uint16_t bitrev4r_table_64_fc32[];
 extern const uint16_t bitrev4r_table_64_fc32_size;
 
@@ -52,8 +48,6 @@ const uint16_t bitrev4r_table_256_fc32[] = {
     1272, 1968, 1304, 1616, 1336, 1744, 1368, 1872, 1392, 1488, 1400, 2000, 1432, 1648, 1464, 1776,
     1496, 1904, 1528, 2032, 1592, 1688, 1624, 1816, 1656, 1944, 1752, 1848, 1784, 1976, 1912, 2008,
 };
-const uint16_t bitrev4r_table_256_fc32_size = 120;
-
 extern const uint16_t bitrev4r_table_256_fc32[];
 extern const uint16_t bitrev4r_table_256_fc32_size;
 
@@ -119,8 +113,6 @@ const uint16_t bitrev4r_table_1024_fc32[] = {
     6520, 7960, 6584, 7064, 6616, 7576, 6648, 8088, 6744, 7224, 6776, 7736, 6872, 7352, 6904, 7864,
     7000, 7480, 7032, 7992, 7128, 7608, 7160, 8120, 7288, 7768, 7416, 7896, 7544, 8024, 7672, 8152,
 };
-const uint16_t bitrev4r_table_1024_fc32_size = 480;
-
 extern const uint16_t bitrev4r_table_1024_fc32[];
 extern const uint16_t bitrev4r_table_1024_fc32_size;
 
@@ -378,8 +370,6 @@ const uint16_t bitrev4r_table_4096_fc32[] = {
     29688, 32472, 29816, 31064, 29944, 31576, 30072, 32088, 30168, 30552, 30200, 32600, 30328, 31192, 30456, 31704,
     30584, 32216, 30712, 32728, 30968, 31352, 31096, 31864, 31224, 32376, 31608, 31992, 31736, 32504, 32248, 32632,
 };
-const uint16_t bitrev4r_table_4096_fc32_size = 2016;
-
 extern const uint16_t bitrev4r_table_4096_fc32[];
 extern const uint16_t bitrev4r_table_4096_fc32_size;
 
@@ -402,10 +392,16 @@ uint16_t *dsps_fft4r_rev_tables_fc32[] = {
     (uint16_t *)bitrev4r_table_4096_fc32,
 };
 
+const uint16_t bitrev4r_table_16_fc32_size = 6;
+const uint16_t bitrev4r_table_64_fc32_size = 24;
+const uint16_t bitrev4r_table_256_fc32_size = 120;
+const uint16_t bitrev4r_table_1024_fc32_size = 480;
+const uint16_t bitrev4r_table_4096_fc32_size = 2016;
+
 const uint16_t dsps_fft4r_rev_tables_fc32_size[] = {
-    (uint16_t)bitrev4r_table_16_fc32_size,
-    (uint16_t)bitrev4r_table_64_fc32_size,
-    (uint16_t)bitrev4r_table_256_fc32_size,
-    (uint16_t)bitrev4r_table_1024_fc32_size,
-    (uint16_t)bitrev4r_table_4096_fc32_size,
+    (const uint16_t)6,   // bitrev4r_table_16_fc32_size,
+    (const uint16_t)24,  // bitrev4r_table_64_fc32_size,
+    (const uint16_t)120, // bitrev4r_table_256_fc32_size,
+    (const uint16_t)480, // bitrev4r_table_1024_fc32_size,
+    (const uint16_t)2016,// bitrev4r_table_4096_fc32_size,
 };
