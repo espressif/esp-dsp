@@ -47,16 +47,9 @@ TEST_CASE("dsps_mulc_s16_ae32 benchmark", "[dsps]")
 {
     const int n = 256;
     int16_t x[n];
-    int16_t y[n];
-    int32_t temp;
-    int16_t test_const = 0x2000;
     for (int i = 0 ; i < n ; i++) {
         x[i] = i<<4;
-        temp = (int32_t)x[i]*(int32_t)test_const;
-        y[i] = temp >> 15;
     }
-
-    int repeat_count = 1;
 
     unsigned int start_b = xthal_get_ccount();
     dsps_mulc_s16_ansi(x, x, n, 10, 1, 1);

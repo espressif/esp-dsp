@@ -35,17 +35,22 @@ static const char *TAG = "main";
 #define N_SAMPLES 1024
 int N = N_SAMPLES;
 // Input test array
+__attribute__((aligned(16)))
 float x1[N_SAMPLES];
+__attribute__((aligned(16)))
 float x2[N_SAMPLES];
 // Window coefficients
+__attribute__((aligned(16)))
 float wind[N_SAMPLES];
 // working complex array
+__attribute__((aligned(16)))
 float y_cf[N_SAMPLES*2];
 // Pointers to result arrays
 float* y1_cf = &y_cf[0];
 float* y2_cf = &y_cf[N_SAMPLES];
 
 // Sum of y1 and y2
+__attribute__((aligned(16)))
 float sum_y[N_SAMPLES/2];
 
 void app_main()

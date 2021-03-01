@@ -34,9 +34,12 @@ static const char *TAG = "main";
 #define N_SAMPLES 1024
 int N = N_SAMPLES;
 // Input test array
+__attribute__((aligned(16)))
 float d[N_SAMPLES];
 // output array
+__attribute__((aligned(16)))
 float y[N_SAMPLES];
+__attribute__((aligned(16)))
 float y_cf[N_SAMPLES*2];
 
 // Function shows result of IIR filter

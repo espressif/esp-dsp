@@ -16,6 +16,7 @@
 #include "unity.h"
 #include "dsp_platform.h"
 #include "esp_log.h"
+#include <malloc.h>
 
 #include "dsps_dotprod.h"
 #include "dsp_tests.h"
@@ -25,9 +26,9 @@ TEST_CASE("dsps_dotprod_s16_ansi functionality", "[dsps]")
 {
     int16_t check_value = 1235;
     int max_N = 1024;
-    int16_t *x = (int16_t *)malloc(max_N * sizeof(int16_t));
-    int16_t *y = (int16_t *)malloc(max_N * sizeof(int16_t));
-    int16_t *z = (int16_t *)malloc(max_N * sizeof(int16_t));
+    int16_t *x = (int16_t *)memalign(16, max_N * sizeof(int16_t));
+    int16_t *y = (int16_t *)memalign(16, max_N * sizeof(int16_t));
+    int16_t *z = (int16_t *)memalign(16, max_N * sizeof(int16_t));
 
     for (int i = 0 ; i < max_N ; i++) {
         x[i] = 0;
@@ -80,13 +81,13 @@ TEST_CASE("dsps_dotprod_s16_ansi functionality", "[dsps]")
 }
 
 // Test dsps_dotprod_s16_ansi function
-TEST_CASE("dsps_dotprod_s16_ae32 functionality", "[dsps]")
+TEST_CASE("dsps_dotprod_s16_aexx functionality", "[dsps]")
 {
     int16_t check_value = 1235;
     int max_N = 1024;
-    int16_t *x = (int16_t *)malloc(max_N * sizeof(int16_t));
-    int16_t *y = (int16_t *)malloc(max_N * sizeof(int16_t));
-    int16_t *z = (int16_t *)malloc(max_N * sizeof(int16_t));
+    int16_t *x = (int16_t *)memalign(16, max_N * sizeof(int16_t));
+    int16_t *y = (int16_t *)memalign(16, max_N * sizeof(int16_t));
+    int16_t *z = (int16_t *)memalign(16, max_N * sizeof(int16_t));
 
     for (int i = 0 ; i < max_N ; i++) {
         x[i] = 0;
@@ -98,7 +99,7 @@ TEST_CASE("dsps_dotprod_s16_ae32 functionality", "[dsps]")
 
     // Check result == 0
     for (int i = 1 ; i < 1024 ; i++) {
-        esp_err_t status = dsps_dotprod_s16_ae32(x, y, &z[1], i, 0);
+        esp_err_t status = dsps_dotprod_s16(x, y, &z[1], i, 0);
         if (i < 4) {
             TEST_ASSERT_EQUAL(status, ESP_ERR_DSP_INVALID_LENGTH);
         } else {
@@ -118,7 +119,7 @@ TEST_CASE("dsps_dotprod_s16_ae32 functionality", "[dsps]")
     }
     // We check that dotproduct working with shift = 0;
     for (int i = 1 ; i < 1024 ; i++) {
-        esp_err_t status = dsps_dotprod_s16_ae32(x, y, &z[1], i, val_shift);
+        esp_err_t status = dsps_dotprod_s16(x, y, &z[1], i, val_shift);
         if (i < 4) {
             TEST_ASSERT_EQUAL(status, ESP_ERR_DSP_INVALID_LENGTH);
         } else {
@@ -130,7 +131,7 @@ TEST_CASE("dsps_dotprod_s16_ae32 functionality", "[dsps]")
     }
     val_shift = 2;
     for (int i = 1 ; i < 1024 ; i++) {
-        esp_err_t status = dsps_dotprod_s16_ae32(x, y, &z[1], i, val_shift);
+        esp_err_t status = dsps_dotprod_s16(x, y, &z[1], i, val_shift);
         if (i < 4) {
             TEST_ASSERT_EQUAL(status, ESP_ERR_DSP_INVALID_LENGTH);
         } else {
@@ -151,9 +152,9 @@ TEST_CASE("dsps_dotprod_s16_ae32 benchmark", "[dsps]")
 {
     int max_N = 1024;
 
-    int16_t *x = (int16_t *)malloc(max_N * sizeof(int16_t));
-    int16_t *y = (int16_t *)malloc(max_N * sizeof(int16_t));
-    int16_t *z = (int16_t *)malloc(max_N * sizeof(int16_t));
+    int16_t *x = (int16_t *)memalign(16, max_N * sizeof(int16_t));
+    int16_t *y = (int16_t *)memalign(16, max_N * sizeof(int16_t));
+    int16_t *z = (int16_t *)memalign(16, max_N * sizeof(int16_t));
 
     for (int i = 0 ; i < max_N ; i++) {
         x[i] = 0x100;
@@ -172,10 +173,10 @@ TEST_CASE("dsps_dotprod_s16_ae32 benchmark", "[dsps]")
     portEXIT_CRITICAL(&testnlock);
 
     float total_b = end_b - start_b;
-    float cycles = total_b / (1024 * repeat_count);
+    float cycles = total_b / (repeat_count);
     printf("Benchmark dsps_dotprod_s16 - %f per sample + overhead. Result = %08x\n", cycles, z[1]);
-    float min_exec = 1.5;
-    float max_exec = 1.6;
+    float min_exec = 512;
+    float max_exec = 8*1024;
     TEST_ASSERT_EXEC_IN_RANGE(min_exec, max_exec, cycles);
 
     free(x);
@@ -187,9 +188,9 @@ TEST_CASE("dsps_dotprod_s16_ansi benchmark", "[dsps]")
 {
     int max_N = 1024;
 
-    int16_t *x = (int16_t *)malloc(max_N * sizeof(int16_t));
-    int16_t *y = (int16_t *)malloc(max_N * sizeof(int16_t));
-    int16_t *z = (int16_t *)malloc(max_N * sizeof(int16_t));
+    int16_t *x = (int16_t *)memalign(16, max_N * sizeof(int16_t));
+    int16_t *y = (int16_t *)memalign(16, max_N * sizeof(int16_t));
+    int16_t *z = (int16_t *)memalign(16, max_N * sizeof(int16_t));
 
     for (int i = 0 ; i < max_N ; i++) {
         x[i] = 0x100;

@@ -16,6 +16,7 @@
 #include "unity.h"
 #include "dsp_platform.h"
 #include "esp_log.h"
+#include <malloc.h>
 
 #include "dsps_view.h"
 #include "dsps_fft2r.h"
@@ -27,8 +28,8 @@ static const char *TAG = "dsps_fft4r_ansi";
 
 TEST_CASE("dsps_fft4r_fc32_ansi functionality", "[dsps]")
 {
-    float* data =  (float*)malloc(sizeof(float) * 1024*2);
-    float* check_data_fft = (float*)malloc(sizeof(float) * 1024*2);
+    float* data =  (float*)memalign(16, sizeof(float) * 1024*2);
+    float* check_data_fft = (float*)memalign(16, sizeof(float) * 1024*2);
     esp_err_t ret;
     ret = dsps_fft2r_init_fc32(NULL, 1024);
     if (ret  != ESP_OK)
@@ -72,8 +73,7 @@ TEST_CASE("dsps_fft4r_fc32_ansi functionality", "[dsps]")
         {
             dsps_view(data, N_check*2, 128, 16, -N_check, N_check, '.');   
             dsps_view(check_data_fft, N_check*2, 128, 16, -N_check, N_check, '.');   
-            
-            TEST_ASSERT_MESSAGE (false, "Result out of range!\n");
+            TEST_ASSERT_MESSAGE (false, "Result out of range!\n");            
         }
     }
     

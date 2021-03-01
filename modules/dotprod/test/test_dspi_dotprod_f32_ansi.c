@@ -16,6 +16,7 @@
 #include "unity.h"
 #include "dsp_platform.h"
 #include "esp_log.h"
+#include <malloc.h>
 
 #include "dspi_dotprod.h"
 #include "dsp_tests.h"
@@ -27,9 +28,9 @@ TEST_CASE("dspi_dotprod_f32_ansi functionality", "[dspi]")
     float check_value1 = 336;
     float check_value2 = 480;
     int max_N = 1024;
-    float *x = (float *)malloc(max_N * sizeof(float));
-    float *y = (float *)malloc(max_N * sizeof(float));
-    float *z = (float *)malloc(max_N * sizeof(float));
+    float *x = (float *)memalign(16, max_N * sizeof(float));
+    float *y = (float *)memalign(16, max_N * sizeof(float));
+    float *z = (float *)memalign(16, max_N * sizeof(float));
     for (size_t i = 0; i < 256; i++)
     {
         x[i] = i%8 + 1;

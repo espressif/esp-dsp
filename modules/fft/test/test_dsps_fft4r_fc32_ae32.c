@@ -16,6 +16,7 @@
 #include "unity.h"
 #include "dsp_platform.h"
 #include "esp_log.h"
+#include <malloc.h>
 
 #include "dsps_view.h"
 #include "dsps_fft2r.h"
@@ -27,8 +28,8 @@ static const char *TAG = "dsps_fft4r_ae32";
 
 TEST_CASE("dsps_fft4r_fc32_ae32 functionality", "[dsps]")
 {
-    float* data =  (float*)malloc(sizeof(float) * 4096*2);
-    float* check_data_fft = (float*)malloc(sizeof(float) * 4096*2);
+    float* data =  (float*)memalign(16, sizeof(float) * 4096*2);
+    float* check_data_fft = (float*)memalign(16, sizeof(float) * 4096*2);
     if (data == NULL)
     {
         ESP_LOGE(TAG, "Not possible to allocate data.");
@@ -49,6 +50,10 @@ TEST_CASE("dsps_fft4r_fc32_ae32 functionality", "[dsps]")
     for (size_t pow = 2; pow < 7; pow++)
     {
         N_check = 1<< (pow*2);
+        if (N_check > CONFIG_DSP_MAX_FFT_SIZE)
+        {
+            break;
+        }
         for (size_t i = 0; i < N_check; i++)
         {
             data[i*2] = cosf(2*M_PI*4/256*i);
@@ -75,7 +80,10 @@ TEST_CASE("dsps_fft4r_fc32_ae32 functionality", "[dsps]")
         }
         ESP_LOGI(TAG, "diff[%i] = %f\n", N_check, diff);
     }
-    
+    if (N_check > CONFIG_DSP_MAX_FFT_SIZE) 
+    {
+        N_check =CONFIG_DSP_MAX_FFT_SIZE; 
+    }
     dsps_view(data, N_check*2, 128, 16, -256, 256, '.');   
     dsps_view(check_data_fft, N_check*2, 128, 16, -256, 256, '.');   
 
@@ -89,7 +97,7 @@ static portMUX_TYPE testnlock = portMUX_INITIALIZER_UNLOCKED;
 
 TEST_CASE("dsps_fft4r_fc32_ae32 benchmark", "[dsps]")
 {
-    float* check_data_fft = (float*)malloc(sizeof(float) * 4096*2);
+    float* check_data_fft = (float*)memalign(16, sizeof(float) * 4096*2);
 
     unsigned int start_b;
     float cycles;
@@ -126,7 +134,7 @@ TEST_CASE("dsps_fft4r_fc32_ae32 benchmark", "[dsps]")
 
 TEST_CASE("dsps_cplx2real_fc32_ae32 benchmark", "[dsps]")
 {
-    float* check_data_fft = (float*)malloc(sizeof(float) * 4096*2);
+    float* check_data_fft = (float*)memalign(16, sizeof(float) * 4096*2);
 
     unsigned int start_b;
     float cycles;
@@ -162,7 +170,7 @@ TEST_CASE("dsps_cplx2real_fc32_ae32 benchmark", "[dsps]")
 
 TEST_CASE("dsps_bit_rev4r_fc32_ansi benchmark", "[dsps]")
 {
-    float* check_data_fft = (float*)malloc(sizeof(float) * 4096*2);
+    float* check_data_fft = (float*)memalign(16, sizeof(float) * 4096*2);
 
     unsigned int start_b;
     float cycles;

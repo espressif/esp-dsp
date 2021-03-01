@@ -93,18 +93,18 @@ dsps_fft2r_fc32_ae32_:
     srli a6, a3, 1 // a6 = N2 = N/2
     movi a7, 1     // a7 - ie
 
-fft2r_l1: 
+.fft2r_l1: 
     movi a8, 0     // a8 - j
     movi a11,0     // a11 = ia = 0;
 
-fft2r_l2:           // loop for j, a8 - j
+.fft2r_l2:           // loop for j, a8 - j
         slli    a10, a8, 3 // a10 = j<<3 // shift for cos ()   -- c = w[2 * j];
         add.n   a10, a10, a4 // a10 - pointer to cos
         lsi     f0, a10, 0   
         lsi     f1, a10, 4
 
         movi a9, 0 // just for debug
-        loopnez a6, fft2r_l3
+        loopnez a6, .fft2r_l3
             add.n    a12, a11, a6   // a12 = m = ia + N2
 
             slli     a14, a12, 3    // a14 - pointer for m*2
@@ -133,15 +133,15 @@ fft2r_l2:           // loop for j, a8 - j
             ssi      f10, a13, 0 
             addi     a11, a11, 1// ia++
             ssi      f11, a13, 4 
-fft2r_l3:
+.fft2r_l3:
         add     a11, a11, a6
 
         addi    a8, a8, 1     // j++
-        BNE     a8, a7, fft2r_l2 // 
+        BNE     a8, a7, .fft2r_l2 // 
     slli    a7, a7, 1  // ie = ie<<1
 // main loop: for (int k = N/2; k > 0; k >>= 1)
     srli    a6, a6, 1  // a6 = a6>>1
-    BNEZ    a6, fft2r_l1// Jump if > 0
+    BNEZ    a6, .fft2r_l1// Jump if > 0
 
 	movi.n	a2, 0 // return status ESP_OK
 	retw.n
