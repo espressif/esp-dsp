@@ -23,11 +23,13 @@
 
 static const char *TAG = "dsps_fft2r_ae32_s16";
 
+
+__attribute__((aligned(16)))
 static int16_t data[1024*2];
-static int16_t check_data[1024*2];
+__attribute__((aligned(16)))
 static float result_data[1024*2];
 
-TEST_CASE("dsps_fft2r_sc16_ae32 functionality", "[dsps]")
+TEST_CASE("dsps_fft2r_sc16_aexx functionality", "[dsps]")
 {
     int N = sizeof(data) / sizeof(float) / 2;
     N = 1024;
@@ -43,8 +45,9 @@ TEST_CASE("dsps_fft2r_sc16_ae32 functionality", "[dsps]")
         ESP_LOGE(TAG, "Not possible to initialize FFT. Error = %i", ret);
         return;
     }
+    ESP_LOGI(TAG, "data address=%8.8x\n", (uint32_t)data);
 
-    dsps_fft2r_sc16_ae32(data, N);
+    dsps_fft2r_sc16(data, N);
     unsigned int start_b = xthal_get_ccount();
     dsps_bit_rev_sc16_ansi(data, N);
     unsigned int end_b = xthal_get_ccount();
@@ -89,7 +92,7 @@ TEST_CASE("dsps_fft2r_sc16_ae32 functionality", "[dsps]")
 }
 
 
-TEST_CASE("dsps_fft2r_sc16_ae32 overflow check", "[dsps]")
+TEST_CASE("dsps_fft2r_sc16_aexx overflow check", "[dsps]")
 {
     int N = sizeof(data) / sizeof(float) / 2;
     N = 1024;
@@ -112,7 +115,7 @@ TEST_CASE("dsps_fft2r_sc16_ae32 overflow check", "[dsps]")
         return;
     }
 
-    dsps_fft2r_sc16_ae32(data, N);
+    dsps_fft2r_sc16(data, N);
     unsigned int start_b = xthal_get_ccount();
     dsps_bit_rev_sc16_ansi(data, N);
     unsigned int end_b = xthal_get_ccount();
@@ -177,12 +180,12 @@ TEST_CASE("dsps_fft2r_sc16_ae32 benchmark", "[dsps]")
     {
         int N_check = 2<<i;
         unsigned int start_b = xthal_get_ccount();
-        dsps_fft2r_sc16_ae32(data, N_check);
+        dsps_fft2r_sc16(data, N_check);
 
         unsigned int end_b = xthal_get_ccount();
         float total_b = end_b - start_b;
         float cycles = total_b;
-        ESP_LOGI(TAG, "Benchmark dsps_fft2r_sc16_ae32 - %6i cycles for %6i points FFT.", (int)cycles, N_check);
+        ESP_LOGI(TAG, "Benchmark dsps_fft2r_sc16_aexx - %6i cycles for %6i points FFT.", (int)cycles, N_check);
         float min_exec = 3;
         float max_exec = 330000*3;
         TEST_ASSERT_EXEC_IN_RANGE(min_exec, max_exec, cycles);

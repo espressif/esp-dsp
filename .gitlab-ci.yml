@@ -2,7 +2,7 @@ stages:
   - build
   - deploy
 
-image: $CI_DOCKER_REGISTRY/esp32-ci-env:latest
+image: "$CI_DOCKER_REGISTRY/esp-idf-doc-env:v4.4-1-v2"
 
 variables:
   # System environment
@@ -18,7 +18,8 @@ variables:
   ESP_IDF_GIT: "https://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HTTPS_SERVER}/espressif/esp-idf.git"
 
 .setup_idf_tools: &setup_idf_tools |
-  tools/idf_tools.py --non-interactive install && eval "$(tools/idf_tools.py --non-interactive export)" || exit 1
+  cd esp-idf  
+#  tools/idf_tools.py --non-interactive install && eval "$(tools/idf_tools.py --non-interactive export)" || exit 1
 
 .add_gh_key_remote: &add_gh_key_remote |
   command -v ssh-agent >/dev/null || exit 1
@@ -39,12 +40,27 @@ build:
     - build
   script:
     # Get ESP-IDF
+    - dir
     - git clone ${ESP_IDF_GIT} esp-idf
+    - dir
     - pushd esp-idf
+    - dir
     # Non-recursive getting its submodules
     - git submodule update --init
+    - dir
     - export IDF_PATH=$PWD
-    - *setup_idf_tools
+    - dir
+    #- *setup_idf_tools
+    - dir
+    - ./tools/ci/mirror-submodule-update.sh
+
+    - source /opt/pyenv/activate
+    - pyenv global $(pyenv versions --bare)
+    - ./tools/idf_tools.py --non-interactive install-python-env
+    - ./tools/idf_tools.py --non-interactive install
+
+    - idf_exports=$(${IDF_PATH}/tools/idf_tools.py --non-interactive export)    
+    - eval "${idf_exports}"
     - popd
 
     # Create a copy of the project in "esp-dsp" directory.
@@ -78,8 +94,18 @@ build_docs:
   # No cleaning when the artifacts
   after_script: []
   script:
+    - dir
+    - source /opt/pyenv/activate
+    - dir
+    - pyenv global $(pyenv versions --bare)
+    - dir
     - cd docs
+    - dir
+    - python -m pip install -r requirements.txt
+#    - python ./build_docs.py -bs $DOC_BUILDERS -l $DOCLANG -t $DOCTGT build
+    - dir 
     - make html
+    - dir
     - ./check_doc_warnings.sh
 
 push_master_to_github:

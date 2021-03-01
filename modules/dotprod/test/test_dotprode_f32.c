@@ -16,6 +16,7 @@
 #include "unity.h"
 #include "dsp_platform.h"
 #include "esp_log.h"
+#include <malloc.h>
 
 #include "dsps_dotprod.h"
 #include "dsp_tests.h"
@@ -24,9 +25,9 @@ TEST_CASE("dsps_dotprode_f32_ae32 functionality", "[dsps]")
 {
     float check_value = 1235;
     int max_N = 1024;
-    float *x = (float *)malloc(max_N * sizeof(float));
-    float *y = (float *)malloc(max_N * sizeof(float));
-    float *z = (float *)malloc(max_N * sizeof(float));
+    float *x = (float *)memalign(16, max_N * sizeof(float));
+    float *y = (float *)memalign(16, max_N * sizeof(float));
+    float *z = (float *)memalign(16, max_N * sizeof(float));
 
     for (int i = 0 ; i < max_N ; i++) {
         x[i] = 0;
@@ -63,9 +64,9 @@ TEST_CASE("dsps_dotprode_f32_ae32 functionality", "[dsps]")
 TEST_CASE("dsps_dotprode_f32_ae32 benchmark", "[dsps]")
 {
     int max_N = 1024;
-    float *x = (float *)malloc(max_N * sizeof(float));
-    float *y = (float *)malloc(max_N * sizeof(float));
-    float *z = (float *)malloc(max_N * sizeof(float));
+    float *x = (float *)memalign(16, max_N * sizeof(float));
+    float *y = (float *)memalign(16, max_N * sizeof(float));
+    float *z = (float *)memalign(16, max_N * sizeof(float));
 
     for (int i = 0 ; i < max_N ; i++) {
         x[i] = 0;
@@ -96,9 +97,9 @@ TEST_CASE("dsps_dotprode_f32_ansi functionality", "[dsps]")
 {
     float check_value = 1235;
     int max_N = 1024;
-    float *x = (float *)malloc(max_N * sizeof(float));
-    float *y = (float *)malloc(max_N * sizeof(float));
-    float *z = (float *)malloc(max_N * sizeof(float));
+    float *x = (float *)memalign(16, max_N * sizeof(float));
+    float *y = (float *)memalign(16, max_N * sizeof(float));
+    float *z = (float *)memalign(16, max_N * sizeof(float));
 
     for (int i = 0 ; i < max_N ; i++) {
         x[i] = 0;
@@ -135,9 +136,9 @@ TEST_CASE("dsps_dotprode_f32_ansi functionality", "[dsps]")
 TEST_CASE("dsps_dotprode_f32_ansi benchmark", "[dsps]")
 {
     int max_N = 1024;
-    float *x = (float *)malloc(max_N * sizeof(float));
-    float *y = (float *)malloc(max_N * sizeof(float));
-    float *z = (float *)malloc(max_N * sizeof(float));
+    float *x = (float *)memalign(16, max_N * sizeof(float));
+    float *y = (float *)memalign(16, max_N * sizeof(float));
+    float *z = (float *)memalign(16, max_N * sizeof(float));
 
     for (int i = 0 ; i < max_N ; i++) {
         x[i] = 0;

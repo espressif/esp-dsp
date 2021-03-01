@@ -21,6 +21,7 @@
 	.text
 	.align  4
 	.global dsps_dotprod_f32_ae32
+	.global .dsps_dotprod_f32_ae32_body
 	.type   dsps_dotprod_f32_ae32,@function
 // The function implements the following C code:
 //esp_err_t dsps_dotprod_f32_ae32(const float* src1, const float* src2, float* dest, int len)
@@ -41,6 +42,7 @@ dsps_dotprod_f32_ae32:
 // len  - a5
 
 	entry	a1, 16
+.dsps_dotprod_f32_ae32_body:	
 	// Array increment for floating point data should be 4
 	movi.n	a8, 4
 	// Clear initial state of the result register

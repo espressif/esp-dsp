@@ -31,11 +31,11 @@
 // 
 	lsi	    f0, \x2, 0
 	sub	    \x1, \x1, \step1 // To compensate first increment
-	loopnez \count, loop_mace_end_m_ae32
+	loopnez \count, .loop_mace_end_m_ae32
 		add.n	\x1, \x1, \step1
 		lsi	    f2, \x1, 0
 		madd.s	f1, f2, f0
 		add.n	\x2, \x2, \step2
 		lsi	     f0, \x2, 0
-	loop_mace_end_m_ae32:
+	.loop_mace_end_m_ae32:
 .endm

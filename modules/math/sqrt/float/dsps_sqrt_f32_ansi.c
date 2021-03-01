@@ -18,8 +18,10 @@
 
 inline float dsps_sqrtf_f32_ansi(float f)
 {
-    const int result = 0x1fbb4000 + (*(int*)&f >> 1);
-    return *(float*)&result;   
+    int* f_ptr = (int*)&f;
+    const int result = 0x1fbb4000 + (*f_ptr >> 1);
+    float* f_result = (float*)&result;
+    return *f_result;   
 }
 
 esp_err_t dsps_sqrt_f32_ansi(const float *input, float *output, int len)
@@ -34,16 +36,16 @@ esp_err_t dsps_sqrt_f32_ansi(const float *input, float *output, int len)
 }
 
 float dsps_inverted_sqrtf_f32_ansi(float data )
-{	
-	const float x2 = data * 0.5F;
-	const float threehalfs = 1.5F;
+{
+    const float x2 = data * 0.5F;
+    const float threehalfs = 1.5F;
 
-	union {
-		float f;
-		uint32_t i;
-	} conv = {data}; // member 'f' set to value of 'data'.
-	conv.i  = 0x5f3759df - ( conv.i >> 1 );
-	conv.f  *= ( threehalfs - ( x2 * conv.f * conv.f ) );
-	return conv.f;
+    union {
+        float f;
+        uint32_t i;
+    } conv = {data}; // member 'f' set to value of 'data'.
+    conv.i  = 0x5f3759df - ( conv.i >> 1 );
+    conv.f  *= ( threehalfs - ( x2 * conv.f * conv.f ) );
+    return conv.f;
 }
 

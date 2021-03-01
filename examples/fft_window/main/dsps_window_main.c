@@ -35,12 +35,16 @@ static const char *TAG = "main";
 #define N_SAMPLES 1024
 int N = N_SAMPLES;
 // Input test array
+__attribute__((aligned(16)))
 float x1[N_SAMPLES];
 // Window coefficients
+__attribute__((aligned(16)))
 float wind[N_SAMPLES];
 // working complex array
+__attribute__((aligned(16)))
 float y_cf[N_SAMPLES*2];
 // Pointers to result arrays
+__attribute__((aligned(16)))
 float* y1_cf = &y_cf[0];
 
 void process_and_show(float* data, int length)

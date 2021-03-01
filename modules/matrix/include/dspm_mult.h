@@ -43,6 +43,7 @@ extern "C"
  */
 esp_err_t dspm_mult_f32_ansi(const float *A, const float *B, float *C, int m, int n, int k);
 esp_err_t dspm_mult_f32_ae32(const float *A, const float *B, float *C, int m, int n, int k);
+esp_err_t dspm_mult_f32_aes3(const float *A, const float *B, float *C, int m, int n, int k);
 /**@}*/
 
 
@@ -128,6 +129,7 @@ esp_err_t dspm_mult_4x4x4_f32_ae32(const float *A, const float *B, float *C);
  */
 esp_err_t dspm_mult_s16_ansi(const int16_t *A, const int16_t *B, int16_t *C, int m, int n, int k, int shift);
 esp_err_t dspm_mult_s16_ae32(const int16_t *A, const int16_t *B, int16_t *C, int m, int n, int k, int shift);
+esp_err_t dspm_mult_s16_aes3(const int16_t *A, const int16_t *B, int16_t *C, int m, int n, int k, int shift);
 /**@}*/
 
 #ifdef __cplusplus
@@ -136,13 +138,18 @@ esp_err_t dspm_mult_s16_ae32(const int16_t *A, const int16_t *B, int16_t *C, int
 
 #if CONFIG_DSP_OPTIMIZED
 
-#if (dspm_mult_s16_ae32_enabled == 1)
+
+#if (dspm_mult_s16_aes3_enabled == 1)
+#define dspm_mult_s16 dspm_mult_s16_aes3
+#elif (dspm_mult_s16_ae32_enabled == 1)
 #define dspm_mult_s16 dspm_mult_s16_ae32
 #else
 #define dspm_mult_s16 dspm_mult_s16_ansi
 #endif
 
-#if (dspm_mult_f32_ae32_enabled == 1)
+#if (dspm_mult_f32_aes3_enabled == 1)
+#define dspm_mult_f32 dspm_mult_f32_aes3
+#elif (dspm_mult_f32_ae32_enabled == 1)
 #define dspm_mult_f32 dspm_mult_f32_ae32
 #else
 #define dspm_mult_f32 dspm_mult_f32_ansi
@@ -159,11 +166,13 @@ esp_err_t dspm_mult_s16_ae32(const int16_t *A, const int16_t *B, int16_t *C, int
 #define dsps_sub_f32 dsps_sub_f32_ansi
 #endif
 #if (dspm_mult_4x4x1_f32_ae32_enabled == 1)
-#define dspm_mult_4x4x1_f32(A,B,C) dspm_mult_f32_ansi(A,B,C, 4, 4, 1)
+#define dspm_mult_4x4x1_f32(A,B,C) dspm_mult_4x4x1_f32_ae32(A,B,C)
 #else
 #define dsps_sub_f32 dsps_sub_f32_ansi
 #endif
-#if (dspm_mult_4x4x4_f32_ae32_enabled == 1)
+#if (dspm_mult_f32_aes3_enabled == 1)
+#define dspm_mult_4x4x4_f32(A,B,C) dspm_mult_f32_aes3(A,B,C, 4, 4, 4)
+#elif (dspm_mult_4x4x4_f32_ae32_enabled == 1)
 #define dspm_mult_4x4x4_f32 dspm_mult_4x4x4_f32_ae32
 #else
 #define dspm_mult_4x4x4_f32(A,B,C) dspm_mult_f32_ansi(A,B,C, 4, 4, 4)

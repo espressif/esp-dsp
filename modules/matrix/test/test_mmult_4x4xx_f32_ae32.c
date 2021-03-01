@@ -51,7 +51,7 @@ TEST_CASE("dspm_mult_4x4x1_f32_ae32 functionality", "[dspm]")
         }
     }
 
-    dspm_mult_4x4x1_f32_ae32(A_ptr, B_ptr, C_ptr);
+    dspm_mult_4x4x1_f32(A_ptr, B_ptr, C_ptr);
     dspm_mult_f32_ansi(A_ptr, B_ptr, Cc_ptr, m, n, k);
 
     for (int i=0 ; i< m ; i++)
@@ -99,7 +99,7 @@ TEST_CASE("dspm_mult_4x4x4_f32_ae32 functionality", "[dspm]")
         }
     }
 
-    dspm_mult_4x4x4_f32_ae32(A_ptr, B_ptr, C_ptr);
+    dspm_mult_4x4x4_f32(A_ptr, B_ptr, C_ptr);
     dspm_mult_f32_ansi(A_ptr, B_ptr, Cc_ptr, m, n, k);
 
     for (int i=0 ; i< m ; i++)
@@ -140,7 +140,7 @@ TEST_CASE("dspm_mult_4x4x1_f32_ae32 benchmark", "[dspm]")
     unsigned int start_b = xthal_get_ccount();
     int repeat_count = 1024;
     for (int i = 0 ; i < repeat_count ; i++) {
-        dspm_mult_4x4x1_f32_ae32(A_ptr, B_ptr, C_ptr);
+        dspm_mult_4x4x1_f32(A_ptr, B_ptr, C_ptr);
     }
     unsigned int end_b = xthal_get_ccount();
     portEXIT_CRITICAL(&testnlock);
@@ -168,13 +168,14 @@ TEST_CASE("dspm_mult_4x4x4_f32_ae32 benchmark", "[dspm]")
     float C[m][k];
     float *C_ptr = (float *)C;
 
+    ESP_LOGI(TAG, "A: %8.8x, B: %8.8x, C=%8.8x", (uint32_t)A_ptr, (uint32_t)B_ptr, (uint32_t)C_ptr);
 
     portENTER_CRITICAL(&testnlock);
 
     unsigned int start_b = xthal_get_ccount();
     int repeat_count = 1024;
     for (int i = 0 ; i < repeat_count ; i++) {
-        dspm_mult_4x4x4_f32_ae32(A_ptr, B_ptr, C_ptr);
+        dspm_mult_4x4x4_f32(A_ptr, B_ptr, C_ptr);
     }
     unsigned int end_b = xthal_get_ccount();
     portEXIT_CRITICAL(&testnlock);
@@ -182,7 +183,7 @@ TEST_CASE("dspm_mult_4x4x4_f32_ae32 benchmark", "[dspm]")
     float total_b = end_b - start_b;
     float cycles = total_b / (repeat_count);
     ESP_LOGI("dspm_mult_4x4x4_f32_ae32", "dspm_mult_4x4x4_f32_ae32 - %f per multiplication", cycles);
-    float min_exec = 300;
+    float min_exec = 50;
     float max_exec = 450;
     TEST_ASSERT_EXEC_IN_RANGE(min_exec, max_exec, cycles);
 }

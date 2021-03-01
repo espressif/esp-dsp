@@ -173,10 +173,17 @@ TEST_CASE("Mat class operators", "[dspm]")
     {
         for (int n=0 ; n < N ; n++)
         {
+            // if (result(m,n) < 0.000000001) 
+            // {
+            //     result(m,n) = 0;
+            // }
             if ((result(m,n) != test2(m,n)) || 
                 (result(m,n) != (m*N + n)) || 
                 (result.data[m*N + n] != (m*N + n)))
             {
+                std::cout << "Error: " << result(m,n) << "!=" << test2(m,n) << " , " 
+                << result(m,n) << "!=" << (m*N + n) << " , " 
+                << result.data[m*N + n] << "!=" << (m*N + n) << std::endl;
                 TEST_ASSERT_MESSAGE (false, "Error in * operator!");
             }
         }
@@ -229,6 +236,8 @@ TEST_CASE("Mat class operators", "[dspm]")
             result(m,n) = 1;
         }
     }
+    std::cout << "Befor normalize: " << std::endl;
+    std::cout << result << std::endl;
     result.normalize();
     std::cout << "normalize: " << std::endl;
     std::cout << result << std::endl;
@@ -239,7 +248,8 @@ TEST_CASE("Mat class operators", "[dspm]")
         {
             if (std::abs(result(m,n) - 0.5) > dspm::Mat::abs_tol)
             {
-                TEST_ASSERT_MESSAGE (false, "Error in normalize() operation!");
+                ESP_LOGE(TAG, "Error bigger then expected: %f", std::abs(result(m,n) - 0.5));
+                TEST_ASSERT_MESSAGE (false, "Error in normalize() operation! ");
             }
         }
     }

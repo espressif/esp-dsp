@@ -22,11 +22,11 @@
 #include "esp_log.h"
 
 // Test dsps_dotprod_s16_ansi function
-TEST_CASE("dspm_mult_s16_ae32 functionality", "[dspm]")
+TEST_CASE("dspm_mult_s16_aexx functionality", "[dspm]")
 {
     for (int m = 1 ; m < 8 ; m++) {
-        for (int n = 1 ; n < 8 ; n++) {
-            for (int k = 1 ; k < 8 ; k++) {
+        for (int n = 1 ; n < 16 ; n++) {
+            for (int k = 1 ; k < 16 ; k++) {
 
                 int16_t A[m][n];
                 int16_t *A_ptr = (int16_t *)A;
@@ -41,22 +41,23 @@ TEST_CASE("dspm_mult_s16_ae32 functionality", "[dspm]")
                 for (int shift = -4 ; shift < 4 ; shift++) {
                     for (int i = 0 ; i < m ; i++) {
                         for (int j = 0 ; j < n; j++) {
-                            A[i][j] = 0x1234;
+                            A[i][j] = 0x123;
                         }
                     }
                     for (int i = 0 ; i < n ; i++) {
                         for (int j = 0 ; j < k; j++) {
-                            B[i][j] = 0x1234;
+                            B[i][j] = 0x123;
                         }
                     }
 
                     dspm_mult_s16_ansi(A_ptr, B_ptr, Cc_ptr, m, n, k, shift);
-                    dspm_mult_s16_ae32(A_ptr, B_ptr, C_ptr,  m, n, k, shift);
+                    dspm_mult_s16(A_ptr, B_ptr, C_ptr,  m, n, k, shift);
 
                     // Compare and check results
                     for (int i = 0 ; i < m * k ; i++) {
                         if (Cc_ptr[i] != C_ptr[i]) {
-                            ESP_LOGE("dspm_mult_s16_ae32", "Process path m=%i, n=%i, k=%i,  shift=%i\n", m, n, k, shift);
+                            ESP_LOGE("dspm_mult_s16_aexx", "Process path m=%i, n=%i, k=%i,  shift=%i", m, n, k, shift);
+                            ESP_LOGE("dspm_mult_s16_aexx", "data[%i] %4.4x != %4.4x expected \n", i, C_ptr[i], Cc_ptr[i]);
                             TEST_ASSERT_EQUAL(Cc_ptr[i], C_ptr[i]);
                         }
                     }
@@ -68,13 +69,13 @@ TEST_CASE("dspm_mult_s16_ae32 functionality", "[dspm]")
 
 static portMUX_TYPE testnlock = portMUX_INITIALIZER_UNLOCKED;
 
-TEST_CASE("dspm_mult_s16_ae32 benchmark", "[dspm]")
+TEST_CASE("dspm_mult_s16_aexx benchmark", "[dspm]")
 {
     unsigned int start_b = xthal_get_ccount();
     unsigned int end_b = xthal_get_ccount();
     for (int m = 2 ; m <= 8 ; m++) {
-        for (int n = 2 ; n <= 8 ; n++) {
-            for (int k = 1 ; k <= 6 ; k++) {
+        for (int n = 2 ; n <= 16 ; n++) {
+            for (int k = 1 ; k <= 16 ; k++) {
 
                 int16_t A[m][n];
                 int16_t *A_ptr = (int16_t *)A;
@@ -91,13 +92,13 @@ TEST_CASE("dspm_mult_s16_ae32 benchmark", "[dspm]")
                 portENTER_CRITICAL(&testnlock);
 
                 start_b = xthal_get_ccount();
-                dspm_mult_s16_ae32(A_ptr, B_ptr, C_ptr, m, n, k, 0);
+                dspm_mult_s16(A_ptr, B_ptr, C_ptr, m, n, k, 0);
                 end_b = xthal_get_ccount();
                 portEXIT_CRITICAL(&testnlock);
 
                 float total_b = end_b - start_b;
                 float cycles = total_b;
-                ESP_LOGD("dspm_mult_s16_ae32", "dspm_mult_s16_ae32[%i][%i][%i] - %f", m, n, k, cycles);
+                ESP_LOGI("dspm_mult_s16_aexx", "dspm_mult_s16_aexx[%i][%i][%i] - %f", m, n, k, cycles);
             }
         }
     }

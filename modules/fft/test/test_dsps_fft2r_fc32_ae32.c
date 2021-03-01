@@ -16,6 +16,7 @@
 #include "unity.h"
 #include "dsp_platform.h"
 #include "esp_log.h"
+#include <malloc.h>
 
 #include "dsps_view.h"
 #include "dsps_fft2r.h"
@@ -23,8 +24,11 @@
 
 static const char *TAG = "fft2r_ae32";
 
+__attribute__((aligned(16)))
 static float data[1024*2];
+__attribute__((aligned(16)))
 static float check_data[1024*2];
+__attribute__((aligned(16)))
 static float data_test[1024*2];
 
 TEST_CASE("dsps_fft2r_fc32_ae32 functionality", "[dsps]")
@@ -123,8 +127,8 @@ TEST_CASE("dsps_bit_rev2r_fc32_ae32 benchmark", "[dsps]")
         ESP_LOGE(TAG, "Not possible to initialize FFT. Error = %i", ret);
         return;
     }
-    float* data = (float*)malloc(2*4096*sizeof(float));
-    float* check_data = (float*)malloc(2*4096*sizeof(float));
+    float* data = (float*)memalign(16, 2*4096*sizeof(float));
+    float* check_data = (float*)memalign(16, 2*4096*sizeof(float));
     if (data  == NULL)
     {
         ESP_LOGE(TAG, "Not possible to allocate memory for data!");
