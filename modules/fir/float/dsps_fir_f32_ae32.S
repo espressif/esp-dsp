@@ -38,13 +38,16 @@ dsps_fir_f32_ae32:
 	l32i    a10, a2, 0  // a10 - coeffs
 	add     a10, a10, a6 // a10 = &coeffs[N];
 	addi    a10, a10, -4 // a10 = &coeffs[N-1];
-	l32i    a11, a2, 4  // a11 - delay line
 	l32i    a6,  a2, 8  // a6  - N
-	movi.n	a9, 0
+
+	movi.n a9, 0
+	movi.n a8, -4
+	movi.n a12, 4
 
 //  a13 - delay index
 fir_loop_len:
 		// Store to delay line
+		l32i    a11, a2, 4      // a11 - delay line
 		lsi     f0, a3, 0       // f0 = x[i]
 		addi    a3, a3, 4       // x++
 		ssx     f0, a11, a13    // delay[a13] = f0;
@@ -59,26 +62,25 @@ fir_loop_len:
 		mov     a15, a10        // a15 - coeffs
 		wfr	    f2, a9 // f2 = 0;
 		sub   a14, a6, a7   // a14 = N-pos
+
+		// a11 = &delay[pos]
+		add     a11, a11, a13
+
 		loopnez  a14, first_fir_loop // pos...N-1
-			lsi     f1, a15, 0
-			addi    a15, a15, -4    // a15--
-			lsx     f0, a11, a13    // load delay f0 = delay[pos]
-			addi    a13, a13, 4     // a13++, pos++
-			madd.s  f2, f0, f1      // f2 += f0*f1
+			lsxp     f1, a15, a8     // f1 = *(coeffs--)
+			lsxp     f0, a11, a12    // load delay f0 = *(delay++)
+			madd.s  f2, f0, f1       // f2 += f0*f1
 first_fir_loop:
-		movi a13, 0    // load delay line counter to 0
+		l32i    a11, a2, 4           // a11 - delay line
 		loopnez  a7, second_fir_loop // 0..pos
-			lsi     f1, a15, 0
-			addi    a15, a15, -4    // a15--
-			lsx     f0, a11, a13    // load delay f0 = delay[pos]
-			addi    a13, a13, 4     // a13++, pos++
+			lsxp     f1, a15, a8     // f1 = *(coeffs--)
+			lsxp     f0, a11, a12    // load delay f0 = *(delay++)
 			madd.s  f2, f0, f1      // f2 += f0*f1
 second_fir_loop:
 
 		// and after end
 		// Store result
 		ssi     f2, a4, 0
-		//s32i    a13, a4, 0// just for debug *a4 = a13
 		addi    a4, a4, 4 // y++ - increment output pointer
 		// Check loop 
 		addi   a5, a5, -1
