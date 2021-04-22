@@ -3,8 +3,10 @@
 
 
 
+#ifdef CONFIG_IDF_TARGET_ARCH_XTENSA
 #include <xtensa/config/core-isa.h>
 #include <xtensa/config/core-matmap.h>
+#endif
 
 
 #if ((XCHAL_HAVE_FP == 1) && (XCHAL_HAVE_LOOPS == 1))
