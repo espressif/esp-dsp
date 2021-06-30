@@ -81,7 +81,7 @@ TEST_CASE("dsps_dotprod_s16_ansi functionality", "[dsps]")
 }
 
 // Test dsps_dotprod_s16_ansi function
-TEST_CASE("dsps_dotprod_s16_ae32 functionality", "[dsps]")
+TEST_CASE("dsps_dotprod_s16_aexx functionality", "[dsps]")
 {
     int16_t check_value = 1235;
     int max_N = 1024;
@@ -99,7 +99,7 @@ TEST_CASE("dsps_dotprod_s16_ae32 functionality", "[dsps]")
 
     // Check result == 0
     for (int i = 1 ; i < 1024 ; i++) {
-        esp_err_t status = dsps_dotprod_s16_ae32(x, y, &z[1], i, 0);
+        esp_err_t status = dsps_dotprod_s16(x, y, &z[1], i, 0);
         if (i < 4) {
             TEST_ASSERT_EQUAL(status, ESP_ERR_DSP_INVALID_LENGTH);
         } else {
@@ -119,7 +119,7 @@ TEST_CASE("dsps_dotprod_s16_ae32 functionality", "[dsps]")
     }
     // We check that dotproduct working with shift = 0;
     for (int i = 1 ; i < 1024 ; i++) {
-        esp_err_t status = dsps_dotprod_s16_ae32(x, y, &z[1], i, val_shift);
+        esp_err_t status = dsps_dotprod_s16(x, y, &z[1], i, val_shift);
         if (i < 4) {
             TEST_ASSERT_EQUAL(status, ESP_ERR_DSP_INVALID_LENGTH);
         } else {
@@ -131,7 +131,7 @@ TEST_CASE("dsps_dotprod_s16_ae32 functionality", "[dsps]")
     }
     val_shift = 2;
     for (int i = 1 ; i < 1024 ; i++) {
-        esp_err_t status = dsps_dotprod_s16_ae32(x, y, &z[1], i, val_shift);
+        esp_err_t status = dsps_dotprod_s16(x, y, &z[1], i, val_shift);
         if (i < 4) {
             TEST_ASSERT_EQUAL(status, ESP_ERR_DSP_INVALID_LENGTH);
         } else {

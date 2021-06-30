@@ -103,7 +103,7 @@ esp_err_t dsps_dotprode_f32_ae32(const float *src1, const float *src2, float *de
 #if (dsps_dotprod_f32_aes3_enabled == 1)
 #define dsps_dotprod_f32 dsps_dotprod_f32_aes3
 #define dsps_dotprode_f32 dsps_dotprode_f32_ae32
-#elif (dsps_dotprod_f32_ae32_enabled == 1)
+#elif (dotprod_f32_ae32_enabled == 1)
 #define dsps_dotprod_f32 dsps_dotprod_f32_ae32
 #define dsps_dotprode_f32 dsps_dotprode_f32_ae32
 #else

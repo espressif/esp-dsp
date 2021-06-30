@@ -156,7 +156,7 @@ TEST_CASE("DSP Libary benchmark table", "[dsp]")
                      data1, 256);
 
     REPORT_BENCHMARK("dsps_fft4r_fc32 for 1024 complex points",
-                     dsps_fft4r_fc32_ae32,
+                     dsps_fft4r_fc32,
                      dsps_fft4r_fc32_ansi,
                      data1, 1024);
 
