@@ -46,6 +46,10 @@ do
     idf.py clean
     idf.py set-target esp32s2
     idf.py build || die "CMake build for ${NAME} has failed for Esp32-s2"
+    echo "Building example $NAME with CMake for Esp32-s3"
+    idf.py clean
+    idf.py set-target esp32s3
+    idf.py build || die "CMake build for ${NAME} has failed for Esp32-s3"
     popd
 done
 
