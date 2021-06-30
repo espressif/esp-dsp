@@ -29,6 +29,10 @@ uint8_t dsps_fft2r_mem_allocated = 0;
 
 uint16_t *dsps_fft2r_ram_rev_table = NULL;
 
+#ifdef CONFIG_IDF_TARGET_ESP32S3 
+extern float* dsps_fft2r_w_table_fc32_1024;
+#endif // CONFIG_IDF_TARGET_ESP32S3
+
 unsigned short reverse(unsigned short x, unsigned short N, int order);
 
 esp_err_t dsps_fft2r_init_fc32(float *fft_table_buff, int table_size)
@@ -51,7 +55,17 @@ esp_err_t dsps_fft2r_init_fc32(float *fft_table_buff, int table_size)
         dsps_fft_w_table_size = table_size;
     } else {
         if (!dsps_fft2r_mem_allocated) {
+            #if CONFIG_IDF_TARGET_ESP32S3
+                if (table_size <= 1024)
+                {
+                    dsps_fft_w_table_fc32 = dsps_fft2r_w_table_fc32_1024;
+                } else
+                {
+                    dsps_fft_w_table_fc32 = (float *)malloc(table_size * sizeof(float));
+                }
+            #else
             dsps_fft_w_table_fc32 = (float *)malloc(table_size * sizeof(float));
+            #endif 
             if (dsps_fft_w_table_fc32 == NULL) {
                 return ESP_ERR_DSP_PARAM_OUTOFRANGE;
             }
@@ -88,7 +102,14 @@ esp_err_t dsps_fft2r_init_fc32(float *fft_table_buff, int table_size)
 void dsps_fft2r_deinit_fc32()
 {
     if (dsps_fft2r_mem_allocated) {
-        free(dsps_fft_w_table_fc32);
+        #if CONFIG_IDF_TARGET_ESP32S3
+            if (dsps_fft_w_table_fc32 != dsps_fft2r_w_table_fc32_1024)
+            {
+                free(dsps_fft_w_table_fc32);
+            }
+        #else
+            free(dsps_fft_w_table_fc32);
+        #endif
     }
     if (dsps_fft2r_ram_rev_table != NULL) {
         free(dsps_fft2r_ram_rev_table);

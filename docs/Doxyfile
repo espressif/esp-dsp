@@ -27,8 +27,10 @@ INPUT = \
     ../modules/common/include/dsp_common.h \
     ## Dot Product - API Reference
     ../modules/dotprod/include/dsps_dotprod.h \
+    ../modules/dotprod/include/dspi_dotprod.h \
     ## FFT - API Reference
     ../modules/fft/include/dsps_fft2r.h \
+    ../modules/fft/include/dsps_fft4r.h \
     ## DCT - API Reference
     ../modules/dct/include/dsps_dct.h \
     ## FIR Filter - API Reference

@@ -22,4 +22,10 @@
 
 #endif //
 
+
+#if CONFIG_IDF_TARGET_ESP32S3
+#define dsps_dotprod_s16_aes3_enabled 1
+#define dsps_dotprod_f32_aes3_enabled 1
+#endif 
+
 #endif // _dsps_dotprod_platform_H_

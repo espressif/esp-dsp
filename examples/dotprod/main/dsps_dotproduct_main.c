@@ -33,7 +33,9 @@ static const char *TAG = "main";
 
 #define N_SAMPLES 256
 int N = N_SAMPLES;
+__attribute__((aligned(16)))
 float input1[N_SAMPLES];
+__attribute__((aligned(16)))
 float input2[N_SAMPLES];
 
 void app_main()

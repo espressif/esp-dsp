@@ -14,8 +14,6 @@
 
 #include "dspi_dotprod.h"
 
-static const char *TAG = "dspi_dotprod_f32_ansi";
-
 esp_err_t dspi_dotprod_f32_ansi(image2d_t* in_image, image2d_t* filter, float *out_value, int count_x, int count_y)
 {
     if (in_image->step_x*count_x > in_image->stride_x) return ESP_ERR_DSP_PARAM_OUTOFRANGE;

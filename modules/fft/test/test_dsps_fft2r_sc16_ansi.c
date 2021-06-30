@@ -23,7 +23,9 @@
 
 static const char *TAG = "dsps_fft2r_ansi_s16";
 
+__attribute__((aligned(16)))
 static int16_t data[1024*2];
+__attribute__((aligned(16)))
 static float result_data[1024*2];
 
 TEST_CASE("dsps_fft2r_sc16_ansi functionality", "[dsps]")

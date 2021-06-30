@@ -21,10 +21,10 @@
 #include "esp_attr.h"
 #include "dsp_tests.h"
 
-static const char *TAG = "dspm_mult_f32_ae32";
+static const char *TAG = "dspm_mult_f32_aexx";
 
 // Test dsps_dotprod_s16_ansi function
-TEST_CASE("dspm_mult_f32_ae32 functionality", "[dspm]")
+TEST_CASE("dspm_mult_f32 functionality", "[dspm]")
 {
     int m = 4;
     int n = 3;
@@ -54,13 +54,13 @@ TEST_CASE("dspm_mult_f32_ae32 functionality", "[dspm]")
             }
         }
     }
-    dspm_mult_f32_ae32(A_ptr, B_ptr, C_ptr, m, n, k);
+    dspm_mult_f32(A_ptr, B_ptr, C_ptr, m, n, k);
 
     for (int i=0 ; i< m ; i++)
     {
         for (int j=0 ; j< k ; j++)
         {
-            ESP_LOGD(TAG, "[%i][%i] calc=%f, expected =%f",i,j, C[i][j], C_compare[i][j]);
+            ESP_LOGI(TAG, "[%i][%i] calc=%f, expected =%f",i,j, C[i][j], C_compare[i][j]);
         }
     }
     // Compare and check results
@@ -73,7 +73,7 @@ TEST_CASE("dspm_mult_f32_ae32 functionality", "[dspm]")
 
 static portMUX_TYPE testnlock = portMUX_INITIALIZER_UNLOCKED;
 
-TEST_CASE("dspm_mult_f32_ae32 benchmark", "[dspm]")
+TEST_CASE("dspm_mult_f32 benchmark", "[dspm]")
 {
     int m = 4;
     int n = 4;
@@ -89,19 +89,20 @@ TEST_CASE("dspm_mult_f32_ae32 benchmark", "[dspm]")
     float *C_ptr = (float *)C;
 
 
+    ESP_LOGI(TAG, "A: %8.8x, B: %8.8x, C=%8.8x", (uint32_t)A_ptr, (uint32_t)B_ptr, (uint32_t)C_ptr);
     portENTER_CRITICAL(&testnlock);
 
     unsigned int start_b = xthal_get_ccount();
     int repeat_count = 1024;
     for (int i = 0 ; i < repeat_count ; i++) {
-        dspm_mult_f32_ae32(A_ptr, B_ptr, C_ptr, m, n, k);
+        dspm_mult_f32(A_ptr, B_ptr, C_ptr, m, n, k);
     }
     unsigned int end_b = xthal_get_ccount();
     portEXIT_CRITICAL(&testnlock);
 
     float total_b = end_b - start_b;
     float cycles = total_b / (repeat_count);
-    printf("Benchmark dspm_mult_f32_ae32 - %f per multiplication 4x4 + overhead.\n", cycles);
+    printf("Benchmark dspm_mult_f32 - %f per multiplication 4x4 + overhead.\n", cycles);
     float min_exec = 100;
     float max_exec = 700;
     TEST_ASSERT_EXEC_IN_RANGE(min_exec, max_exec, cycles);

@@ -21,6 +21,7 @@
 	.text
 	.align  4
 	.global dspm_mult_f32_ae32
+	.global .dspm_mult_f32_ae32_body
 	.type   dspm_mult_f32_ae32,@function
 // The function implements the following C code:
 // esp_err_t dspm_mult_f32_ansi(const float* A, const float* B, float* C, int m, int n, int k)
@@ -57,7 +58,7 @@ dspm_mult_f32_ae32:
 
 	entry	a1, 16
 	// Array increment for floating point data should be 4
-	
+.dspm_mult_f32_ae32_body:
 	slli    a8, a6, 2 // Pointer increment for A
 	slli    a15,a7, 2 // Pointer increment for B
 
@@ -65,9 +66,9 @@ dspm_mult_f32_ae32:
 	movi.n	a10, 4 // Increment = 4
 	movi.n	a9, 0  // counter loop1
 
-dpf_loop1:    
+.dpf_loop1:    
 	movi.n	a11, 0 // reset counter for loop2
-dpf_loop2:
+.dpf_loop2:
 
 	// Clear initial state of the result register
 	// a2 - A
@@ -89,13 +90,13 @@ dpf_loop2:
 
 	// check loop 2
 	addi  a11, a11, 1 // Increment loop2 counter
-	blt   a11, a7, dpf_loop2
+	blt   a11, a7, .dpf_loop2
 
 	// check loop 1
 	add.n   a2, a2, a8 // Increment A, A = A[i*n]
 
 	addi  a9, a9, 1 // Increment loop1 counter
-	blt   a9, a5, dpf_loop1
+	blt   a9, a5, .dpf_loop1
 
 	movi.n	a2, 0 // return status ESP_OK
 	retw.n

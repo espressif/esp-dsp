@@ -23,6 +23,7 @@
 	.text
 	.align  4
 	.global dspm_mult_s16_ae32
+	.global .dspm_mult_s16_ae32_body
 	.type   dspm_mult_s16_ae32,@function
 
 dspm_mult_s16_ae32: 
@@ -36,9 +37,10 @@ dspm_mult_s16_ae32:
 
 // a14 - n*4 - pointer increment
 //
-	entry	a1, 48
+	entry	a1, 80
 // ======     process matrices when k == 1   ============
-	l32i.n	a8, a1, 48 // Load shift to the a8 register
+.dspm_mult_s16_ae32_body:
+	l32i.n	a8, a1, 80 // Load shift to the a8 register
 	
 
 	// Prepare and load round value

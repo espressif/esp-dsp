@@ -16,6 +16,7 @@
 #include "unity.h"
 #include "dsp_platform.h"
 #include "esp_log.h"
+#include <malloc.h>
 
 #include "dspi_dotprod.h"
 #include "dsp_tests.h"
