@@ -44,6 +44,9 @@ TEST_CASE("test template", "[dsp][ignore]")
 
 TEST_CASE("DSP Libary benchmark table", "[dsp]")
 {
+#ifndef CONFIG_COMPILER_OPTIMIZATION_PERF
+   ESP_LOGW(TAG, "WARNING: not optimizing for performance, don't use these benchmark results");
+#endif
     // This test generates benchmark rst table for all available functions
     const size_t test_size = 1024;
 
