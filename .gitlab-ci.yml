@@ -105,6 +105,9 @@ build_docs:
     - python -m pip install -r requirements.txt
 #    - python ./build_docs.py -bs $DOC_BUILDERS -l $DOCLANG -t $DOCTGT build
     - dir 
+    - python build_bm_table.py -d esp_bm_results.csv -t esp-dsp-benchmarks_template.rst -o esp-dsp-benchmarks.rst
+    - git diff --exit-code esp-dsp-benchmarks.rst
+    - dir 
     - make html
     - dir
     - ./check_doc_warnings.sh
