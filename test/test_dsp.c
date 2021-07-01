@@ -114,7 +114,7 @@ TEST_CASE("DSP Libary benchmark table", "[dsp]")
     REPORT_BENCHMARK("dsps_fird_f32 1024 samples, 256 coeffs and decimation 4",
                      dsps_fird_f32,
                      dsps_fird_f32_ansi,
-                     &fir1, data1, data2, 1024);
+                     &fir2, data1, data2, 1024);
 
     REPORT_SECTION("**FFTs Radix-2 32 bit Floating Point**");
 
