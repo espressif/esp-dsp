@@ -44,6 +44,9 @@ TEST_CASE("test template", "[dsp][ignore]")
 
 TEST_CASE("DSP Libary benchmark table", "[dsp]")
 {
+#ifndef CONFIG_COMPILER_OPTIMIZATION_PERF
+   ESP_LOGW(TAG, "WARNING: not optimizing for performance, don't use these benchmark results");
+#endif
     // This test generates benchmark rst table for all available functions
     const size_t test_size = 1024;
 
@@ -114,7 +117,7 @@ TEST_CASE("DSP Libary benchmark table", "[dsp]")
     REPORT_BENCHMARK("dsps_fird_f32 1024 samples, 256 coeffs and decimation 4",
                      dsps_fird_f32,
                      dsps_fird_f32_ansi,
-                     &fir1, data1, data2, 1024);
+                     &fir2, data1, data2, 1024);
 
     REPORT_SECTION("**FFTs Radix-2 32 bit Floating Point**");
 
