@@ -20,6 +20,7 @@
 #include "esp_dsp.h"
 #include "report.inc"
 #include "sdkconfig.h"
+#include "dsp_tests.h"
 
 static const char *TAG = "common";
 
