@@ -1,16 +1,24 @@
 menu "DSP Library"
 
 
+config DSP_OPTIMIZATIONS_SUPPORTED
+   bool
+   default y
+   depends on IDF_TARGET_ESP32 || IDF_TARGET_ESP32S3
+
 choice DSP_OPTIMIZATION
-   bool "DSP Optimization for ESP32"
-   default DSP_OPTIMIZED
+   bool "DSP Optimization"
+   default DSP_OPTIMIZED if DSP_OPTIMIZATIONS_SUPPORTED
+   default DSP_ANSI
    help
-      An Ansi C version could be used for verification and debug purpose.
+      An ANSI C version could be used for verification and debug purpose,
+      or for chips where an optimized version is not available.
 
 config DSP_ANSI
    bool "ANSI C"
 config DSP_OPTIMIZED
-   bool "ESP32 Optimized"
+   bool "Optimized"
+   depends on DSP_OPTIMIZATIONS_SUPPORTED
 endchoice
 
 config DSP_OPTIMIZATION
