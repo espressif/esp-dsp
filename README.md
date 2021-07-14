@@ -1,6 +1,6 @@
 # Espressif DSP Library
 
-ESP-DSP is the official DSP library for the [ESP32](https://espressif.com/en/products/hardware/esp32/overview) chip and for the [ESP32S3](https://espressif.com/en/products/hardware/esp32s3/overview) chip.
+ESP-DSP is the official DSP library for the [ESP32](https://espressif.com/en/products/hardware/esp32/overview) chip and for the [ESP32-S3](https://espressif.com/en/products/hardware/esp32s3/overview) chip.
 
 ## Overview
 
@@ -28,7 +28,7 @@ Documentation found in the above links is automatically generated from the conte
 
 ## Installation and Usage
 
-The ESP-DSP library is a component for the [ESP-IDF build system](https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/build-system.html). It also works with the [new CMake-based build system](https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/build-system-cmake.html).
+The ESP-DSP library is a component for the [ESP-IDF build system](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-guides/build-system.html). It also works for ESP32 with the [legacy GNU Make-based build system](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-guides/build-system-legacy.html).
 
 ### Trying out ESP-DSP examples
 
@@ -37,10 +37,6 @@ If you haven't created an ESP-IDF project yet, and wish to try the examples prov
     cd ~/esp
     git clone https://github.com/espressif/esp-dsp.git
     cd esp-dsp/examples/dotprod
-    make -j4 flash monitor ESPPORT=PORT
-
-or, if you are using CMake based build system,
-
     idf.py -p PORT flash monitor
 
 where `PORT` is the UART port name of your development board, such as `/dev/ttyUSB0` or `COM1`. 
@@ -68,4 +64,4 @@ For general questions related to this library, please use the [esp32.com forum](
 
 ## Copyrights and License
 
-All original source code in this repository is Copyright (C) 2018-2019 Espressif Systems. This source code is licensed under the Apache License 2.0 as described in the file LICENSE.
+All original source code in this repository is Copyright (C) 2018-2021 Espressif Systems. This source code is licensed under the Apache License 2.0 as described in the file LICENSE.
