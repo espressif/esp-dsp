@@ -20,6 +20,7 @@
 #include "dsps_math.h"
 #include "dspm_mult.h"
 #include <math.h>
+#include <cmath>
 
 
 using std::ostream;
