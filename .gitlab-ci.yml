@@ -69,13 +69,13 @@ build_idf_v4.3:
   extends: .build_template
   image: espressif/idf:release-v4.3
   variables:
-    EXAMPLE_TARGETS: "esp32 esp32s2"
+    EXAMPLE_TARGETS: "esp32 esp32s2 esp32c3"
 
 build_idf_latest:
   extends: .build_template
   image: espressif/idf:latest
   variables:
-    EXAMPLE_TARGETS: "esp32 esp32s2 esp32s3"
+    EXAMPLE_TARGETS: "esp32 esp32s2 esp32s3 esp32c3"
     TEST_TARGETS: "esp32 esp32s3"
 
 build_docs:
