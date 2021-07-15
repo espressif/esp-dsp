@@ -56,9 +56,9 @@ void ShowIIRfilter(float freq, float qFactor)
         return;
     }
     // Process input signal
-    unsigned int start_b = xthal_get_ccount();
+    unsigned int start_b = dsp_get_cpu_cycle_count();
     ret = dsps_biquad_f32(d, y, N, coeffs_lpf, w_lpf);
-    unsigned int end_b = xthal_get_ccount();
+    unsigned int end_b = dsp_get_cpu_cycle_count();
     if (ret  != ESP_OK)
     {
         ESP_LOGE(TAG, "Operation error = %i", ret);

@@ -51,9 +51,9 @@ void app_main()
         input2[i] = i;
     }
     float result1 = 0;
-    unsigned int start_b = xthal_get_ccount();
+    unsigned int start_b = dsp_get_cpu_cycle_count();
     ret = dsps_dotprod_f32(input1, input2, &result1, 101);
-    unsigned int end_b = xthal_get_ccount();
+    unsigned int end_b = dsp_get_cpu_cycle_count();
     if (ret != ESP_OK)
     {
         ESP_LOGE(TAG, "Operation error = %i", ret);

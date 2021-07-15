@@ -80,22 +80,22 @@ void app_main()
         x2[i] = x1[i];
     }
     // FFT Radix-2
-    unsigned int start_r2 = xthal_get_ccount();
+    unsigned int start_r2 = dsp_get_cpu_cycle_count();
     dsps_fft2r_fc32(x1, N>>1);
     // Bit reverse 
     dsps_bit_rev2r_fc32(x1, N>>1);
     // Convert one complex vector with length N/2 to one real spectrum vector with length N/2
     dsps_cplx2real_fc32(x1, N>>1);
-    unsigned int end_r2 = xthal_get_ccount();
+    unsigned int end_r2 = dsp_get_cpu_cycle_count();
 
     // FFT Radix-4
-    unsigned int start_r4 = xthal_get_ccount();
+    unsigned int start_r4 = dsp_get_cpu_cycle_count();
     dsps_fft4r_fc32(x2, N>>1);
     // Bit reverse 
     dsps_bit_rev4r_fc32(x2, N>>1);
     // Convert one complex vector with length N/2 to one real spectrum vector with length N/2
     dsps_cplx2real_fc32(x2, N>>1);
-    unsigned int end_r4 = xthal_get_ccount();
+    unsigned int end_r4 = dsp_get_cpu_cycle_count();
 
     for (int i = 0 ; i < N/2 ; i++) {
         x1[i] = 10 * log10f((x1[i * 2 + 0] * x1[i * 2 + 0] + x1[i * 2 + 1] * x1[i * 2 + 1] + 0.0000001)/N);

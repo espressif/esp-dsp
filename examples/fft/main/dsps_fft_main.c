@@ -78,9 +78,9 @@ void app_main()
         y_cf[i*2 + 1] = x2[i] * wind[i];
     }
     // FFT
-    unsigned int start_b = xthal_get_ccount();
+    unsigned int start_b = dsp_get_cpu_cycle_count();
     dsps_fft2r_fc32(y_cf, N);
-    unsigned int end_b = xthal_get_ccount();
+    unsigned int end_b = dsp_get_cpu_cycle_count();
     // Bit reverse 
     dsps_bit_rev_fc32(y_cf, N);
     // Convert one complex vector to two complex vectors
