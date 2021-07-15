@@ -17,10 +17,6 @@ variables:
 
   ESP_IDF_GIT: "https://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HTTPS_SERVER}/espressif/esp-idf.git"
 
-.setup_idf_tools: &setup_idf_tools |
-  cd esp-idf  
-#  tools/idf_tools.py --non-interactive install && eval "$(tools/idf_tools.py --non-interactive export)" || exit 1
-
 .add_gh_key_remote: &add_gh_key_remote |
   command -v ssh-agent >/dev/null || exit 1
   eval $(ssh-agent -s)
@@ -34,51 +30,53 @@ after_script:
   # Just for cleaning space, no other causes
   - git clean -ffdx
 
-build:
+
+# This template gets expanded multiple times, once for every IDF version.
+# IDF version is specified by setting the espressif/idf image tag.
+#
+# EXAMPLE_TARGETS sets the list of IDF_TARGET values to build examples for.
+# It should be equal to the list of targets supported by the specific IDF version.
+#
+# TEST_TARGETS sets the list of IDF_TARGET values to build the test_app for.
+# It should contain only the targets with optimized assembly implementations.
+#
+.build_template:
   stage: build
   tags:
     - build
+    - internet
   script:
-    # Get ESP-IDF
-    - dir
-    - git clone ${ESP_IDF_GIT} esp-idf
-    - dir
-    - pushd esp-idf
-    - dir
-    # Non-recursive getting its submodules
-    - git submodule update --init
-    - dir
-    - export IDF_PATH=$PWD
-    - dir
-    #- *setup_idf_tools
-    - dir
-    - ./tools/ci/mirror-submodule-update.sh
+    - ./build_all.sh
+  variables:
+    EXAMPLE_TARGETS: "esp32"
+    TEST_TARGETS: "esp32"
 
-    - source /opt/pyenv/activate
-    - pyenv global $(pyenv versions --bare)
-    - ./tools/idf_tools.py --non-interactive install-python-env
-    - ./tools/idf_tools.py --non-interactive install
+build_idf_v4.0:
+  extends: .build_template
+  image: espressif/idf:release-v4.0
 
-    - idf_exports=$(${IDF_PATH}/tools/idf_tools.py --non-interactive export)    
-    - eval "${idf_exports}"
-    - popd
+build_idf_v4.1:
+  extends: .build_template
+  image: espressif/idf:release-v4.1
 
-    # Create a copy of the project in "esp-dsp" directory.
-    # This is needed because CMake build system can not build a component
-    # when ESP-IDF directory is inside the component.
-    # After cloning, we will have two directories at the same level: "esp-idf" and "esp-dsp"
-    - git clone $PWD esp-dsp
-    - cd esp-dsp
+build_idf_v4.2:
+  extends: .build_template
+  image: espressif/idf:release-v4.2
+  variables:
+    EXAMPLE_TARGETS: "esp32 esp32s2"
 
-    # Build test app by both Makefiles and CMake ways
-    - pushd test_app
-    - make defconfig && make
-    - rm -rf build
-    - idf.py build
-    - popd
+build_idf_v4.3:
+  extends: .build_template
+  image: espressif/idf:release-v4.3
+  variables:
+    EXAMPLE_TARGETS: "esp32 esp32s2"
 
-    # Build examples
-    - ./build_examples.sh
+build_idf_latest:
+  extends: .build_template
+  image: espressif/idf:latest
+  variables:
+    EXAMPLE_TARGETS: "esp32 esp32s2 esp32s3"
+    TEST_TARGETS: "esp32 esp32s3"
 
 build_docs:
   stage: build
