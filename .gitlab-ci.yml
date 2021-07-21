@@ -17,6 +17,9 @@ variables:
 
   ESP_IDF_GIT: "https://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HTTPS_SERVER}/espressif/esp-idf.git"
 
+.setup_idf_tools: &setup_idf_tools |
+  tools/idf_tools.py --non-interactive install && eval "$(tools/idf_tools.py --non-interactive export)" || exit 1
+
 .add_gh_key_remote: &add_gh_key_remote |
   command -v ssh-agent >/dev/null || exit 1
   eval $(ssh-agent -s)
@@ -108,6 +111,7 @@ build_docs:
 
 push_master_to_github:
   stage: deploy
+#  image: espressif/idf:latest
   tags:
     - deploy
   only:
@@ -117,6 +121,41 @@ push_master_to_github:
   when: on_success
   script:
     # Just for a helper script
+    - dir
     - git clone --depth 1 ${ESP_IDF_GIT} esp-idf
     - *add_gh_key_remote
     - esp-idf/tools/ci/push_to_github.sh
+    - dir
+
+upload_to_component_manager:
+  stage: deploy
+#  image: espressif/idf:latest
+  tags:
+    - deploy
+  only:
+    - master
+    - /^release\/v/
+    - /^v\d+\.\d+(\.\d+)?($|-)/
+  when: on_success
+  script:
+    # Just for a helper script
+    - dir
+    - git clone --depth 1 ${ESP_IDF_GIT} esp-idf
+    - dir $PWD
+    - export IDF_PATH=$PWD/esp-idf
+    - cd esp-idf
+    - ./tools/idf_tools.py --non-interactive install-python-env
+    - ./tools/idf_tools.py --non-interactive install
+    - idf_exports=$(${IDF_PATH}/tools/idf_tools.py --non-interactive export)    
+    - eval "${idf_exports}"
+    - cd ..
+    - git clone $PWD esp-dsp
+    - cd esp-dsp    
+    - dir
+    - pip install idf-component-manager
+    - idf.py --help
+    - dir
+    - export IDF_COMPONENT_API_TOKEN=${ESP_DSP_API_KEY}
+    - idf.py upload-component --name=esp-dsp --namespace=espressif || true
+    - cd ..
+    - dir

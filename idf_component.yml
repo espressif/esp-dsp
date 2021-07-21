@@ -1,0 +1,5 @@
+name: "esp-dsp"
+
+version: "1.1.0"
+
+description: ESP-DSP is the official DSP library for Espressif SoCs.
