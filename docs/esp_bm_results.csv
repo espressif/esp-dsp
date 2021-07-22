@@ -1,0 +1,172 @@
+# This contents of this file is produced by running "DSP Benchmarks data" tests as explained in ESP-IDF Programming Guide and 
+# README.me for ESP-DSP.
+# When updating this file, remember to run build_bm_table.py script to rebuild the table in documentation.
+
+**Dot Product**
+dsps_dotprod_f32 for N=256 points, 448, 3623, 2, 3
+dsps_dotprode_f32 for N=256 points with step 1, 1325, 3115, 2, 3
+dsps_dotprod_s16 for N=256 points, 323, 5706, 2, 3
+**FIR Filters**
+dsps_fir_f32 1024 input samples and 256 coefficients, 1074222, 4357756, 2, 3
+dsps_fird_f32 1024 samples 256 coeffs and decimation 4, 347607, 1114658, 2, 3
+**FFTs Radix-2 32 bit Floating Point**
+dsps_fft2r_fc32 for  64 complex points, 5142, 8244, 2, 3
+dsps_fft2r_fc32 for 128 complex points, 11707, 18723, 2, 3
+dsps_fft2r_fc32 for 256 complex points, 26303, 41897, 2, 3
+dsps_fft2r_fc32 for 512 complex points, 58435, 93361, 2, 3
+dsps_fft2r_fc32 for 1024 complex points, 128585, 206017, 2, 3
+**FFTs Radix-4 32 bit Floating Point**
+dsps_fft4r_fc32 for  64 complex points, 3174, 5442, 2, 3
+dsps_fft4r_fc32 for 256 complex points, 15789, 27530, 2, 3
+dsps_fft4r_fc32 for 1024 complex points, 76548, 134582, 2, 3
+**FFTs 16 bit Fixed Point**
+dsps_fft2r_sc16 for  64 complex points, 793, 14311, 2, 3
+dsps_fft2r_sc16 for 128 complex points, 1627, 32702, 2, 3
+dsps_fft2r_sc16 for 256 complex points, 3430, 73683, 2, 3
+dsps_fft2r_sc16 for 512 complex points, 7311, 164071, 2, 3
+dsps_fft2r_sc16 for 1024 complex points, 15640, 361732, 2, 3
+**IIR Filters**
+dsps_biquad_f32 - biquad filter for 1024 input samples, 17459, 35055, 2, 3
+**Matrix Multiplication**
+dspm_mult_f32 - C[16;16] = A[16;16]*B[16;16], 6529, 70218, 2, 3
+dspm_mult_s16 - C[16;16] = A[16;16]*B[16;16], 2047, 90301, 2, 3
+dspm_mult_3x3x1_f32 - C[3;1] = A[3;3]*B[3;1], 86, 252, 2, 3
+dspm_mult_3x3x3_f32 - C[3;3] = A[3;3]*B[3;3], 217, 564, 2, 3
+dspm_mult_4x4x1_f32 - C[4;1] = A[4;4]*B[4;1], 121, 390, 2, 3
+dspm_mult_4x4x4_f32 - C[4;4] = A[4;4]*B[4;4], 331, 1329, 2, 3
+**Image processing prototypes**
+dspi_dotprod_s8/u8 - dotproduct of two images 16x16, 178, 3437, 2, 3
+dspi_dotprod_off_s8/u8 - dotproduct of two images 16x16, 244, 3960, 2, 3
+dspi_dotprod_s8/u8- dotproduct of two images 64x64, 706, 50382, 2, 3
+dspi_dotprod_off_s8/u8 - dotproduct of two images 64x64, 1010, 58583, 2, 3
+dspi_dotprod_s16/u16 - dotproduct of two images 8x8, 302, 1526, 2, 3
+dspi_dotprod_off_s16/u16 - dotproduct of two images 8x8, 363, 1731, 2, 3
+dspi_dotprod_s16 - dotproduct of two images 32x32, 425, 21111, 2, 3
+dspi_dotprod_off_s16/u16 - dotproduct of two images 32x32, 576, 24219, 2, 3
+
+**Dot Product**
+dsps_dotprod_f32 for N=256 points, 589, 1501, 1, 3
+dsps_dotprode_f32 for N=256 points with step 1, 1325, 2882, 1, 3
+dsps_dotprod_s16 for N=256 points, 325, 3396, 1, 3
+**FIR Filters**
+dsps_fir_f32 1024 input samples and 256 coefficients, 1074223, 2012704, 1, 3
+dsps_fird_f32 1024 samples 256 coeffs and decimation 4, 347436, 546128, 1, 3
+**FFTs Radix-2 32 bit Floating Point**
+dsps_fft2r_fc32 for  64 complex points, 5142, 6975, 1, 3
+dsps_fft2r_fc32 for 128 complex points, 11707, 15859, 1, 3
+dsps_fft2r_fc32 for 256 complex points, 26303, 35310, 1, 3
+dsps_fft2r_fc32 for 512 complex points, 58435, 78196, 1, 3
+dsps_fft2r_fc32 for 1024 complex points, 128586, 171644, 1, 3
+**FFTs Radix-4 32 bit Floating Point**
+dsps_fft4r_fc32 for  64 complex points, 3262, 5040, 1, 3
+dsps_fft4r_fc32 for 256 complex points, 15450, 25499, 1, 3
+dsps_fft4r_fc32 for 1024 complex points, 75185, 124982, 1, 3
+**FFTs 16 bit Fixed Point**
+dsps_fft2r_sc16 for  64 complex points, 933, 13342, 1, 3
+dsps_fft2r_sc16 for 128 complex points, 1734, 30043, 1, 3
+dsps_fft2r_sc16 for 256 complex points, 3507, 67102, 1, 3
+dsps_fft2r_sc16 for 512 complex points, 7312, 148909, 1, 3
+dsps_fft2r_sc16 for 1024 complex points, 15641, 327355, 1, 3
+**IIR Filters**
+dsps_biquad_f32 - biquad filter for 1024 input samples, 17458, 24620, 1, 3
+**Matrix Multiplication**
+dspm_mult_f32 - C[16;16] = A[16;16]*B[16;16], 6298, 47399, 1, 3
+dspm_mult_s16 - C[16;16] = A[16;16]*B[16;16], 1847, 74164, 1, 3
+dspm_mult_3x3x1_f32 - C[3;1] = A[3;3]*B[3;1], 88, 213, 1, 3
+dspm_mult_3x3x3_f32 - C[3;3] = A[3;3]*B[3;3], 217, 453, 1, 3
+dspm_mult_4x4x1_f32 - C[4;1] = A[4;4]*B[4;1], 160, 311, 1, 3
+dspm_mult_4x4x4_f32 - C[4;4] = A[4;4]*B[4;4], 191, 923, 1, 3
+**Image processing prototypes**
+dspi_dotprod_s8/u8 - dotproduct of two images 16x16, 179, 3500, 1, 3
+dspi_dotprod_off_s8/u8 - dotproduct of two images 16x16, 243, 3904, 1, 3
+dspi_dotprod_s8/u8- dotproduct of two images 64x64, 704, 49815, 1, 3
+dspi_dotprod_off_s8/u8 - dotproduct of two images 64x64, 1010, 54043, 1, 3
+dspi_dotprod_s16/u16 - dotproduct of two images 8x8, 162, 1312, 1, 3
+dspi_dotprod_off_s16/u16 - dotproduct of two images 8x8, 429, 1397, 1, 3
+dspi_dotprod_s16 - dotproduct of two images 32x32, 424, 17947, 1, 3
+dspi_dotprod_off_s16/u16 - dotproduct of two images 32x32, 578, 19036, 1, 3
+Esp32
+**Dot Product**
+dsps_dotprod_f32 for N=256 points, 1058, 1325, 1, 1
+dsps_dotprode_f32 for N=256 points with step 1, 1317, 2853, 1, 1
+dsps_dotprod_s16 for N=256 points, 447, 3647, 1, 1
+**FIR Filters**
+dsps_fir_f32 1024 input samples and 256 coefficients, 1079312, 2150685, 1, 1
+dsps_fird_f32 1024 samples 256 coeffs and decimation 4, 350915, 614234, 1, 1
+**FFTs Radix-2 32 bit Floating Point**
+dsps_fft2r_fc32 for  64 complex points, 6079, 7037, 1, 1
+dsps_fft2r_fc32 for 128 complex points, 13031, 15907, 1, 1
+dsps_fft2r_fc32 for 256 complex points, 27828, 35562, 1, 1
+dsps_fft2r_fc32 for 512 complex points, 61753, 78705, 1, 1
+dsps_fft2r_fc32 for 1024 complex points, 135742, 172664, 1, 1
+**FFTs Radix-4 32 bit Floating Point**
+dsps_fft4r_fc32 for  64 complex points, 3125, 5185, 1, 1
+dsps_fft4r_fc32 for 256 complex points, 15551, 26115, 1, 1
+dsps_fft4r_fc32 for 1024 complex points, 75547, 127669, 1, 1
+**FFTs 16 bit Fixed Point**
+dsps_fft2r_sc16 for  64 complex points, 8786, 14575, 1, 1
+dsps_fft2r_sc16 for 128 complex points, 20214, 33121, 1, 1
+dsps_fft2r_sc16 for 256 complex points, 45755, 74290, 1, 1
+dsps_fft2r_sc16 for 512 complex points, 102208, 164803, 1, 1
+dsps_fft2r_sc16 for 1024 complex points, 225862, 362193, 1, 1
+**IIR Filters**
+dsps_biquad_f32 - biquad filter for 1024 input samples, 17450, 24613, 1, 1
+**Matrix Multiplication**
+dspm_mult_f32 - C[16;16] = A[16;16]*B[16;16], 24669, 51502, 1, 1
+dspm_mult_s16 - C[16;16] = A[16;16]*B[16;16], 24707, 83699, 1, 1
+dspm_mult_3x3x1_f32 - C[3;1] = A[3;3]*B[3;1], 79, 226, 1, 1
+dspm_mult_3x3x3_f32 - C[3;3] = A[3;3]*B[3;3], 211, 492, 1, 1
+dspm_mult_4x4x1_f32 - C[4;1] = A[4;4]*B[4;1], 112, 334, 1, 1
+dspm_mult_4x4x4_f32 - C[4;4] = A[4;4]*B[4;4], 405, 1008, 1, 1
+Esp32
+**Dot Product**
+dsps_dotprod_f32 for N=256 points, 1058, 4129, 2, 1
+dsps_dotprode_f32 for N=256 points with step 1, 1317, 3621, 2, 1
+dsps_dotprod_s16 for N=256 points, 447, 6466, 2, 1
+**FIR Filters**
+dsps_fir_f32 1024 input samples and 256 coefficients, 1079599, 5147785, 2, 1
+dsps_fird_f32 1024 samples 256 coeffs and decimation 4, 350520, 1317367, 2, 1
+**FFTs Radix-2 32 bit Floating Point**
+dsps_fft2r_fc32 for  64 complex points, 5452, 8333, 2, 1
+dsps_fft2r_fc32 for 128 complex points, 12399, 19035, 2, 1
+dsps_fft2r_fc32 for 256 complex points, 27828, 42922, 2, 1
+dsps_fft2r_fc32 for 512 complex points, 61753, 95673, 2, 1
+dsps_fft2r_fc32 for 1024 complex points, 135742, 211252, 2, 1
+**FFTs Radix-4 32 bit Floating Point**
+dsps_fft4r_fc32 for  64 complex points, 3247, 5631, 2, 1
+dsps_fft4r_fc32 for 256 complex points, 16056, 28397, 2, 1
+dsps_fft4r_fc32 for 1024 complex points, 77587, 138522, 2, 1
+**FFTs 16 bit Fixed Point**
+dsps_fft2r_sc16 for  64 complex points, 8786, 15861, 2, 1
+dsps_fft2r_sc16 for 128 complex points, 20214, 36238, 2, 1
+dsps_fft2r_sc16 for 256 complex points, 45755, 81638, 2, 1
+dsps_fft2r_sc16 for 512 complex points, 102416, 181758, 2, 1
+dsps_fft2r_sc16 for 1024 complex points, 225861, 400853, 2, 1
+**IIR Filters**
+dsps_biquad_f32 - biquad filter for 1024 input samples, 17451, 36895, 2, 1
+**Matrix Multiplication**
+dspm_mult_f32 - C[16;16] = A[16;16]*B[16;16], 24670, 78197, 2, 1
+dspm_mult_s16 - C[16;16] = A[16;16]*B[16;16], 24707, 99353, 2, 1
+dspm_mult_3x3x1_f32 - C[3;1] = A[3;3]*B[3;1], 80, 271, 2, 1
+dspm_mult_3x3x3_f32 - C[3;3] = A[3;3]*B[3;3], 210, 611, 2, 1
+dspm_mult_4x4x1_f32 - C[4;1] = A[4;4]*B[4;1], 113, 425, 2, 1
+dspm_mult_4x4x4_f32 - C[4;4] = A[4;4]*B[4;4], 404, 1335, 2, 1
+**Image processing prototypes**
+dspi_dotprod_s8/u8 - dotproduct of two images 16x16, 3827, 3828, 1, 1
+dspi_dotprod_off_s8/u8 - dotproduct of two images 16x16, 4142, 4142, 1, 1
+dspi_dotprod_s8/u8- dotproduct of two images 64x64, 58069, 58068, 1, 1
+dspi_dotprod_off_s8/u8 - dotproduct of two images 64x64, 62365, 62366, 1, 1
+dspi_dotprod_s16/u16 - dotproduct of two images 8x8, 1455, 1453, 1, 1
+dspi_dotprod_off_s16/u16 - dotproduct of two images 8x8, 1529, 1531, 1, 1
+dspi_dotprod_s16 - dotproduct of two images 32x32, 20190, 20029, 1, 1
+dspi_dotprod_off_s16/u16 - dotproduct of two images 32x32, 21090, 21089, 1, 1
+**Image processing prototypes**
+dspi_dotprod_s8/u8 - dotproduct of two images 16x16, 4010, 4011, 2, 1
+dspi_dotprod_off_s8/u8 - dotproduct of two images 16x16, 4772, 4774, 2, 1
+dspi_dotprod_s8/u8- dotproduct of two images 64x64, 58825, 58826, 2, 1
+dspi_dotprod_off_s8/u8 - dotproduct of two images 64x64, 71233, 71062, 2, 1
+dspi_dotprod_s16/u16 - dotproduct of two images 8x8, 1804, 1806, 2, 1
+dspi_dotprod_off_s16/u16 - dotproduct of two images 8x8, 2074, 2074, 2, 1
+dspi_dotprod_s16 - dotproduct of two images 32x32, 25300, 25301, 2, 1
+dspi_dotprod_off_s16/u16 - dotproduct of two images 32x32, 29432, 29432, 2, 1
+

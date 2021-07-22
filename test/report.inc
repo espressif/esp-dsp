@@ -104,3 +104,27 @@ static void report_separator(const char* fill)
         report_text_line(report_space_str, "ESP32S3", "ANSI C"); \
         report_separator(report_double_line_str); \
     } while(0);
+
+#define REPORT_SECTION_NAME(title) \
+    do { \
+        printf("%s\n", title);\
+    } while(0);
+
+#define REPORT_BENCHMARK_CSV(title, func1, func2, ...) \
+    do { \
+        func1(__VA_ARGS__); /* warm up the cache */ \
+        unsigned intlevel = portENTER_CRITICAL_NESTED(); \
+        func1(__VA_ARGS__); \
+        uint32_t func1_start = xthal_get_ccount(); \
+        func1(__VA_ARGS__); \
+        uint32_t func1_end = xthal_get_ccount(); \
+        portEXIT_CRITICAL_NESTED(intlevel); \
+        func2(__VA_ARGS__); /* warm up the cache */ \
+        intlevel = portENTER_CRITICAL_NESTED(); \
+        func2(__VA_ARGS__); \
+        uint32_t func2_start = xthal_get_ccount(); \
+        func2(__VA_ARGS__); \
+        uint32_t func2_end = xthal_get_ccount(); \
+        portEXIT_CRITICAL_NESTED(intlevel); \
+        printf("%s, %u, %u, %u, %u\n", title, (func1_end - func1_start), (func2_end - func2_start), compiler_opt, chip_id); \
+    } while(0);

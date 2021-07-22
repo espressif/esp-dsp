@@ -6,3 +6,4 @@ sphinx==1.6.5
 sphinx-rtd-theme
 breathe==4.7.3
 recommonmark
+tabulate

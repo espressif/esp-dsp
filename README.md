@@ -1,6 +1,6 @@
 # Espressif DSP Library
 
-ESP-DSP is the official DSP library for the [ESP32](https://espressif.com/en/products/hardware/esp32/overview) chip and for the [ESP32-S3](https://espressif.com/en/products/hardware/esp32s3/overview) chip.
+ESP-DSP is the official DSP library for the [ESP32](https://espressif.com/en/products/hardware/esp32/overview) chip and for the [ESP32S3](https://espressif.com/en/products/hardware/esp32s3/overview) chip.
 
 ## Overview
 
@@ -28,7 +28,7 @@ Documentation found in the above links is automatically generated from the conte
 
 ## Installation and Usage
 
-The ESP-DSP library is a component for the [ESP-IDF build system](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-guides/build-system.html). It also works for ESP32 with the [legacy GNU Make-based build system](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-guides/build-system-legacy.html).
+The ESP-DSP library is a component for the [ESP-IDF build system](https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/build-system.html). It also works with the [new CMake-based build system](https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/build-system-cmake.html).
 
 ### Trying out ESP-DSP examples
 
@@ -37,6 +37,10 @@ If you haven't created an ESP-IDF project yet, and wish to try the examples prov
     cd ~/esp
     git clone https://github.com/espressif/esp-dsp.git
     cd esp-dsp/examples/dotprod
+    make -j4 flash monitor ESPPORT=PORT
+
+or, if you are using CMake based build system,
+
     idf.py -p PORT flash monitor
 
 where `PORT` is the UART port name of your development board, such as `/dev/ttyUSB0` or `COM1`. 
@@ -56,6 +60,10 @@ To include ESP-DSP into your ESP-IDF project, clone ESP-DSP repository (or add i
 
 ESP-IDF build system also allows including components which are not located in the project components directory, using `EXTRA_COMPONENT_DIRS` project variable. Please refer to the [ESP-IDF build system documentation](https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/build-system.html) for details.
 
+## Build a Benchmarks Table
+
+The Benchmark table [esp-dsp-benchmarks.rst](docs/esp-dsp-benchmarks.rst) contains benchmarks for ESP32 and ESP32S3 CPUs. The benchmarks collected with compiler optimization flags for speed (Os) and for size (Q2). To build this table please collect benchmarks data by running "DSP Benchmarks data" test from test application and place result data to the [CSV file](docs/esp_bm_results.csv). Then run the [Python scrip](docs/build_bm_table.py) to generate the benchmark table [esp-dsp-benchmarks.rst](docs/esp-dsp-benchmarks.rst).
+
 ## Reporting Issues
 
 If you have found an issue in ESP-DSP, or wish to submit an enhancement request, please use the [Issues](https://github.com/espressif/esp-dsp/issues) section on Github.
@@ -64,4 +72,4 @@ For general questions related to this library, please use the [esp32.com forum](
 
 ## Copyrights and License
 
-All original source code in this repository is Copyright (C) 2018-2021 Espressif Systems. This source code is licensed under the Apache License 2.0 as described in the file LICENSE.
+All original source code in this repository is Copyright (C) 2018-2019 Espressif Systems. This source code is licensed under the Apache License 2.0 as described in the file LICENSE.
