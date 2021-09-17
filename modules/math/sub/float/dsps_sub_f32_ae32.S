@@ -51,7 +51,7 @@ dsps_sub_f32_ae32:
         lsi      f1, a3, 0
         add.n    a3, a3, a7     // input2_ptr+=step2;
 
-        sub.s    f2, f1, f0     // f2 = f1 - f0
+        sub.s    f2, f0, f1     // f2 = f0 - f1
         lsi      f0, a2, 0
         add.n    a2, a2, a6     // input1_ptr+=step1;        
         ssi	     f2, a4, 0
