@@ -27,14 +27,16 @@ TEST_CASE("dsps_sub_f32_ansi functionality", "[dsps]")
     int n = 32;
     float x[n];
     float y[n];
+    float z[n];
     for (int i = 0 ; i < n ; i++) {
-        x[i] = i;
-        y[i] = 0;
+        x[i] = i*3;
+        y[i] = i*2;
+        z[i] = i;
     }
-    dsps_sub_f32_ansi(x, x, x, n, 1, 1, 1);
+    dsps_sub_f32_ansi(x, y, x, n, 1, 1, 1);
     for (int i = 0 ; i < n ; i++) {
-        if (x[i] != y[i]) {
-            TEST_ASSERT_EQUAL(x[i], y[i]);
+        if (x[i] != z[i]) {
+            TEST_ASSERT_EQUAL(x[i], z[i]);
         }
     }
 }
@@ -44,17 +46,19 @@ TEST_CASE("dsps_sub_f32_ae32 functionality", "[dsps]")
     int n = 32;
     float x[n];
     float y[n];
+    float z[n];
     for (int i = 0 ; i < n ; i++) {
-        x[i] = i;
-        y[i] = 0;
+        x[i] = i*3;
+        y[i] = i*2;
+        z[i] = i;
     }
-    dsps_sub_f32_ae32(x, x, x, n, 1, 1, 1);
+    dsps_sub_f32_ae32(x, y, x, n, 1, 1, 1);
     for (int i = 0 ; i < n ; i++) {
-        if (x[i] != y[i]) {
-            TEST_ASSERT_EQUAL(x[i], y[i]);
+        if (x[i] != z[i]) {
+            TEST_ASSERT_EQUAL(x[i], z[i]);
         }
     }
-    
+
     int repeat_count = 1;
     dsps_sub_f32_ae32(x, x, x, n, 1, 1, 1);
 
