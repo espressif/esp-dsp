@@ -133,4 +133,7 @@ set(COMPONENT_PRIV_INCLUDEDIRS  "modules/dotprod/float"
 
 register_component()
 
-#component_compile_options(-ffast-math -O2 -Wno-error=maybe-uninitialized)
+# Workaround for libstdc++ dependency in IDF 4.0
+if("${IDF_VERSION_MAJOR}.${IDF_VERSION_MINOR}" VERSION_EQUAL "4.0")
+    target_link_libraries(${COMPONENT_LIB} INTERFACE -lstdc++ -lc)
+endif()

@@ -95,26 +95,17 @@ build_docs:
   # No cleaning when the artifacts
   after_script: []
   script:
-    - dir
     - source /opt/pyenv/activate
-    - dir
     - pyenv global $(pyenv versions --bare)
-    - dir
     - cd docs
-    - dir
     - python -m pip install -r requirements.txt
-#    - python ./build_docs.py -bs $DOC_BUILDERS -l $DOCLANG -t $DOCTGT build
-    - dir 
     - python build_bm_table.py -d esp_bm_results.csv -t esp-dsp-benchmarks_template.rst -o esp-dsp-benchmarks.rst
     - git diff --exit-code esp-dsp-benchmarks.rst
-    - dir 
     - make html
-    - dir
     - ./check_doc_warnings.sh
 
 push_master_to_github:
   stage: deploy
-#  image: espressif/idf:latest
   tags:
     - deploy
   only:
@@ -123,16 +114,12 @@ push_master_to_github:
     - /^v\d+\.\d+(\.\d+)?($|-)/
   when: on_success
   script:
-    # Just for a helper script
-    - dir
     - git clone --depth 1 ${ESP_IDF_GIT} esp-idf
     - *add_gh_key_remote
     - esp-idf/tools/ci/push_to_github.sh
-    - dir
 
 upload_to_component_manager:
   stage: deploy
-#  image: espressif/idf:latest
   tags:
     - deploy
   only:
@@ -141,24 +128,17 @@ upload_to_component_manager:
     - /^v\d+\.\d+(\.\d+)?($|-)/
   when: on_success
   script:
-    # Just for a helper script
-    - dir
     - git clone --depth 1 ${ESP_IDF_GIT} esp-idf
-    - dir $PWD
     - export IDF_PATH=$PWD/esp-idf
     - cd esp-idf
     - ./tools/idf_tools.py --non-interactive install-python-env
     - ./tools/idf_tools.py --non-interactive install
-    - idf_exports=$(${IDF_PATH}/tools/idf_tools.py --non-interactive export)    
+    - idf_exports=$(${IDF_PATH}/tools/idf_tools.py --non-interactive export)
     - eval "${idf_exports}"
     - cd ..
     - git clone $PWD esp-dsp
-    - cd esp-dsp    
-    - dir
-    - pip install idf-component-manager
+    - cd esp-dsp
+    - pip install --upgrade idf-component-manager
     - idf.py --help
-    - dir
     - export IDF_COMPONENT_API_TOKEN=${ESP_DSP_API_KEY}
     - idf.py upload-component --name=esp-dsp --namespace=espressif || true
-    - cd ..
-    - dir
