@@ -33,7 +33,6 @@ after_script:
   # Just for cleaning space, no other causes
   - git clean -ffdx
 
-
 # This template gets expanded multiple times, once for every IDF version.
 # IDF version is specified by setting the espressif/idf image tag.
 #
@@ -133,17 +132,5 @@ upload_to_component_manager:
     - /^v\d+\.\d+(\.\d+)?($|-)/
   when: on_success
   script:
-    - git clone --depth 1 ${ESP_IDF_GIT} esp-idf
-    - export IDF_PATH=$PWD/esp-idf
-    - cd esp-idf
-    - ./tools/idf_tools.py --non-interactive install-python-env
-    - ./tools/idf_tools.py --non-interactive install
-    - idf_exports=$(${IDF_PATH}/tools/idf_tools.py --non-interactive export)
-    - eval "${idf_exports}"
-    - cd ..
-    - git clone $PWD esp-dsp
-    - cd esp-dsp
     - pip install --upgrade idf-component-manager
-    - idf.py --help
-    - export IDF_COMPONENT_API_TOKEN=${ESP_DSP_API_KEY}
-    - idf.py upload-component --name=esp-dsp --namespace=espressif || true
+    - python -m idf_component_manager upload-component --allow-existing --name=esp-dsp --namespace=espressif
