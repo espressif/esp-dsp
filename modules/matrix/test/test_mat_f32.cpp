@@ -129,7 +129,7 @@ TEST_CASE("Mat class operators", "[dspm]")
     {
         for (int n=0 ; n< N ; n++)
         {
-            test1(m,n) = m*N + n;
+            test1(m,n) = (m*N + n) * 2;
             test2(m,n) = m*N + n;
             result(m,n) = 0;
         }
@@ -140,9 +140,9 @@ TEST_CASE("Mat class operators", "[dspm]")
     {
         for (int n=0 ; n < N ; n++)
         {
-            if ((result(m,n) != 2*test1(m,n)) || 
-                (result(m,n) != 2*(m*N + n)) || 
-                (result.data[m*N + n] != 2*(m*N + n)))
+            if ((result(m,n) != (test1(m,n) + test2(m,n))) || 
+                (result(m,n) != 3*(m*N + n)) || 
+                (result.data[m*N + n] != 3*(m*N + n)))
             {
                 TEST_ASSERT_MESSAGE (false, "Error in + operator!");
             }
@@ -154,8 +154,8 @@ TEST_CASE("Mat class operators", "[dspm]")
         for (int n=0 ; n < N ; n++)
         {
             if ((result(m,n) != (test1(m,n) - test2(m,n))) || 
-                (result(m,n) != 0) || 
-                (result.data[m*N + n] != 0))
+                (result(m,n) != (m*N + n)) || 
+                (result.data[m*N + n] != (m*N + n)))
             {
                 TEST_ASSERT_MESSAGE (false, "Error in - operator!");
             }
