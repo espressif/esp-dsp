@@ -13,6 +13,7 @@ The examples are grouped into subdirectories by category. Each category director
 * [Dot Product Calculation](./dotprod/README.md) Example
 * [Basic Math Operations](./basic_math/README.md) Example
 * [FFT](./fft/README.md) Example
-* [Matrix](./matrix/README.md) example
+* [Matrix](./matrix/README.md) Example
 * [FFT Window](./fft_window/README.md) Example
 * [IIR Filter](./iir/README.md) Example
+* [Kalman Filter](./kalman/README.md) Example

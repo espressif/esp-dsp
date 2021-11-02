@@ -16,6 +16,7 @@ set(COMPONENT_SRCDIRS
                     "../modules/fft/test"
                     "../modules/dct/test"
                     "../modules/conv/test"
+                    "../modules/kalman/ekf_imu13states/test"
 )
 set(COMPONENT_REQUIRES unity esp-dsp)
 
