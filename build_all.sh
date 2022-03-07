@@ -19,6 +19,12 @@ then
     exit 1
 fi
 
+if [[ -z "${SKIP_GNU_MAKE_BUILD}" ]]
+then
+    echo "SKIP_GNU_MAKE_BUILD not set, will build with GNU Make based build system as well."
+    export SKIP_GNU_MAKE_BUILD=0
+fi
+
 set -o errexit # Exit if command failed.
 set -o pipefail # Exit if pipe failed.
 set -o nounset # Exit if variable not set.
@@ -41,7 +47,7 @@ function build_for_targets
     for IDF_TARGET in ${target_list}
     do
         export IDF_TARGET
-        if [[ "${IDF_TARGET}" = "esp32" ]]
+        if [[ "${IDF_TARGET}" = "esp32" ]] && [[ "${SKIP_GNU_MAKE_BUILD}" = "0" ]]
         then
             echo "${STARS}"
             echo "Building in $PWD with Make"
