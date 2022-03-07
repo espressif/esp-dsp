@@ -2,7 +2,7 @@ stages:
   - build
   - deploy
 
-image: "$CI_DOCKER_REGISTRY/esp-idf-doc-env:v4.4-1-v2"
+image: "$CI_DOCKER_REGISTRY/esp-idf-doc-env-v5.0:2-2"
 
 variables:
   # System environment
@@ -132,5 +132,4 @@ upload_to_component_manager:
     - /^v\d+\.\d+(\.\d+)?($|-)/
   when: on_success
   script:
-    - pip install --upgrade idf-component-manager
     - python -m idf_component_manager upload-component --allow-existing --name=esp-dsp --namespace=espressif
