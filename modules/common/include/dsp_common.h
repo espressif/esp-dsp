@@ -18,7 +18,7 @@
 #include <stdbool.h>
 #include "dsp_err.h"
 #include "esp_idf_version.h"
-#include "soc/cpu.h"
+#include "esp_cpu.h"
 
 #ifdef __cplusplus
 extern "C"
