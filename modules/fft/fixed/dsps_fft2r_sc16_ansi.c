@@ -17,6 +17,7 @@
 #include "dsp_types.h"
 #include <math.h>
 #include "esp_attr.h"
+#include <stdlib.h>
 
 int16_t* dsps_fft_w_table_sc16;
 int dsps_fft_w_table_sc16_size;
