@@ -64,7 +64,7 @@ Mat::Mat()
 
 Mat::~Mat()
 {
-    ESP_LOGD("Mat", "~Mat(%i, %i), ext_buff=%i, data=0x%8.8x", this->rows, this->cols, this->ext_buff, (uint32_t)this->data);
+    ESP_LOGD("Mat", "~Mat(%i, %i), ext_buff=%i, data=%p", this->rows, this->cols, this->ext_buff, this->data);
     if (false == this->ext_buff) {
         delete data;
     }
@@ -623,7 +623,7 @@ void Mat::allocate()
     this->ext_buff = false;
     this->length = this->rows * this->cols;
     data = new float[this->length];
-    ESP_LOGD("Mat", "allocate(%i) = 0x%8.8x", this->length, (uint32_t)this->data);
+    ESP_LOGD("Mat", "allocate(%i) = %p", this->length, this->data);
 }
 
 Mat Mat::expHelper(const Mat &m, int num)
