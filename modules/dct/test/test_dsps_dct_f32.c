@@ -53,7 +53,7 @@ TEST_CASE("dsps_dct_f32 functionality", "[dsps]")
     float abs_tol = 1e-5;
     for (size_t i = 0; i < N; i++) {
         ESP_LOGD(TAG, "data[%i] = %f, ref_data = %f\n", i, data[i], data_ref[i]*N / 2);
-        float error = abs(data[i] - data_ref[i] * N / 2);
+        float error = fabs(data[i] - data_ref[i] * N / 2);
         if (error > abs_tol) {
             ESP_LOGE(TAG, "data[%i] = %f, ref_data = %f, error= %f\n", i, data[i], data_ref[i]*N / 2, error);
             TEST_ASSERT_MESSAGE (false, "Result out of range!\n");
@@ -99,7 +99,7 @@ TEST_CASE("dsps_dct_f32 functionality Fast DCT", "[dsps]")
     float abs_tol = 1e-5;
     for (size_t i = 0; i < N; i++) {
         ESP_LOGD(TAG, "DCT data[%i] = %2.3f, data_fft = %2.3f\n", i, data[N + i], data_fft[i]);
-        float error = abs(data[N + i] - data_fft[i]);
+        float error = fabs(data[N + i] - data_fft[i]);
         if (error > abs_tol) {
             ESP_LOGE(TAG, "DCT data[%i] = %f, data_fft = %f, error = %f\n", i, data[N + i], data_fft[i], error);
             TEST_ASSERT_MESSAGE (false, "Result out of range!\n");
@@ -110,7 +110,7 @@ TEST_CASE("dsps_dct_f32 functionality Fast DCT", "[dsps]")
 
     for (size_t i = 0; i < N; i++) {
         ESP_LOGD(TAG, "IDCT data[%i] = %2.3f, data_fft = %2.3f\n", i, data[i], data_fft[i] / N * 2);
-        float error = abs(data[i] - data_fft[i] / N * 2);
+        float error = fabs(data[i] - data_fft[i] / N * 2);
         if (error > abs_tol) {
             ESP_LOGE(TAG, "IDCT data[%i] = %f, data_fft = %f, error = %f\n", i, data[i], data_fft[i] / N * 2, error);
             TEST_ASSERT_MESSAGE (false, "Result out of range!\n");

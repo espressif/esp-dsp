@@ -19,6 +19,8 @@
 #include "esp_attr.h"
 #include "esp_log.h"
 #include <string.h>
+#include <malloc.h>
+
 
 static const char *TAG = "fftr2_ansi";
 
@@ -61,7 +63,7 @@ esp_err_t dsps_fft2r_init_fc32(float *fft_table_buff, int table_size)
                     dsps_fft_w_table_fc32 = dsps_fft2r_w_table_fc32_1024;
                 } else
                 {
-                    dsps_fft_w_table_fc32 = (float *)malloc(table_size * sizeof(float));
+                    dsps_fft_w_table_fc32 = (float*)memalign(16, sizeof(float) * table_size);
                 }
             #else
             dsps_fft_w_table_fc32 = (float *)malloc(table_size * sizeof(float));

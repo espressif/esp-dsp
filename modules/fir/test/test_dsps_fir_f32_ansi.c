@@ -24,11 +24,11 @@
 
 static const char *TAG = "dsps_fir_f32_ansi";
 
-float x[1024];
-float y[1024];
+static float x[1024];
+static float y[1024];
 
-float coeffs[32];
-float delay[32];
+static float coeffs[32];
+static float delay[32];
 
 TEST_CASE("dsps_fir_f32_ansi functionality", "[dsps]")
 {

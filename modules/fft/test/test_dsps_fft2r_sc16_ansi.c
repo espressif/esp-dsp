@@ -30,7 +30,7 @@ static float result_data[1024*2];
 
 TEST_CASE("dsps_fft2r_sc16_ansi functionality", "[dsps]")
 {
-    int N = sizeof(data) / sizeof(float) / 2;
+    int N = sizeof(data) / sizeof(int16_t) / 2;
     N = 1024;
     int check_bin = 64;
     for (int i = 0 ; i < N ; i++) {

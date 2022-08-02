@@ -18,6 +18,7 @@
 #include <malloc.h>
 
 #include "esp_dsp.h"
+#define USE_FULL_REPORT
 #include "report.inc"
 #include "sdkconfig.h"
 #include "dsp_tests.h"

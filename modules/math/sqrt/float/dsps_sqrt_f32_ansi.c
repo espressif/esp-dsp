@@ -18,9 +18,11 @@
 
 inline float dsps_sqrtf_f32_ansi(float f)
 {
+    int result;
     int* f_ptr = (int*)&f;
-    const int result = 0x1fbb4000 + (*f_ptr >> 1);
-    float* f_result = (float*)&result;
+    result = 0x1fbb4000 + (*f_ptr >> 1);
+    const int *p = &result;
+    float* f_result = (float*)p;
     return *f_result;   
 }
 

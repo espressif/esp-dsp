@@ -17,10 +17,19 @@
 #include <stdio.h>
 #include <freertos/FreeRTOS.h>
 
+#if ESP_IDF_VERSION >= ESP_IDF_VERSION_VAL(5, 0, 0)
+#define dsp_ENTER_CRITICAL      portSET_INTERRUPT_MASK_FROM_ISR
+#define dsp_EXIT_CRITICAL       portCLEAR_INTERRUPT_MASK_FROM_ISR
+#else
+#define dsp_ENTER_CRITICAL      portENTER_CRITICAL_NESTED
+#define dsp_EXIT_CRITICAL       portEXIT_CRITICAL_NESTED
+#endif
+
 /**
  * This file contains helper functions and macros used to generate
  * the benchmarks table in test_dsp.c.
  */
+#ifdef USE_FULL_REPORT
 
 static char report_space_str[] = "                                                            ";
 static char report_line_str[] = "------------------------------------------------------------";
@@ -59,21 +68,22 @@ static void report_separator(const char* fill)
         REPORT_COL2_WIDTH, fill,
         REPORT_COL3_WIDTH, fill);
 }
+#endif // USE_FULL_REPORT
 
 #define REPORT_BENCHMARK(title, func1, func2, ...) \
     do { \
         func1(__VA_ARGS__); /* warm up the cache */ \
-        unsigned intlevel = portENTER_CRITICAL_NESTED(); \
+        unsigned intlevel = dsp_ENTER_CRITICAL(); \
         uint32_t func1_start = xthal_get_ccount(); \
         func1(__VA_ARGS__); \
         uint32_t func1_end = xthal_get_ccount(); \
-        portEXIT_CRITICAL_NESTED(intlevel); \
+        dsp_EXIT_CRITICAL(intlevel); \
         func2(__VA_ARGS__); /* warm up the cache */ \
-        intlevel = portENTER_CRITICAL_NESTED(); \
+        intlevel = dsp_ENTER_CRITICAL(); \
         uint32_t func2_start = xthal_get_ccount(); \
         func2(__VA_ARGS__); \
         uint32_t func2_end = xthal_get_ccount(); \
-        portEXIT_CRITICAL_NESTED(intlevel); \
+        dsp_EXIT_CRITICAL(intlevel); \
         report_value_line(title, func1_end - func1_start, func2_end - func2_start); \
         report_separator(report_line_str); \
     } while(0);
@@ -113,18 +123,18 @@ static void report_separator(const char* fill)
 #define REPORT_BENCHMARK_CSV(title, func1, func2, ...) \
     do { \
         func1(__VA_ARGS__); /* warm up the cache */ \
-        unsigned intlevel = portENTER_CRITICAL_NESTED(); \
+        unsigned intlevel = dsp_ENTER_CRITICAL(); \
         func1(__VA_ARGS__); \
         uint32_t func1_start = xthal_get_ccount(); \
         func1(__VA_ARGS__); \
         uint32_t func1_end = xthal_get_ccount(); \
-        portEXIT_CRITICAL_NESTED(intlevel); \
+        dsp_EXIT_CRITICAL(intlevel); \
         func2(__VA_ARGS__); /* warm up the cache */ \
-        intlevel = portENTER_CRITICAL_NESTED(); \
+        intlevel = dsp_ENTER_CRITICAL(); \
         func2(__VA_ARGS__); \
         uint32_t func2_start = xthal_get_ccount(); \
         func2(__VA_ARGS__); \
         uint32_t func2_end = xthal_get_ccount(); \
-        portEXIT_CRITICAL_NESTED(intlevel); \
+        dsp_EXIT_CRITICAL(intlevel); \
         printf("%s, %u, %u, %u, %u\n", title, (func1_end - func1_start), (func2_end - func2_start), compiler_opt, chip_id); \
     } while(0);

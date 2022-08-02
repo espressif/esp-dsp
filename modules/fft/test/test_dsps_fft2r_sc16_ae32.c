@@ -31,7 +31,7 @@ static float result_data[1024*2];
 
 TEST_CASE("dsps_fft2r_sc16_aexx functionality", "[dsps]")
 {
-    int N = sizeof(data) / sizeof(float) / 2;
+    int N = sizeof(data) / sizeof(int16_t) / 2;
     N = 1024;
     int check_bin = 64;
     for (int i = 0 ; i < N ; i++) {
@@ -94,7 +94,7 @@ TEST_CASE("dsps_fft2r_sc16_aexx functionality", "[dsps]")
 
 TEST_CASE("dsps_fft2r_sc16_aexx overflow check", "[dsps]")
 {
-    int N = sizeof(data) / sizeof(float) / 2;
+    int N = sizeof(data) / sizeof(int16_t) / 2;
     N = 1024;
     int check_bin = 32;
     int bins_count = 4;
