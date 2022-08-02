@@ -82,6 +82,7 @@ COMPONENT_SRCDIRS :=. \
 					modules/iir/biquad \
 					modules/fir \
 					modules/fir/float \
+					modules/fir/fixed \
 					modules/kalman/ekf/common \
 					modules/kalman/ekf_imu13states
 					

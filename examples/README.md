@@ -17,3 +17,4 @@ The examples are grouped into subdirectories by category. Each category director
 * [FFT Window](./fft_window/README.md) Example
 * [IIR Filter](./iir/README.md) Example
 * [Kalman Filter](./kalman/README.md) Example
+* [FIR Filter](.fir/README.md) Example

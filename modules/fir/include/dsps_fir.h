@@ -42,6 +42,23 @@ typedef struct fir_f32_s {
 } fir_f32_t;
 
 /**
+ * @brief Data struct of s32 fir filter
+ *
+ * This structure used by filter internally. User should access this structure only in case of
+ * extensions for the DSP Library.
+ * All fields of this structure initialized by dsps_fir_init_s16(...) function.
+ */
+typedef struct fir_s16_s{
+    int16_t    *coeffs;     /*!< Pointer to the coefficient buffer.*/
+    int16_t    *delay;      /*!< Pointer to the delay line buffer.*/
+    int16_t     N;          /*!< FIR filter coefficients amount.*/
+    int16_t     pos;        /*!< Position in delay line.*/
+    int16_t     decim;      /*!< Decimation factor.*/
+    int16_t     d_pos;      /*!< Actual decimation counter.*/
+    int16_t     shift;      /*!< shift value of the result.*/
+}fir_s16_t;
+
+/**
  * @brief   initialize structure for 32 bit FIR filter
  *
  * Function initialize structure for 32 bit floating point FIR filter
@@ -75,6 +92,25 @@ esp_err_t dsps_fir_init_f32(fir_f32_t *fir, float *coeffs, float *delay, int N);
  *      - One of the error codes from DSP library
  */
 esp_err_t dsps_fird_init_f32(fir_f32_t *fir, float *coeffs, float *delay, int N, int decim, int start_pos);
+
+/**
+ * @brief   initialize structure for 16 bit Decimation FIR filter
+ * Function initialize structure for 16 bit signed fixed point FIR filter with decimation
+ * The implementation use ANSI C and could be compiled and run on any platform
+ *
+ * @param fir: pointer to fir filter structure, that must be preallocated
+ * @param coeffs: array with FIR filter coefficients. Must be length N
+ * @param delay: array for FIR filter delay line. Must be length N
+ * @param N: FIR filter length. Length of coeffs and delay arrays.
+ * @param decim: decimation factor.
+ * @param start_pos: initial value of decimation counter. Must be [0..d)
+ * @param shift: shift position of the result
+ *
+ * @return
+ *      - ESP_OK on success
+ *      - One of the error codes from DSP library
+ */
+esp_err_t dsps_fird_init_s16(fir_s16_t *fir, int16_t *coeffs, int16_t *delay, int16_t N, int16_t decim, int16_t start_pos, int16_t shift);
 
 
 /**@{*/
@@ -117,6 +153,8 @@ esp_err_t dsps_fir_f32_aes3(fir_f32_t *fir, const float *input, float *output, i
  */
 int dsps_fird_f32_ansi(fir_f32_t *fir, const float *input, float *output, int len);
 int dsps_fird_f32_ae32(fir_f32_t *fir, const float *input, float *output, int len);
+int32_t dsps_fird_s16_ansi(fir_s16_t *fir, const int16_t *input, int16_t *output, int32_t len);
+int32_t dsps_fird_s16_ae32(fir_s16_t *fir, const int16_t *input, int16_t *output, int32_t len);
 /**@}*/
 
 
