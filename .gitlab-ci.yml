@@ -2,7 +2,7 @@ stages:
   - build
   - deploy
 
-image: "$CI_DOCKER_REGISTRY/esp-idf-doc-env-v5.0:2-2"
+image: "$CI_DOCKER_REGISTRY/esp-idf-doc-env-v5.0:2-3"
 
 variables:
   # System environment
@@ -102,12 +102,14 @@ build_docs:
     - source /opt/pyenv/activate
     - pyenv global $(pyenv versions --bare)
     - cd docs
-    - python -m pip install -r requirements.txt
+    # - python -m pip install -U -r requirements.txt
+    - pip install -U -r requirements.txt
     - python build_bm_table.py -d esp_bm_results.csv -t esp-dsp-benchmarks_template.rst -o esp-dsp-benchmarks.rst
     - git diff --exit-code esp-dsp-benchmarks.rst
-    - make html
+    # Not build docs for a while
+    # - make html
     - ./check_doc_warnings.sh
-
+   
 push_master_to_github:
   stage: deploy
   tags:
