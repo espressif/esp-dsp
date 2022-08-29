@@ -32,7 +32,7 @@ TEST_CASE("dspi_dotprod_u16_aexx functionality", "[dspi]")
     uint16_t *y = (uint16_t *)memalign(16, max_N * sizeof(int16_t));
     uint16_t *z = (uint16_t *)memalign(16, max_N * sizeof(int16_t));
 
-    printf("Data: x=%8.8x, y=%8.8x, z=%8.8x \n", (uint32_t)x, (uint32_t)y, (uint32_t)z);
+    printf("Data: x=%8.8"PRIx32", y=%8.8"PRIx32", z=%8.8"PRIx32" \n", (uint32_t)x, (uint32_t)y, (uint32_t)z);
     for (size_t i = 0; i < max_N; i++)
     {
         x[i] = i%7;

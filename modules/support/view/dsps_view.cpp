@@ -2,6 +2,8 @@
 #include <math.h>
 #include "esp_log.h"
 #include <limits>
+#include <inttypes.h>
+
 
 void dsps_view(const float *data, int32_t len, int width, int height, float min, float max, char view_char)
 {
@@ -94,7 +96,7 @@ void dsps_view(const float *data, int32_t len, int width, int height, float min,
         printf("%i", x % 10);
     }
     printf("\n");
-    ESP_LOGI("view", "Plot: Length=%i, min=%f, max=%f", len, min, max);
+    ESP_LOGI("view", "Plot: Length=%i, min=%f, max=%f", (int)len, min, max);
     delete view_data;
     delete view_data_min;
     delete view_data_max;

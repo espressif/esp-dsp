@@ -14,6 +14,7 @@
 
 #include <string.h>
 #include "unity.h"
+#include "esp_dsp.h"
 #include "dsp_platform.h"
 #include "esp_log.h"
 
@@ -89,7 +90,7 @@ TEST_CASE("dspm_mult_f32 benchmark", "[dspm]")
     float *C_ptr = (float *)C;
 
 
-    ESP_LOGI(TAG, "A: %8.8x, B: %8.8x, C=%8.8x", (uint32_t)A_ptr, (uint32_t)B_ptr, (uint32_t)C_ptr);
+    ESP_LOGI(TAG, "A: %8.8"PRIx32", B: %8.8"PRIx32", C=%8.8"PRIx32"", (uint32_t)A_ptr, (uint32_t)B_ptr, (uint32_t)C_ptr);
     portENTER_CRITICAL(&testnlock);
 
     unsigned int start_b = xthal_get_ccount();
