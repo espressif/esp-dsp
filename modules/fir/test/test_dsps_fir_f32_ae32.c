@@ -14,6 +14,7 @@
 
 #include <string.h>
 #include "unity.h"
+#include "esp_dsp.h"
 #include "dsp_platform.h"
 #include "esp_log.h"
 
@@ -56,7 +57,7 @@ TEST_CASE("dsps_fir_f32_ae32 functionality", "[dsps]")
     int32_t *ttt = (int32_t *)y;
     for (int i=0 ; i< fir_len*3 ; i++)
     {
-        ESP_LOGD(TAG, "fir[%i] = 0x%08x\n", i, ttt[i]);
+        ESP_LOGD(TAG, "fir[%i] = 0x%08"PRIx32"\n", i, ttt[i]);
     }
 
     for (int i = 0 ; i < fir_len ; i++) {

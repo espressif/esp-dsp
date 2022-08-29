@@ -14,6 +14,7 @@
 
 #include <string.h>
 #include "unity.h"
+#include "esp_dsp.h"
 #include "dsp_platform.h"
 #include "esp_log.h"
 #include <malloc.h>

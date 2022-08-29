@@ -55,7 +55,7 @@ static void report_text_line(const char* col1, const char* col2, const char* col
 
 static void report_value_line(const char* col1, uint32_t col2, uint32_t col3)
 {
-    printf("| %-*.*s|%*u |%*u |\n",
+    printf("| %-*.*s|%*"PRIu32" |%*"PRIu32" |\n",
         REPORT_COL1_WIDTH - 1, REPORT_COL1_WIDTH - 1, col1,
         REPORT_COL2_WIDTH - 1, col2,
         REPORT_COL3_WIDTH - 1, col3);
@@ -136,5 +136,5 @@ static void report_separator(const char* fill)
         func2(__VA_ARGS__); \
         uint32_t func2_end = xthal_get_ccount(); \
         dsp_EXIT_CRITICAL(intlevel); \
-        printf("%s, %u, %u, %u, %u\n", title, (func1_end - func1_start), (func2_end - func2_start), compiler_opt, chip_id); \
+        printf("%s, %"PRIu32", %"PRIu32", %"PRIu32", %"PRIu32"\n", title, (func1_end - func1_start), (func2_end - func2_start), compiler_opt, chip_id); \
     } while(0);

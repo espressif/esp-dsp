@@ -14,6 +14,7 @@
 
 #include <string.h>
 #include "unity.h"
+#include "esp_dsp.h"
 #include "dsp_platform.h"
 #include "esp_log.h"
 
@@ -45,7 +46,7 @@ TEST_CASE("dsps_fft2r_sc16_aexx functionality", "[dsps]")
         ESP_LOGE(TAG, "Not possible to initialize FFT. Error = %i", ret);
         return;
     }
-    ESP_LOGI(TAG, "data address=%8.8x\n", (uint32_t)data);
+    ESP_LOGI(TAG, "data address=%8.8"PRIx32"\n", (uint32_t)data);
 
     dsps_fft2r_sc16(data, N);
     unsigned int start_b = xthal_get_ccount();
