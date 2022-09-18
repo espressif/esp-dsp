@@ -14,6 +14,7 @@
 
 #include <string.h>
 #include "unity.h"
+#include "esp_dsp.h"
 #include "dsp_platform.h"
 #include "esp_log.h"
 
@@ -24,13 +25,13 @@
 
 static const char *TAG = "dsps_fir_f32_ae32";
 
-float x[1024];
-float y[1024];
-float y_compare[1024];
+static float x[1024];
+static float y[1024];
+static float y_compare[1024];
 
-float coeffs[32];
-float delay[32];
-float delay_compare[32];
+static float coeffs[32];
+static float delay[32];
+static float delay_compare[32];
 
 TEST_CASE("dsps_fir_f32_ae32 functionality", "[dsps]")
 {
@@ -56,7 +57,7 @@ TEST_CASE("dsps_fir_f32_ae32 functionality", "[dsps]")
     int32_t *ttt = (int32_t *)y;
     for (int i=0 ; i< fir_len*3 ; i++)
     {
-        ESP_LOGD(TAG, "fir[%i] = 0x%08x\n", i, ttt[i]);
+        ESP_LOGD(TAG, "fir[%i] = 0x%08"PRIx32"\n", i, ttt[i]);
     }
 
     for (int i = 0 ; i < fir_len ; i++) {

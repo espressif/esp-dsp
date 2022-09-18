@@ -14,6 +14,7 @@
 
 #include <string.h>
 #include "unity.h"
+#include "esp_dsp.h"
 #include "dsp_platform.h"
 #include "esp_log.h"
 #include <malloc.h>
@@ -72,7 +73,7 @@ TEST_CASE("dsps_dotprod_f32_aexx benchmark", "[dsps]")
         x[i] = 0;
         y[i] = 1000;
     }
-    printf("Benchmark dsps_dotprod_f32_aexx - x=%8.8x, y=%8.8x, len=%8.8x\n", (uint32_t)x, (uint32_t)y, 1024);
+    printf("Benchmark dsps_dotprod_f32_aexx - x=%8.8"PRIx32", y=%8.8"PRIx32", len=%8.8x\n", (uint32_t)x, (uint32_t)y, 1024);
 
     unsigned int start_b = xthal_get_ccount();
     int repeat_count = 1024;

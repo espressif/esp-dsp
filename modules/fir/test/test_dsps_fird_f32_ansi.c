@@ -14,6 +14,7 @@
 
 #include <string.h>
 #include "unity.h"
+#include "esp_dsp.h"
 #include "dsp_platform.h"
 #include "esp_log.h"
 
@@ -24,11 +25,11 @@
 
 static const char *TAG = "dsps_fird_f32_ansi";
 
-float x[1024];
-float y[1024];
+static float x[1024];
+static float y[1024];
 
-float coeffs[32];
-float delay[32];
+static float coeffs[32];
+static float delay[32];
 
 TEST_CASE("dsps_fird_f32_ansi functionality", "[dsps]")
 {
