@@ -40,7 +40,7 @@ unsigned short reverse(unsigned short x, unsigned short N, int order);
 esp_err_t dsps_fft2r_init_fc32(float *fft_table_buff, int table_size)
 {
     esp_err_t result = ESP_OK;
-    if (dsps_fft2r_initialized != 0) {
+    if (dsps_fft2r_initialized != 0 && fft_table_buff == NULL) {
         return result;
     }
     if (table_size > CONFIG_DSP_MAX_FFT_SIZE) {
