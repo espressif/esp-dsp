@@ -1,4 +1,5 @@
 set(COMPONENT_SRCS  "modules/common/misc/dsps_pwroftwo.cpp"
+                    "modules/common/misc/aes3_tie_log.c"
                     "modules/dotprod/float/dsps_dotprod_f32_ae32.S"
                     "modules/dotprod/float/dsps_dotprod_f32_m_ae32.S"
                     "modules/dotprod/float/dsps_dotprode_f32_ae32.S"
@@ -106,11 +107,20 @@ set(COMPONENT_SRCS  "modules/common/misc/dsps_pwroftwo.cpp"
                     "modules/fir/fixed/dsps_fird_init_s16.c"
                     "modules/fir/fixed/dsps_fird_s16_ansi.c"
                     "modules/fir/fixed/dsps_fird_s16_ae32.S"
-                    
+                    "modules/fir/fixed/dsps_fir_s16_m_ae32.S"
+                    "modules/fir/fixed/dsps_fird_s16_aes3.S"
 # EKF files
                     "modules/kalman/ekf/common/ekf.cpp"
                     "modules/kalman/ekf_imu13states/ekf_imu13states.cpp"
+
+
                     )
+
+# Add TIE extension support only for IDF 5
+# if("${IDF_VERSION_MAJOR}.${IDF_VERSION_MINOR}" VERSION_GREATER_EQUAL "5.0")
+#     list(APPEND COMPONENT_SRCS "modules/fir/fixed/dsps_fird_s16_aes3.c")
+# endif()
+
 
 set(COMPONENT_ADD_INCLUDEDIRS   "modules/dotprod/include"
                                 "modules/support/include"

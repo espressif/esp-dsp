@@ -73,6 +73,7 @@ TEST_CASE("dsps_fird_s16_ansi functionality", "[dsps]")
         TEST_ASSERT_EQUAL(y[i], (0x2000));
     }
 
+    dsps_fird_s16_aexx_free(&fir1);
     free(x);
     free(y);
     free(coeffs);
@@ -128,6 +129,7 @@ TEST_CASE("dsps_fird_s16_ansi benchmark", "[dsps]")
         fir1.decim *= 2;
     }
 
+    dsps_fird_s16_aexx_free(&fir1);
     free(x);
     free(y);
     free(coeffs);
@@ -259,5 +261,6 @@ TEST_CASE("dsps_fird_s16_ansi noise_snr", "[dsps]")
     const float min_exec_snr = 50;
     const float max_exec_snr = 120;
     TEST_ASSERT_EXEC_IN_RANGE(min_exec_snr, max_exec_snr, snr);
+    dsps_fird_s16_aexx_free(&fir1);
 
 }
