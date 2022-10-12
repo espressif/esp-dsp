@@ -106,7 +106,7 @@ set(COMPONENT_SRCS  "modules/common/misc/dsps_pwroftwo.cpp"
                     "modules/fir/fixed/dsps_fird_init_s16.c"
                     "modules/fir/fixed/dsps_fird_s16_ansi.c"
                     "modules/fir/fixed/dsps_fird_s16_ae32.S"
-                    "modules/fir/fixed/dsps_fir_s16_m_ae32.S"
+                    
 # EKF files
                     "modules/kalman/ekf/common/ekf.cpp"
                     "modules/kalman/ekf_imu13states/ekf_imu13states.cpp"

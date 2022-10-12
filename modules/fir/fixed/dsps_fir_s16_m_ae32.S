@@ -1,22 +1,8 @@
-// Copyright 2018-2019 Espressif Systems (Shanghai) PTE LTD
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License. 
-
-// input1       - a2
-// input2       - a3
-// count        - a4
-// full_count   - a5
-// shift        - a6
+/*
+ * SPDX-FileCopyrightText: 2022 Espressif Systems (Shanghai) CO LTD
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
 .macro fir_s16_ae32_mul x1, x2, count, ID
 // This macro calculates fixed point dot product for ((count + 1)*4) int16 samples
@@ -25,14 +11,14 @@
 // count - counter register (for example a7)
 // count - (samples_count / 4) - 1
 // acc += x1[i + 0]*x2[N - i - 1] + x1[i + 1]*x2[N - i - 2] + x1[i + 2]*x2[N - i - 3] + x1[i + 3]*x2[N - i - 4]; i: 0..count
-// acchi, and acclo have to be initialize before
+// acchi, and acclo have to be initialized before
 // Result - acchi || acclo
 // Modifies: 
 // m0, m1, m2, m3
 // acchi || acclo - must be loaded before (for example 0x3fff to acclo). 
 
 		/*
-		 * Data schedule. Each line represents instruction, columns represent
+		 * Data schedule. Each line represents instruction and columns represent
 		 * register contents. Last column (MUL) shows the multiplication which
 		 * takes place. Values loaded in the given cycle are shown in square brackets.
 		 *
@@ -80,13 +66,13 @@
 // count -   samples_count / 4 - 1
 // full_count - samples_count
 // acc += x1[i + 0]*x2[N - i - 1] + x1[i + 1]*x2[N - i - 2] + x1[i + 2]*x2[N - i - 3] + x1[i + 3]*x2[N - i - 4]; i: 0..count
-// acchi, and acclo have to be initialize before
+// acchi, and acclo have to be initialized before
 // Result - acchi || acclo
 // Modifies: 
 // m0, m1, m2, m3
 // acchi || acclo - must be loaded before (for example 0x3fff to acclo). 
 
-		// the main mac16 multipication loop is skipped for cases with less than 4 samples
+		// the main mac16 multiplication loop is skipped for cases with less than 4 samples
 		blti \full_count, 4, .less_than_4_operands_\ID
         	fir_s16_ae32_mul \x1, \x2, \count, \ID
 
@@ -103,7 +89,6 @@
 		    ldinc m0, \x1
 		    lddec m2, \x2
 		    mula.dd.lh m0, m2
-			addi  a10, a10, 2						// Odd number of coeffs corection
 	    .mod1chk_\ID:
 
 .endm // fir_s16_ae32_full

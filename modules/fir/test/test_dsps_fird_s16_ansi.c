@@ -1,18 +1,11 @@
-// Copyright 2018-2019 Espressif Systems (Shanghai) PTE LTD
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+/*
+ * SPDX-FileCopyrightText: 2022 Espressif Systems (Shanghai) CO LTD
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
-#include <string.h>
+#include <malloc.h>
+#include <stdint.h>
 #include "unity.h"
 #include "dsp_platform.h"
 #include "esp_log.h"
@@ -27,40 +20,35 @@
 #include "dsps_view.h"
 #include "dsps_fft2r.h"
 
-# define N_IN_SAMPLES 1024
-# define DECIMATION 2
-# define Q15_MAX 32768
-# define LEAKAGE_BINS 10
-# define FIR_BUFF_LEN 16
-# define FIR_BUFF (N_IN_SAMPLES + FIR_BUFF_LEN)
-
-const static int N_IN = N_IN_SAMPLES;
-const static int N_FFT = N_IN_SAMPLES / DECIMATION;
-const static int dec = DECIMATION;
+#define COEFFS 64
+#define N_IN_SAMPLES 1024
+#define DECIMATION 2
+#define Q15_MAX INT16_MAX
+#define LEAKAGE_BINS 10
+#define FIR_BUFF_LEN 16
 
 static const char *TAG = "dsps_fird_s16_ansi";
 
-static int16_t x[1024];
-static int16_t y[1024];
-
-static float fft_data[(N_IN_SAMPLES/DECIMATION)*2];
-static float f_in_signal[FIR_BUFF];
-static int16_t fir_x[FIR_BUFF], fir_y[FIR_BUFF];
+const static int32_t len = N_IN_SAMPLES;
+const static int32_t N_FFT = (N_IN_SAMPLES / DECIMATION);
+const static int16_t decim = DECIMATION;
+const static int16_t fir_len = COEFFS;
+const static int32_t fir_buffer = (N_IN_SAMPLES + FIR_BUFF_LEN);
 
 
 TEST_CASE("dsps_fird_s16_ansi functionality", "[dsps]")
 {
-    // In the test we generate filter with cutt off frequency 0.1
-    // and then filtering 0.1 and 0.3 frequencis.
-    // Result must be better then 24 dB
-    int16_t coeffs[32];
-    int16_t delay[32];
 
-    int32_t len = sizeof(x) / sizeof(int16_t);
-    int16_t fir_len = sizeof(coeffs) / sizeof(int16_t);
-    int16_t decim = 4;
-    int16_t shift = 0;
-    int16_t start_pos = 0;
+    int16_t *x = (int16_t *)memalign(16, len * sizeof(int16_t));
+    int16_t *y = (int16_t *)memalign(16, len * sizeof(int16_t));
+
+    int16_t *coeffs = (int16_t *)memalign(16, fir_len * sizeof(int16_t));
+    int16_t *delay = (int16_t *)memalign(16, fir_len * sizeof(int16_t));
+
+    const int16_t start_pos = 0;
+    const int16_t shift = 0;
+    const int16_t dec = decim;
+    const int32_t output_len = (int32_t)(len / dec);
 
     fir_s16_t fir1;
     for (int i = 0 ; i < fir_len ; i++) {
@@ -72,33 +60,40 @@ TEST_CASE("dsps_fird_s16_ansi functionality", "[dsps]")
         x[i] = 0x4000;
     }
 
-    dsps_fird_init_s16(&fir1, coeffs, delay, fir_len, decim, start_pos, shift);
-    int32_t total = dsps_fird_s16_ansi(&fir1, x, y, len);
-    ESP_LOGI(TAG, "Total result = %"PRIx32" from %"PRIx32"\n", total, len);
+    dsps_fird_init_s16(&fir1, coeffs, delay, fir_len, dec, start_pos, shift);
+    const int32_t total = dsps_fird_s16_ansi(&fir1, x, y, output_len);
+
+    ESP_LOGI(TAG, "%"PRId32" input samples, decimation %"PRId16",total result = %"PRId32"\n", len, dec, total);
     TEST_ASSERT_EQUAL(total, len / decim);
-    for (int i=0 ; i< total ; i++)
-    {
+    for (int i=0 ; i< total ; i++) {
         ESP_LOGD(TAG, "data[%i] = %d\n", i, y[i]);
     }
+
     for (int i = 0 ; i < total ; i++) {
-        if (y[i] != (0x2000)) {
-            TEST_ASSERT_EQUAL(y[i], (0x2000));
-        }
+        TEST_ASSERT_EQUAL(y[i], (0x2000));
     }
+
+    free(x);
+    free(y);
+    free(coeffs);
+    free(delay);
 }
 
 
 TEST_CASE("dsps_fird_s16_ansi benchmark", "[dsps]")
 {
 
-    int16_t coeffs[64];
-    int16_t delay[64];
-    int32_t len = sizeof(x) / sizeof(int16_t);
-    int16_t fir_len = sizeof(coeffs) / sizeof(int16_t);
-    int16_t repeat_count = 4;
-    int16_t decim = 1;
-    int16_t start_pos = 0;
-    int16_t shift = 0;
+    int16_t *x = (int16_t *)memalign(16, len * sizeof(int16_t));
+    int16_t *y = (int16_t *)memalign(16, len * sizeof(int16_t));
+
+    int16_t *coeffs = (int16_t *)memalign(16, fir_len * sizeof(int16_t));
+    int16_t *delay = (int16_t *)memalign(16, fir_len * sizeof(int16_t));
+
+    const int repeat_count = 4;
+    const int16_t dec = 1;
+    const int16_t start_pos = 0;
+    const int16_t shift = 0;
+    int32_t output_len = 0;
 
     fir_s16_t fir1;
     for (int i = 0 ; i < fir_len ; i++) {
@@ -110,80 +105,114 @@ TEST_CASE("dsps_fird_s16_ansi benchmark", "[dsps]")
     }
     x[0] = 1;
 
-    // Decimation 1, 2, 4, 8
+    dsps_fird_init_s16(&fir1, coeffs, delay, fir_len, dec, start_pos, shift);
+
+    // Decimations 1, 2, 4, 8
     for (int i = 0 ; i < 4 ; i++){
-        dsps_fird_init_s16(&fir1, coeffs, delay, fir_len, decim, start_pos, shift);
-
-        unsigned int start_b = xthal_get_ccount();
+        
+        output_len = (int32_t)(len / fir1.decim);
+        const unsigned int start_b = xthal_get_ccount();
         for (int i = 0 ; i < repeat_count ; i++) {
-            dsps_fird_s16_ansi(&fir1, x, y, len);
+            dsps_fird_s16_ansi(&fir1, x, y, output_len);
         }
-        unsigned int end_b = xthal_get_ccount();
+        const unsigned int end_b = xthal_get_ccount();
 
-        float total_b = end_b - start_b;
-        float cycles = total_b / (len * repeat_count);
+        const float total_b = end_b - start_b;
+        const float cycles = total_b / (len * repeat_count);
 
-        ESP_LOGI(TAG, "dsps_fir_s16_ansi - %f per sample for for %d coefficients, %f per decim tap \n", cycles, fir_len, cycles / (float)fir_len * decim);
+        ESP_LOGI(TAG, "total cycles %f per sample for %"PRId16" coefficients, decimation %"PRId16", %f per decim tap \n", 
+                 cycles, fir_len, fir1.decim, cycles / (float)fir_len * fir1.decim);
         float min_exec = 10;
         float max_exec = 1500;
         TEST_ASSERT_EXEC_IN_RANGE(min_exec, max_exec, cycles);
-        decim *= 2;
+        fir1.decim *= 2;
     }
+
+    free(x);
+    free(y);
+    free(coeffs);
+    free(delay);
 }
 
 
 TEST_CASE("dsps_fird_s16_ansi noise_snr", "[dsps]")
 {
-    int16_t s_coeffs[32];
-    int16_t delay_line[32];
-    int fir_len = sizeof(s_coeffs) / sizeof(int16_t);
-    float ft = 0.25;                                            // Transition frequency
-    int start_pos = 0;
-    int shift = 0;
-    fir_s16_t fir1;
+
+    // In the SNR-noise test we are generating a sine wave signal, filtering the signal using a fixed point FIRD filter
+    // and do the FFT of the filtered signal. Afterward, a noise and SNR calculated from the FFT spectrum     
 
     // FIR Coeffs
-    float *f_coeffs = (float *)malloc(fir_len * sizeof(float));
+    int16_t *s_coeffs = (int16_t *)memalign(16, fir_len * sizeof(int16_t));         // fixed point coefficients
+    int16_t *delay_line = (int16_t *)memalign(16, fir_len * sizeof(int16_t));       // fixed point delay line
+    float *f_coeffs = (float *)memalign(16, fir_len * sizeof(float));               // floating point coefficients
+
+    // Coefficients windowing
     dsps_wind_hann_f32(f_coeffs, fir_len);
-    float fir_order = (float)fir_len - 1;
+    const float fir_order = (float)fir_len - 1;
+    const float ft = 0.25;                                                          // sine frequency
     for(int i = 0; i < fir_len; i++){
         f_coeffs[i] *= sinf((2 * M_PI * ft * (i - fir_order / 2))) / (M_PI * (i - fir_order / 2));
     }
 
     // FIR coefficients conversion to q15
     for(int i = 0; i < fir_len; i++){
-        s_coeffs[i] = f_coeffs[i] * (int16_t)Q15_MAX; 
+        s_coeffs[i] = f_coeffs[i] * Q15_MAX; 
     }
 
+    free(f_coeffs);
+
     // Signal generation
-    dsps_tone_gen_f32(f_in_signal, FIR_BUFF, 0.9, 0.05, 0);
+    const float amplitude = 0.9;
+    const float frequency = 0.05;
+    const float phase = 0;
+    float *f_in_signal = (float *)memalign(16, fir_buffer * sizeof(float));
+    dsps_tone_gen_f32(f_in_signal, fir_buffer, amplitude, frequency, phase);
 
     // Input signal conversion to q15
-    for(int i = 0; i < FIR_BUFF; i++){
+    int16_t *fir_x = (int16_t *)memalign(16, fir_buffer * sizeof(int16_t));
+    int16_t *fir_y = (int16_t *)memalign(16, fir_buffer * sizeof(int16_t));
+    for(int i = 0; i < fir_buffer; i++){
         fir_x[i] = f_in_signal[i] * (int16_t)Q15_MAX;
     }  
 
+    free(f_in_signal);
+
     // FIR
-    dsps_fird_init_s16(&fir1, s_coeffs, delay_line, fir_len, dec, start_pos, shift);
-    dsps_fird_s16_ansi(&fir1, fir_x, fir_y, FIR_BUFF);
+    const int16_t start_pos = 0;
+    const int16_t shift = 0;
+    const int32_t output_len = (int32_t)(fir_buffer / decim);
+    fir_s16_t fir1;
+    dsps_fird_init_s16(&fir1, s_coeffs, delay_line, fir_len, decim, start_pos, shift);
+    dsps_fird_s16_ansi(&fir1, fir_x, fir_y, output_len);
+
+    free(delay_line);
+    free(s_coeffs);
+    free(fir_x);
 
     // FIR Output conversion to float
     const unsigned int ignored_fir_samples = (FIR_BUFF_LEN / 2) - 1;
-    float *fir_output = (float*)malloc(N_IN * sizeof(float));
+    float *fir_output = (float*)memalign(16, len * sizeof(float));
     for(int i = 0; i < N_FFT; i++){
         fir_output[i] = (float)(fir_y[ignored_fir_samples + i] / (float)Q15_MAX);
     }
 
+    free(fir_y);
+
     // Signal windowing
-    float *window = (float *)malloc((N_IN_SAMPLES/DECIMATION) * sizeof(float));
+    float *window = (float *)memalign(16, N_FFT * sizeof(float));
     dsps_wind_blackman_f32(window, N_FFT);
 
     // Prepare FFT input, real and imaginary part
+    const int32_t fft_data_len = (N_IN_SAMPLES/DECIMATION) * 2;
+    float *fft_data = (float *)memalign(16, fft_data_len * sizeof(float));
     for (int i = 0 ; i < N_FFT ; i++) {
         fft_data[i * 2 + 0] = fir_output[i] * window[i];
         fft_data[i * 2 + 1] = 0;
     }
+    free(fir_output);
+    free(window);
 
+    // Initialize FFT
     esp_err_t ret = dsps_fft2r_init_fc32(NULL, N_FFT*2);
     if (ret  != ESP_OK)
     {
@@ -191,43 +220,44 @@ TEST_CASE("dsps_fird_s16_ansi noise_snr", "[dsps]")
         return;
     }
 
+    // Do the FFT
     dsps_fft2r_fc32(fft_data, N_FFT);
     dsps_bit_rev_fc32(fft_data, N_FFT);
     dsps_cplx2reC_fc32(fft_data, N_FFT);
 
-    float max = -1000000;
+    // Convert the FFT spectrum from amplitude to watts, find the max value and its position
+    float max_val = -1000000;
     int max_pos = 0;
     for (int i = 0 ; i < N_FFT/2 ; i++) {
         fft_data[i] = (fft_data[i * 2 + 0] * fft_data[i * 2 + 0] + fft_data[i * 2 + 1] * fft_data[i * 2 + 1])/(N_FFT * 3);
-        if(fft_data[i] > max){
-            max = fft_data[i];
+        if(fft_data[i] > max_val){
+            max_val = fft_data[i];
             max_pos = i;
         }
     }
 
-    float p_signal = 0, p_noise = 0, snr;
+    // Calculate the power of the signal and noise of the spectrum and convert the spectrum to dB
+    float signal_pow = 0, noise_pow = 0;
     for (int i = 0 ; i < N_FFT/2 ; i++) {
         if ((i >= max_pos - LEAKAGE_BINS) && (i <= max_pos + LEAKAGE_BINS))
-            p_signal += fft_data[i] * fft_data[i];
+            signal_pow += fft_data[i];
         else
-            p_noise += fft_data[i] * fft_data[i];
+            noise_pow += fft_data[i];
 
-        fft_data[i] = 10 * log10f(fft_data[i]);
-        ESP_LOGI(TAG, "%f", fft_data[i]);
-        ESP_LOGD(TAG, "FFT Data[%i] =%8.4f dB", i, fft_data[i]);
+        fft_data[i] = 10 * log10f(0.0000000000001 + fft_data[i]);
     }    
 
-    p_signal = sqrtf(p_signal);
-    p_noise = sqrtf(p_noise);
-    snr = 10 * log10f(p_signal/p_noise);
-    p_noise = 10 * log10f(p_noise);
-    p_signal = 10 * log10f(p_signal);
+    // Convert the signal power and noise power to dB, calculate SNR
+    const float snr = 10 * log10f(signal_pow/noise_pow);    
+    noise_pow = 10 * log10f(noise_pow);         
+    signal_pow = 10 * log10f(signal_pow);       
 
-    ESP_LOGI(TAG, "\nSignal Power: %f\nNoise Power: %f\nSNR: %f", p_signal, p_noise, snr);
+    ESP_LOGI(TAG, "\nSignal Power: \t%f\nNoise Power: \t%f\nSNR: \t\t%f", signal_pow, noise_pow, snr);
     dsps_view(fft_data, N_FFT/2, 128, 16,  -140, 40, '|');
+    free(fft_data);
 
-    float min_exec_snr = 50;
-    float max_exec_snr = 120;
+    const float min_exec_snr = 50;
+    const float max_exec_snr = 120;
     TEST_ASSERT_EXEC_IN_RANGE(min_exec_snr, max_exec_snr, snr);
 
 }

@@ -2,28 +2,28 @@
 
 (See the README.md file in the upper level 'examples' directory for more information about examples.)
 
-This example demonstrates how to use FIR filters functionality from esp-dsp library. Example does the following steps:
+This example demonstrates how to use FIR filter functionality from esp-dsp library. Example does the following steps:
 
 1. Initialize the FFT library
 2. Initialize input signal
     * 1st Sine wave (f = 0.2Fs)
     * 2nd Sine wave (f = 0.4Fs)
-    * Combide the waves 
-3. Show windowed input signal
+    * Combine the waves 
+3. Show input signal
     * Calculate windows coefficients
     * Apply the windowing to the input signal
     * Do the FFT
     * Show the frequency response on a plot
     * Calculate execution performance
-4. Show FIR-filtered input signal
+4. Show filtered signal
     * Initialize the FIR filter library
-    * Calucalte Windowed-Sinc coefficients of FIR filter with decimation
+    * Calculate Windowed-Sinc coefficients of FIR filter
     * Apply the FIR filter to the input signal
     * Do the FFT
     * Show the frequency response on a plot
     * Calculate execution performance
 
-## How to use example
+## How to use the example
 
 ### Hardware required
 
@@ -31,13 +31,12 @@ This example does not require any special hardware, and can be run on any common
 
 ### Configure the project
 
-If using Make based build system, run `make menuconfig` and set serial port under Serial Flasher Options. 
-If using CMake based build system, no configuration is required.
+For the CMake-based build system, no configuration is required.
 Also, under Component Config/DSP Library/Optimization for ESP32, it's possible to select optimized or ansi implementation to compare. 
 
 ### Build and flash
 
-Build the project and flash it to the board, then run monitor tool to view serial output:
+Build the project and flash it to the board, then run the monitor tool to view the serial output:
 
 ```
 make -j4 flash monitor
@@ -55,7 +54,7 @@ See the Getting Started Guide for full steps to configure and use ESP-IDF to bui
 
 ## Example output
 
-Here is an typical example console output. 
+Here is a typical example of console output. 
 
 ```
 I (340) main: Start Example.

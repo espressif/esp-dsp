@@ -1,16 +1,8 @@
-// Copyright 2018-2019 Espressif Systems (Shanghai) PTE LTD
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License. 
+/*
+ * SPDX-FileCopyrightText: 2022 Espressif Systems (Shanghai) CO LTD
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
 #include "dsps_fir_platform.h"
 #if (dsps_fird_s16_ae32_enabled == 1)
@@ -25,132 +17,125 @@
 // The function implements the following C code:
 //int32_t dsps_fird_s16_ansi(fir_s16_t *fir, const int16_t *input, int16_t *output, int32_t len)
 
+
 dsps_fird_s16_ae32: 
 // Input params					Variables
 //
 // fir      - a2				N			- a6
 // input    - a3				pos			- a7
-// output   - a4				res			- a8
+// output   - a4				FREE		- a8
 // len      - a5				d_pos		- a9
 //								&coeffs[N]	- a10
 //								delay		- a11
 //								decim		- a12
-//								delay index - a13	
-//								shift		- a14
+//								rounding_val- a13	
+//								zero        - a14 (shift) (final_shift)
 
-	entry    a1,   16										
-	l16si    a7,   a2,   10			// a7  - pos			-- Load to a7 (pos) from a2 (fir struct), offset 10 bits
-	movi.n   a10,  2				//						-- a10 = 2			
-	mul16s   a13,  a7,   a10       	// a13 - a7*2			-- 16-bit singed mul of 2 (2 byte varialbe) and position = delay index
-	l16si    a6,   a2,   8         	// a6  - N				-- Load to a6 (N) from a2 (fir), offset 8 bits
-	mul16s   a6,   a6,   a10       	// a6  - a6*2			-- 16-bit singed mul of 2 (2 byte varialbe) and N, save to N
-	l32i	 a10,  a2,   0         	// a10 - coeffs			-- 32-bit load to a10 (coeffs) from a2 (fir), offset 0 bits
-	add.n    a10,  a10,  a6       	// a10 - &coeffs[N];	-- 16-bit add of N and coeffs, result as 32bit
-	addi     a10,  a10,  -2       	// a10 - &coeffs[N-1];	-- Add a10 (&coeffs[N]) and immediate (-2) = result in a10
-	l32i     a11,  a2,   4         	// a11 - delay line		-- Offset 4 bits
-	l16si    a6,   a2,   8         	// a6  - N				-- Offset 8 bits
-	l16si    a12,  a2,   12        	// a12 - decimation		-- Offset 12 bits
-	l16si    a9,   a2,   14        	// a9  - d_pos			-- Offset 14 bits
-	l16si    a14,  a2,   16			// a14 - shift		    -- Offset 16 bits
-	movi.n   a8,   0              	// result = 0
+	entry    a1,    32				
 
-	add.n	 a11,  a11,  a13		// set initial position of the delay line - delay[delay_index] - a11[a13]
-	
+	l16si    a7,    a2,    10					// a7  - pos
+	l16si	 a6,    a2,    8					// a6  - N
+	l32i	 a10,   a2,    0					// a10 - coeffs
+	addx2	 a10,   a6,    a10					// a10 - coeffs[N+1]
+	addi     a10,   a10,  -4					// a10 - coeffs[N]
+	s32i	 a10,   a1,    0					// save pointer to a1
+	l32i     a11,   a2,    4         			// a11 - delay line
+	l16si    a12,   a2,    12        			// a12 - decimation		
+	l16si    a9,    a2,    14        			// a9  - d_pos			
+	l16si    a14,   a2,    16					// a14 - shift		    
+		
+	// prepare rounding value		
+	movi     a15,   0x7fff						// rounding value
+	ssr	     a14								// SAR registers = shift		
+	srl	     a13,   a15							// shift right logical
+		
+	// prepare final_shift value			
+	neg 	 a8,    a14							// a8 = neg(fir->shift)
+	addi.n 	 a14,   a8,    15					// a14 = final_shift = a8 +15
+	ssr		 a14								// final_shift is saved to SAR register, SAR is not being changed during the execution
+		
+	mov		 a14,   a10							// copy coeff pointer from a10 to a14
+	s32i     a5,    a1,    4             		// save len to a1, used as the output value
+	movi.n   a14,   0							// move 0 to a14 for the purpose of clearing the acc register
 
-fird_loop_len:
+ 	// first delay line load (decim - d_pos) when d_pos is not 0
+	beqz	a9,     _fird_loop_len
+	sub		a15,    a12, a9						// a15 = decim - d_pos
 
-	l16si	 a15,  a3,   0			// a11[a7] = a3[i]		-- delay[pos] = input[i]
-	s16i	 a15,  a11,  0			// save
-	addi	 a3,   a3,   2			// i++					-- increment pointer
-	addi 	 a13,  a13,  2			// a13++				-- delay index++
-	addi 	 a7,   a7,   1			// a7++					-- position++
+	loopnez a15,  ._loop_d_pos
+		 
+		blt    a7,   a6,   reset_fir_pos_d_pos	// branch if fir->pos >= fir->N
+			movi.n   a7,   0					// fir->pos = 0
+			l32i     a11,  a2,   4      		// reset delay line to the beginning
+		reset_fir_pos_d_pos:		
 
-	// check if position of delay line is lower than length of the delay line N
-	blt	     a7,   a6,   do_not_reset_delay_index
-	
-		movi.n	 a13,  0			//						-- reset delay_index
-		movi.n 	 a7,   0			//						-- reset pos
-		l32i     a11,  a2,   4		//						-- pointer of the dealy line to the beggining
-		addi	 a11,  a11,  -2
-	do_not_reset_delay_index: 	
+		l16si	 a15,  a3,   0					// load 16 bits from input (a3) to a15
+		addi 	 a7,   a7,   1					// fir->pos++
+		s16i	 a15,  a11,  0					// save 16 bits from a15 to delay line (a11)
+		addi	 a3,   a3,   2					// increment input pointer
+		addi	 a11, a11,   2					// increment delay line pointer
+	._loop_d_pos:		
 
-	// decimation
-	addi 	 a9,  a9,   1			// a9++					-- d_pos++
-	
-	// checko d_pos vs decimation
-	blt		 a9,  a12,  next_iter
+	j .fill_delay_line							// skip the first iteration of the delay line filling routine
 
-		addi 	 a8,   a8,   1		// a8++					-- result++
-		movi.n 	 a9,   0			// a9 = 0				-- reset d_pos
+	// outer loop
+	_fird_loop_len:
+
+		loopnez a12, .fill_delay_line
+
+			blt a7, a6, reset_fir_pos			// branch if fir->pos >= fir->N
+				movi.n   a7,   0				// fir->pos = 0
+				l32i	 a11,  a2,  4       	// reset delay line to the beginning
+			reset_fir_pos:		
+
+			l16si	 a15,  a3,    0				// load 16 bits from input (a3) to a15
+			addi 	 a7,   a7,    1				// fir->pos++
+			s16i	 a15,  a11,   0				// save 16 bits from a15 to delay line (a11)
+			addi	 a3,   a3,    2				// increment input pointer
+			addi	 a11,  a11,   2				// increment delay line pointer
+		.fill_delay_line:
 
 		// prepare MAC unit
-		wsr      a9,   acchi		// acchi = 0			-- Accumulator High = 0
-		ssr	     a14				// SAR registers = shift		
-		movi     a9,   0x7fff		// rounding value
-		srl	     a9,   a9			// shift right logical
-		wsr      a9,   acclo		// acclo = 07fff 		-- Accumulator Low = rounding value
-		
-		// calculate position of the
-		sub      a9,   a6, a7   	// a9 = full_count = N(a6) - pos(a7)
-		mov      a15,  a9			// a15 = count
+		wsr		a14,  acchi						// acchi = 0 (a14 = 0)
+		wsr	    a13,  acclo						// acclo = a13 = rounding_val
 
-		// (Count / 4) - 1
-		srli     a15,  a15,   2		// Shift right = divide by 4
-		addi     a15,  a15,  -1		// minus 1
+		addi    a11,  a11,  -4 					// preset delay line pointer, samples (array is being incremented)
+		sub     a9,   a6,    a7   				// a9 = full_count = fir->N - fir->pos
 
-		addi     a11,  a11,  -2 	// To arrange fist pointer, samples (array is being incremented)
-		addi     a10,  a10,   2 	// To arrange fist pointer, coeffs  (array is being decremented)
-		
-		// MAC16 macro
+		// (Count / 4) - 1		
+		srli    a15,  a9,    2					// a15 = count = full_count /4
+		addi    a10,  a10,   4 					// preset coeffs pointer, samples (array is being decremented)
+		addi    a15,  a15,  -1					// count - 1
+
 		// x1, x2, count, full_count, ID
 		fir_s16_ae32_full a11, a10, a15, a9, __LINE__
-		l32i 	 a11,  a2,    4		// reset pointer to the beggining of the array
 
-		mov      a9,   a7			// a7 = full_count = pos
-		srli     a15,  a7,    2		// a15 = count
-		addi     a15,  a15,  -1
+		l32i	a10,  a2,    0         			// load coeffs
+		l32i 	a11,  a2,    4					// reset delay line to the beginning
+		addx2	a10,  a7,    a10				// move coeffs pointer to the end
 		
-		addi     a11,  a11,  -4 	// To arrange fist pointer, samples (array is being incremented)
+		srli 	a15,  a7,    2					// a15 = count = full_count (fir->pos) / 4
+		addi    a11,  a11,  -4 					// preset delay line pointer, samples (array is being incremented)
+		addi    a15,  a15,  -1					// count - 1
 
-		// MAC16 macro
 		// x1, x2, count, full_count, ID
 		fir_s16_ae32_full a11, a10, a15, a7, __LINE__
 
-		// get the shifted value
-		mov      a9,   a14		// a9 = shift	
-		neg	     a9,   a9		// negate
-		addi     a9,   a9,  15			
-		ssr 	 a9
-		rsr		 a9,   acchi	// Get 16 bit result from 40 bit accumulator
-		rsr		 a15,  acclo
-		src 	 a9,   a9,  a15
-		s16i	 a9,   a4,  0	// Save to a4 (output)
-		addi 	 a4,   a4,  2	// a4++					-- output++
+		// SAR already set from the beginning to final_shift value
+		rsr 	a15,  acclo						// get lower 32 bits of the acc register
+		rsr 	a9,   acchi						// get higher 8 bits of the acc register
+		l32i	a10,  a1, 	 0					// reset coefficient pointer
+		src 	a15,  a9, 	 a15				// concatenate the result and shift by SAR register amount to a15
+		l32i    a11,  a2,    4					// Load initial position of the delay line
+		s16i	a15,  a4, 	 0					// save the shifted value to the output array (a4)
+		addi 	a5,   a5,   -1					// len--
+		addi	a4,   a4, 	 2					// increase pointer of the output array		
+		addx2	a11,  a7,    a11				//p_delay[fir->pos] - (two times the fir->pos)	
 
-		// reset coeffcient pointer
-		l32i	 a10,  a2,  0
-		movi	 a15,  2
-		mul16s   a15,  a15,  a6
-		add.n	 a10,  a10,  a15
-		addi     a10,  a10,  -2
+		// counter				
+		bnez    a5,   _fird_loop_len			// break if a5 == 0
 
-		movi	 a9,   0		// a9 back to zero
-
-	next_iter:
-		addi     a5,  a5,   -1	// a5--					-- len-- 
-		
-		l32i     a11,  a2, 4	// Load initial position of the delay line
-		add 	 a11,  a11, a13 // add content of pos to the pointer
-	bnez a5, fird_loop_len		// break if a5 == 0
-
-	mov 	a2,  a8 			// return length of the result array
+	l32i.n     a2,  a1,  4                     	// load return value to a2
 	retw.n
 
-#endif // dsps_fird_f32_ae32_enabled
-
-
-
-
-
-
-
+#endif // dsps_fird_s16_ae32_enabled
