@@ -254,14 +254,14 @@ esp_err_t dsps_cplx2reC_fc32_ansi(float *data, int N)
         data[i * 2 + 0 + 2] = rkl + rnl;
         data[i * 2 + 1 + 2] = ikl - inl;
 
-        data[n2 - i * 2 - 1 - N] = rkh + rnh;
-        data[n2 - i * 2 - 2 - N] = ikh - inh;
+        data[n2 - i * 2 - 1 - N] = inh - ikh;
+        data[n2 - i * 2 - 2 - N] = rkh + rnh;
 
         data[i * 2 + 0 + 2 + N] = ikl + inl;
-        data[i * 2 + 1 + 2 + N] = rkl - rnl;
+        data[i * 2 + 1 + 2 + N] = rnl - rkl;
 
-        data[n2 - i * 2 - 1] = ikh + inh;
-        data[n2 - i * 2 - 2] = rkh - rnh;
+        data[n2 - i * 2 - 1] = rkh - rnh;
+        data[n2 - i * 2 - 2] = ikh + inh;
     }
     data[N] = data[1];
     data[1] = 0;
