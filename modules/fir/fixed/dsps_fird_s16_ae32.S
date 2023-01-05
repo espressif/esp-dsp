@@ -23,13 +23,13 @@ dsps_fird_s16_ae32:
 //
 // fir      - a2				N			- a6
 // input    - a3				pos			- a7
-// output   - a4				FREE		- a8
+// output   - a4				rounding_lo - a8
 // len      - a5				d_pos		- a9
 //								&coeffs[N]	- a10
 //								delay		- a11
 //								decim		- a12
-//								rounding_val- a13	
-//								zero        - a14 (shift) (final_shift)
+//								rounding_hi - a13	
+//								final_shift - a14 (shift)
 
 	entry    a1,    32				
 
@@ -45,18 +45,36 @@ dsps_fird_s16_ae32:
 	l16si    a14,   a2,    16					// a14 - shift		    
 		
 	// prepare rounding value		
-	movi     a15,   0x7fff						// rounding value
-	ssr	     a14								// SAR registers = shift		
-	srl	     a13,   a15							// shift right logical
+	l32i     a15,   a2,    20                   // get address of rounding array to a15
+	l32i 	 a8,    a15,    0					// a8 =  lower 32 bits of the rounding value (acclo)
+	l32i     a13,   a15,    4					// a13 = higher 8 bits of the rounding value (acchi), offset 4 (32 bits)
 		
-	// prepare final_shift value			
-	neg 	 a8,    a14							// a8 = neg(fir->shift)
-	addi.n 	 a14,   a8,    15					// a14 = final_shift = a8 +15
-	ssr		 a14								// final_shift is saved to SAR register, SAR is not being changed during the execution
-		
-	mov		 a14,   a10							// copy coeff pointer from a10 to a14
-	s32i     a5,    a1,    4             		// save len to a1, used as the output value
-	movi.n   a14,   0							// move 0 to a14 for the purpose of clearing the acc register
+	// prepare final_shift value					
+	addi 	 a14,   a14,  -15					// shift - 15
+	abs		 a15, 	a14
+	blti	 a15,    32,   _shift_lower_than_32_init		// check if lower than 32
+
+												// greater than 32 could only be negative shift ((-40 to +40) - 15) -> -55 to +25 
+	addi	 a14, 	a14,   32					// if greater than 32, add 32 (SRC is not defined for SAR greater than 32)
+	_shift_lower_than_32_init:
+
+	bltz	 a14,   _shift_negative_init		// branch if lower than zero (not including zero)
+	beqz	 a14,	_shift_negative_init		// branch if equal to zero (add zero to the previous statement)
+	ssl		 a14								// if positive, set SAR register to left shift value (SAR = 32 - shift)
+	
+	j _end_of_shift_init
+
+	_shift_negative_init:						// negative shift
+	abs		 a14,   a14							// absolute value
+	ssr		 a14								// SAR = -shift
+	// final_shift is saved to SAR register, SAR is not being changed during the execution
+
+	_end_of_shift_init:	
+	l16si    a14,   a2,    16					// a14 - load shift value
+	addi 	 a14,   a14,  -15					// shift - 15
+	
+	s32i     a5,    a1,    4             		// save len to a1, used as the return value
+
 
  	// first delay line load (decim - d_pos) when d_pos is not 0
 	beqz	a9,     _fird_loop_len
@@ -96,8 +114,8 @@ dsps_fird_s16_ae32:
 		.fill_delay_line:
 
 		// prepare MAC unit
-		wsr		a14,  acchi						// acchi = 0 (a14 = 0)
-		wsr	    a13,  acclo						// acclo = a13 = rounding_val
+		wsr	    a8,   acclo						// acclo = a8
+		wsr		a13,  acchi						// acchi = a13
 
 		addi    a11,  a11,  -4 					// preset delay line pointer, samples (array is being incremented)
 		sub     a9,   a6,    a7   				// a9 = full_count = fir->N - fir->pos
@@ -122,15 +140,37 @@ dsps_fird_s16_ae32:
 		fir_s16_ae32_full a11, a10, a15, a7, __LINE__
 
 		// SAR already set from the beginning to final_shift value
-		rsr 	a15,  acclo						// get lower 32 bits of the acc register
-		rsr 	a9,   acchi						// get higher 8 bits of the acc register
+		abs		a15,  a14						// absolute value of shift
 		l32i	a10,  a1, 	 0					// reset coefficient pointer
-		src 	a15,  a9, 	 a15				// concatenate the result and shift by SAR register amount to a15
+		blti    a15,  32,   _shift_lower_than_32
+		rsr 	a9,   acchi						// get only higher 8 bits of the acc register
+		movi.n	a15,  0xFF						// higher 8 bits mask
+		and		a9,   a9,  a15					// apply mask
+		srl		a15,  a9	
+		j 		_shift_set
+
+		_shift_lower_than_32:
+		rsr 	a9,   acchi						// get higher 8 bits of the acc register
+		movi.n	a11,  0xFF						// higher 8 bits mask
+		rsr 	a15,  acclo						// get lower 32 bits of the acc register
+		and		a9,   a9,  a11					// apply mask
+
+
+		bltz	a14,  _shift_negative 			// branch if lower than zero (if negative)
+		beqz	a14,  _shift_negative
+		src		a15,  a15,  a9					// funnel shift left
+		j 		_shift_set
+
+		_shift_negative:						// negative shift
+		src		a15,  a9,  a15					// funnel shift right
+
+		_shift_set:
+		
 		l32i    a11,  a2,    4					// Load initial position of the delay line
 		s16i	a15,  a4, 	 0					// save the shifted value to the output array (a4)
 		addi 	a5,   a5,   -1					// len--
 		addi	a4,   a4, 	 2					// increase pointer of the output array		
-		addx2	a11,  a7,    a11				//p_delay[fir->pos] - (two times the fir->pos)	
+		addx2	a11,  a7,    a11				// p_delay[fir->pos] - (two times the fir->pos)	
 
 		// counter				
 		bnez    a5,   _fird_loop_len			// break if a5 == 0

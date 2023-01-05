@@ -7,19 +7,20 @@
 #include "dsps_fir.h"
 #include "esp_dsp.h"
 
-
 int32_t dsps_fird_s16_ansi(fir_s16_t *fir, const int16_t *input, int16_t *output, int32_t len)
 {
     int32_t result = 0;
     int32_t input_pos = 0;
-    long long rounding_val = 0;
+    long long rounding = 0;
     const int32_t final_shift = fir->shift -15;
+
+    rounding = (long long)(fir->rounding_val);
     
     if(fir->shift >= 0){
-        rounding_val = (long long)(0x7fff >> fir->shift);
+        rounding = (rounding >> fir->shift) & 0xFFFFFFFFFF;         // 40-bit mask
     }
     else{
-        rounding_val = (long long)(0x7fff << (-fir->shift));
+        rounding = (rounding << (-fir->shift)) & 0xFFFFFFFFFF;      // 40-bit mask
     }
 
     // len is already a length of the *output array, calculated as (length of the input array / decimation)
@@ -34,7 +35,7 @@ int32_t dsps_fird_s16_ansi(fir_s16_t *fir, const int16_t *input, int16_t *output
         }
         fir->d_pos = 0;
 
-        long long acc = rounding_val;
+        long long acc = rounding;
         int16_t coeff_pos = fir->coeffs_len - 1;
 
         for (int n = fir->pos; n < fir->coeffs_len ; n++) {

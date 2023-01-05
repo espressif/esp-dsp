@@ -1,14 +1,17 @@
 /*
- * SPDX-FileCopyrightText: 2022 Espressif Systems (Shanghai) CO LTD
+ * SPDX-FileCopyrightText: 2022-2023 Espressif Systems (Shanghai) CO LTD
  *
  * SPDX-License-Identifier: Apache-2.0
  */
 
+
+#include <string.h>
 #include <malloc.h>
-#include <stdint.h>
+#include <stdbool.h>
 #include "unity.h"
 #include "dsp_platform.h"
 #include "esp_log.h"
+#include "esp_err.h"
 #include "esp_dsp.h"
 
 #include "dsps_tone_gen.h"
@@ -20,16 +23,15 @@
 #include "dsps_fft2r.h"
 
 #define COEFFS 256
-#define N_IN_SAMPLES 256
-#define DECIMATION 16
+#define N_IN_SAMPLES 4096
+#define DECIMATION 2
 #define Q15_MAX INT16_MAX
 #define LEAKAGE_BINS 10
 #define FIR_BUFF_LEN 16
 
-#define MAX_DEC 64
-#define MAX_FIR_LEN 128
+#define MAX_FIR_LEN 64 
 
-static const char *TAG = "dsps_fird_s16_ae32";
+static const char *TAG = "dsps_fird_s16_aexx";
 
 const static int32_t len = N_IN_SAMPLES;
 const static int32_t N_FFT = (N_IN_SAMPLES / DECIMATION);
@@ -38,79 +40,111 @@ const static int16_t fir_len = COEFFS;
 const static int32_t fir_buffer = (N_IN_SAMPLES + FIR_BUFF_LEN);
 
 
-TEST_CASE("dsps_fird_s16_ae32 functionality", "[dsps]")
+TEST_CASE("dsps_fird_s16_aexx functionality", "[dsps]")
 {
+
     const int32_t max_len[2] = {2048, 2520};                        // 2520 can be divided by 3, 6, 9, 12, 15, 18 and 21
     const int16_t max_dec[2] = {32, 21};
     const int16_t min_dec[2] = {2, 3};
+    const int16_t shift_vals[17] = {-40, -20, -15, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 15, 20, 40};
 
     int16_t *x = (int16_t *)memalign(16, max_len[1] * sizeof(int16_t));
     int16_t *y = (int16_t *)memalign(16, max_len[1] * sizeof(int16_t));
     int16_t *y_compare = (int16_t *)memalign(16, max_len[1] * sizeof(int16_t));
 
     int16_t *coeffs = (int16_t *)memalign(16, MAX_FIR_LEN * sizeof(int16_t));
+    int16_t *coeffs_aexx = (int16_t *)memalign(16, MAX_FIR_LEN * sizeof(int16_t));
+    int16_t *coeffs_ansi = (int16_t *)memalign(16, MAX_FIR_LEN * sizeof(int16_t));
+
     int16_t *delay = (int16_t *)memalign(16, MAX_FIR_LEN * sizeof(int16_t));
     int16_t *delay_compare = (int16_t *)memalign(16, MAX_FIR_LEN * sizeof(int16_t));
 
-    const int16_t init_start_pos = 0;
-    const int16_t shift = 0;
-    const int16_t init_dec = decim;
     int32_t combinations = 0;
-    int32_t loop_len = 0;
-
-    fir_s16_t fir1;
-    fir_s16_t fir2;
+    esp_err_t status1 = ESP_OK, status2 = ESP_OK;
+    fir_s16_t fir1, fir2;
 
     for (int i = 0 ; i < MAX_FIR_LEN ; i++) {
-        coeffs[i] = 0x100;
+        coeffs[i] = i + 0x100;
     }
-    
+
     for (int i = 0 ; i < max_len[1] ; i++) {
         x[i] = 0x10;
     }
+    
+    for (int variations = 0; variations < 2; variations++){
 
-    dsps_fird_init_s16(&fir1, coeffs, delay, MAX_FIR_LEN, init_dec, init_start_pos, shift);
-    dsps_fird_init_s16(&fir2, coeffs, delay_compare, MAX_FIR_LEN, init_dec, init_start_pos, shift);
-
-    for(int variations = 0; variations < 2; variations++){
-        // Test for different combinations of decimations, FIR filter lengths, and starting positions
-
-        ESP_LOGI(TAG, ": %"PRId32" input samples, coefficients range from 2 to %"PRId16", decimation range from %"PRId16" to %"PRId16" and start positions within the coeffs range", 
+        ESP_LOGI(TAG, ": %"PRId32" input samples, coefficients range from 2 to %"PRId16", decimation range from %"PRId16" to %"PRId16", shift in range from -40 to 40 and start positions within the coeffs range", 
              max_len[variations], (int16_t)MAX_FIR_LEN, min_dec[variations], max_dec[variations]);
 
-        for (int dec = min_dec[variations]; dec <= max_dec[variations]; ((variations) ? (dec+=3) : (dec*=2))){
+        // decimation increment is set as dec * 2 for input data length 2048 (2, 4, 8, 16, 32)
+        //                             as dec + 3 for input data length 2520 (3, 6, 9, 12, 15, 18, 21)
+        for (int16_t dec = min_dec[variations]; dec <= max_dec[variations]; ((variations) ? (dec+=3) : (dec*=2)) ){
 
-            fir1.decim = (int16_t)dec;
-            fir2.decim = (int16_t)dec;
-            loop_len = max_len[variations]/dec;
+            const int32_t loop_len = max_len[variations]/dec;
+            const int16_t start_position = 0;
 
-            for (int fir_length = 2; fir_length <= MAX_FIR_LEN; fir_length++){
+            for (int16_t fir_length = 2; fir_length <= MAX_FIR_LEN; fir_length++){
 
-                fir1.coeffs_len = (int16_t)fir_length;
-                fir2.coeffs_len = (int16_t)fir_length;
+                for(int16_t shift_amount = 0; shift_amount < sizeof(shift_vals) / sizeof(uint16_t); shift_amount++){
 
-                for (int start_pos = 0; start_pos < dec; start_pos++){
-
-                    fir1.d_pos = (int16_t)start_pos;
-                    fir2.d_pos = (int16_t)start_pos;
-
-                    for(int j = 0; j < fir_length; j++){
-                        fir1.delay[j] = 0;
-                        fir2.delay[j] = 0;
+                    for(int k = 0 ; k < fir_length; k++){
+                        coeffs_ansi[k] = coeffs[k];
+                        coeffs_aexx[k] = coeffs[k];
                     }
 
-                    fir1.pos = 0;
-                    fir2.pos = 0;
+                    status1 = dsps_fird_init_s16(&fir1, coeffs_aexx, delay, fir_length, dec, start_position, shift_vals[shift_amount]);
+                    status2 = dsps_fird_init_s16(&fir2, coeffs_ansi, delay_compare, fir_length, dec, start_position, shift_vals[shift_amount]);
 
-                    const int32_t total1 = dsps_fird_s16(&fir1, x, y, loop_len);
-                    const int32_t total2 = dsps_fird_s16_ansi(&fir2, x, y_compare, loop_len);
+                    // error messages
+                    if((status1 != ESP_OK) || (status2 != ESP_OK)){
 
-                    TEST_ASSERT_EQUAL(total1, total2);
+                        if(status1 != ESP_OK) dsps_fird_s16_aexx_free(&fir1);
+                        if(status2 != ESP_OK) dsps_fird_s16_aexx_free(&fir2);
 
-                    for (int i = 0 ; i < total1 ; i++) {
-                        TEST_ASSERT_EQUAL(y[i], y_compare[i]);
+                        esp_err_t wrong_status = ((status1 != ESP_OK) ? (status1) : (status2));
+                        switch(wrong_status){
+                            case ESP_ERR_DSP_ARRAY_NOT_ALIGNED:
+                                TEST_ASSERT_MESSAGE(false, "Delay line or (and) coefficients arrays not aligned");
+                                break;
+                            case ESP_ERR_DSP_PARAM_OUTOFRANGE:
+                                TEST_ASSERT_MESSAGE(false, "Start position or (and) Decimation ratio or (and) Shift out of range");
+                                break;
+                            default:
+                                TEST_ASSERT_MESSAGE(false, "Unspecified error");
+                                break;
+                        }
                     }
-                    combinations++;
+
+                    #if(dsps_fird_s16_aes3_enabled)
+                        dsps_16_array_rev(fir1.coeffs, fir1.coeffs_len);        // coefficients are being reverted for the purposes of the aes3 TIE implementation
+                    #endif
+
+                    for (int16_t start_pos = 0; start_pos < dec; start_pos++){
+                        
+                        fir1.d_pos = start_pos;
+                        fir2.d_pos = start_pos;
+
+                        for(int j = 0; j < fir1.coeffs_len; j++){
+                            fir1.delay[j] = 0;
+                            fir2.delay[j] = 0;
+                        }
+
+                        fir1.pos = 0;
+                        fir2.pos = 0;
+
+                        const int32_t total1 = dsps_fird_s16(&fir1, x, y, loop_len);
+                        const int32_t total2 = dsps_fird_s16_ansi(&fir2, x, y_compare, loop_len);
+
+                        TEST_ASSERT_EQUAL(total1, total2);
+                        for (int i = 0 ; i < total1 ; i++) {
+                            TEST_ASSERT_EQUAL(y[i], y_compare[i]);
+                        }
+
+                        combinations++;
+                    }
+
+                    dsps_fird_s16_aexx_free(&fir1);
+                    dsps_fird_s16_aexx_free(&fir2);
                 }
             }
         }
@@ -120,74 +154,92 @@ TEST_CASE("dsps_fird_s16_ae32 functionality", "[dsps]")
 
     free(x);
     free(y);
-    free(y_compare);
     free(coeffs);
     free(delay);
+    free(y_compare);
+    free(coeffs_ansi);
+    free(coeffs_aexx);
     free(delay_compare);
+
 }
 
-
-TEST_CASE("dsps_fird_s16_ae32 benchmark", "[dsps]")
+TEST_CASE("dsps_fird_s16_aexx benchmark", "[dsps]")
 {
 
-    const int32_t local_dec = 2;
+    const int16_t local_dec = 2;
     const int32_t local_len = (len % 16) ? (4096) : (len);                          // length must be devisible by 16
 
     int16_t *x = (int16_t *)memalign(16, local_len * sizeof(int16_t));
     int16_t *y = (int16_t *)memalign(16, local_len * sizeof(int16_t));
 
-    int16_t *coeffs = (int16_t *)memalign(16, fir_len * sizeof(int16_t));
-    int16_t *delay = (int16_t *)memalign(16, fir_len * sizeof(int16_t));
+    int16_t *coeffs = (int16_t *)memalign(16, MAX_FIR_LEN * sizeof(int16_t));
+    int16_t *delay = (int16_t *)memalign(16, MAX_FIR_LEN * sizeof(int16_t));
 
-    const int repeat_count = 100;    
+    const int repeat_count = 100; 
     const int16_t start_pos = 0;
     const int16_t shift = 0;
     int32_t loop_len = 0;
+    
+    fir_s16_t fir;
+    esp_err_t status = ESP_OK;
 
-    fir_s16_t fir1;
-    for (int i = 0 ; i < fir_len ; i++) {
-        coeffs[i] = 0;
+    status = dsps_fird_init_s16(&fir, coeffs, delay, MAX_FIR_LEN, local_dec, start_pos, shift);
+    
+    // error messages
+    if(status != ESP_OK){
+        dsps_fird_s16_aexx_free(&fir);
+    
+        switch(status){
+            case ESP_ERR_DSP_ARRAY_NOT_ALIGNED:
+                TEST_ASSERT_MESSAGE(false, "Delay line or (and) coefficients arrays not aligned");
+                break;
+            case ESP_ERR_DSP_PARAM_OUTOFRANGE:
+                TEST_ASSERT_MESSAGE(false, "Start position or (and) Decimation ratio or (and) Shift out of range");
+                break;
+            default:
+                TEST_ASSERT_MESSAGE(false, "Unspecified error");
+                break;
+        }
     }
-    coeffs[0] = 0x4000;
-
-    for (int i = 0 ; i < local_len ; i++) {
-        x[i] = 0x4000;
-    }
-
-    dsps_fird_init_s16(&fir1, coeffs, delay, fir_len, local_dec, start_pos, shift);
+    
+    #if(dsps_fird_s16_aes3_enabled)
+        dsps_16_array_rev(fir.coeffs, fir.coeffs_len);
+    #endif
 
     // Test for decimations 2, 4, 8, 16
-     for(int i = 0; i < 4; i++){
+    for(int dec = local_dec; dec <= 16 ; dec*=2){
 
-        loop_len = local_len / fir1.decim;
+        loop_len = (local_len / dec);
+        fir.decim = dec;
+
         const unsigned int start_b = xthal_get_ccount();
-        for (int i = 0 ; i < repeat_count ; i++) {
-            dsps_fird_s16(&fir1, x, y, loop_len);
+        for (int j = 0 ; j < repeat_count ; j++) {
+            dsps_fird_s16(&fir, x, y, loop_len);
         }
         const unsigned int end_b = xthal_get_ccount();
 
         const float total_b = end_b - start_b;
         const float cycles = total_b / (float)(repeat_count);
         const float cycles_per_sample = total_b / (float)(local_len * repeat_count);
-        const float cycles_per_decim_tap = cycles_per_sample / (float)(fir1.coeffs_len * fir1.decim);
-
+        const float cycles_per_decim_tap = cycles_per_sample / (float)(fir.coeffs_len * fir.decim);
+        
         ESP_LOGI(TAG, ": %.2f total cycles, %.2f cycles per sample, %.2f per decim tap, for %"PRId32" input samples, %"PRId16" coefficients and decimation %"PRId16"\n", 
-                 cycles, cycles_per_sample, cycles_per_decim_tap, local_len, fir_len, fir1.decim);
-
-        const float min_exec = ((local_len / fir1.decim) * fir1.coeffs_len) / 2;
-        const float max_exec = min_exec * 10;
+                 cycles, cycles_per_sample, cycles_per_decim_tap, local_len, (int16_t)MAX_FIR_LEN, fir.decim);
+        
+        const float min_exec = (((local_len / fir.decim) * fir.coeffs_len) / 2);
+        const float max_exec = min_exec * 20;
         TEST_ASSERT_EXEC_IN_RANGE(min_exec, max_exec, cycles);
-        fir1.decim *= 2;
-    }
 
+    }
+    
+    dsps_fird_s16_aexx_free(&fir);
     free(x);
     free(y);
     free(coeffs);
     free(delay);
 }
 
-
-TEST_CASE("dsps_fird_s16_ae32 noise_snr", "[dsps]")
+TEST_CASE("dsps_fird_s16_aexx noise_snr", "[dsps]")
 {
 
     // In the SNR-noise test we are generating a sine wave signal, filtering the signal using a fixed point FIRD filter
@@ -233,9 +285,32 @@ TEST_CASE("dsps_fird_s16_ae32 noise_snr", "[dsps]")
     const int16_t start_pos = 0;
     const int16_t shift = 0;
     const int32_t loop_len = (int32_t)(fir_buffer / decim);                         // loop_len result must be without remainder
-    fir_s16_t fir1;
-    dsps_fird_init_s16(&fir1, s_coeffs, delay_line, fir_len, decim, start_pos, shift);
-    dsps_fird_s16(&fir1, fir_x, fir_y, loop_len);
+    fir_s16_t fir;
+    esp_err_t status = ESP_OK;
+    status = dsps_fird_init_s16(&fir, s_coeffs, delay_line, fir_len, decim, start_pos, shift);
+
+    // error messages
+    if(status != ESP_OK){
+        dsps_fird_s16_aexx_free(&fir);
+    
+        switch(status){
+            case ESP_ERR_DSP_ARRAY_NOT_ALIGNED:
+                TEST_ASSERT_MESSAGE(false, "Delay line or (and) coefficients arrays not aligned");
+                break;
+            case ESP_ERR_DSP_PARAM_OUTOFRANGE:
+                TEST_ASSERT_MESSAGE(false, "Start position or (and) Decimation ratio or (and) Shift out of range");
+                break;
+            default:
+                TEST_ASSERT_MESSAGE(false, "Unspecified error");
+                break;
+        }
+    }
+
+    #if(dsps_fird_s16_aes3_enabled)
+        dsps_16_array_rev(fir.coeffs, fir.coeffs_len);
+    #endif
+
+    dsps_fird_s16(&fir, fir_x, fir_y, loop_len);
 
     free(delay_line);
     free(s_coeffs);
@@ -311,5 +386,6 @@ TEST_CASE("dsps_fird_s16_ae32 noise_snr", "[dsps]")
     const float min_exec_snr = 50;
     const float max_exec_snr = 120;
     TEST_ASSERT_EXEC_IN_RANGE(min_exec_snr, max_exec_snr, snr);
+    dsps_fird_s16_aexx_free(&fir);
 
 }
