@@ -20,6 +20,11 @@ set(COMPONENT_SRCDIRS
                     "../modules/kalman/ekf_imu13states/test"
 
 )
+
+if(target STREQUAL "esp32s3")
+    list(APPEND COMPONENT_SRCDIRS "../modules/support/mem/test")
+endif()
+
 set(COMPONENT_REQUIRES unity esp-dsp)
 
 set(COMPONENT_ADD_LDFRAGMENTS linker.lf)

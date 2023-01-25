@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Complex signal generator dsps_cplx_gen()
 - FIR f32 filter optimized for esp32s3 
-
+- Memcpy and Memset optimized for esp32s3
 
 ### Fixed
 - Fix in tests to pass
