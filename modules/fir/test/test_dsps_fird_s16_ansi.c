@@ -36,6 +36,30 @@ const static int16_t fir_len = COEFFS;
 const static int32_t fir_buffer = (N_IN_SAMPLES + FIR_BUFF_LEN);
 
 
+// error messages for the init functions
+static void error_msg_handler(fir_s16_t *fir, esp_err_t status){
+
+    if(status != ESP_OK){
+        dsps_fird_s16_aexx_free(fir);
+
+        switch(status){
+            case ESP_ERR_DSP_INVALID_LENGTH:
+                TEST_ASSERT_MESSAGE(false, "Number of the coefficients must be higher than 1");
+                break;
+            case ESP_ERR_DSP_ARRAY_NOT_ALIGNED:
+                TEST_ASSERT_MESSAGE(false, "Delay line or (and) coefficients arrays not aligned");
+                break;
+            case ESP_ERR_DSP_PARAM_OUTOFRANGE:
+                TEST_ASSERT_MESSAGE(false, "Start position or (and) Decimation ratio or (and) Shift out of range");
+                break;
+            default:
+                TEST_ASSERT_MESSAGE(false, "Unspecified error");
+                break;
+        }
+    }
+}
+
+
 TEST_CASE("dsps_fird_s16_ansi functionality", "[dsps]")
 {
 
@@ -60,7 +84,9 @@ TEST_CASE("dsps_fird_s16_ansi functionality", "[dsps]")
         x[i] = 0x4000;
     }
 
-    dsps_fird_init_s16(&fir1, coeffs, delay, fir_len, dec, start_pos, shift);
+    esp_err_t status = dsps_fird_init_s16(&fir1, coeffs, delay, fir_len, dec, start_pos, shift);
+    error_msg_handler(&fir1, status);
+
     const int32_t total = dsps_fird_s16_ansi(&fir1, x, y, output_len);
 
     ESP_LOGI(TAG, "%"PRId32" input samples, decimation %"PRId16",total result = %"PRId32"\n", len, dec, total);
@@ -106,7 +132,8 @@ TEST_CASE("dsps_fird_s16_ansi benchmark", "[dsps]")
     }
     x[0] = 1;
 
-    dsps_fird_init_s16(&fir1, coeffs, delay, fir_len, dec, start_pos, shift);
+    esp_err_t status = dsps_fird_init_s16(&fir1, coeffs, delay, fir_len, dec, start_pos, shift);
+    error_msg_handler(&fir1, status);
 
     // Decimations 1, 2, 4, 8
     for (int i = 0 ; i < 4 ; i++){
@@ -184,7 +211,8 @@ TEST_CASE("dsps_fird_s16_ansi noise_snr", "[dsps]")
     const int16_t shift = 0;
     const int32_t output_len = (int32_t)(fir_buffer / decim);
     fir_s16_t fir1;
-    dsps_fird_init_s16(&fir1, s_coeffs, delay_line, fir_len, decim, start_pos, shift);
+    esp_err_t status = dsps_fird_init_s16(&fir1, s_coeffs, delay_line, fir_len, decim, start_pos, shift);
+    error_msg_handler(&fir1, status);
     dsps_fird_s16_ansi(&fir1, fir_x, fir_y, output_len);
 
     free(delay_line);
