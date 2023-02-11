@@ -25,6 +25,8 @@ GPATH
 examples/**/sdkconfig
 examples/**/sdkconfig.old
 examples/**/build
+examples/**/dependencies.lock
+exmaples/**/managed_components
 
 # Test app files
 test_app/build
