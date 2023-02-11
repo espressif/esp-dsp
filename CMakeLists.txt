@@ -1,4 +1,4 @@
-set(COMPONENT_SRCS  "modules/common/misc/dsps_pwroftwo.cpp"
+set(srcs            "modules/common/misc/dsps_pwroftwo.cpp"
                     "modules/common/misc/aes3_tie_log.c"
                     "modules/dotprod/float/dsps_dotprod_f32_ae32.S"
                     "modules/dotprod/float/dsps_dotprod_f32_m_ae32.S"
@@ -116,7 +116,7 @@ set(COMPONENT_SRCS  "modules/common/misc/dsps_pwroftwo.cpp"
 
 
 
-set(COMPONENT_ADD_INCLUDEDIRS   "modules/dotprod/include"
+set(include_dirs                "modules/dotprod/include"
                                 "modules/support/include"
                                 "modules/windows/include"
                                 "modules/windows/hann/include"
@@ -144,10 +144,12 @@ set(COMPONENT_ADD_INCLUDEDIRS   "modules/dotprod/include"
                                 "modules/kalman/ekf_imu13states/include"
 )
 
-set(COMPONENT_PRIV_INCLUDEDIRS  "modules/dotprod/float"
+set(priv_include_dirs           "modules/dotprod/float"
                                 "modules/dotprod/fixed")
 
-register_component()
+idf_component_register(SRCS ${srcs}
+                      INCLUDE_DIRS ${include_dirs}
+                      PRIV_INCLUDE_DIRS ${priv_include_dirs})
 
 # Workaround for libstdc++ dependency in IDF 4.0
 if("${IDF_VERSION_MAJOR}.${IDF_VERSION_MINOR}" VERSION_EQUAL "4.0")
