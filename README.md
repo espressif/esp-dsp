@@ -67,16 +67,16 @@ where `PORT` is the UART port name of your development board, such as `/dev/ttyU
 
 Note that you need to set up ESP-IDF before building the project. Refer to the [ESP-IDF Getting Started Guide](https://docs.espressif.com/projects/esp-idf/en/latest/get-started/index.html) if you don't have the environment set up yet.
 
-## Build a Benchmarks Table
-
-The Benchmark table [esp-dsp-benchmarks.rst](docs/esp-dsp-benchmarks.rst) contains benchmarks for ESP32 and ESP32S3 CPUs. The benchmarks collected with compiler optimization flags for speed (Os) and for size (Q2). To build this table please collect benchmarks data by running "DSP Benchmarks data" test from test application and place result data to the [CSV file](docs/esp_bm_results.csv). Then run the [Python scrip](docs/build_bm_table.py) to generate the benchmark table [esp-dsp-benchmarks.rst](docs/esp-dsp-benchmarks.rst).
-
 ## Reporting Issues
 
 If you have found an issue in ESP-DSP, or wish to submit an enhancement request, please use the [Issues](https://github.com/espressif/esp-dsp/issues) section on Github.
 
 For general questions related to this library, please use the [esp32.com forum](https://esp32.com/).
 
+## Contributing to ESP-DSP
+
+Please check [CONTRIBUTING.md](CONTRIBUTING.md) if you'd like to contribute to ESP-DSP.
+
 ## Copyrights and License
 
-All original source code in this repository is Copyright (C) 2018-2019 Espressif Systems. This source code is licensed under the Apache License 2.0 as described in the file LICENSE.
+All original source code in this repository is Copyright (C) 2018-2023 Espressif Systems. This source code is licensed under the Apache License 2.0 as described in the file LICENSE.
