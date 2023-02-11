@@ -16,19 +16,11 @@ This example does not require any special hardware, and can be run on any common
 
 ### Configure the project
 
-If using Make based build system, run `make menuconfig` and set serial port under Serial Flasher Options. 
-If using CMake based build system, no configuration is required.
-Also, under Component Config/DSP Library/Optimization for ESP32, it's possible to select optimized or ansi implementation to compare. 
+Under Component Config ---> DSP Library ---> DSP Optimization, it's possible to choose either the optimized or ANSI implementation, to compare them.
 
 ### Build and flash
 
-Build the project and flash it to the board, then run monitor tool to view serial output:
-
-```
-make -j4 flash monitor
-```
-
-Or, for CMake based build system (replace PORT with serial port name):
+Build the project and flash it to the board, then run monitor tool to view serial output (replace PORT with serial port name):
 
 ```
 idf.py -p PORT flash monitor
