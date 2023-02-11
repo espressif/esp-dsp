@@ -53,10 +53,6 @@ after_script:
     EXAMPLE_TARGETS: "esp32"
     TEST_TARGETS: "esp32"
 
-build_idf_v4.1:
-  extends: .build_template
-  image: espressif/idf:release-v4.1
-
 build_idf_v4.2:
   extends: .build_template
   image: espressif/idf:release-v4.2
@@ -75,6 +71,15 @@ build_idf_v4.4:
   variables:
     EXAMPLE_TARGETS: "esp32 esp32s2 esp32c3 esp32s3"
     TEST_TARGETS: "esp32 esp32s3"
+
+build_idf_v5.0:
+  extends: .build_template
+  image: espressif/idf:release-v5.0
+  variables:
+    EXAMPLE_TARGETS: "esp32 esp32s2 esp32s3 esp32c3 esp32c2"
+    TEST_TARGETS: "esp32 esp32s3"
+    # GNU Make based build system is not supported starting from IDF v5.0
+    SKIP_GNU_MAKE_BUILD: 1
 
 build_idf_latest:
   extends: .build_template

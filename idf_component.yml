@@ -13,3 +13,7 @@ files:
     - "docs/**/*"
     - "test/**/*"
     - "test_app/**/*"
+
+dependencies:
+  # Required IDF version
+  idf: ">=4.2"
