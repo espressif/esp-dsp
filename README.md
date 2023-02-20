@@ -1,6 +1,8 @@
+[![Component Registry](https://components.espressif.com/components/espressif/esp-dsp/badge.svg)](https://components.espressif.com/components/espressif/esp-dsp)
+
 # Espressif DSP Library
 
-ESP-DSP is the official DSP library for the [ESP32](https://espressif.com/en/products/hardware/esp32/overview) chip and for the [ESP32S3](https://espressif.com/en/products/hardware/esp32s3/overview) chip.
+ESP-DSP is the official DSP library for [ESP32](https://espressif.com/en/products/hardware/esp32/overview) and [ESP32-S3](https://espressif.com/en/products/hardware/esp32s3/overview) chips.
 
 ## Overview
 
@@ -29,41 +31,41 @@ Documentation found in the above links is automatically generated from the conte
 
 ## Installation and Usage
 
-The ESP-DSP library is a component for the [ESP-IDF build system](https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/build-system.html). It also works with the [new CMake-based build system](https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/build-system-cmake.html).
+The ESP-DSP library is a component for the [ESP-IDF build system](https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/build-system.html).
 
-### Trying out ESP-DSP examples
+The recommended way to use the component is to install it from the [IDF Component Registry](https://components.espressif.com/components/espressif/esp-dsp).
 
-If you haven't created an ESP-IDF project yet, and wish to try the examples provided with ESP-DSP, you can clone ESP-DSP repository into any directory, and then run examples from there:
+### Adding ESP-DSP component to an existing project
 
-    cd ~/esp
-    git clone https://github.com/espressif/esp-dsp.git
-    cd esp-dsp/examples/dotprod
-    make -j4 flash monitor ESPPORT=PORT
+In the project directory, run:
+```bash
+idf.py add-dependency "espressif/esp-dsp"
+```
+This will add the esp-dsp component as a dependency to the `main` component of your project. You can also add it by editing the `idf_component.yml` file manually.
 
-or, if you are using CMake based build system,
+### Downloading ESP-DSP examples
 
-    idf.py -p PORT flash monitor
+You can download the example projects from the IDF Component Registry website or use the `idf.py create-project-from-example` command. For example:
+
+```bash
+idf.py create-project-from-example "espressif/esp-dsp:basic_math"
+```
+
+Please refer to the [IDF Component Registry](https://components.espressif.com/components/espressif/esp-dsp) for the download links and the instructions.
+
+You can also use Git to clone this repository and find all the examples in the `examples/` subdirectory. For the list of the examples, please see [README.md](examples/README.md) in the examples directory.
+
+### Building and running ESP-DSP examples
+
+Build, flash and monitor as this is usually done for ESP-IDF projects:
+
+```bash
+idf.py -p PORT flash monitor
+```
 
 where `PORT` is the UART port name of your development board, such as `/dev/ttyUSB0` or `COM1`. 
 
-Note that you need to set up environment variables (`IDF_PATH`, `PATH`) before building the project. Refer to the [ESP-IDF Getting Started Guide](https://docs.espressif.com/projects/esp-idf/en/latest/get-started/index.html) if you don't have the environment set up yet.
-
-For the list of the examples, please see [README.md](examples/README.md) in the examples directory.
-
-### Including ESP-DSP into your own project
-
-To include ESP-DSP into your ESP-IDF project, clone ESP-DSP repository (or add it as a submodule) into the components directory of the project:
-
-    cd your-project-directory
-    mkdir -p components
-    cd components
-    git clone https://github.com/espressif/esp-dsp.git
-
-ESP-IDF build system also allows including components which are not located in the project components directory, using `EXTRA_COMPONENT_DIRS` project variable. Please refer to the [ESP-IDF build system documentation](https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/build-system.html) for details.
-
-## Build a Benchmarks Table
-
-The Benchmark table [esp-dsp-benchmarks.rst](docs/esp-dsp-benchmarks.rst) contains benchmarks for ESP32 and ESP32S3 CPUs. The benchmarks collected with compiler optimization flags for speed (Os) and for size (Q2). To build this table please collect benchmarks data by running "DSP Benchmarks data" test from test application and place result data to the [CSV file](docs/esp_bm_results.csv). Then run the [Python scrip](docs/build_bm_table.py) to generate the benchmark table [esp-dsp-benchmarks.rst](docs/esp-dsp-benchmarks.rst).
+Note that you need to set up ESP-IDF before building the project. Refer to the [ESP-IDF Getting Started Guide](https://docs.espressif.com/projects/esp-idf/en/latest/get-started/index.html) if you don't have the environment set up yet.
 
 ## Reporting Issues
 
@@ -71,6 +73,10 @@ If you have found an issue in ESP-DSP, or wish to submit an enhancement request,
 
 For general questions related to this library, please use the [esp32.com forum](https://esp32.com/).
 
+## Contributing to ESP-DSP
+
+Please check [CONTRIBUTING.md](CONTRIBUTING.md) if you'd like to contribute to ESP-DSP.
+
 ## Copyrights and License
 
-All original source code in this repository is Copyright (C) 2018-2019 Espressif Systems. This source code is licensed under the Apache License 2.0 as described in the file LICENSE.
+All original source code in this repository is Copyright (C) 2018-2023 Espressif Systems. This source code is licensed under the Apache License 2.0 as described in the file LICENSE.
