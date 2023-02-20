@@ -130,6 +130,7 @@ push_master_to_github:
     - esp-idf/tools/ci/push_to_github.sh
 
 upload_to_component_manager:
+  image: espressif/idf:latest
   stage: deploy
   tags:
     - deploy
