@@ -287,5 +287,5 @@ TEST_CASE("Mat class operators", "[dspm]")
         }
     }
 
-    delete check_array;
+    delete[] check_array;
 }
