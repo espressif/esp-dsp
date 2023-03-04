@@ -27,8 +27,13 @@ static const char *TAG = "dsps_dct";
 TEST_CASE("dsps_dct_f32 functionality", "[dsps]")
 {
     float* data = calloc(1024*2, sizeof(float));
+    TEST_ASSERT_NOT_NULL(data);
+
     float* data_ref = calloc(1024*2, sizeof(float));
+    TEST_ASSERT_NOT_NULL(data_ref);
+
     float* data_fft = calloc(1024*2, sizeof(float));
+    TEST_ASSERT_NOT_NULL(data_fft);
 
     int N = 64;
     int check_bin = 4;
@@ -69,14 +74,16 @@ TEST_CASE("dsps_dct_f32 functionality", "[dsps]")
 TEST_CASE("dsps_dct_f32 functionality Fast DCT", "[dsps]")
 {
     esp_err_t ret = dsps_fft2r_init_fc32(NULL, CONFIG_DSP_MAX_FFT_SIZE);
-    if (ret  != ESP_OK) {
-        ESP_LOGE(TAG, "Not possible to initialize FFT. Error = %i", ret);
-        return;
-    }
+    TEST_ESP_OK(ret);
 
     float* data = calloc(1024*2, sizeof(float));
+    TEST_ASSERT_NOT_NULL(data);
+
     float* data_ref = calloc(1024*2, sizeof(float));
+    TEST_ASSERT_NOT_NULL(data_ref);
+
     float* data_fft = calloc(1024*2, sizeof(float));
+    TEST_ASSERT_NOT_NULL(data_fft);
 
     int N = 64;
     int check_bin = 4;
@@ -91,11 +98,8 @@ TEST_CASE("dsps_dct_f32 functionality Fast DCT", "[dsps]")
 
     dsps_dct_f32_ref(data, N, &data[N]);
     ret = dsps_dct_f32(data_fft, N);
-
-    if (ret != ESP_OK) {
-        ESP_LOGE(TAG, "Error!");
-        return;
-    }
+    TEST_ESP_OK(ret);
+    
     float abs_tol = 1e-5;
     for (size_t i = 0; i < N; i++) {
         ESP_LOGD(TAG, "DCT data[%i] = %2.3f, data_fft = %2.3f\n", i, data[N + i], data_fft[i]);
@@ -125,14 +129,16 @@ TEST_CASE("dsps_dct_f32 functionality Fast DCT", "[dsps]")
 TEST_CASE("dsps_dct_f32 benchmark", "[dsps]")
 {
     esp_err_t ret = dsps_fft2r_init_fc32(NULL, CONFIG_DSP_MAX_FFT_SIZE);
-    if (ret  != ESP_OK) {
-        ESP_LOGE(TAG, "Not possible to initialize FFT. Error = %i", ret);
-        return;
-    }
+    TEST_ESP_OK(ret);
 
     float* data = calloc(1024*2, sizeof(float));
+    TEST_ASSERT_NOT_NULL(data);
+
     float* data_ref = calloc(1024*2, sizeof(float));
+    TEST_ASSERT_NOT_NULL(data_ref);
+
     float* data_fft = calloc(1024*2, sizeof(float));
+    TEST_ASSERT_NOT_NULL(data_fft);
 
     int N = 64;
     int check_bin = 4;
@@ -145,10 +151,7 @@ TEST_CASE("dsps_dct_f32 benchmark", "[dsps]")
     ret = dsps_dct_f32(data, N);
     unsigned int end_b = xthal_get_ccount();
 
-    if (ret != ESP_OK) {
-        TEST_ASSERT_MESSAGE (false, "Error!\n");
-        return;
-    }
+    TEST_ESP_OK(ret);
 
     float total_b = end_b - start_b;
     float cycles = total_b;

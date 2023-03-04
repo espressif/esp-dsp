@@ -341,11 +341,7 @@ TEST_CASE("dsps_fird_s16_aexx noise_snr", "[dsps]")
 
     // Initialize FFT
     esp_err_t ret = dsps_fft2r_init_fc32(NULL, N_FFT*2);
-    if (ret  != ESP_OK)
-    {
-        ESP_LOGE(TAG, "Not possible to initialize FFT. Error = %i", ret);
-        return;
-    }
+    TEST_ESP_OK(ret);
 
     // Do the FFT
     dsps_fft2r_fc32(fft_data, N_FFT);
