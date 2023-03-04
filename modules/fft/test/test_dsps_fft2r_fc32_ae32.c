@@ -57,7 +57,7 @@ TEST_CASE("dsps_fft2r_fc32_ae32 functionality", "[dsps]")
 
     for (int i=0 ; i< N_check ; i++)
     {
-        if (fabs(check_data[i] - data[i]) == 0) ESP_LOGD(TAG, "Data[%i] =%8.4f, %8.4f, %8.4f", i, data[i], check_data[i], check_data[i] - data[i]);
+        if (fabs(check_data[i] - data[i]) < 1e-5) ESP_LOGD(TAG, "Data[%i] =%8.4f, %8.4f, %8.4f", i, data[i], check_data[i], check_data[i] - data[i]);
         else ESP_LOGE(TAG, "Data[%i] =%f, %f, %f", i, data[i], check_data[i], check_data[i] - data[i]);
     }
     
