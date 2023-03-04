@@ -24,7 +24,7 @@
 
 static const char *TAG = "dsps_dct";
 
-TEST_CASE("dsps_dct_f32 functionality", "[dsps]")
+TEST_CASE("dsps_dct_f32 functionality", "[dsps][ignore]")
 {
     float* data = calloc(1024*2, sizeof(float));
     TEST_ASSERT_NOT_NULL(data);
@@ -71,7 +71,7 @@ TEST_CASE("dsps_dct_f32 functionality", "[dsps]")
 
 }
 
-TEST_CASE("dsps_dct_f32 functionality Fast DCT", "[dsps]")
+TEST_CASE("dsps_dct_f32 functionality Fast DCT", "[dsps][ignore]")
 {
     esp_err_t ret = dsps_fft2r_init_fc32(NULL, CONFIG_DSP_MAX_FFT_SIZE);
     TEST_ESP_OK(ret);

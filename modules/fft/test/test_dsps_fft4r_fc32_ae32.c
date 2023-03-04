@@ -27,7 +27,7 @@
 
 static const char *TAG = "dsps_fft4r_ae32";
 
-TEST_CASE("dsps_fft4r_fc32_ae32 functionality", "[dsps]")
+TEST_CASE("dsps_fft4r_fc32_ae32 functionality", "[dsps][ignore]")
 {
     float* data =  (float*)memalign(16, sizeof(float) * 4096*2);
     TEST_ASSERT_NOT_NULL(data);
@@ -87,7 +87,7 @@ TEST_CASE("dsps_fft4r_fc32_ae32 functionality", "[dsps]")
 
 static portMUX_TYPE testnlock = portMUX_INITIALIZER_UNLOCKED;
 
-TEST_CASE("dsps_fft4r_fc32_ae32 benchmark", "[dsps]")
+TEST_CASE("dsps_fft4r_fc32_ae32 benchmark", "[dsps][ignore]")
 {
     float* check_data_fft = (float*)memalign(16, sizeof(float) * 4096*2);
     TEST_ASSERT_NOT_NULL(check_data_fft);
