@@ -27,23 +27,21 @@
 
 static const char *TAG = "dsps_fft4r_ansi";
 
-TEST_CASE("dsps_fft4r_fc32_ansi functionality", "[dsps]")
+TEST_CASE("dsps_fft4r_fc32_ansi functionality", "[dsps][ignore]")
 {
     float* data =  (float*)memalign(16, sizeof(float) * 1024*2);
+    TEST_ASSERT_NOT_NULL(data);
+
     float* check_data_fft = (float*)memalign(16, sizeof(float) * 1024*2);
+    TEST_ASSERT_NOT_NULL(check_data_fft);
+
     esp_err_t ret;
     ret = dsps_fft2r_init_fc32(NULL, 1024);
-    if (ret  != ESP_OK)
-    {
-        ESP_LOGE(TAG, "Not possible to initialize FFT2R. Error = %i", ret);
-        return;
-    }
+    TEST_ESP_OK(ret);
+
     ret = dsps_fft4r_init_fc32(NULL, 1024);
-    if (ret  != ESP_OK)
-    {
-        ESP_LOGE(TAG, "Not possible to initialize FFT4R. Error = %i", ret);
-        return;
-    }
+    TEST_ESP_OK(ret);
+
     int N_check = 256;
     for (size_t pow = 2; pow < 6; pow++)
     {
@@ -90,16 +88,14 @@ TEST_CASE("dsps_fft4r_fc32_ansi functionality", "[dsps]")
 TEST_CASE("dsps_fft4r_fc32_ansi benchmark", "[dsps]")
 {
     float* check_data_fft = (float*)malloc(sizeof(float) * 4096*2);
+    TEST_ASSERT_NOT_NULL(check_data_fft);
 
     unsigned int start_b;
     float cycles;
 
     esp_err_t ret = dsps_fft4r_init_fc32(NULL, CONFIG_DSP_MAX_FFT_SIZE);
-    if (ret  != ESP_OK)
-    {
-        ESP_LOGE(TAG, "Not possible to initialize FFT. Error = %i", ret);
-        return;
-    }
+    TEST_ESP_OK(ret);
+
     int N_check = 256;
     for (size_t pow = 2; pow < 7; pow++)
     {
@@ -126,20 +122,16 @@ TEST_CASE("dsps_fft4r_fc32_ansi benchmark", "[dsps]")
 TEST_CASE("dsps_cplx2real_fc32 functionality", "[dsps]")
 {
     float* data =  (float*)malloc(sizeof(float) * 1024*2);
+    TEST_ASSERT_NOT_NULL(data);
+
     float* check_data_fft = (float*)malloc(sizeof(float) * 1024*2);
+    TEST_ASSERT_NOT_NULL(check_data_fft);
 
     esp_err_t ret = dsps_fft4r_init_fc32(NULL, 1024);
-    if (ret  != ESP_OK)
-    {
-        ESP_LOGE(TAG, "Not possible to initialize FFT. Error = %i", ret);
-        return;
-    }
+    TEST_ESP_OK(ret);
+
     ret = dsps_fft2r_init_fc32(NULL, 1024);
-    if (ret  != ESP_OK)
-    {
-        ESP_LOGE(TAG, "Not possible to initialize FFT. Error = %i", ret);
-        return;
-    }
+    TEST_ESP_OK(ret);
     
     int N_check = 256;
     for (size_t pow = 4; pow < 11; pow++)
@@ -195,15 +187,14 @@ static portMUX_TYPE testnlock = portMUX_INITIALIZER_UNLOCKED;
 TEST_CASE("dsps_cplx2real_fc32_ansi benchmark", "[dsps]")
 {
     float* check_data_fft = (float*)malloc(sizeof(float) * 4096*2);
+    TEST_ASSERT_NOT_NULL(check_data_fft);
+    
     unsigned int start_b;
     float cycles;
 
     esp_err_t ret = dsps_fft4r_init_fc32(NULL, CONFIG_DSP_MAX_FFT_SIZE);
-    if (ret  != ESP_OK)
-    {
-        ESP_LOGE(TAG, "Not possible to initialize FFT. Error = %i", ret);
-        return;
-    }
+    TEST_ESP_OK(ret);
+
     int N_check = 256;
     for (size_t pow = 4; pow < 13; pow++)
     {

@@ -69,6 +69,6 @@ float dsps_sfdr_f32(const float *input, int32_t len, int8_t use_dc)
         }
     }
 
-    delete temp_array;
+    delete[] temp_array;
     return min_diff;
 }

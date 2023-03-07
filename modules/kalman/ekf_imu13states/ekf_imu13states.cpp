@@ -112,7 +112,7 @@ void ekf_imu13states::Test()
         test_u[i] = i;
     }
     dspm::Mat result_StateXdot = StateXdot(test_x, test_u);
-    delete test_u;
+    delete[] test_u;
 }
 
 void ekf_imu13states::TestFull(bool enable_att)

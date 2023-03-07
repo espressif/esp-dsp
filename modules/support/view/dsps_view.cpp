@@ -97,9 +97,9 @@ void dsps_view(const float *data, int32_t len, int width, int height, float min,
     }
     printf("\n");
     ESP_LOGI("view", "Plot: Length=%i, min=%f, max=%f", (int)len, min, max);
-    delete view_data;
-    delete view_data_min;
-    delete view_data_max;
+    delete[] view_data;
+    delete[] view_data_min;
+    delete[] view_data_max;
 }
 
 void dsps_view_s16(const int16_t *data, int32_t len, int width, int height, float min, float max, char view_char)
@@ -112,7 +112,7 @@ void dsps_view_s16(const int16_t *data, int32_t len, int width, int height, floa
         view_data[i] /=32768;
     }
     dsps_view(view_data, len, width, height, min, max, view_char);
-    delete view_data;
+    delete[] view_data;
 }
 
 void dsps_view_spectrum(const float *data, int32_t len, float min, float max)

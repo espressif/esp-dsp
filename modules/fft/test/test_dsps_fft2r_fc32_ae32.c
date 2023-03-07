@@ -48,11 +48,8 @@ TEST_CASE("dsps_fft2r_fc32_ae32 functionality", "[dsps]")
 
     // Init FFT tables
     esp_err_t ret = dsps_fft2r_init_fc32(NULL, CONFIG_DSP_MAX_FFT_SIZE);
-    if (ret  != ESP_OK)
-    {
-        ESP_LOGE(TAG, "Not possible to initialize FFT. Error = %i", ret);
-        return;
-    }
+    TEST_ESP_OK(ret);
+
     int N_check = N;
 
     dsps_fft2r_fc32_ae32(data, N_check);
@@ -60,7 +57,7 @@ TEST_CASE("dsps_fft2r_fc32_ae32 functionality", "[dsps]")
 
     for (int i=0 ; i< N_check ; i++)
     {
-        if (fabs(check_data[i] - data[i]) == 0) ESP_LOGD(TAG, "Data[%i] =%8.4f, %8.4f, %8.4f", i, data[i], check_data[i], check_data[i] - data[i]);
+        if (fabs(check_data[i] - data[i]) < 1e-5) ESP_LOGD(TAG, "Data[%i] =%8.4f, %8.4f, %8.4f", i, data[i], check_data[i], check_data[i] - data[i]);
         else ESP_LOGE(TAG, "Data[%i] =%f, %f, %f", i, data[i], check_data[i], check_data[i] - data[i]);
     }
     
@@ -92,11 +89,8 @@ TEST_CASE("dsps_fft2r_fc32_ae32 functionality", "[dsps]")
 TEST_CASE("dsps_fft2r_fc32_ae32 benchmark", "[dsps]")
 {
     esp_err_t ret = dsps_fft2r_init_fc32(NULL, CONFIG_DSP_MAX_FFT_SIZE);
-    if (ret  != ESP_OK)
-    {
-        ESP_LOGE(TAG, "Not possible to initialize FFT. Error = %i", ret);
-        return;
-    }
+    TEST_ESP_OK(ret);
+
     for (int i= 5 ; i< 10 ; i++)
     {
         int N_check = 2<<i;
@@ -123,21 +117,13 @@ TEST_CASE("dsps_fft2r_fc32_ae32 benchmark", "[dsps]")
 TEST_CASE("dsps_bit_rev2r_fc32_ae32 benchmark", "[dsps]")
 {
     esp_err_t ret = dsps_fft2r_init_fc32(NULL, CONFIG_DSP_MAX_FFT_SIZE);
-    if (ret  != ESP_OK)
-    {
-        ESP_LOGE(TAG, "Not possible to initialize FFT. Error = %i", ret);
-        return;
-    }
+    TEST_ESP_OK(ret);
+
     float* data = (float*)memalign(16, 2*4096*sizeof(float));
+    TEST_ASSERT_NOT_NULL(data);
+
     float* check_data = (float*)memalign(16, 2*4096*sizeof(float));
-    if (data  == NULL)
-    {
-        ESP_LOGE(TAG, "Not possible to allocate memory for data!");
-    }
-    if (check_data  == NULL)
-    {
-        ESP_LOGE(TAG, "Not possible to allocate memory for check_data!");
-    }
+    TEST_ASSERT_NOT_NULL(check_data);
 
     int N_check = 256;
     for (size_t i = 4; i < 13; i++)

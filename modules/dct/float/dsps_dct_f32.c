@@ -58,6 +58,9 @@ esp_err_t dsps_dct_f32(float *data, int N)
     }
 
     ret = dsps_fft2r_fc32(data, N);
+    if (ret != ESP_OK) {
+        return ret;
+    }
 
     // // The follows code do the same as this one:
     // //
@@ -75,11 +78,14 @@ esp_err_t dsps_dct_f32(float *data, int N)
         data[i * 2 + 1] = data[i * 2 + 1] * s;
     }
     ret = dsps_bit_rev_fc32(data, N);
+    if (ret != ESP_OK) {
+        return ret;
+    }
+
     for (int i = 0; i < N; i++) {
         data[i] = data[i * 2] + data[i * 2 + 1];
     }
-
-    return ret;
+    return ESP_OK;
 }
 
 esp_err_t dsps_dct_inv_f32(float *data, int N)
@@ -97,10 +103,16 @@ esp_err_t dsps_dct_inv_f32(float *data, int N)
         data[i * 2 + 1] = data[i] * -sinf(temp);
     }
     ret = dsps_fft2r_fc32(data, N);
+    if (ret != ESP_OK) {
+        return ret;
+    }
     ret = dsps_bit_rev_fc32(data, N);
+    if (ret != ESP_OK) {
+        return ret;
+    }
     for (size_t i = 0; i < N / 2; i++) {
         data[i * 2 + 1] = data[(N - 1 - i) * 2];
     }
 
-    return ret;
+    return ESP_OK;
 }

@@ -67,7 +67,7 @@ Mat::~Mat()
 {
     ESP_LOGD("Mat", "~Mat(%i, %i), ext_buff=%i", this->rows, this->cols, this->ext_buff);
     if (false == this->ext_buff) {
-        delete data;
+        delete[] data;
     }
 }
 
@@ -111,7 +111,7 @@ Mat &Mat::operator=(const Mat &m)
 
     if (this->rows != m.rows || this->cols != m.cols) {
         if (!this->ext_buff) {
-            delete this->data;
+            delete[] this->data;
         }
         this->ext_buff = false;
         this->rows = m.rows;

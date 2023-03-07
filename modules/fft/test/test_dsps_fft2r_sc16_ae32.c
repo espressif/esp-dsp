@@ -41,11 +41,8 @@ TEST_CASE("dsps_fft2r_sc16_aexx functionality", "[dsps]")
     }
 
     esp_err_t ret = dsps_fft2r_init_sc16(NULL, CONFIG_DSP_MAX_FFT_SIZE);
-    if (ret  != ESP_OK)
-    {
-        ESP_LOGE(TAG, "Not possible to initialize FFT. Error = %i", ret);
-        return;
-    }
+    TEST_ESP_OK(ret);
+
     ESP_LOGI(TAG, "data address=%8.8"PRIx32"\n", (uint32_t)data);
 
     dsps_fft2r_sc16(data, N);
@@ -110,11 +107,8 @@ TEST_CASE("dsps_fft2r_sc16_aexx overflow check", "[dsps]")
     }
 
     esp_err_t ret = dsps_fft2r_init_sc16(NULL, CONFIG_DSP_MAX_FFT_SIZE);
-    if (ret  != ESP_OK)
-    {
-        ESP_LOGE(TAG, "Not possible to initialize FFT. Error = %i", ret);
-        return;
-    }
+    TEST_ESP_OK(ret);
+
 
     dsps_fft2r_sc16(data, N);
     unsigned int start_b = xthal_get_ccount();
@@ -172,11 +166,8 @@ TEST_CASE("dsps_fft2r_sc16_aexx overflow check", "[dsps]")
 TEST_CASE("dsps_fft2r_sc16_ae32 benchmark", "[dsps]")
 {    
     esp_err_t ret = dsps_fft2r_init_sc16(NULL, CONFIG_DSP_MAX_FFT_SIZE);
-    if (ret  != ESP_OK)
-    {
-        ESP_LOGE(TAG, "Not possible to initialize FFT. Error = %i", ret);
-        return;
-    }
+    TEST_ESP_OK(ret);
+
     for (int i= 5 ; i< 10 ; i++)
     {
         int N_check = 2<<i;

@@ -41,11 +41,8 @@ TEST_CASE("dsps_fft2r_fc32_ansi functionality", "[dsps]")
     fft_table_buff[N+1] = 5678;
 
     esp_err_t ret = dsps_fft2r_init_fc32(&fft_table_buff[1], N);
-    if (ret  != ESP_OK)
-    {
-        ESP_LOGE(TAG, "Not possible to initialize FFT. Error = %i", ret);
-        return;
-    }
+    TEST_ESP_OK(ret);
+
 
     dsps_fft2r_fc32_ansi(data, N);
     unsigned int start_b = xthal_get_ccount();
@@ -87,13 +84,14 @@ TEST_CASE("dsps_fft2r_fc32_ansi functionality", "[dsps]")
 TEST_CASE("dsps_fft2r_fc32_ansi benchmark", "[dsps]")
 {    
     esp_err_t ret = dsps_fft2r_init_fc32(NULL, CONFIG_DSP_MAX_FFT_SIZE);
-    if (ret  != ESP_OK)
-    {
-        ESP_LOGE(TAG, "Not possible to initialize FFT. Error = %i", ret);
-        return;
-    }
+    TEST_ESP_OK(ret);
+
     float* data = (float*)malloc(2*4096*sizeof(float));
+    TEST_ASSERT_NOT_NULL(data);
+
     float* check_data = (float*)malloc(2*4096*sizeof(float));
+    TEST_ASSERT_NOT_NULL(check_data);
+
     for (int i= 5 ; i< 10 ; i++)
     {
         int N_check = 2<<i;

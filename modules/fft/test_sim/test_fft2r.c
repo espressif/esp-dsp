@@ -51,11 +51,7 @@ void test_fft2r()
 
     // Init FFT tables
     esp_err_t ret = dsps_fft2r_init_fc32(NULL, 4096);
-    if (ret  != ESP_OK)
-    {
-        printf("Not possible to initialize FFT. Error = %i \n", ret);
-        return;
-    }
+    TEST_ESP_OK(ret);
     int N_check = N;
         // table = (uint16_t *)dsps_fft2r_rev_tables_fc32[6];
         // table_size = dsps_fft2r_rev_tables_fc32_size[6];

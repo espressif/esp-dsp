@@ -70,7 +70,7 @@ float dsps_snr_f32(const float *input, int32_t len, uint8_t use_dc)
     if (noise_power < max * 0.00000000001) {
         return 192;
     }
-    delete temp_array;
+    delete[] temp_array;
     float snr = max / noise_power;
     float result = 10 * log10(max / noise_power) - 2; // 2 - window correction
     ESP_LOGI(TAG, "SNR = %f, result=%f dB", snr, result);
