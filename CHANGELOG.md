@@ -10,7 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Fixed point FIR filter with decimation
-- Update tag to 1.2.1 for component manager 
+- Update tag to 1.2.1 for component manager
+- Extend dsp_power_of_two() to 32-bit value 
 
 ### Fixed
 
