@@ -1,4 +1,4 @@
-// Copyright 2018-2019 Espressif Systems (Shanghai) PTE LTD
+// Copyright 2018-2023 Espressif Systems (Shanghai) PTE LTD
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -39,12 +39,10 @@ dsps_fir_f32_ae32:
 	l32i    a6,  a2, 8  // a6  - N
 	mull    a6, a6, a10// a6 = a6*4
 	l32i    a10, a2, 0  // a10 - coeffs
-	add     a10, a10, a6 // a10 = &coeffs[N];
-	addi    a10, a10, -4 // a10 = &coeffs[N-1];
 	l32i    a6,  a2, 8  // a6  - N
 
 	movi.n a9, 0
-	movi.n a8, -4
+	movi.n a8, 4
 	movi.n a12, 4
 
 //  a13 - delay index

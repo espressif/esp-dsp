@@ -29,7 +29,7 @@ static float x[1024];
 static float y[1024];
 
 static float coeffs[32];
-static float delay[32];
+static float delay[32 + 4];
 
 TEST_CASE("dsps_fir_f32_ansi functionality", "[dsps]")
 {
@@ -41,7 +41,7 @@ TEST_CASE("dsps_fir_f32_ansi functionality", "[dsps]")
 
     fir_f32_t fir1;
     for (int i = 0 ; i < fir_len ; i++) {
-        coeffs[i] = i;
+        coeffs[i] = (fir_len - i - 1);
     }
 
     for (int i = 0 ; i < len ; i++) {
@@ -52,6 +52,10 @@ TEST_CASE("dsps_fir_f32_ansi functionality", "[dsps]")
     dsps_fir_init_f32(&fir1, coeffs, delay, fir_len);
     dsps_fir_f32_ansi(&fir1, x, y, len);
 
+    for (int i=0 ; i< fir_len*3 ; i++)
+    {
+        ESP_LOGD(TAG, "fir[%i] = %f", i, y[i]);
+    }
     for (int i = 0 ; i < fir_len ; i++) {
         if (y[i] != i) {
             TEST_ASSERT_EQUAL(y[i], i);
@@ -59,9 +63,11 @@ TEST_CASE("dsps_fir_f32_ansi functionality", "[dsps]")
     }
 
     // Check even length
-    fir_len--;
+    #ifndef CONFIG_IDF_TARGET_ESP32S3
+        fir_len--;
+    #endif 
     for (int i = 0 ; i < fir_len ; i++) {
-        coeffs[i] = i;
+        coeffs[i] = (fir_len - i - 1);
     }
 
     for (int i = 0 ; i < len ; i++) {

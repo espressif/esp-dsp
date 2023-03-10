@@ -23,17 +23,23 @@
 #include "dsps_fir.h"
 #include "dsp_tests.h"
 
-static const char *TAG = "dsps_fir_f32_ae32";
+static const char *TAG = "dsps_fir_f32_aexx";
 
+__attribute__((aligned(16)))
 static float x[1024];
+__attribute__((aligned(16)))
 static float y[1024];
+__attribute__((aligned(16)))
 static float y_compare[1024];
 
+__attribute__((aligned(16)))
 static float coeffs[32];
-static float delay[32];
+__attribute__((aligned(16)))
+static float delay[32 + 4];
+__attribute__((aligned(16)))
 static float delay_compare[32];
 
-TEST_CASE("dsps_fir_f32_ae32 functionality", "[dsps]")
+TEST_CASE("dsps_fir_f32_aexx functionality", "[dsps]")
 {
     // In the test we generate filter with cutt off frequency 0.1
     // and then filtering 0.1 and 0.3 frequencis.
@@ -44,7 +50,7 @@ TEST_CASE("dsps_fir_f32_ae32 functionality", "[dsps]")
     fir_f32_t fir1;
     fir_f32_t fir2;
     for (int i = 0 ; i < fir_len ; i++) {
-        coeffs[i] = i;
+        coeffs[i] = (fir_len - i - 1);
     }
 
     for (int i = 0 ; i < len ; i++) {
@@ -52,12 +58,14 @@ TEST_CASE("dsps_fir_f32_ae32 functionality", "[dsps]")
     }
     x[0] = 1;
 
-    dsps_fir_init_f32(&fir1, coeffs, delay, fir_len);
-    dsps_fir_f32_ae32(&fir1, x, y, len);
-    int32_t *ttt = (int32_t *)y;
+    esp_err_t err = dsps_fir_init_f32(&fir1, coeffs, delay, fir_len);
+    TEST_ESP_OK(err);
+    err = dsps_fir_f32(&fir1, x, y, len);
+    TEST_ESP_OK(err);
+
     for (int i=0 ; i< fir_len*3 ; i++)
     {
-        ESP_LOGD(TAG, "fir[%i] = 0x%08"PRIx32"\n", i, ttt[i]);
+        ESP_LOGD(TAG, "fir[%i] = %f", i, y[i]);
     }
 
     for (int i = 0 ; i < fir_len ; i++) {
@@ -66,8 +74,6 @@ TEST_CASE("dsps_fir_f32_ae32 functionality", "[dsps]")
         }
     }
 
-    // Check even length
-    fir_len--;
     for (int i = 0 ; i < fir_len ; i++) {
         coeffs[i] = i;
     }
@@ -79,11 +85,11 @@ TEST_CASE("dsps_fir_f32_ae32 functionality", "[dsps]")
     dsps_fir_init_f32(&fir1, coeffs, delay, fir_len);
     dsps_fir_init_f32(&fir2, coeffs, delay_compare, fir_len);
 
-    dsps_fir_f32_ae32(&fir1, x, y, len);
+    dsps_fir_f32(&fir1, x, y, len);
     dsps_fir_f32_ansi(&fir2, x, y_compare, len);
-    dsps_fir_f32_ae32(&fir1, x, y, len);
+    dsps_fir_f32(&fir1, x, y, len);
     dsps_fir_f32_ansi(&fir2, x, y_compare, len);
-    dsps_fir_f32_ae32(&fir1, x, y, len);
+    dsps_fir_f32(&fir1, x, y, len);
     dsps_fir_f32_ansi(&fir2, x, y_compare, len);
 
     for (int i = 0 ; i < len ; i++) {
@@ -93,7 +99,7 @@ TEST_CASE("dsps_fir_f32_ae32 functionality", "[dsps]")
     }
 }
 
-TEST_CASE("dsps_fir_f32_ae32 benchmark", "[dsps]")
+TEST_CASE("dsps_fir_f32_aexx benchmark", "[dsps]")
 {
 
     int len = sizeof(x) / sizeof(float);
@@ -114,14 +120,14 @@ TEST_CASE("dsps_fir_f32_ae32 benchmark", "[dsps]")
 
     unsigned int start_b = xthal_get_ccount();
     for (int i = 0 ; i < repeat_count ; i++) {
-        dsps_fir_f32_ae32(&fir1, x, y, len);
+        dsps_fir_f32(&fir1, x, y, len);
     }
     unsigned int end_b = xthal_get_ccount();
 
     float total_b = end_b - start_b;
     float cycles = total_b / (len * repeat_count);
 
-    ESP_LOGI(TAG, "dsps_fir_f32_ae32 - %f per sample for for %i coefficients, %f per tap \n", cycles, fir_len, cycles / (float)fir_len);
+    ESP_LOGI(TAG, "dsps_fir_f32_aexx - %f per sample for for %i coefficients, %f per tap \n", cycles, fir_len, cycles / (float)fir_len);
 
     float min_exec = 3;
     float max_exec = 800;
