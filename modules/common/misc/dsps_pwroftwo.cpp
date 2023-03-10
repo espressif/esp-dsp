@@ -21,7 +21,7 @@ bool dsp_is_power_of_two(int x)
 
 int dsp_power_of_two(int x)
 {
-    for (size_t i = 0; i < 16; i++)
+    for (size_t i = 0; i < 32; i++)
     {
         x = x >> 1;
         if(0 == x) return i;
