@@ -25,24 +25,26 @@
 #include "dsp_tests.h"
 
 
+#define FFTR4_TEST_SIZE     1024
+
 static const char *TAG = "dsps_fft4r_ae32";
 
-TEST_CASE("dsps_fft4r_fc32_ae32 functionality", "[dsps][ignore]")
+TEST_CASE("dsps_fft4r_fc32_ae32 functionality", "[dsps]")
 {
-    float* data =  (float*)memalign(16, sizeof(float) * 4096*2);
+    float* data =  (float*)memalign(16, sizeof(float) * FFTR4_TEST_SIZE*2);
     TEST_ASSERT_NOT_NULL(data);
 
-    float* check_data_fft = (float*)memalign(16, sizeof(float) * 4096*2);
+    float* check_data_fft = (float*)memalign(16, sizeof(float) * FFTR4_TEST_SIZE*2);
     TEST_ASSERT_NOT_NULL(check_data_fft);
 
-    esp_err_t ret = dsps_fft4r_init_fc32(NULL, CONFIG_DSP_MAX_FFT_SIZE);
+    esp_err_t ret = dsps_fft4r_init_fc32(NULL, FFTR4_TEST_SIZE);
     TEST_ESP_OK(ret);
 
     int N_check = 256;
     for (size_t pow = 2; pow < 7; pow++)
     {
         N_check = 1<< (pow*2);
-        if (N_check > CONFIG_DSP_MAX_FFT_SIZE)
+        if (N_check > FFTR4_TEST_SIZE)
         {
             break;
         }
@@ -72,9 +74,9 @@ TEST_CASE("dsps_fft4r_fc32_ae32 functionality", "[dsps][ignore]")
         }
         ESP_LOGI(TAG, "diff[%i] = %f\n", N_check, diff);
     }
-    if (N_check > CONFIG_DSP_MAX_FFT_SIZE) 
+    if (N_check > FFTR4_TEST_SIZE) 
     {
-        N_check =CONFIG_DSP_MAX_FFT_SIZE; 
+        N_check = FFTR4_TEST_SIZE; 
     }
     dsps_view(data, N_check*2, 128, 16, -256, 256, '.');   
     dsps_view(check_data_fft, N_check*2, 128, 16, -256, 256, '.');   
@@ -87,7 +89,7 @@ TEST_CASE("dsps_fft4r_fc32_ae32 functionality", "[dsps][ignore]")
 
 static portMUX_TYPE testnlock = portMUX_INITIALIZER_UNLOCKED;
 
-TEST_CASE("dsps_fft4r_fc32_ae32 benchmark", "[dsps][ignore]")
+TEST_CASE("dsps_fft4r_fc32_ae32 benchmark", "[dsps]")
 {
     float* check_data_fft = (float*)memalign(16, sizeof(float) * 4096*2);
     TEST_ASSERT_NOT_NULL(check_data_fft);

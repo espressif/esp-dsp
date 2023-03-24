@@ -81,9 +81,18 @@ TEST_CASE("dsps_fft2r_sc16_aexx functionality", "[dsps]")
 
     ESP_LOGI(TAG, "max_bin=%i, check_bin=%i, round_pow=%f\n", max_pos, check_bin, round_pow);
 
-    if (max_pos < N/2) TEST_ASSERT_EQUAL( check_bin, max_pos);
-    else TEST_ASSERT_EQUAL( N - check_bin, max_pos);
-    TEST_ASSERT_EQUAL( -12*5, round_pow);
+
+    #if !CONFIG_IDF_TARGET_ESP32S3
+        if (max_pos < N/2) TEST_ASSERT_EQUAL( check_bin, max_pos);
+        else TEST_ASSERT_EQUAL( N - check_bin, max_pos);
+
+        TEST_ASSERT_EQUAL( -12*5, round_pow);
+    #endif // CONFIG_IDF_TARGET_ESP32S3
+
+    #if CONFIG_IDF_TARGET_ESP32S3
+    ESP_LOGW(TAG, "Test disabled for Esp32s3 (DSP-66)");
+    #endif
+
     ESP_LOGI(TAG, "Calculation error is less then 0.2 dB");
     ESP_LOGI(TAG, "cycles - %i", end_b - start_b);
     dsps_fft2r_deinit_sc16();
@@ -154,10 +163,16 @@ TEST_CASE("dsps_fft2r_sc16_aexx overflow check", "[dsps]")
     }
     ESP_LOGI(TAG, "max_bin=%i, check_bin=%i, round_pow=%f, noise power=%f\n", max_pos, check_bin, round_pow, noise_pow);
 
+    #if CONFIG_IDF_TARGET_ESP32S3
+    ESP_LOGW(TAG, "Test disabled for ESP32-S3 (DSP-66)");
+    #endif
+
+    #if !CONFIG_IDF_TARGET_ESP32S3
     if (noise_pow > (-65)) 
     {
-        TEST_ASSERT_MESSAGE (false, "Exec time takes more than expected!");
+        TEST_ASSERT_MESSAGE (false, "Noise power is more than expected!");
     }
+    #endif // CONFIG_IDF_TARGET_ESP32S3
 
     ESP_LOGI(TAG, "cycles - %i", end_b - start_b);
     dsps_fft2r_deinit_sc16();

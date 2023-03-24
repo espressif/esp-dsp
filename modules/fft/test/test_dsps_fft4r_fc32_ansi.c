@@ -27,7 +27,7 @@
 
 static const char *TAG = "dsps_fft4r_ansi";
 
-TEST_CASE("dsps_fft4r_fc32_ansi functionality", "[dsps][ignore]")
+TEST_CASE("dsps_fft4r_fc32_ansi functionality", "[dsps]")
 {
     float* data =  (float*)memalign(16, sizeof(float) * 1024*2);
     TEST_ASSERT_NOT_NULL(data);
