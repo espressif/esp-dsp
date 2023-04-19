@@ -100,8 +100,11 @@ TEST_CASE("dsps_conv_f32_ae32 benchmark", "[dsps]")
     int max_N = 1024;
     int conv_size = 64;
     float *x = (float *)malloc(max_N * sizeof(float));
+    TEST_ASSERT_NOT_NULL(x);
     float *y = (float *)malloc(max_N * sizeof(float));
+    TEST_ASSERT_NOT_NULL(y);
     float *z = (float *)malloc((max_N * 2 + 1) * sizeof(float));
+    TEST_ASSERT_NOT_NULL(z);
 
     for (int i = 0 ; i < max_N ; i++) {
         x[i] = 0;

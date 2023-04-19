@@ -59,13 +59,10 @@ function build_for_targets
 
         echo "${STARS}"
         echo "Building in $PWD with CMake for ${IDF_TARGET}"
-        if [[ ${IDF_TARGET} != "esp32" ]]
-        then
-            # IDF 4.0 doesn't support idf.py set-target, and only supports esp32.
-            idf.py set-target "${IDF_TARGET}"
-        fi
+        rm -f sdkconfig
+        idf.py set-target "${IDF_TARGET}"
         idf.py build || die "CMake build in ${PWD} has failed for ${IDF_TARGET}"
-        idf.py fullclean
+        idf.py fullclean || true
     done
 }
 
