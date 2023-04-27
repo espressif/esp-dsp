@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Fix in tests to pass
+- Minimum coeffcient length for fird_s16
 
 ### Changed
 

@@ -40,6 +40,31 @@ const static int16_t fir_len = COEFFS;
 const static int32_t fir_buffer = (N_IN_SAMPLES + FIR_BUFF_LEN);
 
 
+// error messages for the init functions
+static void error_msg_handler(fir_s16_t *fir, esp_err_t status){
+
+    if(status != ESP_OK){
+        dsps_fird_s16_aexx_free(fir);
+
+        switch(status){
+            case ESP_ERR_DSP_INVALID_LENGTH:
+                TEST_ASSERT_MESSAGE(false, "Number of the coefficients must be higher than 1");
+                break;
+            case ESP_ERR_DSP_ARRAY_NOT_ALIGNED:
+                TEST_ASSERT_MESSAGE(false, "Delay line or (and) coefficients arrays not aligned");
+                break;
+            case ESP_ERR_DSP_PARAM_OUTOFRANGE:
+                TEST_ASSERT_MESSAGE(false, "Start position or (and) Decimation ratio or (and) Shift out of range");
+                break;
+            default:
+                TEST_ASSERT_MESSAGE(false, "Unspecified error");
+                break;
+        }
+    }
+}
+
+
+
 TEST_CASE("dsps_fird_s16_aexx functionality", "[dsps]")
 {
 
@@ -93,27 +118,9 @@ TEST_CASE("dsps_fird_s16_aexx functionality", "[dsps]")
                     }
 
                     status1 = dsps_fird_init_s16(&fir1, coeffs_aexx, delay, fir_length, dec, start_position, shift_vals[shift_amount]);
+                    error_msg_handler(&fir1, status1);
                     status2 = dsps_fird_init_s16(&fir2, coeffs_ansi, delay_compare, fir_length, dec, start_position, shift_vals[shift_amount]);
-
-                    // error messages
-                    if((status1 != ESP_OK) || (status2 != ESP_OK)){
-
-                        if(status1 != ESP_OK) dsps_fird_s16_aexx_free(&fir1);
-                        if(status2 != ESP_OK) dsps_fird_s16_aexx_free(&fir2);
-
-                        esp_err_t wrong_status = ((status1 != ESP_OK) ? (status1) : (status2));
-                        switch(wrong_status){
-                            case ESP_ERR_DSP_ARRAY_NOT_ALIGNED:
-                                TEST_ASSERT_MESSAGE(false, "Delay line or (and) coefficients arrays not aligned");
-                                break;
-                            case ESP_ERR_DSP_PARAM_OUTOFRANGE:
-                                TEST_ASSERT_MESSAGE(false, "Start position or (and) Decimation ratio or (and) Shift out of range");
-                                break;
-                            default:
-                                TEST_ASSERT_MESSAGE(false, "Unspecified error");
-                                break;
-                        }
-                    }
+                    error_msg_handler(&fir2, status2);
 
                     #if(dsps_fird_s16_aes3_enabled)
                         dsps_16_array_rev(fir1.coeffs, fir1.coeffs_len);        // coefficients are being reverted for the purposes of the aes3 TIE implementation
@@ -184,23 +191,7 @@ TEST_CASE("dsps_fird_s16_aexx benchmark", "[dsps]")
     esp_err_t status = ESP_OK;
 
     status = dsps_fird_init_s16(&fir, coeffs, delay, MAX_FIR_LEN, local_dec, start_pos, shift);
-    
-    // error messages
-    if(status != ESP_OK){
-        dsps_fird_s16_aexx_free(&fir);
-    
-        switch(status){
-            case ESP_ERR_DSP_ARRAY_NOT_ALIGNED:
-                TEST_ASSERT_MESSAGE(false, "Delay line or (and) coefficients arrays not aligned");
-                break;
-            case ESP_ERR_DSP_PARAM_OUTOFRANGE:
-                TEST_ASSERT_MESSAGE(false, "Start position or (and) Decimation ratio or (and) Shift out of range");
-                break;
-            default:
-                TEST_ASSERT_MESSAGE(false, "Unspecified error");
-                break;
-        }
-    }
+    error_msg_handler(&fir, status);
     
     #if(dsps_fird_s16_aes3_enabled)
         dsps_16_array_rev(fir.coeffs, fir.coeffs_len);
@@ -286,25 +277,8 @@ TEST_CASE("dsps_fird_s16_aexx noise_snr", "[dsps]")
     const int16_t shift = 0;
     const int32_t loop_len = (int32_t)(fir_buffer / decim);                         // loop_len result must be without remainder
     fir_s16_t fir;
-    esp_err_t status = ESP_OK;
-    status = dsps_fird_init_s16(&fir, s_coeffs, delay_line, fir_len, decim, start_pos, shift);
-
-    // error messages
-    if(status != ESP_OK){
-        dsps_fird_s16_aexx_free(&fir);
-    
-        switch(status){
-            case ESP_ERR_DSP_ARRAY_NOT_ALIGNED:
-                TEST_ASSERT_MESSAGE(false, "Delay line or (and) coefficients arrays not aligned");
-                break;
-            case ESP_ERR_DSP_PARAM_OUTOFRANGE:
-                TEST_ASSERT_MESSAGE(false, "Start position or (and) Decimation ratio or (and) Shift out of range");
-                break;
-            default:
-                TEST_ASSERT_MESSAGE(false, "Unspecified error");
-                break;
-        }
-    }
+    esp_err_t status = dsps_fird_init_s16(&fir, s_coeffs, delay_line, fir_len, decim, start_pos, shift);
+    error_msg_handler(&fir, status);
 
     #if(dsps_fird_s16_aes3_enabled)
         dsps_16_array_rev(fir.coeffs, fir.coeffs_len);

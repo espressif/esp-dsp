@@ -21,6 +21,10 @@ esp_err_t dsps_fird_init_s16(fir_s16_t *fir, int16_t *coeffs, int16_t *delay, in
     fir->rounding_val = (int16_t)(ROUNDING_VALUE);
     fir->free_status = 0;
 
+    if (fir->coeffs_len < 2) {                                          // number of coeffcients must be higer than 1
+        return ESP_ERR_DSP_INVALID_LENGTH;
+    }
+
     if ((fir->shift > 40) || (fir->shift < -40)) {                      // shift amount must be within a range from -40 to 40
         return ESP_ERR_DSP_PARAM_OUTOFRANGE;
     }
