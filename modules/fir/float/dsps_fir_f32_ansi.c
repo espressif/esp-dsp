@@ -18,17 +18,17 @@ esp_err_t dsps_fir_f32_ansi(fir_f32_t *fir, const float *input, float *output, i
 {
     for (int i = 0 ; i < len ; i++) {
         float acc = 0;
-        int coeff_pos = fir->N - 1;
+        int coeff_pos = 0;
         fir->delay[fir->pos] = input[i];
         fir->pos++;
         if (fir->pos >= fir->N) {
             fir->pos = 0;
         }
         for (int n = fir->pos; n < fir->N ; n++) {
-            acc += fir->coeffs[coeff_pos--] * fir->delay[n];
+            acc += fir->coeffs[coeff_pos++] * fir->delay[n];
         }
         for (int n = 0; n < fir->pos ; n++) {
-            acc += fir->coeffs[coeff_pos--] * fir->delay[n];
+            acc += fir->coeffs[coeff_pos++] * fir->delay[n];
         }
         output[i] = acc;
     }
