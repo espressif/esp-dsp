@@ -13,10 +13,12 @@ set(COMPONENT_SRCDIRS
                     "../modules/support/view/test"
                     "../modules/support/snr/test"
                     "../modules/support/sfdr/test"
+                    "../modules/support/cplx_gen/test"
                     "../modules/fft/test"
                     "../modules/dct/test"
                     "../modules/conv/test"
                     "../modules/kalman/ekf_imu13states/test"
+
 )
 set(COMPONENT_REQUIRES unity esp-dsp)
 

@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Complex signal generator dsps_cplx_gen()
 
 ### Fixed
 - Fix in tests to pass
