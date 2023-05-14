@@ -39,7 +39,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - examples: allow examples to be installed from the component manager
 - Fix for fft_cplx2reC_f32 function
 - Wno-format-fix related errors
-- Wrong path for extra component directory  
+- Wrong path for extra component directory
+- Include malloc.h into dsps_fft4r_fc32_ansi.c
 
 ### Changed
 
