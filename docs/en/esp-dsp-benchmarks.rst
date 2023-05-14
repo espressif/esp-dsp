@@ -101,4 +101,4 @@ The values in "ESP32" and "ESP32S3" column are for the optimized (assembly) impl
 | dspi_dotprod_off_s16/u16 - dotproduct of two images 32x32 |   21090 |       578 |   21089 |   29432 |       576 |   29432 |
 +-----------------------------------------------------------+---------+-----------+---------+---------+-----------+---------+
 
-The benchmark test could be reproduced by executing test cases found in :repo_file:`test/test_dsp.c`.
+The benchmark test could be reproduced by executing test cases found in: :project_file:`test/test_dsp.c`.

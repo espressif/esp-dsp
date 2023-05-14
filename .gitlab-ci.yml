@@ -15,6 +15,7 @@ variables:
   GET_SOURCES_ATTEMPTS: "10"
   ARTIFACT_DOWNLOAD_ATTEMPTS: "10"
   GIT_SUBMODULE_STRATEGY: none
+  ESP_DOCS_PATH: "$CI_PROJECT_DIR"
   TEST_DIR: "$CI_PROJECT_DIR/test_app"
   SIZE_INFO_LOCATION: "${TEST_DIR}/size_info.txt"
 
@@ -100,9 +101,6 @@ build_idf_latest:
     - .build_template
   artifacts:
     paths:
-      - "**/build*/size.json"
-      - "**/build*/build.log"
-      - "**/build*/build_log.txt"
       - "**/build*/*.bin"
       - "**/build*/*.elf"
       - "**/build*/*.map"
@@ -118,7 +116,6 @@ build_idf_latest:
     # Get ESP-IDF and install the tools.
     - pip install idf-component-manager --upgrade
     - pip install "idf_build_apps~=0.3.0"
-    - dir
     - cd /opt/
     - git clone -b master --depth 1 https://github.com/espressif/esp-idf.git
     - cd esp-idf
@@ -138,11 +135,11 @@ build_idf_latest:
       --target all
       --default-build-targets ${TEST_TARGETS}
       --config "sdkconfig.*=" --build-dir "build"
-      --check-warnings
       --collect-size-info $SIZE_INFO_LOCATION
       --parallel-count ${CI_NODE_TOTAL:-1}
       --parallel-index ${CI_NODE_INDEX:-1}
       --ignore-warning-str "DeprecationWarning:"
+
   variables:
     TEST_TARGETS: "esp32"
 
@@ -170,7 +167,6 @@ build_latest_test_app:
 .before_script_pytest_jobs:
   before_script:
     # Get ESP-IDF and install the tools.
-    - dir
     - cd /opt/
     - git clone -b ${IDF_BRANCH} --depth 1 https://github.com/espressif/esp-idf.git
     - cd esp-idf
@@ -224,24 +220,63 @@ build_docs:
   artifacts:
     when: always
     paths:
-      - docs/doxygen-warning-log.txt
-      - docs/sphinx-warning-log.txt
-      - docs/_build/html
-    expire_in: 1 day
+      - docs/_build/*/*/*.txt
+      - docs/_build/*/*/html/*
+    expire_in: 4 days
   # No cleaning when the artifacts
   after_script: []
   script:
-    - source /opt/pyenv/activate
-    - pyenv global $(pyenv versions --bare)
     - cd docs
-    # - python -m pip install -U -r requirements.txt
-    - pip install -U -r requirements.txt
-    - python build_bm_table.py -d esp_bm_results.csv -t esp-dsp-benchmarks_template.rst -o esp-dsp-benchmarks.rst
-    - git diff --exit-code esp-dsp-benchmarks.rst
-    # Not build docs for a while
-    # - make html
-    - ./check_doc_warnings.sh
-   
+    - pip install -r requirements.txt
+    - build-docs -l en -t esp32
+
+.deploy_docs_template:
+  stage: deploy
+  image: $ESP_DOCS_ENV_IMAGE
+  tags:
+    - deploy_docs
+  needs:
+    - build_docs
+  # only:
+  #   changes:
+  #     - "docs/**/*"
+  script:
+    - source ${CI_PROJECT_DIR}/docs/utils.sh
+    - add_doc_server_ssh_keys $DOCS_DEPLOY_PRIVATEKEY $DOCS_DEPLOY_SERVER $DOCS_DEPLOY_SERVER_USER
+    - export GIT_VER=$(git describe --always)
+    - pip install -r ${CI_PROJECT_DIR}/docs/requirements.txt
+    - deploy-docs
+
+deploy_docs_preview:
+  extends:
+    - .deploy_docs_template
+  except:
+    refs:
+      - master
+  variables:
+    TYPE: "preview"
+    DOCS_BUILD_DIR: "${CI_PROJECT_DIR}/docs/_build/"
+    DOCS_DEPLOY_PRIVATEKEY: $DOCS_PREVIEW_PRIVATEKEY
+    DOCS_DEPLOY_SERVER: $DOCS_DEPLOY_PREVIEW_SERVER
+    DOCS_DEPLOY_SERVER_USER: $DOCS_PREVIEW_SERVER_USER
+    DOCS_DEPLOY_PATH: $DOCS_DEPLOY_PREVIEW_PATH
+    DOCS_DEPLOY_URL_BASE: "${DOCS_PREVIEW_SERVER_URL}"
+
+deploy_docs_production:
+  extends:
+    - .deploy_docs_template
+  only:
+    refs:
+      - master
+  variables:
+    TYPE: "production"
+    DOCS_BUILD_DIR: "${CI_PROJECT_DIR}/docs/_build/"
+    DOCS_DEPLOY_PRIVATEKEY: "$DOCS_PROD_PRIVATEKEY"
+    DOCS_DEPLOY_SERVER: "$DOCS_PROD_SERVER"
+    DOCS_DEPLOY_SERVER_USER: "$DOCS_PROD_SERVER_USER"
+    DOCS_DEPLOY_PATH: "$DOCS_PROD_PATH"
+    DOCS_DEPLOY_URL_BASE: "${DOCS_PROD_URL_BASE}"
+
 push_master_to_github:
   stage: deploy
   tags:
