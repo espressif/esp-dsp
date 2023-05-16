@@ -48,6 +48,7 @@ dsps_corr_f32_ae32:
 	movi.n	a8, 4
 	movi.n	a13, 4
 	sub     a11, a3, a5 // a11 = loop length
+	addi	a11, a11, 1
 	addi    a12, a2, 0 	// move input pointer to the a12 
 	movi.n	a9, 0
 	movi.n	a14, 0
