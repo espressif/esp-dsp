@@ -27,7 +27,7 @@ static const char *TAG = "dsps_corr";
 
 static float inputA[lenA];
 static float inputB[lenB];
-static float output[lenA + lenB - 1 + 2];
+static float output[lenA + lenB + 2];
 
 TEST_CASE("dsps_corr_f32_ansi functionality", "[dsps]")
 {
@@ -37,7 +37,7 @@ TEST_CASE("dsps_corr_f32_ansi functionality", "[dsps]")
     for (int i = 0 ; i < lenB ; i++) {
         inputB[i] = 0;
     }
-    for (int i = 0 ; i < (lenA - lenB  + 2); i++) {
+    for (int i = 0 ; i <= (lenA - lenB  + 2); i++) {
         output[i] = -1;
     }
     inputB[0] = 1;
@@ -47,8 +47,8 @@ TEST_CASE("dsps_corr_f32_ansi functionality", "[dsps]")
     }
 
     TEST_ASSERT_EQUAL(output[0], -1);
-    TEST_ASSERT_EQUAL(output[lenA - lenB + 1], -1);
-    for (size_t i = 0; i < (lenA - lenB); i++) {
+    TEST_ASSERT_EQUAL(output[lenA - lenB + 2], -1);
+    for (size_t i = 0; i <= (lenA - lenB); i++) {
         TEST_ASSERT_EQUAL(output[i + 1], i);
     }
 }

@@ -29,7 +29,7 @@ esp_err_t dsps_corr_f32_ansi(const float *Signal, const int siglen, const float 
         return ESP_ERR_DSP_PARAM_OUTOFRANGE;
     }
 
-    for (size_t n = 0; n < (siglen - patlen); n++) {
+    for (size_t n = 0; n <= (siglen - patlen); n++) {
         float k_corr = 0;
         for (size_t m = 0; m < patlen; m++) {
             k_corr += Signal[n + m] * Pattern[m];
