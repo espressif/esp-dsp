@@ -1,4 +1,4 @@
-// Copyright 2018-2019 Espressif Systems (Shanghai) PTE LTD
+// Copyright 2018-2023 Espressif Systems (Shanghai) PTE LTD
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -69,10 +69,10 @@ TEST_CASE("dsps_conv_f32 functionality", "[dsps]")
     for (size_t la = 2; la < lenA; la++) {
         for (size_t lb = 2; lb < lenB; lb++) {
             for (int i = 0 ; i < lenA ; i++) {
-                inputA[i] = (float)rand() / INT32_MAX;
+                inputA[i] = (float)rand() / (float)INT32_MAX;
             }
             for (int i = 0 ; i < lenB ; i++) {
-                inputB[i] = (float)rand() / INT32_MAX;
+                inputB[i] = (float)rand() / (float)INT32_MAX;
             }
             for (int i = 0 ; i < (lenA + lenB  - 1 + 2); i++) {
                 output_ref[i] = -1;

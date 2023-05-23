@@ -1,10 +1,10 @@
 #!/bin/bash
 #
 # Build the test app and all examples from the examples directory.
-# Expects EXAMPLE_TARGETS and TEST_TARGETS environment variables to be set.
-# Each variable is the list of IDF_TARGET values to build the examples and
+# Expects EXAMPLE_TARGETS, TEST_TARGETS and IDF_TOOLCHAIN environment variables to be set.
+# EXAMPLE_TARGETS and TEST_TARGETS variable are the lists of IDF_TARGET values to build the examples and
 # the test app for, respectively.
-#
+# IDF_TOOLCHAIN compiler toolchain used to build the test app (clang or gcc)
 # -----------------------------------------------------------------------------
 # Safety settings (see https://gist.github.com/ilg-ul/383869cbb01f61a51c4d).
 
@@ -13,9 +13,9 @@ then
     set -x # Activate the expand mode if DEBUG is anything but empty.
 fi
 
-if [[ -z "${EXAMPLE_TARGETS}" || -z "${TEST_TARGETS}" ]]
+if [[ -z "${EXAMPLE_TARGETS}" || -z "${TEST_TARGETS}" || -z "${IDF_TOOLCHAIN}" ]]
 then
-    echo "EXAMPLE_TARGETS and TEST_TARGETS environment variables must be set before calling this script"
+    echo "EXAMPLE_TARGETS, TEST_TARGETS and IDF_TOOLCHAIN environment variables must be set before calling this script"
     exit 1
 fi
 
@@ -44,6 +44,7 @@ die() {
 function build_for_targets
 {
     target_list="$1"
+    toolchain="$2"
     for IDF_TARGET in ${target_list}
     do
         export IDF_TARGET
@@ -62,6 +63,12 @@ function build_for_targets
         rm -f sdkconfig
         idf.py set-target "${IDF_TARGET}"
         idf.py build || die "CMake build in ${PWD} has failed for ${IDF_TARGET}"
+
+        if [[ "${toolchain}" = "clang" ]]
+        then
+            idf.py clang-check --run-clang-tidy-py run-clang-tidy
+        fi
+
         idf.py fullclean || true
     done
 }
@@ -69,7 +76,7 @@ function build_for_targets
 # Build the test app
 echo "${STARS}"
 pushd test_app
-build_for_targets "${TEST_TARGETS}"
+build_for_targets "${TEST_TARGETS}" "${IDF_TOOLCHAIN}"
 popd
 
 # Build the examples
@@ -78,7 +85,7 @@ EXAMPLES=$(find . -maxdepth 1 -mindepth 1 -type d | cut -d '/' -f 2)
 for NAME in ${EXAMPLES}
 do
     pushd "${NAME}"
-    build_for_targets "${EXAMPLE_TARGETS}"
+    build_for_targets "${EXAMPLE_TARGETS}" "${IDF_TOOLCHAIN}"
     popd
 done
 popd
