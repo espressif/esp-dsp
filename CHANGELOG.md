@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.4.0] 2023-05-29
 
 ### Added
 - Complex signal generator dsps_cplx_gen()
@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Fix in tests to pass
 - Minimum coeffcient length for fird_s16
+- Include malloc.h into dsps_fft4r_fc32_ansi.c
+- Fix for calculation length for dsps_corr_f32_axxx
 
 ### Changed
 
@@ -40,8 +42,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix for fft_cplx2reC_f32 function
 - Wno-format-fix related errors
 - Wrong path for extra component directory
-- Include malloc.h into dsps_fft4r_fc32_ansi.c
-- Fix for calculation length for dsps_corr_f32_axxx
 
 ### Changed
 
