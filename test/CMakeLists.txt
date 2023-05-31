@@ -1,7 +1,11 @@
 set(COMPONENT_SRCDIRS 
                     "."
                     "../modules/dotprod/test"
-                    "../modules/matrix/test"
+                    "../modules/matrix/mul/test"
+                    "../modules/matrix/add/test"
+                    "../modules/matrix/addc/test"
+                    "../modules/matrix/mulc/test"
+                    "../modules/matrix/sub/test"
                     "../modules/iir/test"
                     "../modules/fir/test"
                     "../modules/math/mulc/test"

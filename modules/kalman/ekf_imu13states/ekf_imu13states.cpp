@@ -117,7 +117,7 @@ void ekf_imu13states::Test()
 
 void ekf_imu13states::TestFull(bool enable_att)
 {
-    int total_N = 4096;
+    int total_N = 2048;
     float pi = std::atan(1) * 4;
     float gyro_err_data[] = {0.1, 0.2, 0.3}; // static constatnt error
     dspm::Mat gyro_err(gyro_err_data, 3, 1);

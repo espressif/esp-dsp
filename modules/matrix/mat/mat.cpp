@@ -1,4 +1,4 @@
-// Copyright 2018-2019 Espressif Systems (Shanghai) PTE LTD
+// Copyright 2018-2023 Espressif Systems (Shanghai) PTE LTD
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,10 +18,11 @@
 #include "esp_log.h"
 
 #include "dsps_math.h"
-#include "dspm_mult.h"
+#include "dspm_matrix.h"
 #include <math.h>
 #include <cmath>
 #include <inttypes.h>
+
 
 
 using std::ostream;
@@ -32,11 +33,47 @@ namespace dspm {
 
 float Mat::abs_tol = 1e-10;
 
+Mat::Rect::Rect(int x, int y, int width, int height)
+{
+    this->x = x;
+    this->y = y;
+    this->width = width;
+    this->height = height;
+}
+
+void Mat::Rect::resizeRect(int x, int y, int width, int height)
+{
+    this->x = x;
+    this->y = y;
+    this->width = width;
+    this->height = height;
+}
+
+int Mat::Rect::areaRect(void)
+{
+    return this->width * this->height;
+}
+
+Mat::Mat(float *data, int roi_rows, int roi_cols, int stride)
+{
+    this->rows = roi_rows;
+    this->cols = roi_cols;
+    this->data = data;
+    this->stride = stride;
+    this->padding = stride - roi_cols;
+    this->length = this->rows * this->cols;
+    this->ext_buff = true;
+    this->sub_matrix = true;
+}
+
 Mat::Mat(int rows, int cols)
 {
     ESP_LOGD("Mat", "Mat(%i, %i)", rows, cols);
     this->rows = rows;
     this->cols = cols;
+    this->sub_matrix = false;
+    this->stride = cols;
+    this->padding = 0;
     allocate();
     memset(this->data, 0, this->length * sizeof(float));
 }
@@ -48,6 +85,9 @@ Mat::Mat(float *data, int rows, int cols)
     this->rows = rows;
     this->cols = cols;
     this->data = data;
+    this->sub_matrix = false;
+    this->stride = cols;
+    this->padding = 0;
     this->length = this->rows * this->cols;
     memcpy(this->data, data, this->length * sizeof(float));
 }
@@ -57,6 +97,9 @@ Mat::Mat()
 {
     this->rows = 1;
     this->cols = 1;
+    this->sub_matrix = false;
+    this->stride = cols;
+    this->padding = 0;
     ESP_LOGD("Mat", "Mat()");
 
     allocate();
@@ -75,19 +118,83 @@ Mat::Mat(const Mat &m)
 {
     this->rows = m.rows;
     this->cols = m.cols;
+    this->padding = m.padding;
+    this->stride = m.stride;
+    this->data = m.data;
+    this->sub_matrix = m.sub_matrix;
 
-    allocate();
-    memcpy(this->data, m.data, this->length * sizeof(float));
+    if (m.sub_matrix) {
+        this->length = m.length;
+        this->data = m.data;
+        this->ext_buff = true;
+    } else {
+        allocate();
+        memcpy(this->data, m.data, this->length * sizeof(float));
+    }
+}
+
+Mat Mat::getROI(int startRow, int startCol, int roiRows, int roiCols, int stride)
+{
+    Mat result(this->data, roiRows, roiCols, 0);
+
+    if ((startRow + roiRows) > this->rows) return result;
+    if ((startCol + roiCols) > this->cols) return result;
+
+    const int ptr_move = startRow * this->cols + startCol;
+    float* new_data_ptr = this->data + ptr_move;
+
+    result.data = new_data_ptr;
+    result.stride = stride;
+    result.padding = result.stride - result.cols;
+    return result;
+}
+
+Mat Mat::getROI(const Mat::Rect& rect)
+{
+    return(getROI(rect.y, rect.x, rect.height, rect.width, this->cols));
+}
+
+Mat Mat::getROI(int startRow, int startCol, int roiRows, int roiCols)
+{
+    return(getROI(startRow, startCol, roiRows, roiCols, this->cols));
 }
 
 void Mat::Copy(const Mat &src, int row_pos, int col_pos)
 {
     if ((row_pos + src.rows) > this->rows) return;
     if ((col_pos + src.cols) > this->cols) return;
+
     for (size_t r = 0; r < src.rows; r++)
     {
-        memcpy(&this->data[(r + row_pos) * this->cols + col_pos], &src.data[r*src.cols], src.cols * sizeof(float));
+        memcpy(&this->data[(r + row_pos) * this->stride + col_pos], &src.data[r*src.cols], src.cols * sizeof(float));
     }
+}
+
+void Mat::CopyHead(const Mat &src)
+{
+    if(!this->ext_buff) {
+        delete[] this->data;
+    }
+    this->rows = src.rows;
+    this->cols = src.cols;
+    this->length = src.length;
+    this->padding = src.padding;
+    this->stride = src.stride;
+    this->data = src.data;
+    this->ext_buff = src.ext_buff;
+    this->sub_matrix = src.sub_matrix;
+}
+
+void Mat::PrintHead(void)
+{
+    std::cout << "rows     " << this->rows << std::endl;
+    std::cout << "cols     " << this->cols << std::endl;
+    std::cout << "lenght   " << this->length << std::endl;
+    std::cout << "data     " << this->data << std::endl;
+    std::cout << "ext_buff " << this->ext_buff << std::endl;
+    std::cout << "sub_mat  " << this->sub_matrix << std::endl;
+    std::cout << "stride   " << this->stride << std::endl;
+    std::cout << "padding  " << this->padding << std::endl << std::endl;
 }
 
 Mat Mat::Get(int row_start, int row_size, int col_start, int col_size)
@@ -96,11 +203,17 @@ Mat Mat::Get(int row_start, int row_size, int col_start, int col_size)
 
     if ((row_start + row_size) > this->rows) return result;
     if ((col_start + col_size) > this->cols) return result;
+    
     for (size_t r = 0; r < result.rows; r++)
     {
-        memcpy(&result.data[r*result.cols], &this->data[(r + row_start) * this->cols + col_start], result.cols * sizeof(float));
+        memcpy(&result.data[r*result.cols], &this->data[(r + row_start) * this->stride + col_start], result.cols * sizeof(float));
     }
     return result;
+}
+
+Mat Mat::Get(const Mat::Rect& rect)
+{
+    return (Get(rect.y, rect.height, rect.x, rect.width));
 }
 
 Mat &Mat::operator=(const Mat &m)
@@ -109,67 +222,131 @@ Mat &Mat::operator=(const Mat &m)
         return *this;
     }
 
+    // matrix dimensions not equal
     if (this->rows != m.rows || this->cols != m.cols) {
+        // left operand is a sub-matrix - error
+        if(this->sub_matrix) {
+            ESP_LOGE("Mat", "operator = Error for sub-matrices: operands matrices dimensions %dx%d and %dx%d do not match", this->rows, this->cols, m.rows, m.cols);
+            return *this;
+        }
         if (!this->ext_buff) {
             delete[] this->data;
         }
         this->ext_buff = false;
         this->rows = m.rows;
         this->cols = m.cols;
+        this->stride = this->cols;
+        this->padding = 0;
+        this->sub_matrix = false;
         allocate();
     }
-    memcpy(this->data, m.data, this->length * sizeof(float));
+
+    for(int row = 0; row < this->rows; row++){
+        memcpy(this->data + (row * this->stride), m.data + (row * m.stride), this->cols * sizeof(float));
+    }
     return *this;
 }
 
 Mat &Mat::operator+=(const Mat &m)
 {
-    dsps_add_f32(this->data, m.data, this->data, this->length, 1, 1, 1);
+    if ((this->rows != m.rows) || (this->cols != m.cols)) {
+        ESP_LOGW("Mat", "operator += Error: matrices do not have equal dimensions");
+        return *this;
+    }
+
+    if (this->sub_matrix || m.sub_matrix) {
+        dspm_add_f32(this->data, m.data, this->data, this->rows, this->cols, this->padding, m.padding, this->padding, 1, 1, 1);
+    } else {
+        dsps_add_f32(this->data, m.data, this->data, this->length, 1, 1, 1);
+    }
     return *this;
 }
 
 Mat &Mat::operator+=(float C)
 {
-    dsps_addc_f32_ansi(this->data, this->data, this->length, C, 1, 1);
+    if (this->sub_matrix) {
+        dspm_addc_f32(this->data, this->data, C, this->rows, this->cols, this->padding, this->padding, 1, 1);
+    } else {
+        dsps_addc_f32_ansi(this->data, this->data, this->length, C, 1, 1);
+    }
     return *this;
 }
 
 Mat &Mat::operator-=(const Mat &m)
 {
-    dsps_sub_f32(this->data, m.data, this->data, this->length, 1, 1, 1);
+    if ((this->rows != m.rows) || (this->cols != m.cols)) {
+        ESP_LOGW("Mat", "operator -= Error: matrices do not have equal dimensions");
+        return *this;
+    }
+
+    if (this->sub_matrix || m.sub_matrix) {
+        dspm_sub_f32(this->data, m.data, this->data, this->rows, this->cols, this->padding, m.padding, this->padding, 1, 1, 1);
+    } else {
+        dsps_sub_f32(this->data, m.data, this->data, this->length, 1, 1, 1);
+    }
     return *this;
 }
 
 Mat &Mat::operator-=(float C)
 {
-    dsps_addc_f32_ansi(this->data, this->data, this->length, -C, 1, 1);
+    if (this->sub_matrix){
+        dspm_addc_f32(this->data, this->data, -C, this->rows, this->cols, this->padding, this->padding, 1, 1);
+    } else {
+        dsps_addc_f32_ansi(this->data, this->data, this->length, -C, 1, 1);
+    }
     return *this;
 }
 
 Mat &Mat::operator*=(const Mat &m)
 {
-    Mat temp = *this;
-    dspm_mult_f32(temp.data, m.data, this->data, temp.rows, temp.cols, m.cols);
+    if (this->cols != m.rows) {
+        ESP_LOGW("Mat", "operator *= Error: matrices do not have equal dimensions");
+        return *this;
+    }
+
+    if (this->sub_matrix || m.sub_matrix) {
+        Mat temp = this->Get(0, this->rows, 0, this->cols);
+        dspm_mult_ex_f32(temp.data, m.data, this->data, temp.rows, temp.cols, m.cols, temp.padding, m.padding, this->padding);
+    } else {
+        Mat temp = *this;
+        dspm_mult_f32(temp.data, m.data, this->data, temp.rows, temp.cols, m.cols);
+    }
     return (*this);
 }
 
 Mat &Mat::operator*=(float num)
 {
-    dsps_mulc_f32_ansi(this->data, this->data, this->length, num, 1, 1);
-    return *this;
-}
-
-Mat &Mat::operator/=(float num)
-{
-    dsps_mulc_f32_ansi(this->data, this->data, this->length, 1 / num, 1, 1);
+    if (this->sub_matrix) {
+        dspm_mulc_f32(this->data, this->data, num, this->rows, this->cols, this->padding, this->padding, 1, 1);
+    } else {
+        dsps_mulc_f32_ansi(this->data, this->data, this->length, num, 1, 1);
+    }
     return *this;
 }
 
 Mat &Mat::operator/=(const Mat &B)
 {
-    Mat temp = *this;
-    *this = temp / B;
+    if ((this->rows != B.rows) || (this->cols != B.cols)) {
+        ESP_LOGW("Mat", "operator /= Error: matrices do not have equal dimensions");
+        return *this;
+    }
+
+    for (int row = 0; row < this->rows; row++) {
+        for (int col = 0; col < this->cols; col++) {
+            (*this)(row, col) = (*this)(row, col) / B(row, col);
+        }
+    }
     return (*this);
+}
+
+Mat &Mat::operator/=(float num)
+{
+    if (this->sub_matrix) {
+        dspm_mulc_f32(this->data, this->data, 1 / num, this->rows, this->cols, this->padding, this->padding, 1 ,1);
+    } else {
+        dsps_mulc_f32_ansi(this->data, this->data, this->length, 1 / num, 1, 1);
+    }
+    return *this;
 }
 
 Mat Mat::operator^(int num)
@@ -180,10 +357,14 @@ Mat Mat::operator^(int num)
 
 void Mat::swapRows(int r1, int r2)
 {
-    for (int i = 0; i < this->cols; i++) {
-        float temp = this->data[r1 * this->cols + i];
-        this->data[r1 * this->cols + i] = this->data[r2 * this->cols + i];
-        this->data[r2 * this->cols + i] = temp;
+    if ((this->rows <= r1) || (this->rows <= r2)) {
+        ESP_LOGW("Mat", "swapRows Error: row %d or %d out of matrix row %d range", r1, r2, this->rows);
+    } else {
+        for (int i = 0; i < this->cols; i++) {
+            float temp = this->data[r1 * this->stride + i];
+            this->data[r1 * this->stride + i] = this->data[r2 * this->stride + i];
+            this->data[r2 * this->stride + i] = temp;
+        }
     }
 }
 
@@ -192,7 +373,7 @@ Mat Mat::t()
     Mat ret(this->cols, this->rows);
     for (int i = 0; i < this->rows; ++i) {
         for (int j = 0; j < this->cols; ++j) {
-            ret(j, i) = this->data[i * this->cols + j];
+            ret(j, i) = this->data[i * this->stride + j];
         }
     }
     return ret;
@@ -215,10 +396,15 @@ Mat Mat::eye(int size)
 
 Mat Mat::ones(int size)
 {
-    Mat temp(size, size);
-    for (int i = 0; i < temp.rows; ++i) {
-        for (int j = 0; j < temp.cols; ++j) {
-            temp(i, j) = 1;
+    return(ones(size, size));
+}
+
+Mat Mat::ones(int rows, int cols)
+{
+    Mat temp(rows, cols);
+    for (int row = 0; row < temp.rows; ++row) {
+        for (int col = 0; col < temp.cols; ++col) {
+            temp(row, col) = 1;
         }
     }
     return temp;
@@ -226,9 +412,12 @@ Mat Mat::ones(int size)
 
 void Mat::clear()
 {
-    memset(this->data, 0, this->length * sizeof(float));
+    for(int row = 0; row < this->rows; row++) {
+        memset(this->data + (row * this->stride), 0, this->cols * sizeof(float));
+    }
 }
 
+// Duplicate to Get method
 Mat Mat::block(int startRow, int startCol, int blockRows, int blockCols)
 {
     Mat result(blockRows, blockCols);
@@ -642,14 +831,32 @@ Mat Mat::expHelper(const Mat &m, int num)
 
 Mat operator+(const Mat &m1, const Mat &m2)
 {
-    Mat temp(m1);
-    return (temp += m2);
+    if ((m1.rows != m2.rows) || (m1.cols != m2.cols)) {
+        ESP_LOGW("Mat", "operator + Error: matrices do not have equal dimensions");
+        Mat err_ret;
+        return err_ret;
+    }
+
+    if (m1.sub_matrix || m2.sub_matrix) {
+        Mat temp(m1.rows, m2.cols);
+        dspm_add_f32(m1.data, m2.data, temp.data, m1.rows, m1.cols, m1.padding, m2.padding, temp.padding, 1, 1, 1);
+        return temp;
+    } else {
+        Mat temp(m1);
+        return (temp += m2);
+    }
 }
 
-Mat operator+(const Mat &m1, float C)
+Mat operator+(const Mat &m, float C)
 {
-    Mat temp(m1);
-    return (temp += C);
+    if (m.sub_matrix) {
+        Mat temp(m.rows, m.cols);
+        dspm_addc_f32(m.data, temp.data, C, m.rows, m.cols, m.padding, temp.padding, 1, 1);
+        return temp;
+    } else {
+        Mat temp(m);
+        return (temp += C);
+    }
 }
 
 bool operator==(const Mat &m1, const Mat &m2)
@@ -657,38 +864,78 @@ bool operator==(const Mat &m1, const Mat &m2)
     if ((m1.cols != m2.cols) || (m1.rows != m2.rows)) {
         return false;
     }
-    for (int i = 0 ; i < (m1.cols * m1.rows) ; i++) {
-        if (m1.data[i] != m2.data[i]) {
-            printf("Error: %i, m1.data=%f, m2.data=%f \n", i, m1.data[i], m2.data[i]);
-            return false;
+
+    for (int row = 0; row < m1.rows; row++) {
+        for (int col = 0; col < m1.cols; col++) {
+            if(m1(row, col) != m2(row, col)) {
+                ESP_LOGW("Mat", "operator == Error: %i %i, m1.data=%f, m2.data=%f \n", row, col, m1(row, col), m2(row, col));
+                return false;
+            }
         }
     }
+
     return true;
 }
 
 Mat operator-(const Mat &m1, const Mat &m2)
 {
-    Mat temp(m1);
-    return (temp -= m2);
+    if ((m1.rows != m2.rows) || (m1.cols != m2.cols)) {
+        ESP_LOGW("Mat", "operator - Error: matrices do not have equal dimensions");
+        Mat err_ret;
+        return err_ret;
+    }
+
+    if (m1.sub_matrix || m2.sub_matrix) {
+        Mat temp(m1.rows, m1.cols);
+        dspm_sub_f32(m1.data, m2.data, temp.data, m1.rows, m1.cols, m1.padding, m2.padding, temp.padding, 1, 1, 1);
+        return temp;
+    } else {
+        Mat temp(m1);
+        return (temp -= m2);
+    }
 }
 
-Mat operator-(const Mat &m1, float C)
+Mat operator-(const Mat &m, float C)
 {
-    Mat temp(m1);
-    return (temp -= C);
+    if (m.sub_matrix) {
+        Mat temp(m.rows, m.cols);
+        dspm_addc_f32(m.data, temp.data, -C, m.rows, m.cols, m.padding, temp.padding, 1, 1);
+        return temp;
+    } else {
+        Mat temp(m);
+        return (temp -= C);
+    }
 }
 
 Mat operator*(const Mat &m1, const Mat &m2)
 {
+    if (m1.cols != m2.rows) {
+        ESP_LOGW("Mat", "operator * Error: matrices do not have correct dimensions");
+        Mat err_ret;
+        return err_ret;
+    }
     Mat temp(m1.rows, m2.cols);
-    dspm_mult_f32(m1.data, m2.data, temp.data, m1.rows, m1.cols, m2.cols);
+
+    if (m1.sub_matrix || m2.sub_matrix) {
+        dspm_mult_ex_f32(m1.data, m2.data, temp.data, m1.rows, m1.cols, m2.cols, m1.padding, m2.padding, temp.padding);
+    } else {
+        dspm_mult_f32(m1.data, m2.data, temp.data, m1.rows, m1.cols, m2.cols);
+    }
+
     return temp;
+
 }
 
 Mat operator*(const Mat &m, float num)
 {
-    Mat temp(m);
-    return (temp *= num);
+    if (m.sub_matrix) {
+        Mat temp(m.rows, m.cols);
+        dspm_mulc_f32(m.data, temp.data, num, m.rows, m.cols, m.padding, temp.padding, 1, 1);
+        return temp;
+    } else {
+        Mat temp(m);
+        return (temp *= num);
+    }
 }
 
 Mat operator*(float num, const Mat &m)
@@ -698,19 +945,31 @@ Mat operator*(float num, const Mat &m)
 
 Mat operator/(const Mat &m, float num)
 {
-    Mat temp(m);
-    return (temp /= num);
+    if (m.sub_matrix) {
+        Mat temp(m.rows, m.cols);
+        dspm_mulc_f32(m.data, temp.data, 1 / num, m.rows, m.cols, m.padding, temp.padding, 1, 1);
+        return temp;
+    } else {
+        Mat temp(m);
+        return (temp /= num);
+    }
 }
 
 Mat operator/(const Mat &A, const Mat &B)
 {
-    Mat temp(A);
-    for (int i = 0; i < A.rows; ++i) {
-        for (int j = 1; j < A.cols; ++j) {
-            temp(i, j) = A(i, j) / B(i, j);
+    if ((A.rows != B.rows) || (A.cols != B.cols)) {
+        ESP_LOGW("Mat", "Operator + Error: matrices do not have equal dimensions");
+        Mat err_ret;
+        return err_ret;
+    }
+
+    Mat temp(A.rows, A.cols);
+    for (int row = 0; row < A.rows; row++) {
+        for (int col = 0; col < A.cols; col++) {
+            temp(row, col) = A(row, col) / B(row, col);
         }
     }
-    return (temp);
+    return temp;
 }
 
 ostream &operator<<(ostream &os, const Mat &m)
@@ -722,6 +981,16 @@ ostream &operator<<(ostream &os, const Mat &m)
         }
         os << endl;
     }
+    return os;
+}
+
+ostream &operator<<(ostream &os, const Mat::Rect &rect)
+{
+    os << "row start " << rect.y << endl;
+    os << "col start " << rect.x << endl;
+    os << "row count " << rect.height << endl;
+    os << "col count " << rect.width << endl;
+
     return os;
 }
 

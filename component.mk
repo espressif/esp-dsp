@@ -16,6 +16,11 @@ COMPONENT_ADD_INCLUDEDIRS := modules/dotprod/include \
 							modules/math/addc/include \
 							modules/math/mulc/include \
 							modules/math/sqrt/include \
+							modules/matrix/add/include \
+							modules/matrix/addc/include \
+							modules/matrix/mul/include \
+							modules/matrix/mulc/include \
+							modules/matrix/sub/include \
 							modules/matrix/include \
 							modules/fft/include \
 							modules/dct/include \
@@ -31,8 +36,17 @@ COMPONENT_SRCDIRS :=. \
 					modules/dotprod/float \
 					modules/dotprod/fixed \
 					modules/matrix \
-					modules/matrix/float \
-					modules/matrix/fixed \
+					modules/matrix/add \
+					modules/matrix/add/float \
+					modules/matrix/addc \
+					modules/matrix/addc/float \
+					modules/matrix/mul \
+					modules/matrix/mul/float \
+					modules/matrix/mul/fixed \
+					modules/matrix/mulc \
+					modules/matrix/mulc/float \
+					modules/matrix/sub \
+					modules/matrix/sub/float \
 					modules/matrix/mat \
 					modules/math \
 					modules/math/mulc \
