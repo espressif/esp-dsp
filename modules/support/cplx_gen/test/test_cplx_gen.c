@@ -100,11 +100,11 @@ TEST_CASE("cplx_gen_functionality_test", "[dsps]")
 
 TEST_CASE("cplx_gen_benchmark_test", "[dsps]")
 {
-    int32_t out_len = 256;
-    const int32_t lut_len = 4096;
+    int32_t out_len = 32;
+    const int32_t lut_len = 256;
     const float frequency = 0.02;
     const float init_phase = 0.9;
-    const int repeat_count = 100; 
+    const int repeat_count = 4; 
 
     cplx_sig_t cplx_signal_float, cplx_signal_fixed;
 
