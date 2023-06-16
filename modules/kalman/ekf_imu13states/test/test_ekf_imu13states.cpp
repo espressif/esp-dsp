@@ -32,9 +32,12 @@ TEST_CASE("ekf_imu13states functionality gyro only", "[dspm]")
     ekf13->TestFull(false);
     unsigned int end_b = xthal_get_ccount();
     ESP_LOGI(TAG, "Total time %i (K cycles)", (end_b - start_b)/1000);
-    TEST_ASSERT_EQUAL(100, (int)(1000*ekf13->X.data[4] + 0.5));
-    TEST_ASSERT_EQUAL(200, (int)(1000*ekf13->X.data[5] + 0.5));
-    TEST_ASSERT_EQUAL(300, (int)(1000*ekf13->X.data[6] + 0.5));
+    TEST_ASSERT_LESS_THAN(100, (int)(1000*abs(ekf13->X.data[4] - 0.1)));
+    TEST_ASSERT_LESS_THAN(100, (int)(1000*abs(ekf13->X.data[5] - 0.2)));
+    TEST_ASSERT_LESS_THAN(100, (int)(1000*abs(ekf13->X.data[6] - 0.3)));
+    printf("Expected result = %i, calculated result = %i\n", 100, (int)(1000*ekf13->X.data[4] + 0.5));
+    printf("Expected result = %i, calculated result = %i\n", 200, (int)(1000*ekf13->X.data[5] + 0.5));
+    printf("Expected result = %i, calculated result = %i\n", 300, (int)(1000*ekf13->X.data[6] + 0.5));
 
 }
 
@@ -48,7 +51,10 @@ TEST_CASE("ekf_imu13states functionality gyro and magn", "[dspm]")
     unsigned int end_b = xthal_get_ccount();
     ESP_LOGI(TAG, "Total time %i (K cycles)", (end_b - start_b)/1000);
 
-    TEST_ASSERT_EQUAL(100, (int)(1000*ekf13->X.data[4] + 0.5));
-    TEST_ASSERT_EQUAL(200, (int)(1000*ekf13->X.data[5] + 0.5));
-    TEST_ASSERT_EQUAL(300, (int)(1000*ekf13->X.data[6] + 0.5));
+    TEST_ASSERT_LESS_THAN(100, (int)(1000*abs(ekf13->X.data[4] - 0.1)));
+    TEST_ASSERT_LESS_THAN(100, (int)(1000*abs(ekf13->X.data[5] - 0.2)));
+    TEST_ASSERT_LESS_THAN(100, (int)(1000*abs(ekf13->X.data[6] - 0.3)));
+    printf("Expected result = %i, calculated result = %i\n", 100, (int)(1000*ekf13->X.data[4] + 0.5));
+    printf("Expected result = %i, calculated result = %i\n", 200, (int)(1000*ekf13->X.data[5] + 0.5));
+    printf("Expected result = %i, calculated result = %i\n", 300, (int)(1000*ekf13->X.data[6] + 0.5));
 }

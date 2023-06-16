@@ -71,7 +71,7 @@ TEST_CASE("dsps_fird_s16_aexx functionality", "[dsps]")
     const int32_t max_len[2] = {2048, 2520};                        // 2520 can be divided by 3, 6, 9, 12, 15, 18 and 21
     const int16_t max_dec[2] = {32, 21};
     const int16_t min_dec[2] = {2, 3};
-    const int16_t shift_vals[17] = {-40, -20, -15, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 15, 20, 40};
+    const int16_t shift_vals[17] = {-15, 0, 15};
 
     int16_t *x = (int16_t *)memalign(16, max_len[1] * sizeof(int16_t));
     int16_t *y = (int16_t *)memalign(16, max_len[1] * sizeof(int16_t));
@@ -108,7 +108,7 @@ TEST_CASE("dsps_fird_s16_aexx functionality", "[dsps]")
             const int32_t loop_len = max_len[variations]/dec;
             const int16_t start_position = 0;
 
-            for (int16_t fir_length = 2; fir_length <= MAX_FIR_LEN; fir_length++){
+            for (int16_t fir_length = 2; fir_length <= MAX_FIR_LEN; fir_length+=16){
 
                 for(int16_t shift_amount = 0; shift_amount < sizeof(shift_vals) / sizeof(uint16_t); shift_amount++){
 

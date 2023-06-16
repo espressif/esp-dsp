@@ -99,7 +99,7 @@ TEST_CASE("dspm_mult_s16_aexx benchmark", "[dspm]")
 
                 float total_b = end_b - start_b;
                 float cycles = total_b;
-                ESP_LOGI("dspm_mult_s16_aexx", "dspm_mult_s16_aexx[%i][%i][%i] - %f", m, n, k, cycles);
+                ESP_LOGD("dspm_mult_s16_aexx", "dspm_mult_s16_aexx[%i][%i][%i] - %f", m, n, k, cycles);
             }
         }
     }

@@ -1,8 +1,7 @@
 stages:
   - build
+  - target_test
   - deploy
-
-image: "$CI_DOCKER_REGISTRY/esp-idf-doc-env-v5.0:2-3"
 
 variables:
   # System environment
@@ -11,9 +10,14 @@ variables:
   MAKEFLAGS: "-j5 --no-keep-going"
 
   # GitLab-CI environment
+  TARGET_TEST_ENV_IMAGE: "$CI_DOCKER_REGISTRY/target-test-env-v5.2:1"
+  ESP_DOCS_ENV_IMAGE: "$CI_DOCKER_REGISTRY/esp-idf-doc-env-v5.0:2-2"
   GET_SOURCES_ATTEMPTS: "10"
   ARTIFACT_DOWNLOAD_ATTEMPTS: "10"
   GIT_SUBMODULE_STRATEGY: none
+  TEST_DIR: "$CI_PROJECT_DIR/test_app"
+  SIZE_INFO_LOCATION: "${TEST_DIR}/size_info.txt"
+
 
   ESP_IDF_GIT: "https://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HTTPS_SERVER}/espressif/esp-idf.git"
 
@@ -29,9 +33,6 @@ variables:
   git remote remove github || true
   git remote add github ${GH_PUSH_REPO}
 
-after_script:
-  # Just for cleaning space, no other causes
-  - git clean -ffdx
 
 # This template gets expanded multiple times, once for every IDF version.
 # IDF version is specified by setting the espressif/idf image tag.
@@ -90,8 +91,136 @@ build_idf_latest:
     # GNU Make based build system is not supported starting from IDF v5.0
     SKIP_GNU_MAKE_BUILD: 1
 
+# target tests related parts:
+
+.build_pytest_template:
+  stage: build
+  image: $TARGET_TEST_ENV_IMAGE
+  extends:
+    - .build_template
+  artifacts:
+    paths:
+      - "**/build*/size.json"
+      - "**/build*/build.log"
+      - "**/build*/build_log.txt"
+      - "**/build*/*.bin"
+      - "**/build*/*.elf"
+      - "**/build*/*.map"
+      - "**/build*/flasher_args.json"
+      - "**/build*/flash_project_args"
+      - "**/build*/config/sdkconfig.json"
+      - "**/build*/bootloader/*.bin"
+      - "**/build*/partition_table/*.bin"
+      - $SIZE_INFO_LOCATION
+    when: always
+    expire_in: 3 days
+  before_script:
+    # Get ESP-IDF and install the tools.
+    - pip install idf-component-manager --upgrade
+    - pip install "idf_build_apps~=0.3.0"
+    - dir
+    - cd /opt/
+    - git clone -b master --depth 1 https://github.com/espressif/esp-idf.git
+    - cd esp-idf
+    - export IDF_PATH=${PWD}
+    - export IDF_DESCRIBE=`git describe`
+    - export IDF_VERSION=${IDF_DESCRIBE%-*}
+    - tools/idf_tools.py --non-interactive install cmake
+    - tools/idf_tools.py install-python-env
+    - tools/idf_tools.py --non-interactive install && eval "$(tools/idf_tools.py --non-interactive export)" || exit 1
+    - 'echo "ESP-IDF: ${IDF_VERSION}" >> ${TEST_DIR}/idf_version_info.txt'
+  script:
+    # CI specific options start from "--collect-size-info xxx". could ignore when running locally
+    # The script below will build all test applications defined in environment variable $TEST_TARGETS
+    - dir
+    - cd ${TEST_DIR}
+    - dir
+    - python -m idf_build_apps build -v -p .
+      --recursive
+      --target all
+      --default-build-targets ${TEST_TARGETS}
+      --config "sdkconfig.*=" --build-dir "build"
+      --check-warnings
+      --collect-size-info $SIZE_INFO_LOCATION
+      --parallel-count ${CI_NODE_TOTAL:-1}
+      --parallel-index ${CI_NODE_INDEX:-1}
+    - dir
+  variables:
+    TEST_TARGETS: "esp32"
+
+build_latest_test_app:
+  extends: .build_pytest_template
+  image: espressif/idf:latest
+  variables:
+    TEST_TARGETS: "esp32"
+
+
+.target_test_template:
+  image: $TARGET_TEST_ENV_IMAGE
+  stage: target_test
+  timeout: 1 hour
+  variables:
+    GIT_DEPTH: 1
+    SUBMODULES_TO_FETCH: "none"
+  cache:
+    # Usually do not need submodule-cache in target_test
+    - key: pip-cache
+      paths:
+        - .cache/pip
+      policy: pull
+
+.before_script_pytest_jobs:
+  before_script:
+    # Get ESP-IDF and install the tools.
+    - dir
+    - cd /opt/
+    - git clone -b ${IDF_BRANCH} --depth 1 https://github.com/espressif/esp-idf.git
+    - cd esp-idf
+    - export IDF_PATH=${PWD}
+    - export IDF_DESCRIBE=`git describe`
+    - export IDF_VERSION=${IDF_DESCRIBE%-*}
+    - tools/idf_tools.py --non-interactive install cmake
+    - tools/idf_tools.py install-python-env
+    - tools/idf_tools.py --non-interactive install && eval "$(tools/idf_tools.py --non-interactive export)" || exit 1
+    - 'echo "ESP-IDF: ${IDF_VERSION}" >> ${TEST_DIR}/idf_version_info.txt'
+    - pip install "pytest-embedded-serial-esp~=1.2.3" "pytest-embedded-idf~=1.2.3"
+
+.test_template:
+  stage: target_test
+  image: $TARGET_TEST_ENV_IMAGE
+  extends:
+    - .before_script_pytest_jobs
+  tags: [esp32]
+  artifacts:
+    paths:
+      - "${TEST_DIR}/*/*.log"
+      - "${TEST_DIR}/*.txt"
+      - "${TEST_DIR}/*/results_*.xml"
+      - "${TEST_DIR}/pytest_embedded_log/"
+    reports:
+      junit: ${TEST_DIR}/results_${IDF_TARGET}.xml
+    when: always
+    expire_in: 1 week
+  script:
+    - cd ${TEST_DIR}
+    - python -m pytest --junit-xml=./results_${TEST_TARGETS}.xml --target=${TEST_TARGETS}
+    - ls -lh > test_dir.txt
+  variables:
+    TEST_TARGETS: "esp32"
+
+test_examples:
+  extends: .test_template
+  parallel:
+    matrix:
+      - IDF_BRANCH: ["master"]
+        IDF_TARGET: ["esp32"]
+  after_script: []
+
+#-------------------------------
+
 build_docs:
   stage: build
+  image: $ESP_DOCS_ENV_IMAGE
   tags:
     - build_docs
   artifacts:
