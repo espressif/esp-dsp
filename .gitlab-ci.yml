@@ -132,9 +132,7 @@ build_idf_latest:
   script:
     # CI specific options start from "--collect-size-info xxx". could ignore when running locally
     # The script below will build all test applications defined in environment variable $TEST_TARGETS
-    - dir
     - cd ${TEST_DIR}
-    - dir
     - python -m idf_build_apps build -v -p .
       --recursive
       --target all
@@ -144,7 +142,7 @@ build_idf_latest:
       --collect-size-info $SIZE_INFO_LOCATION
       --parallel-count ${CI_NODE_TOTAL:-1}
       --parallel-index ${CI_NODE_INDEX:-1}
-    - dir
+      --ignore-warning-str "DeprecationWarning:"
   variables:
     TEST_TARGETS: "esp32"
 
