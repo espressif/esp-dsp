@@ -1,4 +1,4 @@
-version: "1.4.2"
+version: "1.4.4"
 
 description: ESP-DSP is the official DSP library for Espressif SoCs.
 url: https://github.com/espressif/esp-dsp
