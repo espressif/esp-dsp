@@ -7,4 +7,4 @@ The values in "ESP32" and "ESP32S3" column are for the optimized (assembly) impl
 
 MAIN_TABLE
 
-The benchmark test could be reproduced by executing test cases found in :repo_file:`test/test_dsp.c`.
+The benchmark test could be reproduced by executing test cases found in :project_file:`/test/test_dsp.c`.

@@ -21,49 +21,40 @@ PROJECT_NAME = "Espressif DSP Library"
 ## and used to include in API reference documentation
 
 INPUT = \
-    ##
-    ## Common - API Reference
-    ##
-    ../modules/common/include/dsp_common.h \
-    ## Dot Product - API Reference
-    ../modules/dotprod/include/dsps_dotprod.h \
-    ../modules/dotprod/include/dspi_dotprod.h \
-    ## FFT - API Reference
-    ../modules/fft/include/dsps_fft2r.h \
-    ../modules/fft/include/dsps_fft4r.h \
-    ## DCT - API Reference
-    ../modules/dct/include/dsps_dct.h \
-    ## FIR Filter - API Reference
-    ../modules/fir/include/dsps_fir.h \
-    ## IIR Filter - API Reference
-    ../modules/iir/include/dsps_biquad_gen.h \
-    ../modules/iir/include/dsps_biquad.h \
-    ## Math - API Reference
-    ../modules/math/mulc/include/dsps_mulc.h \
-    ../modules/math/addc/include/dsps_addc.h \
-    ../modules/math/add/include/dsps_add.h \
-    ../modules/math/sub/include/dsps_sub.h \
-    ../modules/math/mul/include/dsps_mul.h \
-    ## Matrix - API Reference
-    ../modules/matrix/include/dspm_mult.h \
-    ../modules/matrix/include/mat.h \
-    ## Convolution/Cprrelation - API Reference
-    ../modules/conv/include/dsps_conv.h \
-    ../modules/conv/include/dsps_corr.h \
-    ## Support - API Reference
-    ../modules/support/include/dsps_view.h \
-    ../modules/support/include/dsps_tone_gen.h \
-    ../modules/support/include/dsps_snr.h \
-    ../modules/support/include/dsps_sfdr.h \
-    ../modules/support/include/dsps_d_gen.h \
-    ../modules/support/include/dsps_h_gen.h \
-    ## Windows - API Reference
-    ../modules/windows/hann/include/dsps_wind_hann.h \
-    ../modules/windows/blackman/include/dsps_wind_blackman.h \
-    ../modules/windows/blackman_harris/include/dsps_wind_blackman_harris.h \
-    ../modules/windows/blackman_nuttall/include/dsps_wind_blackman_nuttall.h \
-    ../modules/windows/nuttall/include/dsps_wind_nuttall.h \
-    ../modules/windows/flat_top/include/dsps_wind_flat_top.h
+    $(PROJECT_PATH)/modules/common/include/dsp_common.h \
+    $(PROJECT_PATH)/modules/dotprod/include/dsps_dotprod.h \
+    $(PROJECT_PATH)/modules/dotprod/include/dspi_dotprod.h \
+    $(PROJECT_PATH)/modules/fft/include/dsps_fft2r.h \
+    $(PROJECT_PATH)/modules/fft/include/dsps_fft4r.h \
+    $(PROJECT_PATH)/modules/dct/include/dsps_dct.h \
+    $(PROJECT_PATH)/modules/fir/include/dsps_fir.h \
+    $(PROJECT_PATH)/modules/iir/include/dsps_biquad_gen.h \
+    $(PROJECT_PATH)/modules/iir/include/dsps_biquad.h \
+    $(PROJECT_PATH)/modules/math/mulc/include/dsps_mulc.h \
+    $(PROJECT_PATH)/modules/math/addc/include/dsps_addc.h \
+    $(PROJECT_PATH)/modules/math/add/include/dsps_add.h \
+    $(PROJECT_PATH)/modules/math/sub/include/dsps_sub.h \
+    $(PROJECT_PATH)/modules/math/mul/include/dsps_mul.h \
+    $(PROJECT_PATH)/modules/matrix/include/dspm_mult.h \
+    $(PROJECT_PATH)/modules/matrix/include/mat.h \
+    $(PROJECT_PATH)/modules/conv/include/dsps_conv.h \
+    $(PROJECT_PATH)/modules/conv/include/dsps_corr.h \
+    $(PROJECT_PATH)/modules/support/include/dsps_view.h \
+    $(PROJECT_PATH)/modules/support/include/dsps_tone_gen.h \
+    $(PROJECT_PATH)/modules/support/include/dsps_snr.h \
+    $(PROJECT_PATH)/modules/support/include/dsps_sfdr.h \
+    $(PROJECT_PATH)/modules/support/include/dsps_d_gen.h \
+    $(PROJECT_PATH)/modules/support/include/dsps_h_gen.h \
+    $(PROJECT_PATH)/modules/support/include/dsps_cplx_gen.h \
+    $(PROJECT_PATH)/modules/windows/hann/include/dsps_wind_hann.h \
+    $(PROJECT_PATH)/modules/windows/blackman/include/dsps_wind_blackman.h \
+    $(PROJECT_PATH)/modules/windows/blackman_harris/include/dsps_wind_blackman_harris.h \
+    $(PROJECT_PATH)/modules/windows/blackman_nuttall/include/dsps_wind_blackman_nuttall.h \
+    $(PROJECT_PATH)/modules/windows/nuttall/include/dsps_wind_nuttall.h \
+    $(PROJECT_PATH)/modules/windows/flat_top/include/dsps_wind_flat_top.h \
+    $(PROJECT_PATH)/modules/kalman/ekf/include/ekf.h \
+    $(PROJECT_PATH)/modules/kalman/ekf_imu13states/include/ekf_imu13states.h
+    
 
 
 ## Get warnings for functions that have no documentation for their parameters or return value

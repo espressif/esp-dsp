@@ -6,11 +6,11 @@ This example demonstrates how to use FFT functionality from esp-dsp library. Exa
 
 1. Initialize the library
 2. Initialize input signals with 1024 samples: one 0 dB, second with -20 dB
-4. Calculate FFT Radix-2 for 1024 complex samples
+3. Calculate FFT Radix-2 for 1024 complex samples
 4. Calculate FFT Radix-4 for 1024 complex samples
 5. Apply bit reverse operation for output complex vectors
-7. Show results on the plots
-8. Show execution time of FFTs
+6. Show results on the plots
+7. Show execution time of FFTs
 
 ## How to use example
 

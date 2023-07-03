@@ -1,9 +1,4 @@
 # This is a list of python packages used to generate documentation. This file is used with pip:
 # pip install --user -r requirements.txt
 #
-future
-sphinx==1.6.5
-sphinx-rtd-theme
-breathe==4.7.3
-recommonmark
-tabulate
+esp-docs==0.2.4

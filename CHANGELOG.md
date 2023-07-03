@@ -12,8 +12,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Add Bi-Quad for esp32s3 into common CMakeLists.txt 
-
 ### Changed
+- Update documentation build
+
 
 ### Removed
 
