@@ -12,4 +12,5 @@ The ESP-DSP it’s the official DSP library for the Espressif chips. It contains
     Introduction <esp-dsp-library>
     Benchmarks <esp-dsp-benchmarks>
     Examples <esp-dsp-examples>
+    Applications <esp-dsp-applications>
     API Reference <esp-dsp-apis>
