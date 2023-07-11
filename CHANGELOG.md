@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Target tests
+- Application for Azure IoT board
 
 ### Fixed
 - Add Bi-Quad for esp32s3 into common CMakeLists.txt 
