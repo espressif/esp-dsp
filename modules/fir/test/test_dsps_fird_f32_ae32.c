@@ -33,7 +33,7 @@ static float coeffs[32];
 static float delay[32];
 static float delay_compare[32];
 
-TEST_CASE("dsps_fird_f32_ae32 functionality", "[dsps]")
+TEST_CASE("dsps_fird_f32_aexx functionality", "[dsps]")
 {
     // In the test we generate filter with cutt off frequency 0.1
     // and then filtering 0.1 and 0.3 frequencis.
@@ -53,14 +53,14 @@ TEST_CASE("dsps_fird_f32_ae32 functionality", "[dsps]")
         x[i] = i;
     }
 
-    dsps_fird_init_f32(&fir1, coeffs, delay, fir_len, decim, 0);
-    dsps_fird_init_f32(&fir2, coeffs, delay_compare, fir_len, decim, 0);
-    int total1 = dsps_fird_f32_ae32(&fir1, x, y, len);
-    int total2 = dsps_fird_f32_ansi(&fir2, x, y_compare, len);
-    total1 += dsps_fird_f32_ae32(&fir1, x, y, len);
-    total2 += dsps_fird_f32_ansi(&fir2, x, y_compare, len);
-    total1 += dsps_fird_f32_ae32(&fir1, x, y, len);
-    total2 += dsps_fird_f32_ansi(&fir2, x, y_compare, len);
+    dsps_fird_init_f32(&fir1, coeffs, delay, fir_len, decim);
+    dsps_fird_init_f32(&fir2, coeffs, delay_compare, fir_len, decim);
+    int total1 = dsps_fird_f32_ae32(&fir1, x, y, len/decim);
+    int total2 = dsps_fird_f32_ansi(&fir2, x, y_compare, len/decim);
+    total1 += dsps_fird_f32(&fir1, x, y, len/decim);
+    total2 += dsps_fird_f32_ansi(&fir2, x, y_compare, len/decim);
+    total1 += dsps_fird_f32(&fir1, x, y, len/decim);
+    total2 += dsps_fird_f32_ansi(&fir2, x, y_compare, len/decim);
     ESP_LOGI(TAG, "Total result = %i, expected %i from %i", total1, total2, len);
     TEST_ASSERT_EQUAL(total1, total2);
     for (int i=0 ; i< total1 ; i++)
@@ -77,7 +77,7 @@ TEST_CASE("dsps_fird_f32_ae32 functionality", "[dsps]")
 }
 
 
-TEST_CASE("dsps_fird_f32_ae32 benchmark", "[dsps]")
+TEST_CASE("dsps_fird_f32_aexx benchmark", "[dsps]")
 {
 
     int len = sizeof(x) / sizeof(float);
@@ -95,11 +95,11 @@ TEST_CASE("dsps_fird_f32_ae32 benchmark", "[dsps]")
     }
     x[0] = 1;
 
-    dsps_fird_init_f32(&fir1, coeffs, delay, fir_len, decim, 0);
+    dsps_fird_init_f32(&fir1, coeffs, delay, fir_len, decim);
 
     unsigned int start_b = xthal_get_ccount();
     for (int i = 0 ; i < repeat_count ; i++) {
-        dsps_fird_f32_ae32(&fir1, x, y, len);
+        dsps_fird_f32(&fir1, x, y, len/decim);
     }
     unsigned int end_b = xthal_get_ccount();
 

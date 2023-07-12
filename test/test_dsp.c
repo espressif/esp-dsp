@@ -82,7 +82,7 @@ TEST_CASE("DSP Libary benchmark table", "[dsp]")
     dsps_fir_init_f32(&fir1, data1, data2, 256);
 
     fir_f32_t fir2;
-    dsps_fird_init_f32(&fir2, data1, data2, 256, 4, 0);
+    dsps_fird_init_f32(&fir2, data1, data2, 256, 4);
 
     float coeffs[5];
     dsps_biquad_gen_lpf_f32(coeffs, 0.1, 1);
@@ -119,7 +119,7 @@ TEST_CASE("DSP Libary benchmark table", "[dsp]")
     REPORT_BENCHMARK("dsps_fird_f32 1024 samples, 256 coeffs and decimation 4",
                      dsps_fird_f32,
                      dsps_fird_f32_ansi,
-                     &fir2, data1, data2, 1024);
+                     &fir2, data1, data2, 1024/4);
 
     REPORT_SECTION("**FFTs Radix-2 32 bit Floating Point**");
 

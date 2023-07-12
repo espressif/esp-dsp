@@ -74,18 +74,17 @@ void generate_FIR_coefficients(float *fir_coeffs, const unsigned int fir_len, co
     free(fir_window);
 }
 
+static __attribute__((aligned(16))) float tone_combined[FIR_BUFF_OUT_LEN];
+static __attribute__((aligned(16))) float fir_coeffs[FIR_COEFFS_LEN];
+static __attribute__((aligned(16))) float delay_line[FIR_COEFFS_LEN];
 
 void app_main()
 {
-    const int16_t fir_len = FIR_COEFFS_LEN;                            
+    const int32_t fir_len = FIR_COEFFS_LEN;                            
     const float fir_ft = 0.5 / DECIMATION;                                  // Transition frequency of the FIR filter
     const int32_t N = N_SAMPLES;                                            // Number of input samples
-    const int16_t fir_decim = DECIMATION;                                   // FIR filter decimation
+    const int32_t fir_decim = DECIMATION;                                   // FIR filter decimation
     const int32_t N_buff = FIR_BUFF_OUT_LEN;                                // Total length of samples with ignored 
-
-    __attribute__((aligned(16))) float tone_combined[N_buff];
-    __attribute__((aligned(16))) float fir_coeffs[fir_len];
-    __attribute__((aligned(16))) float delay_line[fir_len];
 
     fir_f32_t fir1;
     esp_err_t ret;
@@ -144,11 +143,11 @@ void app_main()
 
     // Filter the input signal with FIR filter
     float *fir_out = (float*)malloc( N_buff * sizeof(float));
-    dsps_fird_init_f32(&fir1, fir_coeffs, delay_line, fir_len, fir_decim, 0);
+    dsps_fird_init_f32(&fir1, fir_coeffs, delay_line, fir_len, fir_decim);
 
-    unsigned int start_b = dsp_get_cpu_cycle_count();
-    dsps_fird_f32_ansi(&fir1, tone_combined, fir_out, N_buff);
-    unsigned int end_b = dsp_get_cpu_cycle_count();
+    uint32_t start_b = dsp_get_cpu_cycle_count();
+    dsps_fird_f32(&fir1, tone_combined, fir_out, N_buff/fir_decim);
+    uint32_t end_b = dsp_get_cpu_cycle_count();
 
     // Generate windowing coefficients and apply the windowing
     dsps_wind_blackman_harris_f32(window, (N / fir_decim));
@@ -158,7 +157,7 @@ void app_main()
 
     // Show FFT spectrum, ignoring first samples from the delay line
     show_FFT(window, N / fir_decim);
-    ESP_LOGI(TAG, "FIR for %"PRId32" samples and decimation %"PRId16" takes %"PRId16" cycles", N, fir_decim, (int16_t)(end_b - start_b));
+    ESP_LOGI(TAG, "FIR for %"PRId32" samples and decimation %"PRId32" takes %"PRId32" cycles", N, fir_decim, (int32_t)(end_b - start_b));
     ESP_LOGI(TAG, "End Example.");
 
     free(fir_out);

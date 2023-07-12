@@ -47,11 +47,11 @@ TEST_CASE("dsps_fird_f32_ansi functionality", "[dsps]")
     coeffs[0] = 1;
 
     for (int i = 0 ; i < len ; i++) {
-        x[i] = i % decim;
+        x[i] = (i) % decim;
     }
 
-    dsps_fird_init_f32(&fir1, coeffs, delay, fir_len, decim, 0);
-    int total = dsps_fird_f32_ansi(&fir1, x, y, len);
+    dsps_fird_init_f32(&fir1, coeffs, delay, fir_len, decim);
+    int total = dsps_fird_f32_ansi(&fir1, x, y, len/decim);
     ESP_LOGI(TAG, "Total result = %i from %i", total, len);
     TEST_ASSERT_EQUAL(total, len / decim);
     for (int i=0 ; i< total ; i++)
@@ -59,9 +59,7 @@ TEST_CASE("dsps_fird_f32_ansi functionality", "[dsps]")
         ESP_LOGD(TAG, "data[%i] = %f\n", i, y[i]);
     }
     for (int i = 0 ; i < total ; i++) {
-        if (y[i] != (decim - 1)) {
-            TEST_ASSERT_EQUAL(y[i], (decim - 1));
-        }
+        TEST_ASSERT_EQUAL(y[i], 0);
     }
 
 
@@ -86,11 +84,11 @@ TEST_CASE("dsps_fird_f32_ansi benchmark", "[dsps]")
     }
     x[0] = 1;
 
-    dsps_fird_init_f32(&fir1, coeffs, delay, fir_len, decim, 0);
+    dsps_fird_init_f32(&fir1, coeffs, delay, fir_len, decim);
 
     unsigned int start_b = xthal_get_ccount();
     for (int i = 0 ; i < repeat_count ; i++) {
-        dsps_fird_f32_ansi(&fir1, x, y, len);
+        dsps_fird_f32_ansi(&fir1, x, y, len/decim);
     }
     unsigned int end_b = xthal_get_ccount();
 
