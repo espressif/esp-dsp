@@ -23,7 +23,7 @@
 	.global dsps_fird_f32_ae32
 	.type   dsps_fird_f32_ae32,@function
 // The function implements the following C code:
-//esp_err_t dsps_fir_f32_ae32(fir_f32_t* fir, const float* input, float* output, int len);
+//esp_err_t dsps_fird_f32_ae32(fir_f32_t* fir, const float* input, float* output, int len);
 
 dsps_fird_f32_ae32: 
 // fir      - a2
@@ -39,47 +39,42 @@ dsps_fird_f32_ae32:
 	l32i    a6,  a2, 8  // a6  - N
 	mull    a6, a6, a10// a6 = a6*4
 	l32i    a10, a2, 0  // a10 - coeffs
-	add     a10, a10, a6 // a10 = &coeffs[N];
-	addi    a10, a10, -4 // a10 = &coeffs[N-1];
 	l32i    a11, a2, 4  // a11 - delay line
 	l32i    a6,  a2, 8  // a6  - N
 	l32i    a12, a2, 16  // a12  - decimation
-	l32i    a9,  a2, 20   // a9  -  d_pos
 	movi    a8, 0         // result = 0;
 
 //  a13 - delay index
 fird_loop_len:
 		// Store to delay line
-		lsi     f0, a3, 0       // f0 = x[i]
-		addi    a3, a3, 4       // x++
-		ssx     f0, a11, a13    // delay[a13] = f0;
-		addi    a13, a13, 4     // a13++
-		addi    a7, a7, 1       // a7++
-		// verify deley line
-		blt     a7, a6, do_not_reset_a13
-			movi    a13, 0
-			movi    a7,  0
-	do_not_reset_a13:
-		// calc d_pos
-		addi    a9, a9, 1
-		blt     a9, a12, next_itt_fir32 // Jump if d_pos < d
+		
+        loopnez  a12, .fird_load_data // K loops
+			lsip    f0, a3, 4       // f0 = x[i++]
+			ssx     f0, a11, a13    // delay[a13] = f0;
+			addi    a13, a13, 4     // a13++
+			addi    a7, a7, 1       // a7++
+			// verify deley line
+			blt     a7, a6, do_not_reset_a13
+				movi    a13, 0
+				movi    a7,  0
+			do_not_reset_a13:
+        	const.s f2, 0
+		.fird_load_data:
+
 		addi    a8, a8, 1
-		movi    a9, 0 // reset d_pos
+
 		// Calc amount for delay line before end
 		mov     a15, a10        // a15 - coeffs
-		wfr	    f2, a9 // f2 = 0;
 		sub   a14, a6, a7   // a14 = N-pos
 		loopnez  a14, first_fird_loop // pos...N-1
-			lsi     f1, a15, 0
-			addi    a15, a15, -4    // a15--
+			lsip    f1, a15, 4		// a15++
 			lsx     f0, a11, a13    // load delay f0 = delay[pos]
 			addi    a13, a13, 4     // a13++, pos++
 			madd.s  f2, f0, f1      // f2 += f0*f1
 first_fird_loop:
 		movi a13, 0    // load delay line counter to 0
 		loopnez  a7, second_fird_loop // 0..pos
-			lsi     f1, a15, 0
-			addi    a15, a15, -4    // a15--
+			lsip    f1, a15, 4		// a15++
 			lsx     f0, a11, a13    // load delay f0 = delay[pos]
 			addi    a13, a13, 4     // a13++, pos++
 			madd.s  f2, f0, f1      // f2 += f0*f1
@@ -96,7 +91,6 @@ next_itt_fir32:
 	// store state
 
 	s32i    a7,  a2, 12 // pos = a7
-	s32i    a9,  a2, 20 // d_pos = a9
 	
 	mov 	a2, a8 // return status ESP_OK
 	retw.n

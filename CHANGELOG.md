@@ -10,12 +10,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Target tests
 - Application for Azure IoT board
+- FIR f32 decimation filter optimized for esp32s3
 
 ### Fixed
 - Add Bi-Quad for esp32s3 into common CMakeLists.txt 
+
 ### Changed
 - Update documentation build
-
+- In dsps_fird_init_f32() function the parameter start_pos removed
+- In dsps_fird_f32() function the coefficients order changed to backward order
 
 ### Removed
 
@@ -23,7 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Complex signal generator dsps_cplx_gen()
-- FIR f32 filter optimized for esp32s3 
+- FIR f32 filter optimized for esp32s3
 - Memcpy and Memset optimized for esp32s3
 
 ### Fixed

@@ -18,23 +18,21 @@ int dsps_fird_f32_ansi(fir_f32_t *fir, const float *input, float *output, int le
 {
     int result = 0;
     for (int i = 0; i < len ; i++) {
-        fir->delay[fir->pos++] = input[i];
-        if (fir->pos >= fir->N) {
-            fir->pos = 0;
-        }
-        fir->d_pos++;
-        if (fir->d_pos >= fir->decim) {
-            fir->d_pos = 0;
-            float acc = 0;
-            int coeff_pos = fir->N - 1;
-            for (int n = fir->pos; n < fir->N ; n++) {
-                acc += fir->coeffs[coeff_pos--] * fir->delay[n];
+        for (int k=0 ; k < fir->decim ; k++){
+            fir->delay[fir->pos++] = *input++;
+            if (fir->pos >= fir->N) {
+                fir->pos = 0;
             }
-            for (int n = 0; n < fir->pos ; n++) {
-                acc += fir->coeffs[coeff_pos--] * fir->delay[n];
-            }
-            output[result++] = acc;
         }
+        float acc = 0;
+        int coeff_pos = 0;
+        for (int n = fir->pos; n < fir->N ; n++) {
+            acc += fir->coeffs[coeff_pos++] * fir->delay[n];
+        }
+        for (int n = 0; n < fir->pos ; n++) {
+            acc += fir->coeffs[coeff_pos++] * fir->delay[n];
+        }
+        output[result++] = acc;
     }
     return result;
 }

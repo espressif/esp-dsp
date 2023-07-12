@@ -13,17 +13,17 @@
 // limitations under the License. 
 
 #include "dsps_fir_platform.h"
-#if (dsps_fir_f32_aes3_enabled == 1)
+#if (dsps_fird_f32_aes3_enabled == 1)
 
 // This is FIR filter for Esp32s3 processor.
     .text
     .align  4
-    .global dsps_fir_f32_aes3
-    .type   dsps_fir_f32_aes3,@function
+    .global dsps_fird_f32_aes3
+    .type   dsps_fird_f32_aes3,@function
 // The function implements the following C code:
-//esp_err_t dsps_fir_f32_aes3(fir_f32_t* fir, const float* input, float* output, int len);
+//esp_err_t dsps_fird_f32_aes3(fir_f32_t* fir, const float* input, float* output, int len);
 
-dsps_fir_f32_aes3:
+dsps_fird_f32_aes3:
 // fir      - a2
 // input    - a3
 // output   - a4
@@ -37,7 +37,6 @@ dsps_fir_f32_aes3:
 // a6 - fir length
 // a7 - position in delay line
 // a8 - temp
-// a9 - const 0
 // a10 - coeffs ptr
 // a11 - delay line ptr
 // a12 - const
@@ -55,25 +54,32 @@ dsps_fir_f32_aes3:
     addx4	a11, a7, a11 // a11 = a11 + a7*4	
     l32i    a6,  a2, 8   // a6  - N
 
-    movi.n	a9, 0
+    mov.n    a9, a5
     movi.n	a12, 3
 
     movi.n	a12, -16
     movi.n	a13, 15
 // Main loop for input samples
-.fir_loop_len:
-        // Store to delay line
-        lsip	f15,  a3, 4		// a3  += 4, f15 = input[n]
-        ssip	f15, a11, 4		// a11 += 4, *a11 = f15
-        addi    a7,  a7,  1     // a7++ - position in delay line
+.fird_loop_len:
+        // Store K values from input to delay line:
 
+        l32i    a14,  a2, 16   // a14  - decimation
+        loopnez  a14, .fird_load_data // K loops
+            // Store to delay line
+            lsip	f15,  a3, 4		// a3  += 4, f15 = input[n]
+            ssip	f15, a11, 4		// a11 += 4, *a11 = f15
+            addi    a7,  a7,  1     // a7++ - position in delay line
+
+            blt     a7, a6, .do_not_reset_a11
+                l32i    a11, a2, 4	// Load delay line
+                movi    a7,  0
+            .do_not_reset_a11:
+            and     a15, a11, a12
+        .fird_load_data:
         //
-        blt     a7, a6, .do_not_reset_a11
-            l32i    a11, a2, 4	// Load delay line
-            movi    a7,  0
-    .do_not_reset_a11:
+        // Process data
+        //
         // Load rounded delay line address
-        and     a15, a11, a12
 
         l32i    a10, a2, 0  // a10 - coeffs
 
@@ -223,11 +229,11 @@ dsps_fir_f32_aes3:
     ssip     f4, a4, 4  // y++ - save result and increment output pointer
     // Check loop length
     addi   a5, a5, -1
-    bnez    a5, .fir_loop_len
+    bnez    a5, .fird_loop_len
     // store state
 
     s32i    a7,  a2, 12 // pos = a7
-    movi.n	a2, 0 // return status ESP_OK
+    mov.n    a2,  a9
     retw.n
 
 #endif // dsps_fir_f32_aes3_enabled
