@@ -407,3 +407,9 @@ dspm::Mat ekf::dFdq_inv(dspm::Mat &vector, dspm::Mat &q)
     return result;
 }
 
+dspm::Mat ekf::StateXdot(dspm::Mat &x, float *u)
+{
+	dspm::Mat U(u, this->G.cols, 1);
+	dspm::Mat Xdot = (this->F * x + this->G * U);
+	return Xdot;
+}

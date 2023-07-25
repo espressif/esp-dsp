@@ -1,4 +1,4 @@
-version: "1.4.7"
+version: "1.4.8"
 
 description: ESP-DSP is the official DSP library for Espressif SoCs.
 url: https://github.com/espressif/esp-dsp
@@ -10,6 +10,7 @@ examples:
   - path: ./applications
   - path: ./applications/azure_board_apps
   - path: ./applications/azure_board_apps/apps
+  - path: ./applications/lyrat_board_app
   
 files:
   exclude:
