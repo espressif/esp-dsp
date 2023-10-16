@@ -120,12 +120,12 @@ build_idf_latest:
     - git clone -b master --depth 1 https://github.com/espressif/esp-idf.git
     - cd esp-idf
     - export IDF_PATH=${PWD}
-    - export IDF_DESCRIBE=`git describe`
-    - export IDF_VERSION=${IDF_DESCRIBE%-*}
+    # - export IDF_DESCRIBE=`git describe`
+    # - export IDF_VERSION=${IDF_DESCRIBE%-*}
     - tools/idf_tools.py --non-interactive install cmake
     - tools/idf_tools.py install-python-env
     - tools/idf_tools.py --non-interactive install && eval "$(tools/idf_tools.py --non-interactive export)" || exit 1
-    - 'echo "ESP-IDF: ${IDF_VERSION}" >> ${TEST_DIR}/idf_version_info.txt'
+    # - 'echo "ESP-IDF: ${IDF_VERSION}" >> ${TEST_DIR}/idf_version_info.txt'
   script:
     # CI specific options start from "--collect-size-info xxx". could ignore when running locally
     # The script below will build all test applications defined in environment variable $TEST_TARGETS
@@ -167,17 +167,18 @@ build_latest_test_app:
 .before_script_pytest_jobs:
   before_script:
     # Get ESP-IDF and install the tools.
+    - dir
     - cd /opt/
     - git clone -b ${IDF_BRANCH} --depth 1 https://github.com/espressif/esp-idf.git
     - cd esp-idf
     - export IDF_PATH=${PWD}
-    - export IDF_DESCRIBE=`git describe`
-    - export IDF_VERSION=${IDF_DESCRIBE%-*}
-    - tools/idf_tools.py --non-interactive install cmake
-    - tools/idf_tools.py install-python-env
-    - tools/idf_tools.py --non-interactive install && eval "$(tools/idf_tools.py --non-interactive export)" || exit 1
-    - 'echo "ESP-IDF: ${IDF_VERSION}" >> ${TEST_DIR}/idf_version_info.txt'
-    - pip install "pytest-embedded-serial-esp~=1.2.3" "pytest-embedded-idf~=1.2.3"
+    # - export IDF_DESCRIBE=`git describe`
+    # - export IDF_VERSION=${IDF_DESCRIBE%-*}
+    # - tools/idf_tools.py --non-interactive install cmake
+    # - tools/idf_tools.py install-python-env
+    # - tools/idf_tools.py --non-interactive install && eval "$(tools/idf_tools.py --non-interactive export)" || exit 1
+    # - 'echo "ESP-IDF: ${IDF_VERSION}" >> ${TEST_DIR}/idf_version_info.txt'
+    # - pip install "pytest-embedded-serial-esp~=1.2.3" "pytest-embedded-idf~=1.2.3"
 
 .test_template:
   stage: target_test
@@ -185,18 +186,20 @@ build_latest_test_app:
   extends:
     - .before_script_pytest_jobs
   tags: [esp32]
-  artifacts:
-    paths:
-      - "${TEST_DIR}/*/*.log"
-      - "${TEST_DIR}/*.txt"
-      - "${TEST_DIR}/*/results_*.xml"
-      - "${TEST_DIR}/pytest_embedded_log/"
-    reports:
-      junit: ${TEST_DIR}/results_${IDF_TARGET}.xml
-    when: always
-    expire_in: 1 week
+  # artifacts:
+  #   paths:
+  #     - "${TEST_DIR}/*/*.log"
+  #     - "${TEST_DIR}/*.txt"
+  #     - "${TEST_DIR}/*/results_*.xml"
+  #     - "${TEST_DIR}/pytest_embedded_log/"
+  #   reports:
+  #     junit: ${TEST_DIR}/results_${IDF_TARGET}.xml
+  #   when: always
+  #   expire_in: 1 week
   script:
+    - dir
     - cd ${TEST_DIR}
+    - dir
     - python -m pytest --junit-xml=./results_${TEST_TARGETS}.xml --target=${TEST_TARGETS}
     - ls -lh > test_dir.txt
   variables:
