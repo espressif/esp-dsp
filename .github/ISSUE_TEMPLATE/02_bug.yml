@@ -17,19 +17,11 @@ body:
         - label: I have searched the issue tracker for a similar issue and not found a similar issue.
           required: true
   - type: input
-    id: development_kit
+    id: idf_version
     attributes:
-      label: Development kit.
-      description: What development kit are you using?
-      placeholder: ex. ESP32-Wrover-Kit
-    validations:
-      required: true
-  - type: input
-    id: kit_version
-    attributes:
-      label: Development kit version.
-      description: Which version of kit are you using?
-      placeholder: ex. v3
+      label: IDF version.
+      description: On which IDF version does this issue occur on? Run `git describe --tags` to find it.
+      placeholder: ex. v5.3-dev-65-ga9079626bb
     validations:
       required: true
   - type: input
@@ -37,46 +29,15 @@ body:
     attributes:
       label: Module or chip used.
       description: What module or chip are you using?
-      placeholder: ex. ESP32-WROOM-32U
+      placeholder: ex. ESP32
     validations:
       required: true
   - type: input
-    id: idf_version
+    id: dsp_version
     attributes:
-      label: IDF version.
-      description: On which IDF version does this issue occur on? Run `git describe --tags` to find it.
-      placeholder: ex. v3.2-dev-1148-g96cd3b75c
-    validations:
-      required: true
-  - type: input
-    id: compiler_version
-    attributes:
-      label: Compiler version used.
-      description: Which version of compiler are you using? Run `xtensa-esp32-elf-gcc --version` to find it.
-      placeholder: ex. 1.22.0-80-g6c4433a
-    validations:
-      required: true
-  - type: dropdown
-    id: operating_system
-    attributes:
-      label: Operating System used.
-      multiple: false
-      options:
-        - Windows
-        - Linux
-        - macOS
-    validations:
-      required: true
-  - type: dropdown
-    id: power_supply
-    attributes:
-      label: What power supply are you using?
-      multiple: false
-      options:
-        - USB
-        - External 3.3V
-        - External 5V
-        - Battery
+      label: DSP version.
+      description: On which DSP version does this issue occur on? Run `git describe --tags` to find it.
+      placeholder: ex. v1.4.0-18-g8fc582f
     validations:
       required: true
   - type: textarea
