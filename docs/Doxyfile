@@ -35,7 +35,7 @@ INPUT = \
     $(PROJECT_PATH)/modules/math/add/include/dsps_add.h \
     $(PROJECT_PATH)/modules/math/sub/include/dsps_sub.h \
     $(PROJECT_PATH)/modules/math/mul/include/dsps_mul.h \
-    $(PROJECT_PATH)/modules/matrix/include/dspm_mult.h \
+    $(PROJECT_PATH)/modules/matrix/mul/include/dspm_mult.h \
     $(PROJECT_PATH)/modules/matrix/include/mat.h \
     $(PROJECT_PATH)/modules/conv/include/dsps_conv.h \
     $(PROJECT_PATH)/modules/conv/include/dsps_corr.h \

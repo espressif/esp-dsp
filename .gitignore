@@ -32,6 +32,7 @@ exmaples/**/managed_components
 test_app/build
 test_app/sdkconfig
 test_app/sdkconfig.old
+test_app/dependencies.lock
 
 # Doc build artifacts
 docs/_build/
@@ -54,3 +55,6 @@ coverage_report/
 
 # VS Code Settings
 .vscode/
+
+# incorrect build locations
+build/

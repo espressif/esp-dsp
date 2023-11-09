@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Application for Azure IoT board
 - FIR f32 decimation filter optimized for esp32s3
 - Add Esp32-LyraT board application 
+- New methods for Mat class to support sub-matrix operations
 
 ### Fixed
 - Add Bi-Quad for esp32s3 into common CMakeLists.txt 
