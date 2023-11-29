@@ -14,4 +14,7 @@ The applications are grouped into subdirectories by category. Each category dire
     * [3d graphics](./azure_board_apps/apps/3d_graphics/README.md) application
     * [Kalman filter](./azure_board_apps/apps/kalman_filter/README.md) application
 
+* [LyraT Board](./lyrat_board_app/README.md) application
+* [ESP32-S3-BOX-Lite](./spectrum_box_lite/README.md) application
+
 
