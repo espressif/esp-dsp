@@ -52,7 +52,7 @@ The audio processing flow contains next blocks:
 
 ### Hardware required
 
-This example does not require any special hardware, and can be run on any common development board.
+This example require LyraT development board.
 
 ### Configure the project
 

@@ -242,7 +242,7 @@ esp_err_t dsps_cplx2reC_sc16(int16_t *data, int N)
     esp_err_t result = ESP_OK;
 
     int i;
-    int n2 = N << (1 + 1); // we will operate with int32 indexes
+    int n2 = N << (1); // we will operate with int32 indexes
     uint32_t* in_data = (uint32_t*)data;
 
     sc16_t kl;
@@ -252,9 +252,9 @@ esp_err_t dsps_cplx2reC_sc16(int16_t *data, int N)
 
     for (i = 0; i < (N / 4); i++) {
         kl.data = in_data[i  + 1];
-        nl.data = in_data[n2 - i - 1];
+        nl.data = in_data[N - i - 1];
         kh.data = in_data[i + 1 + N/2];
-        nh.data = data[n2 - i  - 1 - N/2];
+        nh.data = in_data[N - i - 1 - N/2];
 
         data[i * 2 + 0 + 2] = kl.re + nl.re;
         data[i * 2 + 1 + 2] = kl.im - nl.im;
