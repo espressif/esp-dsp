@@ -1,0 +1,95 @@
+name: Bug report
+description: Report  bugs
+labels: ["Type: Bug"]
+body:
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Answers checklist.
+      description: Before submitting a new issue, please follow the checklist and try to find the answer.
+      options:
+        - label: I have read the [ESP-DSP documentation](https://docs.espressif.com/projects/esp-dsp/en/latest/esp-dsp-library.html/) and the issue is not addressed there.
+          required: true
+        - label: I have read the documentation [ESP-IDF Programming Guide](https://docs.espressif.com/projects/esp-idf/en/latest/) and the issue is not addressed there.
+          required: true
+        - label: I have updated my ESP-DSP branch (master or release) to the latest version and checked that the issue is present there.
+          required: true
+        - label: I have searched the issue tracker for a similar issue and not found a similar issue.
+          required: true
+  - type: input
+    id: idf_version
+    attributes:
+      label: IDF version.
+      description: On which IDF version does this issue occur on? Run `git describe --tags` to find it.
+      placeholder: ex. v5.3-dev-65-ga9079626bb
+    validations:
+      required: true
+  - type: input
+    id: module_or_chip
+    attributes:
+      label: Module or chip used.
+      description: What module or chip are you using?
+      placeholder: ex. ESP32
+    validations:
+      required: true
+  - type: input
+    id: dsp_version
+    attributes:
+      label: DSP version.
+      description: On which DSP version does this issue occur on? Run `git describe --tags` to find it.
+      placeholder: ex. v1.4.0-18-g8fc582f
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What is the expected behavior?
+      description: Please provide a clear and concise description of the expected behavior.
+      placeholder: I expected it to...
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: What is the actual behavior?
+      description: Please describe actual behavior.
+      placeholder: Instead it...
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce.
+      description: "How do you trigger this bug? Please walk us through it step by step. If this is build bug, please attach sdkconfig file (from your project folder). Please attach your code here."
+      value: |
+        1. Step
+        2. Step
+        3. Step
+        ...
+    validations:
+      required: true
+  - type: textarea
+    id: code
+    attributes:
+      label: Code to reproduce this issue.
+      description: Your code that can be used to reproduce this issue goes here. If your code is longer than 30 lines, [GIST](https://gist.github.com) is preferred.
+      placeholder: Your code goes here.
+      render: plain
+    validations:
+      required: false
+  - type: textarea
+    id: debug_logs
+    attributes:
+      label: Debug logs.
+      description: Do you have debug logs that you can send us?
+      placeholder: Debug log goes here.
+    validations:
+      required: false
+  - type: textarea
+    id: more-info
+    attributes:
+      label: More Information.
+      description: Do you have any other information from investigating this?
+      placeholder: ex. I tried on my friend's Windows 10 PC and the command works there.
+    validations:
+      required: false
