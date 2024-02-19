@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: 2024 Espressif Systems (Shanghai) CO LTD
+ * SPDX-FileCopyrightText: 2018-2024 Espressif Systems (Shanghai) CO LTD
  *
  * SPDX-License-Identifier: Apache-2.0
  */
@@ -9,12 +9,12 @@
 #include "dsp_platform.h"
 #include "esp_log.h"
 
-#include "dsps_add.h"
+#include "dsps_sub.h"
 #include "esp_attr.h"
 
-static const char *TAG = "dsps_add";
+static const char *TAG = "dsps_sub";
 
-TEST_CASE("dsps_add_s16_ansi functionality", "[dsps]")
+TEST_CASE("dsps_sub_s16_ansi functionality", "[dsps]")
 {
     int n = 64;
     int16_t x[n];
@@ -23,19 +23,20 @@ TEST_CASE("dsps_add_s16_ansi functionality", "[dsps]")
     int shift = 0;
     for (int i = 0 ; i < n ; i++) {
         x[i] = i<<4;
-        temp = ((int32_t)x[i] + (int32_t)x[i])>>shift;
+        temp = ((int32_t)x[i] - (int32_t)x[i])>>shift;
         y[i] = temp;
     }
     
-    dsps_add_s16_ansi(x, x, x, n, 1, 1, 1, 0);
+    dsps_sub_s16_ansi(x, x, x, n, 1, 1, 1, shift);
     for (int i = 0 ; i < n ; i++) {
+        ESP_LOGD(TAG, "x[%i] = %i  %i", i, x[i], y[i]);
         if (x[i] != y[i]) {
             TEST_ASSERT_EQUAL(x[i], y[i]);
         }
     }
 }
 
-TEST_CASE("dsps_add_s16_ansi benchmark", "[dsps]")
+TEST_CASE("dsps_sub_s16_ansi benchmark", "[dsps]")
 {
     const int n = 256;
     int16_t x[n];
@@ -44,9 +45,9 @@ TEST_CASE("dsps_add_s16_ansi benchmark", "[dsps]")
     }
 
     unsigned int start_b = xthal_get_ccount();
-    dsps_add_s16_ansi(x, x, x, n, 1, 1, 1, 0);
+    dsps_sub_s16_ansi(x, x, x, n, 1, 1, 1, 0);
     unsigned int end_b = xthal_get_ccount();
     
     float cycles = end_b - start_b;
-    ESP_LOGI(TAG, "dsps_add_s16_ansi - %f cycles per sample \n", cycles);
+    ESP_LOGI(TAG, "dsps_sub_s16_ansi - %f cycles per sample \n", cycles);
 }

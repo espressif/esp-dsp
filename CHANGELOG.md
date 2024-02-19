@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased] 
 
 ### Added
+- Fixed point functions mul/add/sub for esp32 and esp32s3
 - Target tests
 - Application for Azure IoT board
 - FIR f32 decimation filter optimized for esp32s3
