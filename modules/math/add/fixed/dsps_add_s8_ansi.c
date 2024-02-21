@@ -1,13 +1,12 @@
 /*
- * SPDX-FileCopyrightText: 2023-2024 Espressif Systems (Shanghai) CO LTD
+ * SPDX-FileCopyrightText: 2024 Espressif Systems (Shanghai) CO LTD
  *
  * SPDX-License-Identifier: Apache-2.0
  */
 
-
 #include "dsps_add.h"
 
-esp_err_t dsps_add_s16_ansi(const int16_t *input1, const int16_t *input2, int16_t *output, int len, int step1, int step2, int step_out, int shift)
+esp_err_t dsps_add_s8_ansi(const int8_t *input1, const int8_t *input2, int8_t *output, int len, int step1, int step2, int step_out, int shift)
 {
     if (NULL == input1) return ESP_ERR_DSP_PARAM_OUTOFRANGE;
     if (NULL == input2) return ESP_ERR_DSP_PARAM_OUTOFRANGE;
