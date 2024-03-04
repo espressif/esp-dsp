@@ -32,18 +32,19 @@ static const char *TAG = "main";
 
 
 // Function shows the result of the FIR filter
-void show_FFT(float *input_signal, const unsigned int fft_len){
+void show_FFT(float *input_signal, const unsigned int fft_len)
+{
 
-    dsps_fft2r_fc32(input_signal, fft_len>>1);
-    dsps_bit_rev2r_fc32(input_signal, fft_len>>1);
-    dsps_cplx2real_fc32(input_signal, fft_len>>1);
+    dsps_fft2r_fc32(input_signal, fft_len >> 1);
+    dsps_bit_rev2r_fc32(input_signal, fft_len >> 1);
+    dsps_cplx2real_fc32(input_signal, fft_len >> 1);
 
     // Correction factor for the FFT spectrum
     const float correction_factor = fft_len * 3;
 
     // Calculating power of spectrum in dB
     for (int i = 0 ; i < fft_len / 2 ; i++) {
-        input_signal[i] = 10 * log10f((input_signal[i * 2 + 0] * input_signal[i * 2 + 0] + input_signal[i * 2 + 1] * input_signal[i * 2 + 1] + 0.0000001)/correction_factor);
+        input_signal[i] = 10 * log10f((input_signal[i * 2 + 0] * input_signal[i * 2 + 0] + input_signal[i * 2 + 1] * input_signal[i * 2 + 1] + 0.0000001) / correction_factor);
     }
 
     // Display power spectrum
@@ -52,21 +53,23 @@ void show_FFT(float *input_signal, const unsigned int fft_len){
 
 
 // Generate Windowed-Sinc filter coefficients
-void generate_FIR_coefficients(float *fir_coeffs, const unsigned int fir_len, const float ft){
+void generate_FIR_coefficients(float *fir_coeffs, const unsigned int fir_len, const float ft)
+{
 
     // Even or odd length of the FIR filter
-    const bool is_odd = (fir_len % 2) ? (true) : (false);                
+    const bool is_odd = (fir_len % 2) ? (true) : (false);
     const float fir_order = (float)(fir_len - 1);
 
     // Window coefficients
-    float *fir_window = (float*)malloc(fir_len * sizeof(float));
+    float *fir_window = (float *)malloc(fir_len * sizeof(float));
     dsps_wind_blackman_f32(fir_window, fir_len);
 
-    for(int i = 0; i < fir_len; i++){
-        if((i == fir_order / 2) && (is_odd))
+    for (int i = 0; i < fir_len; i++) {
+        if ((i == fir_order / 2) && (is_odd)) {
             fir_coeffs[i] = 2 * ft;
-        else
+        } else {
             fir_coeffs[i] = sinf((2 * M_PI * ft * (i - fir_order / 2))) / (M_PI * (i - fir_order / 2));
+        }
 
         fir_coeffs[i] *= fir_window[i];
     }
@@ -80,11 +83,11 @@ static __attribute__((aligned(16))) float delay_line[FIR_COEFFS_LEN];
 
 void app_main()
 {
-    const int32_t fir_len = FIR_COEFFS_LEN;                            
+    const int32_t fir_len = FIR_COEFFS_LEN;
     const float fir_ft = 0.5 / DECIMATION;                                  // Transition frequency of the FIR filter
     const int32_t N = N_SAMPLES;                                            // Number of input samples
     const int32_t fir_decim = DECIMATION;                                   // FIR filter decimation
-    const int32_t N_buff = FIR_BUFF_OUT_LEN;                                // Total length of samples with ignored 
+    const int32_t N_buff = FIR_BUFF_OUT_LEN;                                // Total length of samples with ignored
 
     fir_f32_t fir1;
     esp_err_t ret;
@@ -94,35 +97,33 @@ void app_main()
 
     ESP_LOGI(TAG, "Start Example.");
 
-    // If a user doesn't care about buffer allocation, the default 
+    // If a user doesn't care about buffer allocation, the default
     // initialization could be used as shown here:
     ret = dsps_fft2r_init_fc32(NULL, CONFIG_DSP_MAX_FFT_SIZE);
-    if (ret  != ESP_OK)
-    {
+    if (ret  != ESP_OK) {
         ESP_LOGE(TAG, "Not possible to initialize FFT. Error = %i", ret);
         return;
     }
 
     ret = dsps_fft4r_init_fc32(NULL, CONFIG_DSP_MAX_FFT_SIZE);
-    if (ret  != ESP_OK)
-    {
+    if (ret  != ESP_OK) {
         ESP_LOGE(TAG, "Not possible to initialize FFT. Error = %i", ret);
         return;
     }
 
     // Generate input signal as 2 sine waves
-    float *tone_1 = (float*)malloc(N_buff * sizeof(float));
-    float *tone_2 = (float*)malloc(N_buff * sizeof(float));
+    float *tone_1 = (float *)malloc(N_buff * sizeof(float));
+    float *tone_2 = (float *)malloc(N_buff * sizeof(float));
 
     dsps_tone_gen_f32(tone_1, N_buff, 5, 0.2, 0);
     dsps_tone_gen_f32(tone_2, N_buff, 5, 0.4, 0);
 
     // Generate windowing coefficients
-    float *window = (float*)malloc(N * sizeof(float));
+    float *window = (float *)malloc(N * sizeof(float));
     dsps_wind_blackman_harris_f32(window, N);
 
     // Add the two waves together
-    for (int i = 0 ; i < N_buff ; i++){
+    for (int i = 0 ; i < N_buff ; i++) {
         tone_combined[i] = tone_1[i] + tone_2[i];
     }
 
@@ -130,7 +131,7 @@ void app_main()
     free(tone_2);
 
     // Apply the windowing
-    for (int i = 0 ; i < N ; i++){
+    for (int i = 0 ; i < N ; i++) {
         window[i] *= tone_combined[i];
     }
 
@@ -142,16 +143,16 @@ void app_main()
     ESP_LOGI(TAG, "\n");
 
     // Filter the input signal with FIR filter
-    float *fir_out = (float*)malloc( N_buff * sizeof(float));
+    float *fir_out = (float *)malloc( N_buff * sizeof(float));
     dsps_fird_init_f32(&fir1, fir_coeffs, delay_line, fir_len, fir_decim);
 
     uint32_t start_b = dsp_get_cpu_cycle_count();
-    dsps_fird_f32(&fir1, tone_combined, fir_out, N_buff/fir_decim);
+    dsps_fird_f32(&fir1, tone_combined, fir_out, N_buff / fir_decim);
     uint32_t end_b = dsp_get_cpu_cycle_count();
 
     // Generate windowing coefficients and apply the windowing
     dsps_wind_blackman_harris_f32(window, (N / fir_decim));
-    for (int i = 0 ; i < N / fir_decim ; i++){
+    for (int i = 0 ; i < N / fir_decim ; i++) {
         window[i] *= fir_out[fir_out_offset + i];
     }
 
@@ -162,5 +163,5 @@ void app_main()
 
     free(fir_out);
     free(window);
-    
+
 }

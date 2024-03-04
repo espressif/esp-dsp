@@ -63,8 +63,7 @@ TEST_CASE("dsps_fir_f32_aexx functionality", "[dsps]")
     err = dsps_fir_f32(&fir1, x, y, len);
     TEST_ESP_OK(err);
 
-    for (int i=0 ; i< fir_len*3 ; i++)
-    {
+    for (int i = 0 ; i < fir_len * 3 ; i++) {
         ESP_LOGD(TAG, "fir[%i] = %f", i, y[i]);
     }
 

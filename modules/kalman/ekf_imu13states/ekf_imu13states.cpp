@@ -80,7 +80,7 @@ void ekf_imu13states::LinearizeFG(dspm::Mat &x, float *u)
     this->G *= 0;
 
     // dqdot / dq - skey matrix
-    F.Copy(0.5*ekf::SkewSym4x4(w), 0, 0);
+    F.Copy(0.5 * ekf::SkewSym4x4(w), 0, 0);
 
     // dqdot/dvector
     dspm::Mat dq = -0.5 * qProduct(x.data);

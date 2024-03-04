@@ -52,7 +52,7 @@ TEST_CASE("dspm_mult_ex_f32_ansi functionality", "[dspm]")
 
                             // fill A B matrices with numbers
                             // fill C matrix with ones
-                            for(int i = 0; i < A.length; i++) {
+                            for (int i = 0; i < A.length; i++) {
                                 A.data[i] = i + 1;
                             }
                             for (int i = 0; i < B.length; i++) {
@@ -64,43 +64,43 @@ TEST_CASE("dspm_mult_ex_f32_ansi functionality", "[dspm]")
                             // Matrices B and C are sub-matrices - the data are defined as a pointer to an external buffer
                             // Matrix B is a matrix - the data are copied into the B matrix
                             switch (var) {
-                                case 0: {
-                                    A_sub.CopyHead(A.getROI(A_roi_rect));    // A sub-matrix - NO DATA CPY
-                                    B_sub.CopyHead(B.getROI(B_roi_rect));    // B sub-matrix - NO DATA CPY
-                                    C_sub.CopyHead(C.getROI(C_roi_rect));    // C sub-matrix - NO DATA CPY
-                                } break;
-                                case 1: {
-                                    A_sub = A.Get(A_roi_rect);               // A matrix     - DATA CPY
-                                    B_sub.CopyHead(B.getROI(B_roi_rect));    // B sub_matirx - NO DATA CPY
-                                    C_sub.CopyHead(C.getROI(C_roi_rect));    // C sub_matirx - NO DATA CPY
-                                } break;
-                                case 2: {
-                                    A_sub.CopyHead(A.getROI(A_roi_rect));    // A sub-matrix - NO DATA CPY
-                                    B_sub = B.Get(B_roi_rect);               // B matrix     - DATA CPY
-                                    C_sub.CopyHead(C.getROI(C_roi_rect));    // C sub-matrix - NO DATA CPY
-                                } break;
-                                case 3: {
-                                    A_sub = A.Get(A_roi_rect);               // A matrix     - DATA CPY
-                                    B_sub = B.Get(B_roi_rect);               // B matrix     - DATA CPY
-                                    C_sub.CopyHead(C.getROI(C_roi_rect));    // C sub-matrix - NO DATA CPY
-                                } break;
-                                case 4: {
-                                    A_sub.CopyHead(A.getROI(A_roi_rect));    // A sub-matrix - NO DATA CPY
-                                    B_sub.CopyHead(B.getROI(B_roi_rect));    // B sub-matrix - NO DATA CPY
-                                    C_sub = C.Get(C_roi_rect);               // C matrix     - DATA CPY
-                                } break;
-                                case 5: {
-                                    A_sub.CopyHead(A.getROI(A_roi_rect));    // A sub-matrix - NO DATA CPY
-                                    B_sub = B.Get(B_roi_rect);               // B matrix     - DATA CPY
-                                    C_sub = C.Get(C_roi_rect);               // C matrix     - DATA CPY
-                                } break;
-                                case 6: {
-                                    A_sub = A.Get(A_roi_rect);               // A matrix     - DATA CPY
-                                    B_sub.CopyHead(B.getROI(B_roi_rect));    // B sub-matrix - NO DATA CPY
-                                    C_sub = C.Get(C_roi_rect);               // C matrix     - DATA CPY
-                                } break;
-                                default:
-                                    break;
+                            case 0: {
+                                A_sub.CopyHead(A.getROI(A_roi_rect));    // A sub-matrix - NO DATA CPY
+                                B_sub.CopyHead(B.getROI(B_roi_rect));    // B sub-matrix - NO DATA CPY
+                                C_sub.CopyHead(C.getROI(C_roi_rect));    // C sub-matrix - NO DATA CPY
+                            } break;
+                            case 1: {
+                                A_sub = A.Get(A_roi_rect);               // A matrix     - DATA CPY
+                                B_sub.CopyHead(B.getROI(B_roi_rect));    // B sub_matirx - NO DATA CPY
+                                C_sub.CopyHead(C.getROI(C_roi_rect));    // C sub_matirx - NO DATA CPY
+                            } break;
+                            case 2: {
+                                A_sub.CopyHead(A.getROI(A_roi_rect));    // A sub-matrix - NO DATA CPY
+                                B_sub = B.Get(B_roi_rect);               // B matrix     - DATA CPY
+                                C_sub.CopyHead(C.getROI(C_roi_rect));    // C sub-matrix - NO DATA CPY
+                            } break;
+                            case 3: {
+                                A_sub = A.Get(A_roi_rect);               // A matrix     - DATA CPY
+                                B_sub = B.Get(B_roi_rect);               // B matrix     - DATA CPY
+                                C_sub.CopyHead(C.getROI(C_roi_rect));    // C sub-matrix - NO DATA CPY
+                            } break;
+                            case 4: {
+                                A_sub.CopyHead(A.getROI(A_roi_rect));    // A sub-matrix - NO DATA CPY
+                                B_sub.CopyHead(B.getROI(B_roi_rect));    // B sub-matrix - NO DATA CPY
+                                C_sub = C.Get(C_roi_rect);               // C matrix     - DATA CPY
+                            } break;
+                            case 5: {
+                                A_sub.CopyHead(A.getROI(A_roi_rect));    // A sub-matrix - NO DATA CPY
+                                B_sub = B.Get(B_roi_rect);               // B matrix     - DATA CPY
+                                C_sub = C.Get(C_roi_rect);               // C matrix     - DATA CPY
+                            } break;
+                            case 6: {
+                                A_sub = A.Get(A_roi_rect);               // A matrix     - DATA CPY
+                                B_sub.CopyHead(B.getROI(B_roi_rect));    // B sub-matrix - NO DATA CPY
+                                C_sub = C.Get(C_roi_rect);               // C matrix     - DATA CPY
+                            } break;
+                            default:
+                                break;
                             }
 
                             // create A B check sub-matrices, actual matrix data are COPIED
@@ -127,7 +127,7 @@ TEST_CASE("dspm_mult_ex_f32_ansi functionality", "[dspm]")
                                 dspm::Mat C_area_check = dspm::Mat::ones(m + (2 * start_row), k + (2 * start_col));
                                 test_assert_equal_mat_mat(C_sub_check, C_sub, message);
                                 test_assert_check_area_mat_mat(C_area_check, C_sub, start_row, start_col, message);
-                            // C is a matrix
+                                // C is a matrix
                             } else {
                                 test_assert_equal_mat_mat(C_sub_check, C_sub, message);
                             }

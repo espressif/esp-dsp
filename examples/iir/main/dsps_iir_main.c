@@ -40,18 +40,17 @@ float d[N_SAMPLES];
 __attribute__((aligned(16)))
 float y[N_SAMPLES];
 __attribute__((aligned(16)))
-float y_cf[N_SAMPLES*2];
+float y_cf[N_SAMPLES * 2];
 
 // Function shows result of IIR filter
 void ShowIIRfilter(float freq, float qFactor)
 {
     esp_err_t ret = ESP_OK;
     float coeffs_lpf[5];
-    float w_lpf[5] = {0,0};
+    float w_lpf[5] = {0, 0};
     // Calculate iir filter coefficients
     ret = dsps_biquad_gen_lpf_f32(coeffs_lpf, freq, qFactor);
-    if (ret  != ESP_OK)
-    {
+    if (ret  != ESP_OK) {
         ESP_LOGE(TAG, "Operation error = %i", ret);
         return;
     }
@@ -59,8 +58,7 @@ void ShowIIRfilter(float freq, float qFactor)
     unsigned int start_b = dsp_get_cpu_cycle_count();
     ret = dsps_biquad_f32(d, y, N, coeffs_lpf, w_lpf);
     unsigned int end_b = dsp_get_cpu_cycle_count();
-    if (ret  != ESP_OK)
-    {
+    if (ret  != ESP_OK) {
         ESP_LOGE(TAG, "Operation error = %i", ret);
         return;
     }
@@ -68,24 +66,23 @@ void ShowIIRfilter(float freq, float qFactor)
     // Show result as a plot
     ESP_LOGI(TAG, "Impulse response of IIR filter with F=%f, qFactor=%f", freq, qFactor);
     dsps_view(y, 128, 64, 10,  -1, 1, '-');
-    
+
     // Show result as frequency responce on the plot
-    for (int i=0 ; i< N ; i++)
-    {
-        y_cf[i*2 + 0] = y[i];
-        y_cf[i*2 + 1] = 0;
+    for (int i = 0 ; i < N ; i++) {
+        y_cf[i * 2 + 0] = y[i];
+        y_cf[i * 2 + 1] = 0;
     }
 
     // We making FFT transform
     dsps_fft2r_fc32_ansi(y_cf, N);
-    // Bit reverse 
+    // Bit reverse
     dsps_bit_rev_fc32_ansi(y_cf, N);
     // Calculating power of spectrum in dB
-    for (int i = 0 ; i < N/2 ; i++) {
-        y_cf[i] = 10 * log10f((y_cf[i * 2 + 0] * y_cf[i * 2 + 0] + y_cf[i * 2 + 1] * y_cf[i * 2 + 1])/N);
+    for (int i = 0 ; i < N / 2 ; i++) {
+        y_cf[i] = 10 * log10f((y_cf[i * 2 + 0] * y_cf[i * 2 + 0] + y_cf[i * 2 + 1] * y_cf[i * 2 + 1]) / N);
     }
     // Show power spectrum in 64x10 window from -100 to 0 dB from 0..N/2 samples
-    dsps_view(y_cf, N/2, 64, 10,  -100, 0, '-');
+    dsps_view(y_cf, N / 2, 64, 10,  -100, 0, '-');
     ESP_LOGI(TAG, "IIR for %i samples take %i cycles", N, end_b - start_b);
 }
 
@@ -93,11 +90,10 @@ void app_main()
 {
     esp_err_t ret;
     ESP_LOGI(TAG, "Start Example.");
-    // If user don't care about buffer allocation, the defalt 
+    // If user don't care about buffer allocation, the defalt
     // initialization could be used as shown here:
     ret = dsps_fft2r_init_fc32(NULL, CONFIG_DSP_MAX_FFT_SIZE);
-    if (ret  != ESP_OK)
-    {
+    if (ret  != ESP_OK) {
         ESP_LOGE(TAG, "Not possible to initialize FFT. Error = %i", ret);
         return;
     }

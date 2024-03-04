@@ -33,12 +33,11 @@ TEST_CASE("dspi_dotprod_off_s8_aexx functionality", "[dspi]")
     int8_t *y = (int8_t *)memalign(16, (max_N) * sizeof(int8_t));
     int8_t *z = (int8_t *)memalign(16, max_N * sizeof(int8_t));
 
-   
+
     printf("Data: x=%8.8"PRIx32", y=%8.8"PRIx32", z=%8.8"PRIx32" \n", (uint32_t)x, (uint32_t)y, (uint32_t)z);
-    for (size_t i = 0; i < max_N; i++)
-    {
-        x[i] = i%7;
-        y[i] = i%7;
+    for (size_t i = 0; i < max_N; i++) {
+        x[i] = i % 7;
+        y[i] = i % 7;
         z[i] = 0;
     }
     {

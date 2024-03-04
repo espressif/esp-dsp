@@ -29,18 +29,18 @@ void error_msg_handler(cplx_sig_t *cplx_signal, esp_err_t status)
         cplx_gen_free(cplx_signal);
 
         switch (status) {
-            case ESP_ERR_DSP_INVALID_LENGTH:
-                TEST_ASSERT_MESSAGE(false, "LUT table has invalid length, must be power of 2");
-                break;
-            case ESP_ERR_DSP_PARAM_OUTOFRANGE:
-                TEST_ASSERT_MESSAGE(false, "LUT table length must be in a range from 256 to 8192");
-                break;
-            case ESP_ERR_DSP_INVALID_PARAM:
-                TEST_ASSERT_MESSAGE(false, "Frequency and initial phase must be in a range from -1 to 1");
-                break;
-            default:
-                TEST_ASSERT_MESSAGE(false, "Unspecified error");
-                break;
+        case ESP_ERR_DSP_INVALID_LENGTH:
+            TEST_ASSERT_MESSAGE(false, "LUT table has invalid length, must be power of 2");
+            break;
+        case ESP_ERR_DSP_PARAM_OUTOFRANGE:
+            TEST_ASSERT_MESSAGE(false, "LUT table length must be in a range from 256 to 8192");
+            break;
+        case ESP_ERR_DSP_INVALID_PARAM:
+            TEST_ASSERT_MESSAGE(false, "Frequency and initial phase must be in a range from -1 to 1");
+            break;
+        default:
+            TEST_ASSERT_MESSAGE(false, "Unspecified error");
+            break;
         }
     }
 }
@@ -104,7 +104,7 @@ TEST_CASE("cplx_gen_benchmark_test", "[dsps]")
     const int32_t lut_len = 256;
     const float frequency = 0.02;
     const float init_phase = 0.9;
-    const int repeat_count = 4; 
+    const int repeat_count = 4;
 
     cplx_sig_t cplx_signal_float, cplx_signal_fixed;
 
@@ -136,10 +136,10 @@ TEST_CASE("cplx_gen_benchmark_test", "[dsps]")
         const float cycles_per_lut_sample_float = total_float / (float)(out_len * repeat_count);
         const float cycles_per_lut_sample_fixed = total_fixed / (float)(out_len * repeat_count);
 
-        ESP_LOGI(TAG, "Float : %.2f total cycles, %.2f cycles per sample, for %"PRId32" LUT samples, %"PRId32" output array length", 
+        ESP_LOGI(TAG, "Float : %.2f total cycles, %.2f cycles per sample, for %"PRId32" LUT samples, %"PRId32" output array length",
                  cycles_float, cycles_per_lut_sample_float, lut_len, out_len);
 
-        ESP_LOGI(TAG, "Fixed : %.2f total cycles, %.2f cycles per sample, for %"PRId32" LUT samples, %"PRId32" output array length \n", 
+        ESP_LOGI(TAG, "Fixed : %.2f total cycles, %.2f cycles per sample, for %"PRId32" LUT samples, %"PRId32" output array length \n",
                  cycles_fixed, cycles_per_lut_sample_fixed, lut_len, out_len);
 
         out_len *= 2;
@@ -156,7 +156,7 @@ TEST_CASE("cplx_gen_noise_SNR_test", "[dsps]")
 {
     const int32_t out_len = 2048;
     const int32_t lut_len = 8192;
-    const int32_t n_fft = out_len *2;       // * 2 (real and imaginary)
+    const int32_t n_fft = out_len * 2;      // * 2 (real and imaginary)
     const float frequency = 0.01;
     const float init_phase = 0.0;
     const float real_ampl = 0.5;
@@ -195,8 +195,8 @@ TEST_CASE("cplx_gen_noise_SNR_test", "[dsps]")
     // Convert the FFT spectrum from amplitude to watts, find the max value and its position
     float max_val_1 = -1000000, max_val_2 = -1000000;
     int max_pos_1 = 0, max_pos_2 = 0, spur_pos_1 = 0, spur_pos_2 = 0;
-    for (int i = 0 ; i < n_fft/2 ; i++) {
-        out_array_float[i] = (out_array_float[i * 2 + 0] * out_array_float[i * 2 + 0] + out_array_float[i * 2 + 1] * out_array_float[i * 2 + 1])/(n_fft * 3);
+    for (int i = 0 ; i < n_fft / 2 ; i++) {
+        out_array_float[i] = (out_array_float[i * 2 + 0] * out_array_float[i * 2 + 0] + out_array_float[i * 2 + 1] * out_array_float[i * 2 + 1]) / (n_fft * 3);
         if (i < n_fft / 4) {
             if (out_array_float[i] > max_val_1) {
                 max_val_1 = out_array_float[i];
@@ -213,8 +213,8 @@ TEST_CASE("cplx_gen_noise_SNR_test", "[dsps]")
     // Calculate the power of the signal and noise of the spectrum and convert the spectrum to dB
     float signal_pow_1 = 0, signal_pow_2 = 0, noise_pow_1 = 0, noise_pow_2 = 0;
     float spur_1 = -1000000, spur_2 = -1000000;
-    for (int i = 0 ; i < n_fft/2 ; i++) {
-        if (i < n_fft/4) {
+    for (int i = 0 ; i < n_fft / 2 ; i++) {
+        if (i < n_fft / 4) {
             if ((i >= max_pos_1 - LEAKAGE_BINS) && (i <= max_pos_1 + LEAKAGE_BINS)) {
                 signal_pow_1 += out_array_float[i];
             } else {
@@ -239,8 +239,8 @@ TEST_CASE("cplx_gen_noise_SNR_test", "[dsps]")
     }
 
     // Convert the signal power and noise power from watts to dB and calculate SNR and SFDR
-    const float snr_1 = 10 * log10f(signal_pow_1/noise_pow_1);
-    const float snr_2 = 10 * log10f(signal_pow_2/noise_pow_2);
+    const float snr_1 = 10 * log10f(signal_pow_1 / noise_pow_1);
+    const float snr_2 = 10 * log10f(signal_pow_2 / noise_pow_2);
     noise_pow_1 = 10 * log10f(noise_pow_1);
     noise_pow_2 = 10 * log10f(noise_pow_2);
     signal_pow_1 = 10 * log10f(signal_pow_1);
@@ -249,11 +249,11 @@ TEST_CASE("cplx_gen_noise_SNR_test", "[dsps]")
     const float sfdr_2 = out_array_float[max_pos_2] - out_array_float[spur_pos_2];
 
     ESP_LOGI(TAG, "\nSignal Power: \t%f\nNoise Power: \t%f\nSNR: \t\t%f \nSFDR: \t\t%f", signal_pow_1, noise_pow_1, snr_1, sfdr_1);
-    dsps_view(out_array_float, n_fft/4, 128, 16,  -140, 40, '|');
+    dsps_view(out_array_float, n_fft / 4, 128, 16,  -140, 40, '|');
     putchar('\n');
 
     ESP_LOGI(TAG, "\nSignal Power: \t%f\nNoise Power: \t%f\nSNR: \t\t%f \nSFDR: \t\t%f", signal_pow_2, noise_pow_2, snr_2, sfdr_2);
-    dsps_view(out_array_float + (n_fft/4), n_fft/4, 128, 16,  -140, 40, '|');
+    dsps_view(out_array_float + (n_fft / 4), n_fft / 4, 128, 16,  -140, 40, '|');
 
     free(out_array_float);
     cplx_gen_free(&cplx_signal_float);

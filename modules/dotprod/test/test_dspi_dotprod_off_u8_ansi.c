@@ -34,10 +34,9 @@ TEST_CASE("dspi_dotprod_off_u8_ansi functionality", "[dspi]")
     uint8_t *x = (uint8_t *)malloc(max_N * sizeof(uint8_t));
     uint8_t *y = (uint8_t *)malloc(max_N * sizeof(uint8_t));
     uint8_t *z = (uint8_t *)malloc(max_N * sizeof(uint8_t));
-    for (size_t i = 0; i < 256; i++)
-    {
-        x[i] = i%8 + 20;
-        y[i] = i%8 + 20;
+    for (size_t i = 0; i < 256; i++) {
+        x[i] = i % 8 + 20;
+        y[i] = i % 8 + 20;
         z[i] = 0;
     }
     image2d_t image1 = {x, 2, 2, 8, 8}; // Image 8x8

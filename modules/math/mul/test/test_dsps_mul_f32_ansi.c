@@ -29,7 +29,7 @@ TEST_CASE("dsps_mul_f32_ansi functionality", "[dsps]")
     float y[n];
     for (int i = 0 ; i < n ; i++) {
         x[i] = i;
-        y[i] = i*i;
+        y[i] = i * i;
     }
     dsps_mul_f32_ansi(x, x, x, n, 1, 1, 1);
     for (int i = 0 ; i < n ; i++) {
@@ -46,7 +46,7 @@ TEST_CASE("dsps_mul_f32_ae32 functionality", "[dsps]")
     float y[n];
     for (int i = 0 ; i < n ; i++) {
         x[i] = i;
-        y[i] = i*i;
+        y[i] = i * i;
     }
     dsps_mul_f32_ae32(x, x, x, n, 1, 1, 1);
     for (int i = 0 ; i < n ; i++) {
@@ -54,7 +54,7 @@ TEST_CASE("dsps_mul_f32_ae32 functionality", "[dsps]")
             TEST_ASSERT_EQUAL(x[i], y[i]);
         }
     }
-    
+
     int repeat_count = 1;
 
     dsps_mul_f32_ae32(x, x, x, n, 1, 1, 1);

@@ -30,11 +30,11 @@ TEST_CASE("dsps_mul_s8_ansi functionality", "[dsps]")
     int32_t temp;
     int shift = 0;
     for (int i = 0 ; i < n ; i++) {
-        x[i] = i - n/2;
-        temp = ((int32_t)x[i] * (int32_t)x[i])>>shift;
+        x[i] = i - n / 2;
+        temp = ((int32_t)x[i] * (int32_t)x[i]) >> shift;
         y[i] = temp;
     }
-    
+
     dsps_mul_s8_ansi(x, x, x, n, 1, 1, 1, 0);
     for (int i = 0 ; i < n ; i++) {
         if (x[i] != y[i]) {
@@ -48,13 +48,13 @@ TEST_CASE("dsps_mul_s8_ansi benchmark", "[dsps]")
     const int n = 256;
     int8_t x[n];
     for (int i = 0 ; i < n ; i++) {
-        x[i] = i<<4;
+        x[i] = i << 4;
     }
 
     unsigned int start_b = xthal_get_ccount();
     dsps_mul_s8_ansi(x, x, x, n, 1, 1, 1, 0);
     unsigned int end_b = xthal_get_ccount();
-    
+
     float cycles = end_b - start_b;
     ESP_LOGI(TAG, "dsps_mul_s8_ansi - %f cycles per sample \n", cycles);
 }

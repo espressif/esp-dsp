@@ -14,24 +14,30 @@
 
 #include "dspi_dotprod.h"
 
-esp_err_t dspi_dotprod_off_u8_ansi(image2d_t* in_image, image2d_t* filter, uint8_t *out_value, int count_x, int count_y, int shift, uint8_t offset)
+esp_err_t dspi_dotprod_off_u8_ansi(image2d_t *in_image, image2d_t *filter, uint8_t *out_value, int count_x, int count_y, int shift, uint8_t offset)
 {
-    if (in_image->step_x*count_x > in_image->stride_x) return ESP_ERR_DSP_PARAM_OUTOFRANGE;
-    if (in_image->step_y*count_y > in_image->stride_y) return ESP_ERR_DSP_PARAM_OUTOFRANGE;
-    if (filter->step_x*count_x > filter->stride_x) return ESP_ERR_DSP_PARAM_OUTOFRANGE;
-    if (filter->step_y*count_y > filter->stride_y) return ESP_ERR_DSP_PARAM_OUTOFRANGE;
+    if (in_image->step_x * count_x > in_image->stride_x) {
+        return ESP_ERR_DSP_PARAM_OUTOFRANGE;
+    }
+    if (in_image->step_y * count_y > in_image->stride_y) {
+        return ESP_ERR_DSP_PARAM_OUTOFRANGE;
+    }
+    if (filter->step_x * count_x > filter->stride_x) {
+        return ESP_ERR_DSP_PARAM_OUTOFRANGE;
+    }
+    if (filter->step_y * count_y > filter->stride_y) {
+        return ESP_ERR_DSP_PARAM_OUTOFRANGE;
+    }
 
-    uint8_t* i_data =  (uint8_t*)in_image->data;
-    uint8_t* f_data =  (uint8_t*)filter->data;
-    int i_step = in_image->stride_x*in_image->step_y;
-    int f_step = filter->stride_x*filter->step_y;
+    uint8_t *i_data =  (uint8_t *)in_image->data;
+    uint8_t *f_data =  (uint8_t *)filter->data;
+    int i_step = in_image->stride_x * in_image->step_y;
+    int f_step = filter->stride_x * filter->step_y;
 
     int32_t acc = 0;
-    for (int y = 0; y < count_y; y++)
-    {
-        for (int x = 0; x < count_x; x++)
-        {
-            acc += (int16_t)i_data[in_image->step_x * x]*((int16_t)f_data[filter->step_x * x] + (int16_t)offset);
+    for (int y = 0; y < count_y; y++) {
+        for (int x = 0; x < count_x; x++) {
+            acc += (int16_t)i_data[in_image->step_x * x] * ((int16_t)f_data[filter->step_x * x] + (int16_t)offset);
         }
         i_data += i_step;
         f_data += f_step;
@@ -41,4 +47,3 @@ esp_err_t dspi_dotprod_off_u8_ansi(image2d_t* in_image, image2d_t* filter, uint8
     *out_value = acc;
     return ESP_OK;
 }
-

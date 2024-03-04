@@ -60,11 +60,9 @@ TEST_CASE("dspm_mult_s16_ansi functionality", "[dspm]")
     }
     dspm_mult_s16_ansi(A_ptr, B_ptr, C_ptr, m, n, k, shift);
 
-    for (int i=0 ; i< m ; i++)
-    {
-        for (int j=0 ; j< k ; j++)
-        {
-            ESP_LOGD(TAG, "[%i][%i] calc=%i, expected =%i",i,j, C[i][j], C_compare[i][j]);
+    for (int i = 0 ; i < m ; i++) {
+        for (int j = 0 ; j < k ; j++) {
+            ESP_LOGD(TAG, "[%i][%i] calc=%i, expected =%i", i, j, C[i][j], C_compare[i][j]);
         }
     }
     // Compare and check results

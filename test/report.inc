@@ -10,7 +10,7 @@
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
-// limitations under the License. 
+// limitations under the License.
 
 #pragma once
 
@@ -39,34 +39,34 @@ static char report_double_line_str[] = "========================================
 #define REPORT_COL2_WIDTH 10
 #define REPORT_COL3_WIDTH 10
 
-static void report_text_line_2col(const char* col1, const char* col2)
+static void report_text_line_2col(const char *col1, const char *col2)
 {
     printf("| %-*.*s| %-*.*s|\n",
-        REPORT_COL1_WIDTH - 1, REPORT_COL1_WIDTH - 1, col1,
-        REPORT_COL2_WIDTH + REPORT_COL3_WIDTH, REPORT_COL2_WIDTH + REPORT_COL3_WIDTH, col2);
+           REPORT_COL1_WIDTH - 1, REPORT_COL1_WIDTH - 1, col1,
+           REPORT_COL2_WIDTH + REPORT_COL3_WIDTH, REPORT_COL2_WIDTH + REPORT_COL3_WIDTH, col2);
 }
-static void report_text_line(const char* col1, const char* col2, const char* col3)
+static void report_text_line(const char *col1, const char *col2, const char *col3)
 {
     printf("| %-*.*s| %-*.*s| %-*.*s|\n",
-        REPORT_COL1_WIDTH - 1, REPORT_COL1_WIDTH - 1, col1,
-        REPORT_COL2_WIDTH - 1, REPORT_COL2_WIDTH - 1, col2,
-        REPORT_COL3_WIDTH - 1, REPORT_COL3_WIDTH - 1, col3);
+           REPORT_COL1_WIDTH - 1, REPORT_COL1_WIDTH - 1, col1,
+           REPORT_COL2_WIDTH - 1, REPORT_COL2_WIDTH - 1, col2,
+           REPORT_COL3_WIDTH - 1, REPORT_COL3_WIDTH - 1, col3);
 }
 
-static void report_value_line(const char* col1, uint32_t col2, uint32_t col3)
+static void report_value_line(const char *col1, uint32_t col2, uint32_t col3)
 {
     printf("| %-*.*s|%*"PRIu32" |%*"PRIu32" |\n",
-        REPORT_COL1_WIDTH - 1, REPORT_COL1_WIDTH - 1, col1,
-        REPORT_COL2_WIDTH - 1, col2,
-        REPORT_COL3_WIDTH - 1, col3);
+           REPORT_COL1_WIDTH - 1, REPORT_COL1_WIDTH - 1, col1,
+           REPORT_COL2_WIDTH - 1, col2,
+           REPORT_COL3_WIDTH - 1, col3);
 }
 
-static void report_separator(const char* fill)
+static void report_separator(const char *fill)
 {
     printf("+%.*s+%.*s+%.*s+\n",
-        REPORT_COL1_WIDTH, fill,
-        REPORT_COL2_WIDTH, fill,
-        REPORT_COL3_WIDTH, fill);
+           REPORT_COL1_WIDTH, fill,
+           REPORT_COL2_WIDTH, fill,
+           REPORT_COL3_WIDTH, fill);
 }
 #endif // USE_FULL_REPORT
 

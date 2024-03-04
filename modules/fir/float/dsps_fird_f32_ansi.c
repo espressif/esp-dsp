@@ -18,7 +18,7 @@ int dsps_fird_f32_ansi(fir_f32_t *fir, const float *input, float *output, int le
 {
     int result = 0;
     for (int i = 0; i < len ; i++) {
-        for (int k=0 ; k < fir->decim ; k++){
+        for (int k = 0 ; k < fir->decim ; k++) {
             fir->delay[fir->pos++] = *input++;
             if (fir->pos >= fir->N) {
                 fir->pos = 0;

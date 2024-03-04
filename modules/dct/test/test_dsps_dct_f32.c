@@ -28,13 +28,13 @@ static const char *TAG = "dsps_dct";
 
 TEST_CASE("dsps_dct_f32 functionality", "[dsps]")
 {
-    float* data = calloc(1024*2, sizeof(float));
+    float *data = calloc(1024 * 2, sizeof(float));
     TEST_ASSERT_NOT_NULL(data);
 
-    float* data_ref = calloc(1024*2, sizeof(float));
+    float *data_ref = calloc(1024 * 2, sizeof(float));
     TEST_ASSERT_NOT_NULL(data_ref);
 
-    float* data_fft = calloc(1024*2, sizeof(float));
+    float *data_fft = calloc(1024 * 2, sizeof(float));
     TEST_ASSERT_NOT_NULL(data_fft);
 
     int N = 64;
@@ -60,9 +60,8 @@ TEST_CASE("dsps_dct_f32 functionality", "[dsps]")
     float abs_tol = 1e-5;
     for (size_t i = 1; i < N; i++) {
         ESP_LOGD(TAG, "data[%i] = %f, ref_data = %f\n", i, data[i], data_ref[i]*N / 2);
-        float error = fabs(data[i] - data_ref[i]* N / 2)/(N / 2);
-        if (error > abs_tol) 
-        {
+        float error = fabs(data[i] - data_ref[i] * N / 2) / (N / 2);
+        if (error > abs_tol) {
             ESP_LOGE(TAG, "data[%i] = %f, ref_data = %f, error= %f\n", i, data[i], data_ref[i]*N / 2, error);
             TEST_ASSERT_MESSAGE (false, "Result out of range!\n");
         }
@@ -79,13 +78,13 @@ TEST_CASE("dsps_dct_f32 functionality Fast DCT", "[dsps]")
     esp_err_t ret = dsps_fft2r_init_fc32(NULL, CONFIG_DSP_MAX_FFT_SIZE);
     TEST_ESP_OK(ret);
 
-    float* data =  (float*)memalign(16, sizeof(float) * 1024*2);
+    float *data =  (float *)memalign(16, sizeof(float) * 1024 * 2);
     TEST_ASSERT_NOT_NULL(data);
 
-    float* data_ref =  (float*)memalign(16, sizeof(float) * 1024*2);
+    float *data_ref =  (float *)memalign(16, sizeof(float) * 1024 * 2);
     TEST_ASSERT_NOT_NULL(data_ref);
 
-    float* data_fft =  (float*)memalign(16, sizeof(float) * 1024*2);
+    float *data_fft =  (float *)memalign(16, sizeof(float) * 1024 * 2);
     TEST_ASSERT_NOT_NULL(data_fft);
 
     int N = 64;
@@ -102,12 +101,12 @@ TEST_CASE("dsps_dct_f32 functionality Fast DCT", "[dsps]")
     dsps_dct_f32_ref(data, N, &data[N]);
     ret = dsps_dct_f32(data_fft, N);
     TEST_ESP_OK(ret);
-    
+
     float abs_tol = 1e-5;
 
     for (size_t i = 0; i < N; i++) {
         ESP_LOGD(TAG, "DCT data[%i] = %2.3f, data_fft = %2.3f\n", i, data[N + i], data_fft[i]);
-        float error = fabs(data[N + i] - data_fft[i])/(N / 2);
+        float error = fabs(data[N + i] - data_fft[i]) / (N / 2);
         if (error > abs_tol) {
             ESP_LOGE(TAG, "DCT data[%i] = %f, data_fft = %f, error = %f\n", i, data[N + i], data_fft[i], error);
             TEST_ASSERT_MESSAGE (false, "Result out of range!\n");
@@ -118,7 +117,7 @@ TEST_CASE("dsps_dct_f32 functionality Fast DCT", "[dsps]")
 
     for (size_t i = 0; i < N; i++) {
         ESP_LOGD(TAG, "IDCT data[%i] = %2.3f, data_fft = %2.3f\n", i, data[i], data_fft[i] / N * 2);
-        float error = fabs(data[i] - data_fft[i] / N * 2)/(N / 2);
+        float error = fabs(data[i] - data_fft[i] / N * 2) / (N / 2);
         if (error > abs_tol) {
             ESP_LOGE(TAG, "IDCT data[%i] = %f, data_fft = %f, error = %f\n", i, data[i], data_fft[i] / N * 2, error);
             TEST_ASSERT_MESSAGE (false, "Result out of range!\n");
@@ -135,13 +134,13 @@ TEST_CASE("dsps_dct_f32 benchmark", "[dsps]")
     esp_err_t ret = dsps_fft2r_init_fc32(NULL, CONFIG_DSP_MAX_FFT_SIZE);
     TEST_ESP_OK(ret);
 
-    float* data = calloc(1024*2, sizeof(float));
+    float *data = calloc(1024 * 2, sizeof(float));
     TEST_ASSERT_NOT_NULL(data);
 
-    float* data_ref = calloc(1024*2, sizeof(float));
+    float *data_ref = calloc(1024 * 2, sizeof(float));
     TEST_ASSERT_NOT_NULL(data_ref);
 
-    float* data_fft = calloc(1024*2, sizeof(float));
+    float *data_fft = calloc(1024 * 2, sizeof(float));
     TEST_ASSERT_NOT_NULL(data_fft);
 
     int N = 64;

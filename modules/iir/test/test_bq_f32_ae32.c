@@ -26,9 +26,9 @@ static const char *TAG = "dsps_biquad_f32_ae32";
 const int bq_len = 1024;
 TEST_CASE("dsps_biquad_f32_ae32 functionality", "[dsps]")
 {
-    float* x = calloc(bq_len,sizeof(float));
-    float* y = calloc(bq_len,sizeof(float));
-    float* z = calloc(bq_len,sizeof(float));
+    float *x = calloc(bq_len, sizeof(float));
+    float *y = calloc(bq_len, sizeof(float));
+    float *z = calloc(bq_len, sizeof(float));
 
     // In the test we generate filter with cutt off frequency 0.1
     // and then filtering 0.1 and 0.3 frequencis.
@@ -56,9 +56,9 @@ TEST_CASE("dsps_biquad_f32_ae32 functionality", "[dsps]")
 
 TEST_CASE("dsps_biquad_f32_ae32 benchmark", "[dsps]")
 {
-    float* x = calloc(bq_len,sizeof(float));
-    float* y = calloc(bq_len,sizeof(float));
-    float* z = calloc(bq_len,sizeof(float));
+    float *x = calloc(bq_len, sizeof(float));
+    float *y = calloc(bq_len, sizeof(float));
+    float *z = calloc(bq_len, sizeof(float));
 
     float w1[2] = {0};
     int len = bq_len;

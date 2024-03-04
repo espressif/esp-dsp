@@ -49,7 +49,7 @@ Procedure:
     - Copy the desired length of content from the source array to the destination array using memcpy
     - Compare the content of the destination array with the content of the source array
     - Initialize the destination arrays to 0
-    - Repeat the 3 above steps for different copy lengths (especially corner conditions like copy 0, 1, 2... and N, N -1, N - 2.... bytes) 
+    - Repeat the 3 above steps for different copy lengths (especially corner conditions like copy 0, 1, 2... and N, N -1, N - 2.... bytes)
       and following arrays alignments
         - destination array 16-byte aligned, source array 16-byte aligned
         - destination array unaligned,       source array 16-byte aligned
@@ -58,7 +58,7 @@ Procedure:
     - Set the desired length of the destination array using memset
     - Compare the content of the destination array with the set constant
     - Initialize the destination arrays to 0
-    - Repeat the 3 above steps for different set lengths (especially corner conditions like copy 0, 1, 2... and N, N -1, N - 2.... bytes) 
+    - Repeat the 3 above steps for different set lengths (especially corner conditions like copy 0, 1, 2... and N, N -1, N - 2.... bytes)
       and both alignments of the destination array (16-byte aligned or unaligned)
     - Free the dynamic array
 */
@@ -88,47 +88,47 @@ TEST_CASE("dsps_memcpy_memset_aes3_functionality", "[dsps]")
     for (int i = arr_len; i < (arr_len + canary_bytes); i++) {
         ((uint8_t *)arr_dest_align)[i] = 0;
         ((uint8_t *)arr_dest_unalign)[i] = 0;
-    }    
+    }
 
     // aes3 memcpy functionality
     for (int align = 0; align < align_combinations_cpy; align++) {                   // alinged and unaligned arrays test loop
-        
+
         size_t byte_count[2] = {0, full_count - CORNERS_CPY_SET_COUNT};         // amount of bytes to be copied
-    
+
         switch (align) {
-            case 0:                             // both 16-byte aligned
-                arr_src = arr_src_align;
-                arr_dest = arr_dest_align;
-                break;
-        
-            case 1:                             // destination unaligned, source aligned
-                arr_src = arr_src_align;
-                arr_dest = arr_dest_unalign;
-                break;
+        case 0:                             // both 16-byte aligned
+            arr_src = arr_src_align;
+            arr_dest = arr_dest_align;
+            break;
 
-            case 2:                             // source unaligned, destination aligned
-                arr_src = arr_src_unalign;
-                arr_dest = arr_dest_align;
-                break;
+        case 1:                             // destination unaligned, source aligned
+            arr_src = arr_src_align;
+            arr_dest = arr_dest_unalign;
+            break;
 
-            case 3:                             // both unaligned
-                arr_src = arr_src_unalign;
-                arr_dest = arr_dest_unalign;
-                break;
+        case 2:                             // source unaligned, destination aligned
+            arr_src = arr_src_unalign;
+            arr_dest = arr_dest_align;
+            break;
 
-            default:                            // default - both aligned
-                arr_src = arr_src_align;
-                arr_dest = arr_dest_align;
-                break;
+        case 3:                             // both unaligned
+            arr_src = arr_src_unalign;
+            arr_dest = arr_dest_unalign;
+            break;
+
+        default:                            // default - both aligned
+            arr_src = arr_src_align;
+            arr_dest = arr_dest_align;
+            break;
         }
 
         for (int var = 0; var < 2; var++) {                                     // test conrner conditions
-            for (int j = 0; j < CORNERS_CPY_SET_COUNT; j++) {                   // mem_set from 1 to CORNERS_CPY_SET_COUNT 
-                                                                                //         from (full_count - CORNERS_CPY_SET_COUNT + 1) to full_count
+            for (int j = 0; j < CORNERS_CPY_SET_COUNT; j++) {                   // mem_set from 1 to CORNERS_CPY_SET_COUNT
+                //         from (full_count - CORNERS_CPY_SET_COUNT + 1) to full_count
                 for (int i = 0; i < full_count; i++) {                          // Destination array initializing
                     ((uint8_t *)arr_dest)[i] = 0;
                 }
-    
+
                 dsps_memcpy((void *)arr_dest, (void *)arr_src, ++byte_count[var]);
 
                 TEST_ASSERT_EQUAL_UINT8_ARRAY(arr_src, arr_dest, byte_count[var]);
@@ -144,16 +144,19 @@ TEST_CASE("dsps_memcpy_memset_aes3_functionality", "[dsps]")
     for (int align = 0; align < align_combinations_set; align++ ) {             // alinged and unaligned arrays test loop
 
         size_t byte_count[2] = {0, full_count - CORNERS_CPY_SET_COUNT};         // amount of bytes to be copied
-        if(!align)  arr_dest = arr_dest_align;
-        else        arr_dest = arr_dest_unalign;
+        if (!align) {
+            arr_dest = arr_dest_align;
+        } else {
+            arr_dest = arr_dest_unalign;
+        }
 
         for (int var = 0; var < 2; var++) {                                     // test conrner conditions
-            for (int j = 0; j < CORNERS_CPY_SET_COUNT; j++) {                   // mem_set from 1 to CORNERS_CPY_SET_COUNT          
-                                                                                //         from (full_count - CORNERS_CPY_SET_COUNT + 1) to full_count
+            for (int j = 0; j < CORNERS_CPY_SET_COUNT; j++) {                   // mem_set from 1 to CORNERS_CPY_SET_COUNT
+                //         from (full_count - CORNERS_CPY_SET_COUNT + 1) to full_count
                 for (int i = 0; i < full_count; i++) {                          // Destination array initializing
                     ((uint8_t *)arr_dest)[i] = 0;
                 }
-    
+
                 dsps_memset((void *)arr_dest, set_val, ++byte_count[var]);
 
                 TEST_ASSERT_EACH_EQUAL_UINT8(set_val, arr_dest, byte_count[var]);
@@ -178,7 +181,7 @@ Test micro-benchmark of the memcpy and memset functions optimized for esp32s3 an
 Requires: esp32s3
 
 Purpose:
-    - Test how fast the esp32s3 optimized memcpy and memset are compared to the esp32 optimized memcpy and memset 
+    - Test how fast the esp32s3 optimized memcpy and memset are compared to the esp32 optimized memcpy and memset
 
 Procedure:
     - Create 2 unaligned arrays, source and destination array
@@ -214,10 +217,10 @@ TEST_CASE("dsps_memcpy_memset_aes3_benchmark", "[dsps]")
 
     const float aes3_cycles_memcpy = ((float)(end_aes3_memcpy - start_aes3_memcpy)) / CALL_REPEAT_COUNT;
     const float ae32_cycles_memcpy = ((float)(end_ae32_memcpy - start_ae32_memcpy)) / CALL_REPEAT_COUNT;
-  
-    ESP_LOGI(TAG, "Micro benchmark of memcpy for unaligned array of %"PRIu32" bytes", (uint32_t)full_count); 
-    ESP_LOGI(TAG, "Not-optimized cycles = %.2f", ae32_cycles_memcpy); 
-    ESP_LOGI(TAG, "S3  optimized cycles  = %.2f", aes3_cycles_memcpy); 
+
+    ESP_LOGI(TAG, "Micro benchmark of memcpy for unaligned array of %"PRIu32" bytes", (uint32_t)full_count);
+    ESP_LOGI(TAG, "Not-optimized cycles = %.2f", ae32_cycles_memcpy);
+    ESP_LOGI(TAG, "S3  optimized cycles  = %.2f", aes3_cycles_memcpy);
 
     // Memset benchmark
     const unsigned int start_aes3_memset = xthal_get_ccount();
@@ -234,10 +237,10 @@ TEST_CASE("dsps_memcpy_memset_aes3_benchmark", "[dsps]")
 
     const float ae32_cycles_memset = ((float)(end_ae32_memset - start_ae32_memset)) / CALL_REPEAT_COUNT;
     const float aes3_cycles_memset = ((float)(end_aes3_memset - start_aes3_memset)) / CALL_REPEAT_COUNT;
-    
-    ESP_LOGI(TAG, "Micro benchmark of memset for unaligned array of %"PRIu32" bytes", (uint32_t)full_count); 
-    ESP_LOGI(TAG, "Not-optimized cycles = %.2f", ae32_cycles_memset); 
-    ESP_LOGI(TAG, "S3  optimized cycles  = %.2f", aes3_cycles_memset); 
+
+    ESP_LOGI(TAG, "Micro benchmark of memset for unaligned array of %"PRIu32" bytes", (uint32_t)full_count);
+    ESP_LOGI(TAG, "Not-optimized cycles = %.2f", ae32_cycles_memset);
+    ESP_LOGI(TAG, "S3  optimized cycles  = %.2f", aes3_cycles_memset);
 
     free(arr_src);
     free(arr_dest);
@@ -251,7 +254,7 @@ Test micro-benchmark of the memcpy optimized for esp32s3 and esp32 and print a c
 Requires: esp32s3
 
 Purpose:
-    - Test how fast the esp32s3 optimized memcpy is to the esp32 optimized memcpy 
+    - Test how fast the esp32s3 optimized memcpy is to the esp32 optimized memcpy
 
 Procedure:
     - Create 2 aligned arrays, source and destination array
@@ -277,40 +280,40 @@ TEST_CASE("dsps_memcpy_benchmark_report", "[dsps]")
     uint8_t *arr_src  = (uint8_t *)memalign(16, arr_len * sizeof(uint8_t));
     uint8_t *arr_dest_align = NULL, *arr_src_align = NULL;
 
-    uint16_t **result_aes3 = (uint16_t **)malloc(align_combinations * sizeof(uint16_t*));     // 2D arrays result_aes3[align_combinations][MEMCPY_REPORT_LEN]
-    uint16_t **result_ae32 = (uint16_t **)malloc(align_combinations * sizeof(uint16_t*));     // 2D arrays result_ae32[align_combinations][MEMCPY_REPORT_LEN]
-    
+    uint16_t **result_aes3 = (uint16_t **)malloc(align_combinations * sizeof(uint16_t *));    // 2D arrays result_aes3[align_combinations][MEMCPY_REPORT_LEN]
+    uint16_t **result_ae32 = (uint16_t **)malloc(align_combinations * sizeof(uint16_t *));    // 2D arrays result_ae32[align_combinations][MEMCPY_REPORT_LEN]
+
     for (int i = 0; i < align_combinations; i++) {
         result_aes3[i] = (uint16_t *)malloc(MEMCPY_REPORT_LEN * sizeof(uint16_t));
         result_ae32[i] = (uint16_t *)malloc(MEMCPY_REPORT_LEN * sizeof(uint16_t));
     }
 
-    for (int iter = 0; iter < align_combinations; iter++) {      
+    for (int iter = 0; iter < align_combinations; iter++) {
         switch (iter) {
-            case 0:                             // both 16-byte aligned
-                arr_dest_align = arr_dest;
-                arr_src_align = arr_src;
-                break;
+        case 0:                             // both 16-byte aligned
+            arr_dest_align = arr_dest;
+            arr_src_align = arr_src;
+            break;
 
-            case 1:                             // destination unaligned, source aligned
-                arr_dest_align = arr_dest + 1;
-                arr_src_align = arr_src;
-                break;
+        case 1:                             // destination unaligned, source aligned
+            arr_dest_align = arr_dest + 1;
+            arr_src_align = arr_src;
+            break;
 
-            case 2:                             // source unaligned, destination aligned
-                arr_dest_align = arr_dest;
-                arr_src_align = arr_src + 1;
-                break;
+        case 2:                             // source unaligned, destination aligned
+            arr_dest_align = arr_dest;
+            arr_src_align = arr_src + 1;
+            break;
 
-            case 3:                             // both unaligned
-                arr_dest_align = arr_dest + 1;
-                arr_src_align = arr_src + 1;
-                break;
+        case 3:                             // both unaligned
+            arr_dest_align = arr_dest + 1;
+            arr_src_align = arr_src + 1;
+            break;
 
-            default:                            // default - both aligned
-                arr_dest_align = arr_dest;
-                arr_src_align = arr_src;
-                break;
+        default:                            // default - both aligned
+            arr_dest_align = arr_dest;
+            arr_src_align = arr_src;
+            break;
         }
 
         for (int cpy_amount = 1; cpy_amount <= MEMCPY_REPORT_LEN; cpy_amount++) {
@@ -331,7 +334,7 @@ TEST_CASE("dsps_memcpy_benchmark_report", "[dsps]")
         }
     }
 
-    ESP_LOGI(TAG, "Cycle counts for aligned/unaligned source/destination array using default xtensa memcpy and s3 optimized memcpy"); 
+    ESP_LOGI(TAG, "Cycle counts for aligned/unaligned source/destination array using default xtensa memcpy and s3 optimized memcpy");
     printf("\n\tdest aligned \tdest unaligned\tdest   aligned\tdest unaligned\n");
     printf(  "\tsrc  aligned \tsrc    aligned\tsrc  unaligned\tsrc  unaligned\n\n");
     printf(  "byte \taes3    ae32\taes3    ae32\taes3    ae32\taes3    ae32\n");
@@ -365,7 +368,7 @@ Test micro-benchmark of the memset optimized for esp32s3 and esp32 and print a c
 Requires: esp32s3
 
 Purpose:
-    - Test how fast the esp32s3 optimized memset is compared to the esp32 optimized memset 
+    - Test how fast the esp32s3 optimized memset is compared to the esp32 optimized memset
 
 Procedure:
     - Create 1 aligned array - destination array
@@ -387,15 +390,15 @@ TEST_CASE("dsps_memset_benchmark_report", "[dsps]")
     uint8_t *arr_dest = (uint8_t *)memalign(16, arr_len * sizeof(uint8_t));
     uint8_t *arr_dest_align = NULL;
 
-    uint16_t **result_aes3 = (uint16_t **)malloc(align_combinations * sizeof(uint16_t*));     // 2D arrays result_aes3[align_combinations][MEMSET_REPORT_LEN]
-    uint16_t **result_ae32 = (uint16_t **)malloc(align_combinations * sizeof(uint16_t*));     // 2D arrays result_ae32[align_combinations][MEMSET_REPORT_LEN]
-    
+    uint16_t **result_aes3 = (uint16_t **)malloc(align_combinations * sizeof(uint16_t *));    // 2D arrays result_aes3[align_combinations][MEMSET_REPORT_LEN]
+    uint16_t **result_ae32 = (uint16_t **)malloc(align_combinations * sizeof(uint16_t *));    // 2D arrays result_ae32[align_combinations][MEMSET_REPORT_LEN]
+
     for (int i = 0; i < align_combinations; i++) {
         result_aes3[i] = (uint16_t *)malloc(MEMSET_REPORT_LEN * sizeof(uint16_t));
         result_ae32[i] = (uint16_t *)malloc(MEMSET_REPORT_LEN * sizeof(uint16_t));
     }
 
-    for (int iter = 0; iter < align_combinations; iter++) {      
+    for (int iter = 0; iter < align_combinations; iter++) {
 
         if (iter == 0) {
             arr_dest_align = arr_dest;          // destination 16-byte aligned
@@ -403,7 +406,7 @@ TEST_CASE("dsps_memset_benchmark_report", "[dsps]")
             arr_dest_align = arr_dest + 1;      // destination unaligned
         }
 
-        for (int set_amount = 1; set_amount <= MEMSET_REPORT_LEN; set_amount++) { 
+        for (int set_amount = 1; set_amount <= MEMSET_REPORT_LEN; set_amount++) {
             start_count = xthal_get_ccount();
             for (int j = 0; j < CALL_REPEAT_COUNT; j++) {
                 dsps_memset((void *)arr_dest_align, set_val, set_amount);
@@ -420,7 +423,7 @@ TEST_CASE("dsps_memset_benchmark_report", "[dsps]")
         }
     }
 
-    ESP_LOGI(TAG, "Cycle counts for aligned/unaligned destination array using default xtensa memcpy and s3 optimized memcpy"); 
+    ESP_LOGI(TAG, "Cycle counts for aligned/unaligned destination array using default xtensa memcpy and s3 optimized memcpy");
     printf("\n\tdest aligned \tdest unaligned\n\n");
     printf(  "byte \taes3    ae32\taes3    ae32\n");
 
@@ -439,7 +442,7 @@ TEST_CASE("dsps_memset_benchmark_report", "[dsps]")
             TEST_ASSERT_GREATER_OR_EQUAL((result_ae32[j][i]) / 8, result_aes3[j][i]);
         }
     }
-    
+
     free(arr_dest);
     free(result_ae32);
     free(result_aes3);
@@ -549,9 +552,9 @@ TEST_CASE("dsps_memset_memcpy_context_switch_benchmark", "[dsps]")
         // Create test tasks for each core
         for (int i = 0; i < configNUM_CORES; i++) {
             for (int j = 0; j < TEST_PINNED_NUM_TASKS; j++) {
-                sprintf(task_name, "task %d-%d",i, j);
-                TEST_ASSERT_EQUAL(pdTRUE, xTaskCreatePinnedToCore(pinned_functions[iter], task_name, 4096, 
-                                                                  &test_context, 10, &task_handles[i][j], i));
+                sprintf(task_name, "task %d-%d", i, j);
+                TEST_ASSERT_EQUAL(pdTRUE, xTaskCreatePinnedToCore(pinned_functions[iter], task_name, 4096,
+                                  &test_context, 10, &task_handles[i][j], i));
             }
         }
 
@@ -609,7 +612,7 @@ Procedure:
     - A counter counts number or context switcher within the timer interval specified by the timer
     - Wait for the timer to expire and terminate the tasks
     - Get the number of task switches and delete all the tasks
-    - Repeat the 7 above steps with the created tasks executing a single generic Xtensa assembler instruction, 
+    - Repeat the 7 above steps with the created tasks executing a single generic Xtensa assembler instruction,
       instead of the TIE instruction to get the switching overhead
 */
 
@@ -637,7 +640,7 @@ static void pinned_task_tie_on(void *arg)
     xSemaphoreGive(context->semaphore);
     vTaskSuspend(NULL);
 }
-  
+
 // Taks pinned to a core, executing generic Xtensa instruction
 static void pinned_task_tie_off(void *arg)
 {
@@ -655,7 +658,7 @@ static void pinned_task_tie_off(void *arg)
     vTaskSuspend(NULL);
 }
 
-static void context_switch_timer_callback(TimerHandle_t xTimer) 
+static void context_switch_timer_callback(TimerHandle_t xTimer)
 {
     timer_expired = true;
 }
@@ -685,9 +688,9 @@ TEST_CASE("dsps_TIE_context_switch_timing", "[dsps]")
         // Create test tasks for each core
         for (int i = 0; i < configNUM_CORES; i++) {
             for (int j = 0; j < TEST_PINNED_NUM_TASKS; j++) {
-                sprintf(task_name, "task %d-%d",i, j);
-                TEST_ASSERT_EQUAL(pdTRUE, xTaskCreatePinnedToCore(pinned_functions[iter], task_name, 4096, 
-                                                                  &test_context, 1, &task_handles[i][j], i));
+                sprintf(task_name, "task %d-%d", i, j);
+                TEST_ASSERT_EQUAL(pdTRUE, xTaskCreatePinnedToCore(pinned_functions[iter], task_name, 4096,
+                                  &test_context, 1, &task_handles[i][j], i));
             }
         }
 

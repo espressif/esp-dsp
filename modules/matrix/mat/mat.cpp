@@ -137,11 +137,15 @@ Mat Mat::getROI(int startRow, int startCol, int roiRows, int roiCols, int stride
 {
     Mat result(this->data, roiRows, roiCols, 0);
 
-    if ((startRow + roiRows) > this->rows) return result;
-    if ((startCol + roiCols) > this->cols) return result;
+    if ((startRow + roiRows) > this->rows) {
+        return result;
+    }
+    if ((startCol + roiCols) > this->cols) {
+        return result;
+    }
 
     const int ptr_move = startRow * this->cols + startCol;
-    float* new_data_ptr = this->data + ptr_move;
+    float *new_data_ptr = this->data + ptr_move;
 
     result.data = new_data_ptr;
     result.stride = stride;
@@ -149,30 +153,33 @@ Mat Mat::getROI(int startRow, int startCol, int roiRows, int roiCols, int stride
     return result;
 }
 
-Mat Mat::getROI(const Mat::Rect& rect)
+Mat Mat::getROI(const Mat::Rect &rect)
 {
-    return(getROI(rect.y, rect.x, rect.height, rect.width, this->cols));
+    return (getROI(rect.y, rect.x, rect.height, rect.width, this->cols));
 }
 
 Mat Mat::getROI(int startRow, int startCol, int roiRows, int roiCols)
 {
-    return(getROI(startRow, startCol, roiRows, roiCols, this->cols));
+    return (getROI(startRow, startCol, roiRows, roiCols, this->cols));
 }
 
 void Mat::Copy(const Mat &src, int row_pos, int col_pos)
 {
-    if ((row_pos + src.rows) > this->rows) return;
-    if ((col_pos + src.cols) > this->cols) return;
+    if ((row_pos + src.rows) > this->rows) {
+        return;
+    }
+    if ((col_pos + src.cols) > this->cols) {
+        return;
+    }
 
-    for (size_t r = 0; r < src.rows; r++)
-    {
-        memcpy(&this->data[(r + row_pos) * this->stride + col_pos], &src.data[r*src.cols], src.cols * sizeof(float));
+    for (size_t r = 0; r < src.rows; r++) {
+        memcpy(&this->data[(r + row_pos) * this->stride + col_pos], &src.data[r * src.cols], src.cols * sizeof(float));
     }
 }
 
 void Mat::CopyHead(const Mat &src)
 {
-    if(!this->ext_buff) {
+    if (!this->ext_buff) {
         delete[] this->data;
     }
     this->rows = src.rows;
@@ -201,17 +208,20 @@ Mat Mat::Get(int row_start, int row_size, int col_start, int col_size)
 {
     Mat result(row_size, col_size);
 
-    if ((row_start + row_size) > this->rows) return result;
-    if ((col_start + col_size) > this->cols) return result;
-    
-    for (size_t r = 0; r < result.rows; r++)
-    {
-        memcpy(&result.data[r*result.cols], &this->data[(r + row_start) * this->stride + col_start], result.cols * sizeof(float));
+    if ((row_start + row_size) > this->rows) {
+        return result;
+    }
+    if ((col_start + col_size) > this->cols) {
+        return result;
+    }
+
+    for (size_t r = 0; r < result.rows; r++) {
+        memcpy(&result.data[r * result.cols], &this->data[(r + row_start) * this->stride + col_start], result.cols * sizeof(float));
     }
     return result;
 }
 
-Mat Mat::Get(const Mat::Rect& rect)
+Mat Mat::Get(const Mat::Rect &rect)
 {
     return (Get(rect.y, rect.height, rect.x, rect.width));
 }
@@ -225,7 +235,7 @@ Mat &Mat::operator=(const Mat &m)
     // matrix dimensions not equal
     if (this->rows != m.rows || this->cols != m.cols) {
         // left operand is a sub-matrix - error
-        if(this->sub_matrix) {
+        if (this->sub_matrix) {
             ESP_LOGE("Mat", "operator = Error for sub-matrices: operands matrices dimensions %dx%d and %dx%d do not match", this->rows, this->cols, m.rows, m.cols);
             return *this;
         }
@@ -241,7 +251,7 @@ Mat &Mat::operator=(const Mat &m)
         allocate();
     }
 
-    for(int row = 0; row < this->rows; row++){
+    for (int row = 0; row < this->rows; row++) {
         memcpy(this->data + (row * this->stride), m.data + (row * m.stride), this->cols * sizeof(float));
     }
     return *this;
@@ -289,7 +299,7 @@ Mat &Mat::operator-=(const Mat &m)
 
 Mat &Mat::operator-=(float C)
 {
-    if (this->sub_matrix){
+    if (this->sub_matrix) {
         dspm_addc_f32(this->data, this->data, -C, this->rows, this->cols, this->padding, this->padding, 1, 1);
     } else {
         dsps_addc_f32_ansi(this->data, this->data, this->length, -C, 1, 1);
@@ -342,7 +352,7 @@ Mat &Mat::operator/=(const Mat &B)
 Mat &Mat::operator/=(float num)
 {
     if (this->sub_matrix) {
-        dspm_mulc_f32(this->data, this->data, 1 / num, this->rows, this->cols, this->padding, this->padding, 1 ,1);
+        dspm_mulc_f32(this->data, this->data, 1 / num, this->rows, this->cols, this->padding, this->padding, 1, 1);
     } else {
         dsps_mulc_f32_ansi(this->data, this->data, this->length, 1 / num, 1, 1);
     }
@@ -396,7 +406,7 @@ Mat Mat::eye(int size)
 
 Mat Mat::ones(int size)
 {
-    return(ones(size, size));
+    return (ones(size, size));
 }
 
 Mat Mat::ones(int rows, int cols)
@@ -412,7 +422,7 @@ Mat Mat::ones(int rows, int cols)
 
 void Mat::clear()
 {
-    for(int row = 0; row < this->rows; row++) {
+    for (int row = 0; row < this->rows; row++) {
         memset(this->data + (row * this->stride), 0, this->cols * sizeof(float));
     }
 }
@@ -867,7 +877,7 @@ bool operator==(const Mat &m1, const Mat &m2)
 
     for (int row = 0; row < m1.rows; row++) {
         for (int col = 0; col < m1.cols; col++) {
-            if(m1(row, col) != m2(row, col)) {
+            if (m1(row, col) != m2(row, col)) {
                 ESP_LOGW("Mat", "operator == Error: %i %i, m1.data=%f, m2.data=%f \n", row, col, m1(row, col), m2(row, col));
                 return false;
             }

@@ -31,10 +31,9 @@ TEST_CASE("dspi_dotprod_f32_ansi functionality", "[dspi]")
     float *x = (float *)memalign(16, max_N * sizeof(float));
     float *y = (float *)memalign(16, max_N * sizeof(float));
     float *z = (float *)memalign(16, max_N * sizeof(float));
-    for (size_t i = 0; i < 256; i++)
-    {
-        x[i] = i%8 + 1;
-        y[i] = i%8 + 1;
+    for (size_t i = 0; i < 256; i++) {
+        x[i] = i % 8 + 1;
+        y[i] = i % 8 + 1;
         z[i] = 0;
     }
     image2d_t image1 = {x, 2, 2, 8, 8}; // Image 8x8
@@ -66,4 +65,3 @@ TEST_CASE("dspi_dotprod_f32_ansi functionality", "[dspi]")
     free(y);
     free(z);
 }
-

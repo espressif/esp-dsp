@@ -55,16 +55,15 @@ TEST_CASE("dsps_fird_f32_aexx functionality", "[dsps]")
 
     dsps_fird_init_f32(&fir1, coeffs, delay, fir_len, decim);
     dsps_fird_init_f32(&fir2, coeffs, delay_compare, fir_len, decim);
-    int total1 = dsps_fird_f32_ae32(&fir1, x, y, len/decim);
-    int total2 = dsps_fird_f32_ansi(&fir2, x, y_compare, len/decim);
-    total1 += dsps_fird_f32(&fir1, x, y, len/decim);
-    total2 += dsps_fird_f32_ansi(&fir2, x, y_compare, len/decim);
-    total1 += dsps_fird_f32(&fir1, x, y, len/decim);
-    total2 += dsps_fird_f32_ansi(&fir2, x, y_compare, len/decim);
+    int total1 = dsps_fird_f32_ae32(&fir1, x, y, len / decim);
+    int total2 = dsps_fird_f32_ansi(&fir2, x, y_compare, len / decim);
+    total1 += dsps_fird_f32(&fir1, x, y, len / decim);
+    total2 += dsps_fird_f32_ansi(&fir2, x, y_compare, len / decim);
+    total1 += dsps_fird_f32(&fir1, x, y, len / decim);
+    total2 += dsps_fird_f32_ansi(&fir2, x, y_compare, len / decim);
     ESP_LOGI(TAG, "Total result = %i, expected %i from %i", total1, total2, len);
     TEST_ASSERT_EQUAL(total1, total2);
-    for (int i=0 ; i< total1 ; i++)
-    {
+    for (int i = 0 ; i < total1 ; i++) {
         ESP_LOGD(TAG, "data[%i] = %f\n", i, y[i]);
     }
     for (int i = 0 ; i < total1 ; i++) {
@@ -99,7 +98,7 @@ TEST_CASE("dsps_fird_f32_aexx benchmark", "[dsps]")
 
     unsigned int start_b = xthal_get_ccount();
     for (int i = 0 ; i < repeat_count ; i++) {
-        dsps_fird_f32(&fir1, x, y, len/decim);
+        dsps_fird_f32(&fir1, x, y, len / decim);
     }
     unsigned int end_b = xthal_get_ccount();
 

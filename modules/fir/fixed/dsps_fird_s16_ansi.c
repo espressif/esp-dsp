@@ -11,14 +11,13 @@ int32_t dsps_fird_s16_ansi(fir_s16_t *fir, const int16_t *input, int16_t *output
     int32_t result = 0;
     int32_t input_pos = 0;
     long long rounding = 0;
-    const int32_t final_shift = fir->shift -15;
+    const int32_t final_shift = fir->shift - 15;
 
     rounding = (long long)(fir->rounding_val);
-    
-    if(fir->shift >= 0){
+
+    if (fir->shift >= 0) {
         rounding = (rounding >> fir->shift) & 0xFFFFFFFFFF;         // 40-bit mask
-    }
-    else{
+    } else {
         rounding = (rounding << (-fir->shift)) & 0xFFFFFFFFFF;      // 40-bit mask
     }
 
@@ -49,7 +48,7 @@ int32_t dsps_fird_s16_ansi(fir_s16_t *fir, const int16_t *input, int16_t *output
         } else {
             output[result++] = (int16_t)(acc >> (-final_shift));
         }
-        
+
     }
     return result;
 }

@@ -18,16 +18,16 @@
 
 void dsps_wind_flat_top_f32(float *window, int len)
 {
-    const float a0=0.21557895; 
-    const float a1=0.41663158; 
-    const float a2=0.277263158; 
-    const float a3=0.083578947; 
-    const float a4=0.006947368;    
+    const float a0 = 0.21557895;
+    const float a1 = 0.41663158;
+    const float a2 = 0.277263158;
+    const float a3 = 0.083578947;
+    const float a4 = 0.006947368;
 
-    float len_mult = 1/(float)(len-1);
+    float len_mult = 1 / (float)(len - 1);
     for (int i = 0; i < len; i++) {
-        window[i] = a0 
-                    - a1 * cosf(i * 2 * M_PI * len_mult) 
+        window[i] = a0
+                    - a1 * cosf(i * 2 * M_PI * len_mult)
                     + a2 * cosf(i * 4 * M_PI * len_mult)
                     - a3 * cosf(i * 6 * M_PI * len_mult)
                     + a4 * cosf(i * 8 * M_PI * len_mult);

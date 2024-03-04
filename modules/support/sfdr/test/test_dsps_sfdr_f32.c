@@ -35,7 +35,7 @@ TEST_CASE("dsps_sfdr_f32 functionality", "[dsps]")
         data[i] = 4 * sinf(M_PI / N * check_bin * i) / (N / 2);
         data[i] += sinf(M_PI / N * check_bin * i * 2) / (N / 2);
     }
-    
+
     float sfdr = dsps_sfdr_f32(data, N, 1);
     TEST_ASSERT_EQUAL( (int)20 * log10(sfdr_exp), (int)sfdr);
     ESP_LOGI(TAG, "dsps_sfdr_f32 = %f dB", sfdr);

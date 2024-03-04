@@ -34,10 +34,9 @@ TEST_CASE("dspi_dotprod_off_u16_ansi functionality", "[dspi]")
     uint16_t *x = (uint16_t *)malloc(max_N * sizeof(uint16_t));
     uint16_t *y = (uint16_t *)malloc(max_N * sizeof(uint16_t));
     uint16_t *z = (uint16_t *)malloc(max_N * sizeof(uint16_t));
-    for (size_t i = 0; i < 256; i++)
-    {
-        x[i] = i%8 + 255;
-        y[i] = i%8 + 255;
+    for (size_t i = 0; i < 256; i++) {
+        x[i] = i % 8 + 255;
+        y[i] = i % 8 + 255;
         z[i] = 0;
     }
     image2d_t image1 = {x, 2, 2, 8, 8}; // Image 8x8

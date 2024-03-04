@@ -44,7 +44,7 @@ TEST_CASE("dspm_mulc_f32_ansi functionality", "[dspm]")
                         // adjust ROI rectangles
                         roi_rect.resizeRect(start_col, start_row, col, row);
 
-                        for(int i = 0; i < A.length; i++) {
+                        for (int i = 0; i < A.length; i++) {
                             A.data[i] = i + 1;
                             C_compare.data[i] = (i + 1) * B;
                         }
@@ -54,20 +54,20 @@ TEST_CASE("dspm_mulc_f32_ansi functionality", "[dspm]")
                         // Matrix A is a sub-matrix - the data are defined as a pointer to an external buffer
                         // Matrix C is a matrix - the data are copied into the C matrix
                         switch (var) {
-                            case 0: {
-                                A_sub.CopyHead(A.getROI(roi_rect));    // A sub-matrix - NO DATA CPY
-                                C_sub.CopyHead(C.getROI(roi_rect));    // C sub-matrix - NO DATA CPY
-                            } break;
-                            case 1: {
-                                A_sub = A.Get(roi_rect);               // A matrix     - DATA CPY
-                                C_sub.CopyHead(C.getROI(roi_rect));    // C sub_matirx - NO DATA CPY
-                            } break;
-                            case 2: {
-                                A_sub.CopyHead(A.getROI(roi_rect));    // A sub-matrix - NO DATA CPY
-                                C_sub = C.Get(roi_rect);               // C matrix     - DATA CPY
-                            } break;
-                            default:
-                                break;
+                        case 0: {
+                            A_sub.CopyHead(A.getROI(roi_rect));    // A sub-matrix - NO DATA CPY
+                            C_sub.CopyHead(C.getROI(roi_rect));    // C sub-matrix - NO DATA CPY
+                        } break;
+                        case 1: {
+                            A_sub = A.Get(roi_rect);               // A matrix     - DATA CPY
+                            C_sub.CopyHead(C.getROI(roi_rect));    // C sub_matirx - NO DATA CPY
+                        } break;
+                        case 2: {
+                            A_sub.CopyHead(A.getROI(roi_rect));    // A sub-matrix - NO DATA CPY
+                            C_sub = C.Get(roi_rect);               // C matrix     - DATA CPY
+                        } break;
+                        default:
+                            break;
                         }
 
                         dspm_mulc_f32(A_sub.data, C_sub.data, B, row, col, A_sub.padding, C_sub.padding, 1, 1);
@@ -80,7 +80,7 @@ TEST_CASE("dspm_mulc_f32_ansi functionality", "[dspm]")
                             dspm::Mat C_area_check = dspm::Mat::ones(row + (2 * start_row), col + (2 * start_col));
                             test_assert_equal_mat_mat(C_sub_check, C_sub, message);
                             test_assert_check_area_mat_mat(C_area_check, C_sub, start_row, start_col, message);
-                        // C is a matrix
+                            // C is a matrix
                         } else {
                             test_assert_equal_mat_mat(C_sub_check, C_sub, message);
                         }

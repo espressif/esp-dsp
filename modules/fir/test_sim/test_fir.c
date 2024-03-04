@@ -40,14 +40,13 @@ void test_fir()
         x[i] = i;
     }
     x[0] = 1;
-    dsps_fir_init_f32(&fir1, coeffs, delay, fir_len/4);
+    dsps_fir_init_f32(&fir1, coeffs, delay, fir_len / 4);
     dsps_fir_init_f32(&fir2, coeffs, delay_compare, fir_len);
 
     xt_iss_profile_enable();
-        dsps_fir_f32_aes3(&fir1, x, y, len);
-        dsps_fir_f32_ansi(&fir2, x, y_compare, len);
+    dsps_fir_f32_aes3(&fir1, x, y, len);
+    dsps_fir_f32_ansi(&fir2, x, y_compare, len);
     xt_iss_profile_disable();
 
     printf("Test Pass!\n");
 }
-

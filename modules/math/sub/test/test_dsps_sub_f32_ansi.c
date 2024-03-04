@@ -29,8 +29,8 @@ TEST_CASE("dsps_sub_f32_ansi functionality", "[dsps]")
     float y[n];
     float z[n];
     for (int i = 0 ; i < n ; i++) {
-        x[i] = i*3;
-        y[i] = i*2;
+        x[i] = i * 3;
+        y[i] = i * 2;
         z[i] = i;
     }
     dsps_sub_f32_ansi(x, y, x, n, 1, 1, 1);
@@ -48,8 +48,8 @@ TEST_CASE("dsps_sub_f32_ae32 functionality", "[dsps]")
     float y[n];
     float z[n];
     for (int i = 0 ; i < n ; i++) {
-        x[i] = i*3;
-        y[i] = i*2;
+        x[i] = i * 3;
+        y[i] = i * 2;
         z[i] = i;
     }
     dsps_sub_f32_ae32(x, y, x, n, 1, 1, 1);
@@ -62,7 +62,7 @@ TEST_CASE("dsps_sub_f32_ae32 functionality", "[dsps]")
     int repeat_count = 1;
     dsps_sub_f32_ae32(x, x, x, n, 1, 1, 1);
 
-    unsigned int start_b = xthal_get_ccount();    
+    unsigned int start_b = xthal_get_ccount();
     dsps_sub_f32_ae32(x, x, x, n, 1, 1, 1);
     unsigned int end_b = xthal_get_ccount();
 

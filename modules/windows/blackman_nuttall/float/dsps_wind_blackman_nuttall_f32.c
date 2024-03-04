@@ -18,16 +18,16 @@
 
 void dsps_wind_blackman_nuttall_f32(float *window, int len)
 {
-    const float a0=0.3635819; 
-    const float a1=0.4891775;
-    const float a2=0.1365995;
-    const float a3=0.0106411;
-    
-    float len_mult = 1/(float)(len-1);
+    const float a0 = 0.3635819;
+    const float a1 = 0.4891775;
+    const float a2 = 0.1365995;
+    const float a3 = 0.0106411;
+
+    float len_mult = 1 / (float)(len - 1);
     for (int i = 0; i < len; i++) {
-        window[i] = a0 
-                    - a1 * cosf(i * 2 * M_PI * len_mult) 
-                    + a2 * cosf(i * 4 * M_PI * len_mult) 
+        window[i] = a0
+                    - a1 * cosf(i * 2 * M_PI * len_mult)
+                    + a2 * cosf(i * 4 * M_PI * len_mult)
                     - a3 * cosf(i * 6 * M_PI * len_mult);
     }
 }

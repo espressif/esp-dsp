@@ -45,8 +45,7 @@ void app_main()
 
     // The example will calculate n!
     //Initialize an input arrays
-    for (int i=0 ; i< N ; i++)
-    {
+    for (int i = 0 ; i < N ; i++) {
         input1[i] = 1;
         input2[i] = i;
     }
@@ -54,8 +53,7 @@ void app_main()
     unsigned int start_b = dsp_get_cpu_cycle_count();
     ret = dsps_dotprod_f32(input1, input2, &result1, 101);
     unsigned int end_b = dsp_get_cpu_cycle_count();
-    if (ret != ESP_OK)
-    {
+    if (ret != ESP_OK) {
         ESP_LOGE(TAG, "Operation error = %i", ret);
     }
     ESP_LOGI(TAG, "The sum of 101 elements from 0..100 = %f", result1);
