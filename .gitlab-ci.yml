@@ -1,4 +1,5 @@
 stages:
+  - check
   - build
   - target_test
   - deploy
@@ -34,6 +35,16 @@ variables:
   git remote remove github || true
   git remote add github ${GH_PUSH_REPO}
 
+check_pre_commit_MR:
+  stage: check
+  image: "$CI_DOCKER_REGISTRY/esp-idf-pre-commit:1"
+  tags:
+    - build
+    - internet
+  dependencies: []
+  script:
+    - pre-commit run --all-files --show-diff-on-failure
+
 
 # This template gets expanded multiple times, once for every IDF version.
 # IDF version is specified by setting the espressif/idf image tag.
@@ -49,6 +60,7 @@ variables:
   tags:
     - build
     - internet
+  dependencies: []
   script:
     - ./build_all.sh
   variables:
@@ -220,6 +232,7 @@ build_docs:
   image: $ESP_DOCS_ENV_IMAGE
   tags:
     - build_docs
+  dependencies: []
   artifacts:
     when: always
     paths:
@@ -289,6 +302,7 @@ push_master_to_github:
     - /^release\/v/
     - /^v\d+\.\d+(\.\d+)?($|-)/
   when: on_success
+  dependencies: []
   script:
     - git clone --depth 1 ${ESP_IDF_GIT} esp-idf
     - *add_gh_key_remote
@@ -304,5 +318,6 @@ upload_to_component_manager:
     - /^release\/v/
     - /^v\d+\.\d+(\.\d+)?($|-)/
   when: on_success
+  dependencies: []
   script:
     - python -m idf_component_manager upload-component --allow-existing --name=esp-dsp --namespace=espressif

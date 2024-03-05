@@ -26,8 +26,8 @@ static const char *TAG = "dsps_fft2r_ansi";
 
 TEST_CASE("dsps_fft2r_fc32_ansi functionality", "[dsps]")
 {
-    float* data = (float*)malloc(2*4096*sizeof(float));
-    float* check_data = (float*)malloc(2*4096*sizeof(float));
+    float *data = (float *)malloc(2 * 4096 * sizeof(float));
+    float *check_data = (float *)malloc(2 * 4096 * sizeof(float));
 
     int N = 1024;
     int check_bin = 32;
@@ -36,9 +36,9 @@ TEST_CASE("dsps_fft2r_fc32_ansi functionality", "[dsps]")
         data[i * 2 + 1] = 0;
     }
 
-    float* fft_table_buff = (float*)malloc((N+2)*sizeof(float));
+    float *fft_table_buff = (float *)malloc((N + 2) * sizeof(float));
     fft_table_buff[0] = 1234;
-    fft_table_buff[N+1] = 5678;
+    fft_table_buff[N + 1] = 5678;
 
     esp_err_t ret = dsps_fft2r_init_fc32(&fft_table_buff[1], N);
     TEST_ESP_OK(ret);
@@ -71,9 +71,9 @@ TEST_CASE("dsps_fft2r_fc32_ansi functionality", "[dsps]")
     ESP_LOGI(TAG, "Calculation error is less then 0.1 dB");
     ESP_LOGI(TAG, "cycles - %i", end_b - start_b);
 
-    ESP_LOGI(TAG, "fft_table_buff[0] = %f, fft_table_buff[N+1] = %f", fft_table_buff[0], fft_table_buff[N+1]);
+    ESP_LOGI(TAG, "fft_table_buff[0] = %f, fft_table_buff[N+1] = %f", fft_table_buff[0], fft_table_buff[N + 1]);
     TEST_ASSERT_EQUAL( fft_table_buff[0],  1234);
-    TEST_ASSERT_EQUAL( fft_table_buff[N+1],  5678);
+    TEST_ASSERT_EQUAL( fft_table_buff[N + 1],  5678);
     free(fft_table_buff);
 
     free(data);
@@ -82,19 +82,18 @@ TEST_CASE("dsps_fft2r_fc32_ansi functionality", "[dsps]")
 }
 
 TEST_CASE("dsps_fft2r_fc32_ansi benchmark", "[dsps]")
-{    
+{
     esp_err_t ret = dsps_fft2r_init_fc32(NULL, CONFIG_DSP_MAX_FFT_SIZE);
     TEST_ESP_OK(ret);
 
-    float* data = (float*)malloc(2*4096*sizeof(float));
+    float *data = (float *)malloc(2 * 4096 * sizeof(float));
     TEST_ASSERT_NOT_NULL(data);
 
-    float* check_data = (float*)malloc(2*4096*sizeof(float));
+    float *check_data = (float *)malloc(2 * 4096 * sizeof(float));
     TEST_ASSERT_NOT_NULL(check_data);
 
-    for (int i= 5 ; i< 10 ; i++)
-    {
-        int N_check = 2<<i;
+    for (int i = 5 ; i < 10 ; i++) {
+        int N_check = 2 << i;
         unsigned int start_b = xthal_get_ccount();
         dsps_fft2r_fc32_ansi(data, N_check);
 
@@ -103,7 +102,7 @@ TEST_CASE("dsps_fft2r_fc32_ansi benchmark", "[dsps]")
         float cycles = total_b;
         ESP_LOGI(TAG, "Benchmark dsps_fft2r_fc32_ansi - %6i cycles for %6i points FFT.", (int)cycles, N_check);
         float min_exec = 3;
-        float max_exec = 330000*3;
+        float max_exec = 330000 * 3;
         TEST_ASSERT_EXEC_IN_RANGE(min_exec, max_exec, cycles);
     }
     free(data);
@@ -113,9 +112,8 @@ TEST_CASE("dsps_fft2r_fc32_ansi benchmark", "[dsps]")
 
 TEST_CASE("dsps_gen_bitrev2r_table bitrev table generation.", "[dsps]")
 {
-    for (int i= 4 ; i< 13 ; i++)
-    {
-        int N_check = 1<<i;
+    for (int i = 4 ; i < 13 ; i++) {
+        int N_check = 1 << i;
         dsps_gen_bitrev2r_table(N_check, 8, "fc32");
-    }    
+    }
 }

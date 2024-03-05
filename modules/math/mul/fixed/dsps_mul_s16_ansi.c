@@ -16,13 +16,19 @@
 
 esp_err_t dsps_mul_s16_ansi(const int16_t *input1, const int16_t *input2, int16_t *output, int len, int step1, int step2, int step_out, int shift)
 {
-    if (NULL == input1) return ESP_ERR_DSP_PARAM_OUTOFRANGE;
-    if (NULL == input2) return ESP_ERR_DSP_PARAM_OUTOFRANGE;
-    if (NULL == output) return ESP_ERR_DSP_PARAM_OUTOFRANGE;
+    if (NULL == input1) {
+        return ESP_ERR_DSP_PARAM_OUTOFRANGE;
+    }
+    if (NULL == input2) {
+        return ESP_ERR_DSP_PARAM_OUTOFRANGE;
+    }
+    if (NULL == output) {
+        return ESP_ERR_DSP_PARAM_OUTOFRANGE;
+    }
 
     for (int i = 0 ; i < len ; i++) {
         int ttt = (int)input1[i * step1] * (int)input2[i * step2];
-        output[i * step_out] = ttt>>shift;
+        output[i * step_out] = ttt >> shift;
     }
     return ESP_OK;
 }

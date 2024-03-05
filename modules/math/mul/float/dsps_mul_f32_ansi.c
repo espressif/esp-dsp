@@ -16,9 +16,15 @@
 
 esp_err_t dsps_mul_f32_ansi(const float *input1, const float *input2, float *output, int len, int step1, int step2, int step_out)
 {
-    if (NULL == input1) return ESP_ERR_DSP_PARAM_OUTOFRANGE;
-    if (NULL == input2) return ESP_ERR_DSP_PARAM_OUTOFRANGE;
-    if (NULL == output) return ESP_ERR_DSP_PARAM_OUTOFRANGE;
+    if (NULL == input1) {
+        return ESP_ERR_DSP_PARAM_OUTOFRANGE;
+    }
+    if (NULL == input2) {
+        return ESP_ERR_DSP_PARAM_OUTOFRANGE;
+    }
+    if (NULL == output) {
+        return ESP_ERR_DSP_PARAM_OUTOFRANGE;
+    }
 
     for (int i = 0 ; i < len ; i++) {
         output[i * step_out] = input1[i * step1] * input2[i * step2];

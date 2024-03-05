@@ -10,17 +10,17 @@ extern void xt_iss_profile_disable();
 extern void xt_iss_profile_enable();
 
 #define M 4
-#define N 8 
-#define K 16 
+#define N 8
+#define K 16
 
 const    int m = M;
 const    int n = N;
 const    int k = K;
 
-    float A[M][N];
-    float B[N][K];
-    float C[M][K];
-    float C_compare[M][K];
+float A[M][N];
+float B[N][K];
+float C[M][K];
+float C_compare[M][K];
 
 void test_mmult()
 {
@@ -48,11 +48,9 @@ void test_mmult()
     dspm_mult_f32_aes3(A_ptr, B_ptr, C_ptr, m, n, k);
     xt_iss_profile_disable();
 
-    for (int i=0 ; i< m ; i++)
-    {
-        for (int j=0 ; j< k ; j++)
-        {
-            printf("[%i][%i] calc=%f, expected =%f\n",i,j, C[i][j], C_compare[i][j]);
+    for (int i = 0 ; i < m ; i++) {
+        for (int j = 0 ; j < k ; j++) {
+            printf("[%i][%i] calc=%f, expected =%f\n", i, j, C[i][j], C_compare[i][j]);
         }
     }
     // Compare and check results
@@ -65,4 +63,3 @@ void test_mmult()
 
     printf("Test Pass!\n");
 }
-

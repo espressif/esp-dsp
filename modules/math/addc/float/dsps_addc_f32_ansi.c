@@ -16,8 +16,12 @@
 
 esp_err_t dsps_addc_f32_ansi(const float *input, float *output, int len, float C, int step_in, int step_out)
 {
-    if (NULL == input) return ESP_ERR_DSP_PARAM_OUTOFRANGE;
-    if (NULL == output) return ESP_ERR_DSP_PARAM_OUTOFRANGE;
+    if (NULL == input) {
+        return ESP_ERR_DSP_PARAM_OUTOFRANGE;
+    }
+    if (NULL == output) {
+        return ESP_ERR_DSP_PARAM_OUTOFRANGE;
+    }
 
     for (int i = 0 ; i < len ; i++) {
         output[i * step_out] = input[i * step_in] + C;

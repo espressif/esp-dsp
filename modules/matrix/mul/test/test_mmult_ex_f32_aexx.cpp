@@ -62,7 +62,7 @@ static void dspm_mult_ex_f32_aexx_functionality_in_cycle(m_test_data_t *test_d)
 
     // fill A B matrices with numbers
     // fill C matrix with ones
-    for(int i = 0; i < A.length; i++) {
+    for (int i = 0; i < A.length; i++) {
         A.data[i] = i + 1;
     }
     for (int i = 0; i < B.length; i++) {
@@ -79,44 +79,44 @@ static void dspm_mult_ex_f32_aexx_functionality_in_cycle(m_test_data_t *test_d)
     // As an example: case 1
     // Matrices A and C are sub-matrices - the data are defined as a pointer to an external buffer
     // Matrix B is a matrix - the data are copied into the B matrix
-    switch(test_d->var) {
-        case 0: {
-            A_sub.CopyHead(A.getROI(A_roi_rect));    // A sub-matrix - NO DATA CPY
-            B_sub.CopyHead(B.getROI(B_roi_rect));    // B sub-matrix - NO DATA CPY
-            C_sub.CopyHead(C.getROI(C_roi_rect));    // C sub-matrix - NO DATA CPY
-        } break;
-        case 1: {
-            A_sub = A.Get(A_roi_rect);               // A matrix     - DATA CPY
-            B_sub.CopyHead(B.getROI(B_roi_rect));    // B sub-matrix - NO DATA CPY
-            C_sub.CopyHead(C.getROI(C_roi_rect));    // C sub-matrix - NO DATA CPY
-        } break;
-        case 2: {
-            A_sub.CopyHead(A.getROI(A_roi_rect));    // A sub-matrix - NO DATA CPY
-            B_sub = B.Get(B_roi_rect);               // B matrix     - DATA CPY
-            C_sub.CopyHead(C.getROI(C_roi_rect));    // C sub-matrix - NO DATA CPY
-        } break;
-        case 3: {
-            A_sub = A.Get(A_roi_rect);               // A matrix     - DATA CPY
-            B_sub = B.Get(B_roi_rect);               // B matrix     - DATA CPY
-            C_sub.CopyHead(C.getROI(C_roi_rect));    // C sub-matrix - NO DATA CPY
-        } break;
-        case 4: {
-            A_sub.CopyHead(A.getROI(A_roi_rect));    // A sub-matrix - NO DATA CPY
-            B_sub.CopyHead(B.getROI(B_roi_rect));    // B sub-matrix - NO DATA CPY
-            C_sub = C.Get(C_roi_rect);               // B matrix     - DATA CPY
-        } break;
-        case 5: {
-            A_sub.CopyHead(A.getROI(A_roi_rect));    // A sub-matrix - NO DATA CPY
-            B_sub = B.Get(B_roi_rect);               // B matrix     - DATA CPY
-            C_sub = C.Get(C_roi_rect);               // C matrix     - DATA CPY
-        } break;
-        case 6: {
-            A_sub = A.Get(A_roi_rect);               // A matrix     - DATA CPY
-            B_sub.CopyHead(B.getROI(B_roi_rect));    // B sub-matrix - NO DATA CPY
-            C_sub = C.Get(C_roi_rect);               // C matrix     - DATA CPY
-        } break;
-        default:
-            break;
+    switch (test_d->var) {
+    case 0: {
+        A_sub.CopyHead(A.getROI(A_roi_rect));    // A sub-matrix - NO DATA CPY
+        B_sub.CopyHead(B.getROI(B_roi_rect));    // B sub-matrix - NO DATA CPY
+        C_sub.CopyHead(C.getROI(C_roi_rect));    // C sub-matrix - NO DATA CPY
+    } break;
+    case 1: {
+        A_sub = A.Get(A_roi_rect);               // A matrix     - DATA CPY
+        B_sub.CopyHead(B.getROI(B_roi_rect));    // B sub-matrix - NO DATA CPY
+        C_sub.CopyHead(C.getROI(C_roi_rect));    // C sub-matrix - NO DATA CPY
+    } break;
+    case 2: {
+        A_sub.CopyHead(A.getROI(A_roi_rect));    // A sub-matrix - NO DATA CPY
+        B_sub = B.Get(B_roi_rect);               // B matrix     - DATA CPY
+        C_sub.CopyHead(C.getROI(C_roi_rect));    // C sub-matrix - NO DATA CPY
+    } break;
+    case 3: {
+        A_sub = A.Get(A_roi_rect);               // A matrix     - DATA CPY
+        B_sub = B.Get(B_roi_rect);               // B matrix     - DATA CPY
+        C_sub.CopyHead(C.getROI(C_roi_rect));    // C sub-matrix - NO DATA CPY
+    } break;
+    case 4: {
+        A_sub.CopyHead(A.getROI(A_roi_rect));    // A sub-matrix - NO DATA CPY
+        B_sub.CopyHead(B.getROI(B_roi_rect));    // B sub-matrix - NO DATA CPY
+        C_sub = C.Get(C_roi_rect);               // B matrix     - DATA CPY
+    } break;
+    case 5: {
+        A_sub.CopyHead(A.getROI(A_roi_rect));    // A sub-matrix - NO DATA CPY
+        B_sub = B.Get(B_roi_rect);               // B matrix     - DATA CPY
+        C_sub = C.Get(C_roi_rect);               // C matrix     - DATA CPY
+    } break;
+    case 6: {
+        A_sub = A.Get(A_roi_rect);               // A matrix     - DATA CPY
+        B_sub.CopyHead(B.getROI(B_roi_rect));    // B sub-matrix - NO DATA CPY
+        C_sub = C.Get(C_roi_rect);               // C matrix     - DATA CPY
+    } break;
+    default:
+        break;
     }
 
     // create A B check sub-matrices, actual matrix data are COPIED
@@ -143,7 +143,7 @@ static void dspm_mult_ex_f32_aexx_functionality_in_cycle(m_test_data_t *test_d)
         dspm::Mat C_area_check = dspm::Mat::ones(test_d->m + (2 * test_d->C_start_row), test_d->k + (2 * test_d->C_start_col));
         test_assert_equal_mat_mat(C_sub_check, C_sub, message);
         test_assert_check_area_mat_mat(C_area_check, C_sub, test_d->C_start_row, test_d->C_start_col, message);
-    // C is a matrix
+        // C is a matrix
     } else {
         test_assert_equal_mat_mat(C_sub_check, C_sub, message);
     }
@@ -164,53 +164,53 @@ TEST_CASE("dspm_mult_ex_f32_aexx functionality", "[dspm]")
     const int start_col_min = 0;
     const int start_row_min = 0;
 
-    #if CONFIG_IDF_TARGET_ESP32S3
-        const int start_col_max = 4;
-        const int start_row_max = 4;
-        const int col_row_increment = 4;
-        const int m_max = 12;
-        const int n_max = 12;
-        const int k_mak = 12;
-        const int dim_increment = 4;
-        const int dim_start = 4;
-    #else
-        const int start_col_max = 1;
-        const int start_row_max = 1;
-        const int col_row_increment = 1;
-        const int m_max = 4;
-        const int n_max = 4;
-        const int k_mak = 4;
-        const int dim_increment = 1;
-        const int dim_start = 1;
-    #endif
+#if CONFIG_IDF_TARGET_ESP32S3
+    const int start_col_max = 4;
+    const int start_row_max = 4;
+    const int col_row_increment = 4;
+    const int m_max = 12;
+    const int n_max = 12;
+    const int k_mak = 12;
+    const int dim_increment = 4;
+    const int dim_start = 4;
+#else
+    const int start_col_max = 1;
+    const int start_row_max = 1;
+    const int col_row_increment = 1;
+    const int m_max = 4;
+    const int n_max = 4;
+    const int k_mak = 4;
+    const int dim_increment = 1;
+    const int dim_start = 1;
+#endif
 
     for (int var = 0; var < test_varations; var++) {
         // C Matrix starting row for sub-matrix
-        for (int C_start_row = start_row_min; C_start_row <= start_row_max; C_start_row+=col_row_increment) {
+        for (int C_start_row = start_row_min; C_start_row <= start_row_max; C_start_row += col_row_increment) {
 
             // C Matrix starting col for sub-matrix
-            for (int C_start_col = start_col_min; C_start_col <= start_col_max; C_start_col+=col_row_increment) {
+            for (int C_start_col = start_col_min; C_start_col <= start_col_max; C_start_col += col_row_increment) {
 
                 // A Matrix starting row for sub-matrix
-                for (int A_start_row = start_row_min; A_start_row <= start_row_max; A_start_row+=col_row_increment) {
+                for (int A_start_row = start_row_min; A_start_row <= start_row_max; A_start_row += col_row_increment) {
 
                     // A Matrix starting col for sub-matrix
-                    for (int A_start_col = start_col_min; A_start_col <= start_col_max; A_start_col+=col_row_increment) {
+                    for (int A_start_col = start_col_min; A_start_col <= start_col_max; A_start_col += col_row_increment) {
 
                         // B Matrix starting row for sub-matrix
-                        for (int B_start_row = start_row_min; B_start_row <= start_row_max; B_start_row+=col_row_increment) {
+                        for (int B_start_row = start_row_min; B_start_row <= start_row_max; B_start_row += col_row_increment) {
 
                             // B Matrix starting col for sub-matrix
-                            for (int B_start_col = start_col_min; B_start_col <= start_col_max; B_start_col+=col_row_increment) {
+                            for (int B_start_col = start_col_min; B_start_col <= start_col_max; B_start_col += col_row_increment) {
 
                                 // sub-matrix m parameter
-                                for (int m = dim_start; m <= m_max; m+=dim_increment) {
+                                for (int m = dim_start; m <= m_max; m += dim_increment) {
 
                                     // sub-matrix n paramter
-                                    for (int n = dim_start; n <= n_max; n+=dim_increment) {
+                                    for (int n = dim_start; n <= n_max; n += dim_increment) {
 
                                         // sub-matrix k parameter
-                                        for (int k = dim_start; k <= k_mak; k+=dim_increment) {
+                                        for (int k = dim_start; k <= k_mak; k += dim_increment) {
 
                                             test_data = {var, A_start_row, A_start_col, B_start_row, B_start_col, C_start_row, C_start_col, m, n, k};
                                             dspm_mult_ex_f32_aexx_functionality_in_cycle(&test_data);

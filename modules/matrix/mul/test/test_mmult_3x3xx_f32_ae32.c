@@ -57,11 +57,9 @@ TEST_CASE("dspm_mult_3x3x1_f32_ae32 functionality", "[dspm]")
     dspm_mult_3x3x1_f32_ae32(A_ptr, B_ptr, C_ptr);
     dspm_mult_f32_ansi(A_ptr, B_ptr, Cc_ptr, m, n, k);
 
-    for (int i=0 ; i< m ; i++)
-    {
-        for (int j=0 ; j< k ; j++)
-        {
-            ESP_LOGD(TAG, "[%i][%i] calc=%f, expected =%f",i,j, C[i][j], C_compare[i][j]);
+    for (int i = 0 ; i < m ; i++) {
+        for (int j = 0 ; j < k ; j++) {
+            ESP_LOGD(TAG, "[%i][%i] calc=%f, expected =%f", i, j, C[i][j], C_compare[i][j]);
         }
     }
     //Compare and check results
@@ -105,11 +103,9 @@ TEST_CASE("dspm_mult_3x3x3_f32_ae32 functionality", "[dspm]")
     dspm_mult_3x3x3_f32_ae32(A_ptr, B_ptr, C_ptr);
     dspm_mult_f32_ansi(A_ptr, B_ptr, Cc_ptr, m, n, k);
 
-    for (int i=0 ; i< m ; i++)
-    {
-        for (int j=0 ; j< k ; j++)
-        {
-            ESP_LOGD(TAG, "[%i][%i] calc=%f, expected =%f",i,j, C[i][j], C_compare[i][j]);
+    for (int i = 0 ; i < m ; i++) {
+        for (int j = 0 ; j < k ; j++) {
+            ESP_LOGD(TAG, "[%i][%i] calc=%f, expected =%f", i, j, C[i][j], C_compare[i][j]);
         }
     }
     // Compare and check results

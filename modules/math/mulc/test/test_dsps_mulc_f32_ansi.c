@@ -46,7 +46,7 @@ TEST_CASE("dsps_mulc_f32_ae32 functionality", "[dsps]")
     float y[n];
     for (int i = 0 ; i < n ; i++) {
         x[i] = i;
-        y[i] = i*10;
+        y[i] = i * 10;
     }
     dsps_mulc_f32_ae32(x, x, n, 10, 1, 1);
     for (int i = 0 ; i < n ; i++) {

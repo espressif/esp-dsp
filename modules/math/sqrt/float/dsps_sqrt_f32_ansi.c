@@ -19,17 +19,21 @@
 inline float dsps_sqrtf_f32_ansi(float f)
 {
     int result;
-    int* f_ptr = (int*)&f;
+    int *f_ptr = (int *)&f;
     result = 0x1fbb4000 + (*f_ptr >> 1);
     const int *p = &result;
-    float* f_result = (float*)p;
-    return *f_result;   
+    float *f_result = (float *)p;
+    return *f_result;
 }
 
 esp_err_t dsps_sqrt_f32_ansi(const float *input, float *output, int len)
 {
-    if (NULL == input) return ESP_ERR_DSP_PARAM_OUTOFRANGE;
-    if (NULL == output) return ESP_ERR_DSP_PARAM_OUTOFRANGE;
+    if (NULL == input) {
+        return ESP_ERR_DSP_PARAM_OUTOFRANGE;
+    }
+    if (NULL == output) {
+        return ESP_ERR_DSP_PARAM_OUTOFRANGE;
+    }
 
     for (int i = 0 ; i < len ; i++) {
         output[i] = dsps_sqrtf_f32_ansi(input[i]);
@@ -50,4 +54,3 @@ float dsps_inverted_sqrtf_f32_ansi(float data )
     conv.f  *= ( threehalfs - ( x2 * conv.f * conv.f ) );
     return conv.f;
 }
-

@@ -29,21 +29,18 @@ TEST_CASE("dsps_sqrtf_f32_ansi functionality", "[dsps]")
     float min_err = 0;
     float min_value = INT32_MAX;
     int test_points = 100000;
-    for (size_t i = 0; i < test_points; i++)
-    {
+    for (size_t i = 0; i < test_points; i++) {
         float test_value = rand();
         // if (test_value > max_value) max_value = test_value;
         // if (test_value < min_value) min_value = test_value;
         float x = sqrtf(test_value);
         float y = dsps_sqrtf_f32(test_value);
-        float error = 20*log10f(fabs((x - y)/x) + 0.000001);
-        if (error > max_err)
-        {
+        float error = 20 * log10f(fabs((x - y) / x) + 0.000001);
+        if (error > max_err) {
             max_err = error;
             max_value = test_value;
         }
-        if (error < min_err) 
-        {
+        if (error < min_err) {
             min_err = error;
             min_value = test_value;
         }
@@ -58,12 +55,12 @@ TEST_CASE("dsps_sqrtf_f32_ansi functionality", "[dsps]")
 TEST_CASE("dsps_sqrt_f32_ansi functionality", "[dsps]")
 {
     int n = 256;
-    float* x = (float*)malloc(sizeof(float)*n);
-    float* result = (float*)malloc(sizeof(float)*n);
-    float* y = (float*)malloc(sizeof(float)*n);
+    float *x = (float *)malloc(sizeof(float) * n);
+    float *result = (float *)malloc(sizeof(float) * n);
+    float *y = (float *)malloc(sizeof(float) * n);
     for (int i = 0 ; i < n ; i++) {
         y[i] = i * 10;
-        x[i] = y[i]*y[i];
+        x[i] = y[i] * y[i];
     }
     unsigned int start_b = xthal_get_ccount();
     dsps_sqrt_f32_ansi(x, result, n);
@@ -71,7 +68,7 @@ TEST_CASE("dsps_sqrt_f32_ansi functionality", "[dsps]")
 
     for (int i = 0 ; i < n ; i++) {
         //printf("Result[%i] = %f, expected = %f,  diff = %f\n", i, result[i], y[i], 20*logf(fabs((result[i] - y[i])/y[i]) + 0.000001));
-        float error = 20*log10f(fabs((result[i] - y[i])/y[i]) + 0.000001);
+        float error = 20 * log10f(fabs((result[i] - y[i]) / y[i]) + 0.000001);
         if (error > -25) {
             TEST_ASSERT_EQUAL(result[i], y[i]);
         }

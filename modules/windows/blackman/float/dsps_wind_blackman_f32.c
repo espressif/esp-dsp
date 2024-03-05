@@ -22,7 +22,7 @@ void dsps_wind_blackman_f32(float *window, int len)
     const float a1 = 0.5;
     const float a2 = 0.08;
 
-    float len_mult = 1/(float)(len-1);
+    float len_mult = 1 / (float)(len - 1);
     for (int i = 0; i < len; i++) {
         window[i] = a0 - a1 * cosf(i * 2 * M_PI * len_mult) + a2 * cosf(i * 4 * M_PI * len_mult);
     }

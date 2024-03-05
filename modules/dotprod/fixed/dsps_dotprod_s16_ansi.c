@@ -18,7 +18,7 @@ esp_err_t dsps_dotprod_s16_ansi(const int16_t *src1, const int16_t *src2, int16_
 {
     // To make correct round operation we have to shift round value
     long long acc = 0x7fff >> shift;
-    
+
     for (int i = 0 ; i < len ; i++) {
         acc += (int32_t)src1[i] * (int32_t)src2[i];
     }
@@ -31,4 +31,3 @@ esp_err_t dsps_dotprod_s16_ansi(const int16_t *src1, const int16_t *src2, int16_
     }
     return ESP_OK;
 }
-

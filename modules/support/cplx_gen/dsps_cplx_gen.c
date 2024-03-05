@@ -13,7 +13,7 @@ esp_err_t dsps_cplx_gen_ansi(cplx_sig_t *cplx_gen, void *output, int32_t len)
     float ph = cplx_gen->phase;
     const float fr = cplx_gen->freq;
     int sin_pos, cos_pos;
- 
+
     for (int i = 0 ; i < len; i++) {
 
         if (ph < 0) {
@@ -24,7 +24,7 @@ esp_err_t dsps_cplx_gen_ansi(cplx_sig_t *cplx_gen, void *output, int32_t len)
         }
 
         sin_pos = (int)(ph * (cplx_gen->lut_len));
-        cos_pos = (sin_pos + sin_to_cos)&(cplx_gen->lut_len - 1);
+        cos_pos = (sin_pos + sin_to_cos) & (cplx_gen->lut_len - 1);
 
         if (cplx_gen->d_type == S16_FIXED) {
             ((int16_t *)output)[i * 2 + 0] = ((int16_t *)cplx_gen->lut)[cos_pos];

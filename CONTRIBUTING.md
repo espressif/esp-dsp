@@ -12,6 +12,12 @@ We require accepting the contributor's license agreement for all pull requests. 
 
 If you'd like to propose a change to the existing APIs or a large-scale refactoring of the implementation, we recommend opening an issue first to discuss this.
 
+## Pre-commit hooks
+
+ESP-DSP project uses [pre-commit hooks](https://pre-commit.com/) to perform code formatting and other checks when you run `git commit`.
+
+To install pre-commit hooks, run `pip install pre-commit && pre-commit install`. 
+
 ## Updating the Benchmarks Table
 
 The benchmarks table [esp-dsp-benchmarks.rst](docs/esp-dsp-benchmarks.rst) contains benchmarks for ESP32 and ESP32-S3 CPUs. The benchmarks are collected with compiler optimizations for speed (-Os) and for size (-O2). This table may need to be updated if you have changed the implementations of some of the functions.

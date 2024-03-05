@@ -28,12 +28,13 @@ TEST_CASE("dsps_wind_hann_f32: test Hann window for symmetry", "[dsps]")
 {
     dsps_wind_hann_f32(data, length);
     float hann_diff = 0;
-    for (int i=0 ; i< length/2 ; i++)
-    {
-        hann_diff += fabs(data[i] - data[length - 1 -i]);
+    for (int i = 0 ; i < length / 2 ; i++) {
+        hann_diff += fabs(data[i] - data[length - 1 - i]);
     }
-	
-	if (hann_diff > 0) TEST_ASSERT_EQUAL(0, hann_diff);
+
+    if (hann_diff > 0) {
+        TEST_ASSERT_EQUAL(0, hann_diff);
+    }
     dsps_view(data, length, 64, 10, 0, 1, '.');
 }
 
@@ -41,11 +42,12 @@ TEST_CASE("dsps_wind_blackman_f32: test Blackman window for symmetry", "[dsps]")
 {
     dsps_wind_blackman_f32(data, length);
     float hann_diff = 0;
-    for (int i=0 ; i< length/2 ; i++)
-    {
-        hann_diff += fabs(data[i] - data[length - 1 -i]);
-    }	
-	if (hann_diff > 0) TEST_ASSERT_EQUAL(0, hann_diff);
+    for (int i = 0 ; i < length / 2 ; i++) {
+        hann_diff += fabs(data[i] - data[length - 1 - i]);
+    }
+    if (hann_diff > 0) {
+        TEST_ASSERT_EQUAL(0, hann_diff);
+    }
     dsps_view(data, length, 64, 10, 0, 1, '.');
 }
 
@@ -53,12 +55,13 @@ TEST_CASE("dsps_wind_blackman_harris_f32: test Blackman-Hariss window for symmet
 {
     dsps_wind_blackman_harris_f32(data, length);
     float hann_diff = 0;
-    for (int i=0 ; i< length/2 ; i++)
-    {
-        hann_diff += fabs(data[i] - data[length - 1 -i]);
+    for (int i = 0 ; i < length / 2 ; i++) {
+        hann_diff += fabs(data[i] - data[length - 1 - i]);
     }
-	
-	if (hann_diff > 0) TEST_ASSERT_EQUAL(0, hann_diff);
+
+    if (hann_diff > 0) {
+        TEST_ASSERT_EQUAL(0, hann_diff);
+    }
     dsps_view(data, length, 64, 10, 0, 1, '.');
 }
 
@@ -66,12 +69,13 @@ TEST_CASE("dsps_wind_blackman_nuttall_f32: test Blackman-Nuttall window for symm
 {
     dsps_wind_blackman_nuttall_f32(data, length);
     float hann_diff = 0;
-    for (int i=0 ; i< length/2 ; i++)
-    {
-        hann_diff += fabs(data[i] - data[length - 1 -i]);
+    for (int i = 0 ; i < length / 2 ; i++) {
+        hann_diff += fabs(data[i] - data[length - 1 - i]);
     }
-	
-	if (hann_diff > 0) TEST_ASSERT_EQUAL(0, hann_diff);
+
+    if (hann_diff > 0) {
+        TEST_ASSERT_EQUAL(0, hann_diff);
+    }
     dsps_view(data, length, 64, 10, 0, 1, '.');
 }
 
@@ -79,12 +83,13 @@ TEST_CASE("dsps_wind_nuttall_f32: test Nuttall window for symmetry", "[dsps]")
 {
     dsps_wind_nuttall_f32(data, length);
     float hann_diff = 0;
-    for (int i=0 ; i< length/2 ; i++)
-    {
-        hann_diff += fabs(data[i] - data[length - 1 -i]);
+    for (int i = 0 ; i < length / 2 ; i++) {
+        hann_diff += fabs(data[i] - data[length - 1 - i]);
     }
-	
-	if (hann_diff > 0) TEST_ASSERT_EQUAL(0, hann_diff);
+
+    if (hann_diff > 0) {
+        TEST_ASSERT_EQUAL(0, hann_diff);
+    }
     dsps_view(data, length, 64, 10, 0, 1, '.');
 }
 
@@ -92,11 +97,12 @@ TEST_CASE("dsps_wind_flat_top_f32: test Flat-Top window for symmetry", "[dsps]")
 {
     dsps_wind_flat_top_f32(data, length);
     float hann_diff = 0;
-    for (int i=0 ; i< length/2 ; i++)
-    {
-        hann_diff += fabs(data[i] - data[length - 1 -i]);
+    for (int i = 0 ; i < length / 2 ; i++) {
+        hann_diff += fabs(data[i] - data[length - 1 - i]);
     }
-	
-	if (hann_diff > 0) TEST_ASSERT_EQUAL(0, hann_diff);
+
+    if (hann_diff > 0) {
+        TEST_ASSERT_EQUAL(0, hann_diff);
+    }
     dsps_view(data, length, 64, 10, 0, 1, '.');
 }

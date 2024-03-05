@@ -277,7 +277,7 @@ dspm::Mat ekf::eul2rotm(float xyz[3])
 
 dspm::Mat ekf::rotm2eul(dspm::Mat &rotm)
 {
-    dspm::Mat result(3,1);
+    dspm::Mat result(3, 1);
     float x, y, z;
 //    float cy = sqrtf(rotm(2, 2) * rotm(2, 2) + rotm(2, 0) * rotm(2, 0));
     float cy = sqrtf(rotm(2, 2) * rotm(2, 2) + rotm(1, 2) * rotm(1, 2));
@@ -409,7 +409,7 @@ dspm::Mat ekf::dFdq_inv(dspm::Mat &vector, dspm::Mat &q)
 
 dspm::Mat ekf::StateXdot(dspm::Mat &x, float *u)
 {
-	dspm::Mat U(u, this->G.cols, 1);
-	dspm::Mat Xdot = (this->F * x + this->G * U);
-	return Xdot;
+    dspm::Mat U(u, this->G.cols, 1);
+    dspm::Mat Xdot = (this->F * x + this->G * U);
+    return Xdot;
 }

@@ -329,4 +329,3 @@ esp_err_t dsps_bit_rev4r_fc32(float *data, int N)
 
     return dsps_bit_rev_lookup_fc32(data, table_size, table);
 }
-

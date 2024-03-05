@@ -34,4 +34,3 @@ esp_err_t dsps_fir_f32_ansi(fir_f32_t *fir, const float *input, float *output, i
     }
     return ESP_OK;
 }
-

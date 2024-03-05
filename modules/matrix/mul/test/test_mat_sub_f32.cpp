@@ -34,7 +34,8 @@ TEST_CASE("Mat class matrix subset", TAG)
                       5, 6, 7, 8, 9,
                       0, 1, 2, 3, 4,
                       5, 6, 7, 8, 9,
-                      0, 1, 2, 3, 4};
+                      0, 1, 2, 3, 4
+                     };
 
     // Test matrix dimensions
     const int m = 5;
@@ -89,10 +90,11 @@ TEST_CASE("Mat class matrix subset", TAG)
     std::cout << mat_subset3 << std::endl;
     dspm::Mat mat_subset3_check = mat.Get(start_row, 5, start_col, roi_cols);
 
-    for(int row = 0; row < mat_subset3_check.rows; row++){
-        if(row % 2)
-            continue;;
-        for(int col =  0; col < mat_subset3_check.cols; col++){
+    for (int row = 0; row < mat_subset3_check.rows; row++) {
+        if (row % 2) {
+            continue;
+        };
+        for (int col =  0; col < mat_subset3_check.cols; col++) {
             TEST_ASSERT_EQUAL_FLOAT(mat_subset3_check(row, col), mat_subset3(row / 2, col));
         }
     }
@@ -101,12 +103,12 @@ TEST_CASE("Mat class matrix subset", TAG)
 static void test_mat_subset_operator_eq()
 {
     dspm::Mat mat(2, 2);
-    for (int i = 0; i < mat.length; i++){
+    for (int i = 0; i < mat.length; i++) {
         mat.data[i] = 1;
     }
 
     dspm::Mat mat1(2, 2);
-    for (int i = 0; i < mat1.length; i++){
+    for (int i = 0; i < mat1.length; i++) {
         mat1.data[i] = i + 1;
     }
 
@@ -120,7 +122,7 @@ static void test_mat_subset_operator_eq()
     test_assert_equal_mat_mat(mat1, mat, "=operator, mat = mat (equal dim)");
 
     dspm::Mat mat2(3, 3);
-    for (int i = 0; i < mat2.length; i++){
+    for (int i = 0; i < mat2.length; i++) {
         mat2.data[i] = (i + 1) * 2;
     }
 
@@ -136,7 +138,7 @@ static void test_mat_subset_operator_eq()
     dspm::Mat mat3(4, 4);
     dspm::Mat mat4(4, 4);
     dspm::Mat mat4_compare(4, 4);
-    for (int i = 0; i < mat3.length; i++){
+    for (int i = 0; i < mat3.length; i++) {
         mat3.data[i] = (i + 1) * 3;
         mat4.data[i] = (i + 1) * 4;
         mat4_compare.data[i] = (i + 1) * 4;
@@ -144,7 +146,7 @@ static void test_mat_subset_operator_eq()
     dspm::Mat mat3_sub_3x3 = mat3.getROI(1, 1, 3, 3);
     dspm::Mat mat3_sub_2x2 = mat3.getROI(1, 1, 2, 2);
     dspm::Mat mat3_mat_2x2 = mat3.Get(1, 2, 1, 2);
-    
+
     // matrix and sub-matrix, dimensions are equal
     // mat1(3, 3), mat3_sub_3x3(3, 3)
     mat1 = mat3_sub_3x3;
@@ -196,7 +198,7 @@ static void test_mat_subset_operator_eq_eq(void)
     dspm::Mat A(MAT_ROW, MAT_COL);
     dspm::Mat B(MAT_ROW, MAT_COL);
 
-    for(int i = 0; i < A.length; i++) {
+    for (int i = 0; i < A.length; i++) {
         A.data[i] = i;
         B.data[i] = i * 2;
     }
@@ -206,8 +208,8 @@ static void test_mat_subset_operator_eq_eq(void)
 
     dspm::Mat B_sub = B.getROI(roi_rect);
 
-    for(int row = 0; row < B_sub.rows; row++){
-        for(int col = 0; col < B_sub.cols; col++){
+    for (int row = 0; row < B_sub.rows; row++) {
+        for (int col = 0; col < B_sub.cols; col++) {
             B_sub(row, col) = B_sub(row, col) / 2;
         }
     }
@@ -228,7 +230,7 @@ static void test_mat_subset_operator_eq_eq(void)
 static void test_mat_subset_operator_mat_div_mat(void)
 {
     dspm::Mat mat(MAT_ROW, MAT_COL);
-    for (int i = 0; i < mat.length; i++){
+    for (int i = 0; i < mat.length; i++) {
         mat.data[i] = i;
     }
 
@@ -245,7 +247,7 @@ static void test_mat_subset_operator_mat_div_mat(void)
     dspm::Mat C_mat = C.Get(roi_rect);
     dspm::Mat C_compare(ROI_ROW, ROI_COL);
 
-    for(int i = 0; i < C_compare.length; i++) {
+    for (int i = 0; i < C_compare.length; i++) {
         C_compare.data[i] = A_mat.data[i] / B_mat.data[i];
     }
 
@@ -295,7 +297,7 @@ static void test_mat_subset_operator_xor(void)
 {
     dspm::Mat mat(5, 5);
     dspm::Mat mat_area_check(5, 5);
-    for (int i = 0; i < mat.length; i++){
+    for (int i = 0; i < mat.length; i++) {
         mat.data[i] = i;
         mat_area_check.data[i] = i;
     }
@@ -335,7 +337,7 @@ static void test_mat_subset_operator_mat_div_const(void)
     const float div_const = 2;
 
     dspm::Mat mat(MAT_ROW, MAT_COL);
-    for (int i = 0; i < mat.length; i++){
+    for (int i = 0; i < mat.length; i++) {
         mat.data[i] = i;
     }
 
@@ -349,7 +351,7 @@ static void test_mat_subset_operator_mat_div_const(void)
     dspm::Mat C_mat = C.Get(roi_rect);
     dspm::Mat C_compare = mat.Get(roi_rect);
 
-    for(int i = 0; i < C_compare.length; i++) {
+    for (int i = 0; i < C_compare.length; i++) {
         C_compare.data[i] /= div_const;
     }
 
@@ -379,7 +381,7 @@ static void test_mat_subset_operator_mat_sub_const(void)
     const float sub_const = 2;
 
     dspm::Mat mat(MAT_ROW, MAT_COL);
-    for (int i = 0; i < mat.length; i++){
+    for (int i = 0; i < mat.length; i++) {
         mat.data[i] = i;
     }
 
@@ -393,7 +395,7 @@ static void test_mat_subset_operator_mat_sub_const(void)
     dspm::Mat C_mat = C.Get(roi_rect);
     dspm::Mat C_compare = mat.Get(roi_rect);
 
-    for(int i = 0; i < C_compare.length; i++) {
+    for (int i = 0; i < C_compare.length; i++) {
         C_compare.data[i] -= sub_const;
     }
 
@@ -421,7 +423,7 @@ static void test_mat_subset_operator_mat_sub_const(void)
 static void test_mat_subset_operator_mat_sub_mat(void)
 {
     dspm::Mat mat(MAT_ROW, MAT_COL);
-    for (int i = 0; i < mat.length; i++){
+    for (int i = 0; i < mat.length; i++) {
         mat.data[i] = i;
     }
 
@@ -438,7 +440,7 @@ static void test_mat_subset_operator_mat_sub_mat(void)
     dspm::Mat C_mat = C.Get(roi_rect);
     dspm::Mat C_compare(ROI_ROW, ROI_COL);
 
-    for(int i = 0; i < C_compare.length; i++) {
+    for (int i = 0; i < C_compare.length; i++) {
         C_compare.data[i] = A_mat.data[i] - B_mat.data[i];
     }
 
@@ -487,7 +489,7 @@ static void test_mat_subset_operator_mat_sub_mat(void)
 static void test_mat_subset_operator_mat_add_mat(void)
 {
     dspm::Mat mat(MAT_ROW, MAT_COL);
-    for (int i = 0; i < mat.length; i++){
+    for (int i = 0; i < mat.length; i++) {
         mat.data[i] = i;
     }
 
@@ -504,7 +506,7 @@ static void test_mat_subset_operator_mat_add_mat(void)
     dspm::Mat C_mat = C.Get(roi_rect);
     dspm::Mat C_compare(ROI_ROW, ROI_COL);
 
-    for(int i = 0; i < C_compare.length; i++) {
+    for (int i = 0; i < C_compare.length; i++) {
         C_compare.data[i] = A_mat.data[i] + B_mat.data[i];
     }
 
@@ -552,7 +554,7 @@ static void test_mat_subset_operator_mat_add_const(void)
     const float add_const = 2;
 
     dspm::Mat mat(MAT_ROW, MAT_COL);
-    for (int i = 0; i < mat.length; i++){
+    for (int i = 0; i < mat.length; i++) {
         mat.data[i] = i;
     }
 
@@ -566,7 +568,7 @@ static void test_mat_subset_operator_mat_add_const(void)
     dspm::Mat C_mat = C.Get(roi_rect);
     dspm::Mat C_compare = mat.Get(roi_rect);
 
-    for(int i = 0; i < C_compare.length; i++) {
+    for (int i = 0; i < C_compare.length; i++) {
         C_compare.data[i] += add_const;
     }
 
@@ -593,7 +595,7 @@ static void test_mat_subset_operator_mat_mul_const(void)
     const float mul_const = 2;
 
     dspm::Mat mat(MAT_ROW, MAT_COL);
-    for (int i = 0; i < mat.length; i++){
+    for (int i = 0; i < mat.length; i++) {
         mat.data[i] = i;
     }
 
@@ -607,7 +609,7 @@ static void test_mat_subset_operator_mat_mul_const(void)
     dspm::Mat C_mat = C.Get(roi_rect);
     dspm::Mat C_compare = mat.Get(roi_rect);
 
-    for(int i = 0; i < C_compare.length; i++) {
+    for (int i = 0; i < C_compare.length; i++) {
         C_compare.data[i] *= mul_const;
     }
 
@@ -635,7 +637,7 @@ static void test_mat_subset_operator_mat_mul_const(void)
 static void test_mat_subset_operator_mat_mul_mat_2(void)
 {
     dspm::Mat mat(MAT_ROW, MAT_COL);
-    for (int i = 0; i < mat.length; i++){
+    for (int i = 0; i < mat.length; i++) {
         mat.data[i] = i;
     }
 
@@ -682,7 +684,7 @@ static void test_mat_subset_operator_mat_mul_mat_2(void)
 static void test_mat_subset_operator_mat_mul_mat_1(void)
 {
     dspm::Mat mat(MAT_ROW, MAT_COL);
-    for (int i = 0; i < mat.length; i++){
+    for (int i = 0; i < mat.length; i++) {
         mat.data[i] = i;
     }
 
@@ -752,8 +754,8 @@ static void test_mat_subset_solve(void)
 {
     int m = 3;
     int n = 3;
-    float data_a[9] ={3, 2, 1, 2, 3, 1, 2, 1, 3}; 
-    float data_b[9] ={5, -1, 4}; 
+    float data_a[9] = {3, 2, 1, 2, 3, 1, 2, 1, 3};
+    float data_b[9] = {5, -1, 4};
     dspm::Mat A(data_a, m, n);
     dspm::Mat b(data_b, m, 1);
 
@@ -774,13 +776,13 @@ static void test_mat_subset_solve(void)
     test_assert_check_area_mat_mat(b_origin_area_check, b_sub, 1, 1, "check solve, area b");
 
     std::cout << "Solve result matrix: rows: " << x1.rows << ", columns: " << x1.cols << std::endl;
-    std::cout << (x1*12).t();
+    std::cout << (x1 * 12).t();
     dspm::Mat x2 = dspm::Mat::roots(A_sub, b_sub);
     test_assert_check_area_mat_mat(A_origin_area_check, A_sub, 1, 1, "check solve, area A");
     test_assert_check_area_mat_mat(b_origin_area_check, b_sub, 1, 1, "check solve, area b");
-    
+
     std::cout << "Roots result matrix: rows: " << x2.rows << ", columns: " << x2.cols << std::endl;
-    std::cout << (x2*12).t();
+    std::cout << (x2 * 12).t();
     dspm::Mat diff_b = x1 - x2;
     std::cout << "Difference between solve() abd roots(): " << diff_b.t();
     for (int row = 0; row < diff_b.rows; row++) {
@@ -796,14 +798,16 @@ static void test_mat_subset_inverse(void)
 {
     // Test inverse()
     dspm::Mat result;
-    float m_data[] = {2,5,7,
-                      6,3,4,
-                      5,-2,-3};
+    float m_data[] = {2, 5, 7,
+                      6, 3, 4,
+                      5, -2, -3
+                     };
     float m_result[] = {  1.0000,   -1.0000,    1.0000,
-                        -38.0000,   41.0000,  -34.0000,
-                         27.0000,  -29.0000,   24.0000};
+                          -38.0000,   41.0000,  -34.0000,
+                          27.0000,  -29.0000,   24.0000
+                       };
 
-    result = dspm::Mat(m_data, 3,3);
+    result = dspm::Mat(m_data, 3, 3);
 
     dspm::Mat result_origin = dspm::Mat::ones(5);
     dspm::Mat result_origin_area_check = dspm::Mat::ones(5);
@@ -816,13 +820,13 @@ static void test_mat_subset_inverse(void)
 
     std::cout << "inverse: " << std::endl;
     std::cout << result << std::endl;
-    for (int i = 0; i < 3*3; i++) {
+    for (int i = 0; i < 3 * 3; i++) {
         if (std::abs(result.data[i] - m_result[i]) > 1e-8) {
             printf("Error at[%i] = %f, expected= %f, calculated = %f \n", i, std::abs(result.data[i] - m_result[i]), m_result[i], result.data[i]);
             TEST_ASSERT_MESSAGE (false, "Error in inverse() operation!\n");
         }
     }
-    result = dspm::Mat(m_data, 3,3);
+    result = dspm::Mat(m_data, 3, 3);
     result_origin = dspm::Mat::ones(5);
     result_origin.Copy(result, 1, 1);
     result_sub = result_origin.getROI(1, 1, 3, 3);
@@ -832,7 +836,7 @@ static void test_mat_subset_inverse(void)
 
     std::cout << "pinv: " << std::endl;
     std::cout << result << std::endl;
-    for (int i = 0; i < 3*3; i++) {
+    for (int i = 0; i < 3 * 3; i++) {
         if (std::abs(result.data[i] - m_result[i]) > 1e-2) {
             printf("Error at[%i] = %f, expected= %f, calculated = %f \n", i, std::abs(result.data[i] - m_result[i]), m_result[i], result.data[i]);
             TEST_ASSERT_MESSAGE (false, "Error in pinv() operation!\n");
@@ -854,9 +858,9 @@ static void test_mat_subset_normalize(void)
     std::cout << result_sub << std::endl;
 
     for (int row = 0; row < result_sub.rows; row++) {
-        for (int col=0 ; col < result_sub.cols ; col++) {
-            if (std::abs(result_sub(row,col) - 0.5) > dspm::Mat::abs_tol) {
-                ESP_LOGE(TAG, "Error bigger then expected: %f", std::abs(result_sub(row,col) - 0.5));
+        for (int col = 0 ; col < result_sub.cols ; col++) {
+            if (std::abs(result_sub(row, col) - 0.5) > dspm::Mat::abs_tol) {
+                ESP_LOGE(TAG, "Error bigger then expected: %f", std::abs(result_sub(row, col) - 0.5));
                 TEST_ASSERT_MESSAGE (false, "Error in normalize() operation! ");
             }
         }
@@ -867,8 +871,8 @@ static void test_mat_subset_swap_trans_dot_clear(void)
 {
     dspm::Mat mat(5, 5);
     dspm::Mat mat_area_check(5, 5);
-    for (int row = 0; row < mat.rows; row++){
-        for (int col = 0; col < mat.cols; col++){
+    for (int row = 0; row < mat.rows; row++) {
+        for (int col = 0; col < mat.cols; col++) {
             mat(row, col) = row + 1;
             mat_area_check(row, col) = row + 1;
         }

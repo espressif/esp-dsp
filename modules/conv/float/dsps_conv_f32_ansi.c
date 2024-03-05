@@ -49,7 +49,7 @@ esp_err_t dsps_conv_f32_ansi(const float *Signal, const int siglen, const float 
         for (k = 0; k <= n; k++) {
             convout[n] += sig[k] * kern[n - k];
         }
-        ESP_LOGV(TAG,"L1 kmin = %i, kmax = %i , n-kmin = %i", 0, n, n);
+        ESP_LOGV(TAG, "L1 kmin = %i, kmax = %i , n-kmin = %i", 0, n, n);
     }
     for (int n = lkern; n < lsig; n++) {
         size_t kmin, kmax, k;
@@ -58,7 +58,7 @@ esp_err_t dsps_conv_f32_ansi(const float *Signal, const int siglen, const float 
 
         kmin = n - lkern + 1;
         kmax = n;
-        ESP_LOGV(TAG,"L2 n=%i, kmin = %i, kmax = %i , n-kmin = %i", n, kmin, kmax, n-kmin);
+        ESP_LOGV(TAG, "L2 n=%i, kmin = %i, kmax = %i , n-kmin = %i", n, kmin, kmax, n - kmin);
         for (k = kmin; k <= kmax; k++) {
             convout[n] += sig[k] * kern[n - k];
         }
@@ -75,7 +75,7 @@ esp_err_t dsps_conv_f32_ansi(const float *Signal, const int siglen, const float 
         for (k = kmin; k <= kmax; k++) {
             convout[n] += sig[k] * kern[n - k];
         }
-        ESP_LOGV(TAG,"L3 n=%i, kmin = %i, kmax = %i , n-kmin = %i", n, kmin, kmax, n-kmin);
+        ESP_LOGV(TAG, "L3 n=%i, kmin = %i, kmax = %i , n-kmin = %i", n, kmin, kmax, n - kmin);
     }
     return ESP_OK;
 }

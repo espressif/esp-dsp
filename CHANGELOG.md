@@ -8,24 +8,64 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased] 
 
 ### Added
+- ci: add pre-commit hooks
+
+### Changed
+
+### Removed
+
+## [1.4.11] 2024-02-21
+
+### Added
 - Fixed point functions mul/add/sub for esp32 and esp32s3
-- Target tests
-- Application for Azure IoT board
-- FIR f32 decimation filter optimized for esp32s3
-- Add Esp32-LyraT board application 
+
+## [1.4.10] 2023-11-30
+
+### Added
+- Demo application for ESP32-S3-BOX-Lite Board
+
+## [1.4.9] 2023-11-09
+
+### Added
 - New methods for Mat class to support sub-matrix operations
+
+## [1.4.8] 2023-10-16
+
+### Added
+- Audio amplifier application for the esp32-LyraT board
+
+## [1.4.7] 2023-07-13
+
+### Changed
+- Demo applications added to the component manager as examples 
+
+## [1.4.6] 2023-07-11
+
+### Added
+- FIR f32 decimation filter optimized for esp32s3
+
+### Changed
+- In dsps_fird_init_f32() function the parameter start_pos removed
+- In dsps_fird_f32() function the coefficients order changed to backward order
+
+## [1.4.5] 2023-07-11
+
+### Added
+- Application for Azure IoT board
+- Add Esp32-LyraT board application 
+
+## [1.4.4] 2023-07-03
+
+### Changed
+- Update documentation build
+
+## [1.4.1] 2023-06-30
 
 ### Fixed
 - Add Bi-Quad for esp32s3 into common CMakeLists.txt 
 
-### Changed
-- Update documentation build
-- In dsps_fird_init_f32() function the parameter start_pos removed
-- In dsps_fird_f32() function the coefficients order changed to backward order
 
-### Removed
-
-## [1.4.0] 2023-05-29
+## [1.4.0] 2023-03-29
 
 ### Added
 - Complex signal generator dsps_cplx_gen()

@@ -8,17 +8,33 @@
 
 esp_err_t dspm_addc_f32_ansi(const float *input, float *output, float C, int rows, int cols, int padd_in, int padd_out, int step_in, int step_out)
 {
-    if (NULL == input) return ESP_ERR_DSP_PARAM_OUTOFRANGE;
-    if (NULL == output) return ESP_ERR_DSP_PARAM_OUTOFRANGE;
+    if (NULL == input) {
+        return ESP_ERR_DSP_PARAM_OUTOFRANGE;
+    }
+    if (NULL == output) {
+        return ESP_ERR_DSP_PARAM_OUTOFRANGE;
+    }
 
-    if (rows <= 0) return ESP_ERR_DSP_PARAM_OUTOFRANGE;
-    if (cols <= 0) return ESP_ERR_DSP_PARAM_OUTOFRANGE;
+    if (rows <= 0) {
+        return ESP_ERR_DSP_PARAM_OUTOFRANGE;
+    }
+    if (cols <= 0) {
+        return ESP_ERR_DSP_PARAM_OUTOFRANGE;
+    }
 
-    if (padd_in < 0) return ESP_ERR_DSP_PARAM_OUTOFRANGE;
-    if (padd_out < 0) return ESP_ERR_DSP_PARAM_OUTOFRANGE;
+    if (padd_in < 0) {
+        return ESP_ERR_DSP_PARAM_OUTOFRANGE;
+    }
+    if (padd_out < 0) {
+        return ESP_ERR_DSP_PARAM_OUTOFRANGE;
+    }
 
-    if (step_in <= 0) return ESP_ERR_DSP_PARAM_OUTOFRANGE;
-    if (step_out <= 0) return ESP_ERR_DSP_PARAM_OUTOFRANGE;
+    if (step_in <= 0) {
+        return ESP_ERR_DSP_PARAM_OUTOFRANGE;
+    }
+    if (step_out <= 0) {
+        return ESP_ERR_DSP_PARAM_OUTOFRANGE;
+    }
 
     const int ptr_step_in = cols + padd_in;
     const int ptr_step_out = cols + padd_out;

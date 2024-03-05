@@ -42,25 +42,25 @@ __attribute__((aligned(16)))
 float wind[N_SAMPLES];
 // working complex array
 __attribute__((aligned(16)))
-float y_cf[N_SAMPLES*2];
+float y_cf[N_SAMPLES * 2];
 // Pointers to result arrays
 __attribute__((aligned(16)))
-float* y1_cf = &y_cf[0];
+float *y1_cf = &y_cf[0];
 
-void process_and_show(float* data, int length)
+void process_and_show(float *data, int length)
 {
     dsps_fft2r_fc32(data, length);
-    // Bit reverse 
+    // Bit reverse
     dsps_bit_rev_fc32(data, length);
     // Convert one complex vector to two complex vectors
     dsps_cplx2reC_fc32(data, length);
 
-    for (int i = 0 ; i < length/2 ; i++) {
-        data[i] = 10 * log10f((data[i * 2 + 0] * data[i * 2 + 0] + data[i * 2 + 1] * data[i * 2 + 1])/N);
+    for (int i = 0 ; i < length / 2 ; i++) {
+        data[i] = 10 * log10f((data[i * 2 + 0] * data[i * 2 + 0] + data[i * 2 + 1] * data[i * 2 + 1]) / N);
     }
-  
+
     // Show power spectrum in 64x10 window from -100 to 0 dB from 0..N/4 samples
-    dsps_view(data, length/2, 64, 10,  -120, 40, '|');
+    dsps_view(data, length / 2, 64, 10,  -120, 40, '|');
 
 }
 
@@ -69,8 +69,7 @@ void app_main()
     esp_err_t ret;
     ESP_LOGI(TAG, "Start Example.");
     ret = dsps_fft2r_init_fc32(NULL, CONFIG_DSP_MAX_FFT_SIZE);
-    if (ret  != ESP_OK)
-    {
+    if (ret  != ESP_OK) {
         ESP_LOGE(TAG, "Not possible to initialize FFT. Error = %i", ret);
         return;
     }
@@ -79,10 +78,9 @@ void app_main()
     // Generate Hann window
     dsps_wind_hann_f32(wind, N);
     // Convert two input vectors to one complex vector
-    for (int i=0 ; i< N ; i++)
-    {
-        y_cf[i*2 + 0] = wind[i];
-        y_cf[i*2 + 1] = 0;
+    for (int i = 0 ; i < N ; i++) {
+        y_cf[i * 2 + 0] = wind[i];
+        y_cf[i * 2 + 1] = 0;
     }
     process_and_show(y_cf, N);
 
@@ -90,10 +88,9 @@ void app_main()
     // Generate Blackman window
     dsps_wind_blackman_f32(wind, N);
     // Convert two input vectors to one complex vector
-    for (int i=0 ; i< N ; i++)
-    {
-        y_cf[i*2 + 0] = wind[i];
-        y_cf[i*2 + 1] = 0;
+    for (int i = 0 ; i < N ; i++) {
+        y_cf[i * 2 + 0] = wind[i];
+        y_cf[i * 2 + 1] = 0;
     }
     process_and_show(y_cf, N);
 
@@ -101,10 +98,9 @@ void app_main()
     // Generate Blackman-Harris window
     dsps_wind_blackman_harris_f32(wind, N);
     // Convert two input vectors to one complex vector
-    for (int i=0 ; i< N ; i++)
-    {
-        y_cf[i*2 + 0] = wind[i];
-        y_cf[i*2 + 1] = 0;
+    for (int i = 0 ; i < N ; i++) {
+        y_cf[i * 2 + 0] = wind[i];
+        y_cf[i * 2 + 1] = 0;
     }
     process_and_show(y_cf, N);
 
@@ -112,10 +108,9 @@ void app_main()
     // Generate Blackman-Nuttall window
     dsps_wind_blackman_nuttall_f32(wind, N);
     // Convert two input vectors to one complex vector
-    for (int i=0 ; i< N ; i++)
-    {
-        y_cf[i*2 + 0] = wind[i];
-        y_cf[i*2 + 1] = 0;
+    for (int i = 0 ; i < N ; i++) {
+        y_cf[i * 2 + 0] = wind[i];
+        y_cf[i * 2 + 1] = 0;
     }
     process_and_show(y_cf, N);
 
@@ -123,10 +118,9 @@ void app_main()
     // Generate Nuttall window
     dsps_wind_nuttall_f32(wind, N);
     // Convert two input vectors to one complex vector
-    for (int i=0 ; i< N ; i++)
-    {
-        y_cf[i*2 + 0] = wind[i];
-        y_cf[i*2 + 1] = 0;
+    for (int i = 0 ; i < N ; i++) {
+        y_cf[i * 2 + 0] = wind[i];
+        y_cf[i * 2 + 1] = 0;
     }
     process_and_show(y_cf, N);
 
@@ -134,10 +128,9 @@ void app_main()
     // Generate Flat-Top window
     dsps_wind_flat_top_f32(wind, N);
     // Convert two input vectors to one complex vector
-    for (int i=0 ; i< N ; i++)
-    {
-        y_cf[i*2 + 0] = wind[i];
-        y_cf[i*2 + 1] = 0;
+    for (int i = 0 ; i < N ; i++) {
+        y_cf[i * 2 + 0] = wind[i];
+        y_cf[i * 2 + 1] = 0;
     }
     process_and_show(y_cf, N);
 
