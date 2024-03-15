@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - ci: add pre-commit hooks
 
 ### Changed
+- dock: list of supported targets updated 
 
 ### Removed
 
