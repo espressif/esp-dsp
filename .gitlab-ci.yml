@@ -95,6 +95,15 @@ build_idf_v5.0:
     # GNU Make based build system is not supported starting from IDF v5.0
     SKIP_GNU_MAKE_BUILD: 1
 
+build_idf_v5.3:
+  extends: .build_template
+  image: espressif/idf:release-v5.3
+  variables:
+    EXAMPLE_TARGETS: "esp32 esp32s2 esp32s3 esp32c3 esp32c2"
+    TEST_TARGETS: "esp32 esp32s3"
+    # GNU Make based build system is not supported starting from IDF v5.0
+    SKIP_GNU_MAKE_BUILD: 1
+
 build_idf_latest:
   extends: .build_template
   image: espressif/idf:latest
