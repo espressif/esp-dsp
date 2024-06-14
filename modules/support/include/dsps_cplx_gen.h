@@ -178,7 +178,7 @@ esp_err_t dsps_cplx_gen_ae32(cplx_sig_t *cplx_gen, void *output, int32_t len);
 #endif
 
 
-#if CONFIG_DSP_OPTIMIZED
+#if (dsps_cplx_gen_ae32_enbled || dsps_cplx_gen_aes3_enbled)
 #define dsps_cplx_gen dsps_cplx_gen_ae32
 #else // CONFIG_DSP_OPTIMIZED
 #define dsps_cplx_gen dsps_cplx_gen_ansi

@@ -21,7 +21,7 @@
 #include "dsps_dotprod.h"
 #include "dsp_tests.h"
 
-TEST_CASE("dsps_dotprode_f32_ae32 functionality", "[dsps]")
+TEST_CASE("dsps_dotprode_f32 functionality", "[dsps]")
 {
     float check_value = 1235;
     int max_N = 1024;
@@ -38,7 +38,7 @@ TEST_CASE("dsps_dotprode_f32_ae32 functionality", "[dsps]")
     z[2] = check_value + 1;
 
     for (int i = 1 ; i < 1024 ; i++) {
-        esp_err_t status = dsps_dotprode_f32_ae32(x, y, &z[1], i, 1, 1);
+        esp_err_t status = dsps_dotprode_f32(x, y, &z[1], i, 1, 1);
         TEST_ASSERT_EQUAL(status, ESP_OK);
         TEST_ASSERT_EQUAL(check_value, z[0]);
         TEST_ASSERT_EQUAL(check_value + 1, z[2]);
@@ -49,7 +49,7 @@ TEST_CASE("dsps_dotprode_f32_ae32 functionality", "[dsps]")
         y[i] = 3;
     }
     for (int i = 1 ; i < 1024 ; i++) {
-        esp_err_t status = dsps_dotprode_f32_ae32(x, y, &z[1], i, 1, 1);
+        esp_err_t status = dsps_dotprode_f32(x, y, &z[1], i, 1, 1);
         TEST_ASSERT_EQUAL(status, ESP_OK);
         TEST_ASSERT_EQUAL(check_value, z[0]);
         TEST_ASSERT_EQUAL(check_value + 1, z[2]);
@@ -61,7 +61,7 @@ TEST_CASE("dsps_dotprode_f32_ae32 functionality", "[dsps]")
     free(z);
 }
 
-TEST_CASE("dsps_dotprode_f32_ae32 benchmark", "[dsps]")
+TEST_CASE("dsps_dotprode_f32 benchmark", "[dsps]")
 {
     int max_N = 1024;
     float *x = (float *)memalign(16, max_N * sizeof(float));
@@ -73,18 +73,18 @@ TEST_CASE("dsps_dotprode_f32_ae32 benchmark", "[dsps]")
         y[i] = 1000;
     }
 
-    unsigned int start_b = xthal_get_ccount();
+    unsigned int start_b = dsp_get_cpu_cycle_count();
     int repeat_count = 1024;
     for (int i = 0 ; i < repeat_count ; i++) {
-        dsps_dotprode_f32_ae32(x, y, &z[1], 1024, 1, 1);
+        dsps_dotprode_f32(x, y, &z[1], 1024, 1, 1);
     }
-    unsigned int end_b = xthal_get_ccount();
+    unsigned int end_b = dsp_get_cpu_cycle_count();
 
     float total_b = end_b - start_b;
-    float cycles = total_b / (1024 * repeat_count);
-    printf("Benchmark dsps_dotprode_f32_ae32 - %f per sample + overhead.\n", cycles);
-    float min_exec = 3;
-    float max_exec = 6;
+    float cycles = total_b / (repeat_count);
+    printf("Benchmark dsps_dotprode_f32_aexx - %f per 1024 samples + overhead.\n", cycles);
+    float min_exec = 1024;
+    float max_exec = 6 * 1024;
     TEST_ASSERT_EXEC_IN_RANGE(min_exec, max_exec, cycles);
 
     free(x);
@@ -145,17 +145,17 @@ TEST_CASE("dsps_dotprode_f32_ansi benchmark", "[dsps]")
         y[i] = 1000;
     }
 
-    unsigned int start_b = xthal_get_ccount();
+    unsigned int start_b = dsp_get_cpu_cycle_count();
     int repeat_count = 1024;
     for (int i = 0 ; i < repeat_count ; i++) {
         dsps_dotprode_f32_ansi(x, y, &z[1], 1024, 1, 1);
     }
-    unsigned int end_b = xthal_get_ccount();
+    unsigned int end_b = dsp_get_cpu_cycle_count();
 
     float total_b = end_b - start_b;
     float cycles = total_b / (1024 * repeat_count);
     printf("Benchmark dsps_dotprode_f32_ansi - %f per sample + overhead.\n", cycles);
-    float min_exec = 10;
+    float min_exec = 5;
     float max_exec = 25;
     TEST_ASSERT_EXEC_IN_RANGE(min_exec, max_exec, cycles);
 

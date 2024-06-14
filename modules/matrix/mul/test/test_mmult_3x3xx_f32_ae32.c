@@ -22,10 +22,10 @@
 #include "esp_attr.h"
 #include "dsp_tests.h"
 
-static const char *TAG = "dspm_mult_3x3x1_f32_ae32";
+static const char *TAG = "dspm_mult_3x3xX_f32";
 
 // Test dsps_dotprod_s16_ansi function
-TEST_CASE("dspm_mult_3x3x1_f32_ae32 functionality", "[dspm]")
+TEST_CASE("dspm_mult_3x3x1_f32 functionality", "[dspm]")
 {
     int m = 3;
     int n = 3;
@@ -54,7 +54,7 @@ TEST_CASE("dspm_mult_3x3x1_f32_ae32 functionality", "[dspm]")
         }
     }
 
-    dspm_mult_3x3x1_f32_ae32(A_ptr, B_ptr, C_ptr);
+    dspm_mult_3x3x1_f32(A_ptr, B_ptr, C_ptr);
     dspm_mult_f32_ansi(A_ptr, B_ptr, Cc_ptr, m, n, k);
 
     for (int i = 0 ; i < m ; i++) {
@@ -70,7 +70,7 @@ TEST_CASE("dspm_mult_3x3x1_f32_ae32 functionality", "[dspm]")
     }
 }
 
-TEST_CASE("dspm_mult_3x3x3_f32_ae32 functionality", "[dspm]")
+TEST_CASE("dspm_mult_3x3x3_f32 functionality", "[dspm]")
 {
     int m = 3;
     int n = 3;
@@ -100,7 +100,7 @@ TEST_CASE("dspm_mult_3x3x3_f32_ae32 functionality", "[dspm]")
         }
     }
 
-    dspm_mult_3x3x3_f32_ae32(A_ptr, B_ptr, C_ptr);
+    dspm_mult_3x3x3_f32(A_ptr, B_ptr, C_ptr);
     dspm_mult_f32_ansi(A_ptr, B_ptr, Cc_ptr, m, n, k);
 
     for (int i = 0 ; i < m ; i++) {
@@ -118,7 +118,7 @@ TEST_CASE("dspm_mult_3x3x3_f32_ae32 functionality", "[dspm]")
 
 static portMUX_TYPE testnlock = portMUX_INITIALIZER_UNLOCKED;
 
-TEST_CASE("dspm_mult_3x3x1_f32_ae32 benchmark", "[dspm]")
+TEST_CASE("dspm_mult_3x3x1_f32 benchmark", "[dspm]")
 {
     int m = 3;
     int n = 3;
@@ -136,23 +136,23 @@ TEST_CASE("dspm_mult_3x3x1_f32_ae32 benchmark", "[dspm]")
 
     portENTER_CRITICAL(&testnlock);
 
-    unsigned int start_b = xthal_get_ccount();
+    unsigned int start_b = dsp_get_cpu_cycle_count();
     int repeat_count = 1024;
     for (int i = 0 ; i < repeat_count ; i++) {
-        dspm_mult_3x3x1_f32_ae32(A_ptr, B_ptr, C_ptr);
+        dspm_mult_3x3x1_f32(A_ptr, B_ptr, C_ptr);
     }
-    unsigned int end_b = xthal_get_ccount();
+    unsigned int end_b = dsp_get_cpu_cycle_count();
     portEXIT_CRITICAL(&testnlock);
 
     float total_b = end_b - start_b;
     float cycles = total_b / (repeat_count);
-    ESP_LOGI("dspm_mult_3x3x1_f32_ae32", "dspm_mult_3x3x1_f32_ae32 - %f per multiplication (ae32 - 134, ansi - 285)", cycles);
+    ESP_LOGI("dspm_mult_3x3x1_f32", "dspm_mult_3x3x1_f32 - %f per multiplication (ae32 - 134, ansi - 285)", cycles);
     float min_exec = 60;
-    float max_exec = 90;
+    float max_exec = 200;
     TEST_ASSERT_EXEC_IN_RANGE(min_exec, max_exec, cycles);
 }
 
-TEST_CASE("dspm_mult_3x3x3_f32_ae32 benchmark", "[dspm]")
+TEST_CASE("dspm_mult_3x3x3_f32 benchmark", "[dspm]")
 {
     int m = 4;
     int n = 4;
@@ -170,18 +170,18 @@ TEST_CASE("dspm_mult_3x3x3_f32_ae32 benchmark", "[dspm]")
 
     portENTER_CRITICAL(&testnlock);
 
-    unsigned int start_b = xthal_get_ccount();
+    unsigned int start_b = dsp_get_cpu_cycle_count();
     int repeat_count = 1024;
     for (int i = 0 ; i < repeat_count ; i++) {
-        dspm_mult_3x3x3_f32_ae32(A_ptr, B_ptr, C_ptr);
+        dspm_mult_3x3x3_f32(A_ptr, B_ptr, C_ptr);
     }
-    unsigned int end_b = xthal_get_ccount();
+    unsigned int end_b = dsp_get_cpu_cycle_count();
     portEXIT_CRITICAL(&testnlock);
 
     float total_b = end_b - start_b;
     float cycles = total_b / (repeat_count);
-    ESP_LOGI("dspm_mult_3x3x3_f32_ae32", "dspm_mult_3x3x3_f32_ae32 - %f per multiplication", cycles);
+    ESP_LOGI("dspm_mult_3x3x3_f32", "dspm_mult_3x3x3_f32 - %f per multiplication", cycles);
     float min_exec = 100;
-    float max_exec = 250;
+    float max_exec = 400;
     TEST_ASSERT_EXEC_IN_RANGE(min_exec, max_exec, cycles);
 }

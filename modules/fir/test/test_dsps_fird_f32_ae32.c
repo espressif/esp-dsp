@@ -23,7 +23,7 @@
 #include "dsps_fir.h"
 #include "dsp_tests.h"
 
-static const char *TAG = "dsps_fird_f32_ae32";
+static const char *TAG = "dsps_fird_f32";
 
 static float x[1024];
 static float y[1024];
@@ -55,7 +55,7 @@ TEST_CASE("dsps_fird_f32_aexx functionality", "[dsps]")
 
     dsps_fird_init_f32(&fir1, coeffs, delay, fir_len, decim);
     dsps_fird_init_f32(&fir2, coeffs, delay_compare, fir_len, decim);
-    int total1 = dsps_fird_f32_ae32(&fir1, x, y, len / decim);
+    int total1 = dsps_fird_f32(&fir1, x, y, len / decim);
     int total2 = dsps_fird_f32_ansi(&fir2, x, y_compare, len / decim);
     total1 += dsps_fird_f32(&fir1, x, y, len / decim);
     total2 += dsps_fird_f32_ansi(&fir2, x, y_compare, len / decim);
@@ -64,7 +64,7 @@ TEST_CASE("dsps_fird_f32_aexx functionality", "[dsps]")
     ESP_LOGI(TAG, "Total result = %i, expected %i from %i", total1, total2, len);
     TEST_ASSERT_EQUAL(total1, total2);
     for (int i = 0 ; i < total1 ; i++) {
-        ESP_LOGD(TAG, "data[%i] = %f\n", i, y[i]);
+        ESP_LOGD(TAG, "data[%i] = %f expected %f\n", i, y[i], y_compare[i]);
     }
     for (int i = 0 ; i < total1 ; i++) {
         if (y[i] != y_compare[i]) {
@@ -96,16 +96,17 @@ TEST_CASE("dsps_fird_f32_aexx benchmark", "[dsps]")
 
     dsps_fird_init_f32(&fir1, coeffs, delay, fir_len, decim);
 
-    unsigned int start_b = xthal_get_ccount();
+    unsigned int start_b = dsp_get_cpu_cycle_count();
     for (int i = 0 ; i < repeat_count ; i++) {
         dsps_fird_f32(&fir1, x, y, len / decim);
     }
-    unsigned int end_b = xthal_get_ccount();
+    unsigned int end_b = dsp_get_cpu_cycle_count();
 
     float total_b = end_b - start_b;
     float cycles = total_b / (len * repeat_count);
 
-    ESP_LOGI(TAG, "dsps_fir_f32_ae32 - %f per sample for for %i coefficients, %f per decim tap \n", cycles, fir_len, cycles / (float)fir_len * decim);
+    ESP_LOGI(TAG, "dsps_fir_f32_ae32 - %f per sample for for %i coefficients, %f per decim tap\n", cycles, fir_len, cycles / (float)fir_len * decim);
+    ESP_LOGI(TAG, "Total cycles = %i", end_b - start_b);
     float min_exec = 3;
     float max_exec = 300;
     TEST_ASSERT_EXEC_IN_RANGE(min_exec, max_exec, cycles);

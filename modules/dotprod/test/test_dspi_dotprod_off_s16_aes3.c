@@ -44,9 +44,9 @@ TEST_CASE("dspi_dotprod_off_s16_aexx functionality", "[dspi]")
         image2d_t image1 = {&x[3], 1, 1, 64, 64, 64, 64}; // Image 64
         image2d_t image2 = {y, 1, 1, 8, 8, 8, 8}; // Umage 64
         int16_t result = -1;
-        unsigned int start_b = xthal_get_ccount();
+        unsigned int start_b = dsp_get_cpu_cycle_count();
         dspi_dotprod_off_s16(&image1, &image2, &result, 8, 8, shift, offset);
-        unsigned int end_b = xthal_get_ccount();
+        unsigned int end_b = dsp_get_cpu_cycle_count();
         ESP_LOGI(TAG, "cycles = %i", end_b - start_b);
         ESP_LOGI(TAG, "result 1 = %i", result);
         int16_t result_ref = -1;
@@ -59,9 +59,9 @@ TEST_CASE("dspi_dotprod_off_s16_aexx functionality", "[dspi]")
         image2d_t image1 = {&x[3], 1, 1, 64, 64, 64, 64}; // Image 64x64
         image2d_t image2 = {y, 1, 1, 16, 16, 16, 16}; // Umage 16x16
         int16_t result = -1;
-        unsigned int start_b = xthal_get_ccount();
+        unsigned int start_b = dsp_get_cpu_cycle_count();
         dspi_dotprod_off_s16(&image1, &image2, &result, 16, 16, shift, offset);
-        unsigned int end_b = xthal_get_ccount();
+        unsigned int end_b = dsp_get_cpu_cycle_count();
         ESP_LOGI(TAG, "cycles = %i", end_b - start_b);
         ESP_LOGI(TAG, "result 1 = %i", result);
         int16_t result_ref = -1;
@@ -74,9 +74,9 @@ TEST_CASE("dspi_dotprod_off_s16_aexx functionality", "[dspi]")
         image2d_t image1 = {&x[3], 1, 1, 64, 64, 64, 64}; // Image 64x64
         image2d_t image2 = {y, 1, 1, 24, 24, 24, 24}; // Umage 24x24
         int16_t result = -1;
-        unsigned int start_b = xthal_get_ccount();
+        unsigned int start_b = dsp_get_cpu_cycle_count();
         dspi_dotprod_off_s16(&image1, &image2, &result, 24, 24, shift, offset);
-        unsigned int end_b = xthal_get_ccount();
+        unsigned int end_b = dsp_get_cpu_cycle_count();
         ESP_LOGI(TAG, "cycles = %i", end_b - start_b);
         ESP_LOGI(TAG, "result 1 = %i", result);
         int16_t result_ref = -1;
@@ -89,9 +89,9 @@ TEST_CASE("dspi_dotprod_off_s16_aexx functionality", "[dspi]")
         image2d_t image1 = {&x[3], 1, 1, 64, 64, 64, 64}; // Image 64x64
         image2d_t image2 = {y, 1, 1, 32, 32, 32, 32}; // Umage 32x32
         int16_t result = -1;
-        unsigned int start_b = xthal_get_ccount();
+        unsigned int start_b = dsp_get_cpu_cycle_count();
         dspi_dotprod_off_s16(&image1, &image2, &result, 32, 32, shift, offset);
-        unsigned int end_b = xthal_get_ccount();
+        unsigned int end_b = dsp_get_cpu_cycle_count();
         ESP_LOGI(TAG, "cycles = %i", end_b - start_b);
         ESP_LOGI(TAG, "result 1 = %i", result);
         int16_t result_ref = -1;

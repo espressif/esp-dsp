@@ -17,12 +17,13 @@
 #include "dsp_platform.h"
 #include "esp_log.h"
 
+#include "dsp_tests.h"
 #include "dsps_mul.h"
 #include "esp_attr.h"
 
 static const char *TAG = "dsps_mul";
 
-TEST_CASE("dsps_mul_s16_ae32 functionality", "[dsps]")
+TEST_CASE("dsps_mul_s16 functionality", "[dsps]")
 {
     int n = 64;
     int16_t x[n];
@@ -35,7 +36,7 @@ TEST_CASE("dsps_mul_s16_ae32 functionality", "[dsps]")
         y[i] = temp;
     }
 
-    dsps_mul_s16_ae32(x, x, x, n, 1, 1, 1, shift);
+    dsps_mul_s16(x, x, x, n, 1, 1, 1, shift);
     for (int i = 0 ; i < n ; i++) {
         ESP_LOGD(TAG, "x[%i] = %i  %i", i, x[i], y[i]);
         if (x[i] != y[i]) {
@@ -44,7 +45,7 @@ TEST_CASE("dsps_mul_s16_ae32 functionality", "[dsps]")
     }
 }
 
-TEST_CASE("dsps_mul_s16_ae32 benchmark", "[dsps]")
+TEST_CASE("dsps_mul_s16 benchmark", "[dsps]")
 {
     const int n = 256;
     int16_t x[n];
@@ -52,10 +53,10 @@ TEST_CASE("dsps_mul_s16_ae32 benchmark", "[dsps]")
         x[i] = i << 4;
     }
 
-    unsigned int start_b = xthal_get_ccount();
-    dsps_mul_s16_ae32(x, x, x, n, 1, 1, 1, 0);
-    unsigned int end_b = xthal_get_ccount();
+    unsigned int start_b = dsp_get_cpu_cycle_count();
+    dsps_mul_s16(x, x, x, n, 1, 1, 1, 0);
+    unsigned int end_b = dsp_get_cpu_cycle_count();
 
     float cycles = end_b - start_b;
-    ESP_LOGI(TAG, "dsps_mul_s16_ae32 - %f cycles per sample \n", cycles);
+    ESP_LOGI(TAG, "dsps_mul_s16 - %f cycles per sample \n", cycles);
 }

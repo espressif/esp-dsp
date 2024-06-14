@@ -18,6 +18,7 @@
 #include <math.h>
 #include "esp_attr.h"
 #include <malloc.h>
+#include "dsp_tests.h"
 
 
 int16_t *dsps_fft_w_table_sc16;
@@ -86,11 +87,7 @@ esp_err_t dsps_fft2r_init_sc16(int16_t *fft_table_buff, int table_size)
         dsps_fft_w_table_sc16_size = table_size;
     } else {
         if (!dsps_fft2r_sc16_mem_allocated) {
-#if CONFIG_IDF_TARGET_ESP32S3
             dsps_fft_w_table_sc16 = (int16_t *)memalign(16, CONFIG_DSP_MAX_FFT_SIZE * sizeof(int16_t));
-#else
-            dsps_fft_w_table_sc16 = (int16_t *)malloc(CONFIG_DSP_MAX_FFT_SIZE * sizeof(int16_t));
-#endif
         }
         dsps_fft_w_table_sc16_size = CONFIG_DSP_MAX_FFT_SIZE;
         dsps_fft2r_sc16_mem_allocated = 1;

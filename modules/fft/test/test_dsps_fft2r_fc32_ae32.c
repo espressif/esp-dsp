@@ -32,7 +32,7 @@ static float check_data[1024 * 2];
 __attribute__((aligned(16)))
 static float data_test[1024 * 2];
 
-TEST_CASE("dsps_fft2r_fc32_ae32 functionality", "[dsps]")
+TEST_CASE("dsps_fft2r_fc32 functionality", "[dsps]")
 {
     int N = sizeof(data) / sizeof(float) / 2;
     int check_bin = 32;
@@ -52,7 +52,7 @@ TEST_CASE("dsps_fft2r_fc32_ae32 functionality", "[dsps]")
 
     int N_check = N;
 
-    dsps_fft2r_fc32_ae32(data, N_check);
+    dsps_fft2r_fc32(data, N_check);
     dsps_fft2r_fc32_ansi(check_data, N_check);
 
     for (int i = 0 ; i < N_check ; i++) {
@@ -88,10 +88,11 @@ TEST_CASE("dsps_fft2r_fc32_ae32 functionality", "[dsps]")
     dsps_fft2r_deinit_fc32();
 }
 
-TEST_CASE("dsps_fft2r_fc32_ae32 benchmark", "[dsps]")
+TEST_CASE("dsps_fft2r_fc32 benchmark", "[dsps]")
 {
     esp_err_t ret = dsps_fft2r_init_fc32(NULL, CONFIG_DSP_MAX_FFT_SIZE);
     TEST_ESP_OK(ret);
+    asm("test_point1:   nop;");
 
     for (int i = 5 ; i < 10 ; i++) {
         int N_check = 2 << i;
@@ -101,13 +102,13 @@ TEST_CASE("dsps_fft2r_fc32_ae32 benchmark", "[dsps]")
             data[i * 2 + 1] = 0;
         }
 
-        unsigned int start_b = xthal_get_ccount();
-        dsps_fft2r_fc32_ae32(data, N_check);
+        unsigned int start_b = dsp_get_cpu_cycle_count();
+        dsps_fft2r_fc32(data, N_check);
 
-        unsigned int end_b = xthal_get_ccount();
+        unsigned int end_b = dsp_get_cpu_cycle_count();
         float total_b = end_b - start_b;
         float cycles = total_b;
-        ESP_LOGI(TAG, "Benchmark dsps_fft2r_fc32_ae32 - %6i cycles for %6i points FFT.", (int)cycles, N_check);
+        ESP_LOGI(TAG, "Benchmark dsps_fft2r_fc32 - %6i cycles for %6i points FFT.", (int)cycles, N_check);
         float min_exec = 3;
         float max_exec = 330000;
         TEST_ASSERT_EXEC_IN_RANGE(min_exec, max_exec, cycles);
@@ -134,9 +135,9 @@ TEST_CASE("dsps_bit_rev2r_fc32_ae32 benchmark", "[dsps]")
             check_data[i] = i;
         }
         dsps_bit_rev_fc32_ansi(data, N_check);
-        unsigned int start_b = xthal_get_ccount();
+        unsigned int start_b = dsp_get_cpu_cycle_count();
         dsps_bit_rev2r_fc32(data, N_check);
-        float cycles = xthal_get_ccount() - start_b;
+        float cycles = dsp_get_cpu_cycle_count() - start_b;
 
         for (size_t i = 0; i < N_check * 2; i++) {
             TEST_ASSERT_EQUAL( data[i], check_data[i]);

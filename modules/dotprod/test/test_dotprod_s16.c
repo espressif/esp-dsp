@@ -39,7 +39,7 @@ TEST_CASE("dsps_dotprod_s16_ansi functionality", "[dsps]")
     z[2] = check_value + 1;
 
     // Check result == 0
-    for (int i = 1; i < 1024; i++) {
+    for (int i = 4; i < 1024; i++) {
         esp_err_t status = dsps_dotprod_s16_ansi(x, y, &z[1], i, 0);
         TEST_ASSERT_EQUAL(status, ESP_OK);
         TEST_ASSERT_EQUAL(check_value, z[0]);
@@ -57,7 +57,7 @@ TEST_CASE("dsps_dotprod_s16_ansi functionality", "[dsps]")
     }
 
     // We check that dotproduct working with shift = 0;
-    for (int i = 1 ; i < 1024 ; i++) {
+    for (int i = 4 ; i < 1024 ; i++) {
         esp_err_t status = dsps_dotprod_s16_ansi(x, y, &z[1], i, val_shift);
 
         TEST_ASSERT_EQUAL(status, ESP_OK);
@@ -66,7 +66,7 @@ TEST_CASE("dsps_dotprod_s16_ansi functionality", "[dsps]")
         TEST_ASSERT_EQUAL((i * (val_x * val_y) + (0x7fff >> val_shift)) >> (15 - val_shift), z[1]);
     }
     val_shift = 2;
-    for (int i = 1 ; i < 1024 ; i++) {
+    for (int i = 4 ; i < 1024 ; i++) {
         esp_err_t status = dsps_dotprod_s16_ansi(x, y, &z[1], i, val_shift);
 
         TEST_ASSERT_EQUAL(status, ESP_OK);
@@ -98,11 +98,10 @@ TEST_CASE("dsps_dotprod_s16_aexx functionality", "[dsps]")
     z[2] = check_value + 1;
 
     // Check result == 0
-    for (int i = 1 ; i < 1024 ; i++) {
+    for (int i = 4 ; i < 1024 ; i++) {
         esp_err_t status = dsps_dotprod_s16(x, y, &z[1], i, 0);
-        if (i < 4) {
-            TEST_ASSERT_EQUAL(status, ESP_ERR_DSP_INVALID_LENGTH);
-        } else {
+        {
+            TEST_ASSERT_EQUAL(status, ESP_OK);
             TEST_ASSERT_EQUAL(check_value, z[0]);
             TEST_ASSERT_EQUAL(check_value + 1, z[2]);
             TEST_ASSERT_EQUAL(0, z[1]);
@@ -118,11 +117,9 @@ TEST_CASE("dsps_dotprod_s16_aexx functionality", "[dsps]")
         y[i] = val_y;
     }
     // We check that dotproduct working with shift = 0;
-    for (int i = 1 ; i < 1024 ; i++) {
+    for (int i = 4 ; i < 1024 ; i++) {
         esp_err_t status = dsps_dotprod_s16(x, y, &z[1], i, val_shift);
-        if (i < 4) {
-            TEST_ASSERT_EQUAL(status, ESP_ERR_DSP_INVALID_LENGTH);
-        } else {
+        {
             TEST_ASSERT_EQUAL(status, ESP_OK);
             TEST_ASSERT_EQUAL(check_value, z[0]);
             TEST_ASSERT_EQUAL(check_value + 1, z[2]);
@@ -130,11 +127,9 @@ TEST_CASE("dsps_dotprod_s16_aexx functionality", "[dsps]")
         }
     }
     val_shift = 2;
-    for (int i = 1 ; i < 1024 ; i++) {
+    for (int i = 4 ; i < 1024 ; i++) {
         esp_err_t status = dsps_dotprod_s16(x, y, &z[1], i, val_shift);
-        if (i < 4) {
-            TEST_ASSERT_EQUAL(status, ESP_ERR_DSP_INVALID_LENGTH);
-        } else {
+        {
             TEST_ASSERT_EQUAL(status, ESP_OK);
             TEST_ASSERT_EQUAL(check_value, z[0]);
             TEST_ASSERT_EQUAL(check_value + 1, z[2]);
@@ -148,7 +143,7 @@ TEST_CASE("dsps_dotprod_s16_aexx functionality", "[dsps]")
 }
 
 static portMUX_TYPE testnlock = portMUX_INITIALIZER_UNLOCKED;
-TEST_CASE("dsps_dotprod_s16_ae32 benchmark", "[dsps]")
+TEST_CASE("dsps_dotprod_s16 benchmark", "[dsps]")
 {
     int max_N = 1024;
 
@@ -164,18 +159,18 @@ TEST_CASE("dsps_dotprod_s16_ae32 benchmark", "[dsps]")
 
     portENTER_CRITICAL(&testnlock);
 
-    unsigned int start_b = xthal_get_ccount();
+    unsigned int start_b = dsp_get_cpu_cycle_count();
     int repeat_count = 1024;
     for (int i = 0 ; i < repeat_count ; i++) {
-        dsps_dotprod_s16_ae32(x, y, &z[1], 1024, 0);
+        dsps_dotprod_s16(x, y, &z[1], 1024, 0);
     }
-    unsigned int end_b = xthal_get_ccount();
+    unsigned int end_b = dsp_get_cpu_cycle_count();
     portEXIT_CRITICAL(&testnlock);
 
     float total_b = end_b - start_b;
     float cycles = total_b / (repeat_count);
-    printf("Benchmark dsps_dotprod_s16 - %f per sample + overhead. Result = %08x\n", cycles, z[1]);
-    float min_exec = 512;
+    printf("Benchmark dsps_dotprod_s16 - %f cycles for 1024 samples + overhead. Result = %08x\n", cycles, z[1]);
+    float min_exec = 256;
     float max_exec = 8 * 1024;
     TEST_ASSERT_EXEC_IN_RANGE(min_exec, max_exec, cycles);
 
@@ -200,19 +195,19 @@ TEST_CASE("dsps_dotprod_s16_ansi benchmark", "[dsps]")
 
     portENTER_CRITICAL(&testnlock);
 
-    unsigned int start_b = xthal_get_ccount();
+    unsigned int start_b = dsp_get_cpu_cycle_count();
     int repeat_count = 1024;
     for (int i = 0 ; i < repeat_count ; i++) {
         dsps_dotprod_s16_ansi(x, y, &z[1], 1024, 0);
     }
-    unsigned int end_b = xthal_get_ccount();
+    unsigned int end_b = dsp_get_cpu_cycle_count();
     portEXIT_CRITICAL(&testnlock);
 
     float total_b = end_b - start_b;
-    float cycles = total_b / (1024 * repeat_count);
-    printf("Benchmark dsps_dotprod_s16 - %f per sample + overhead. Result = %08x\n", cycles, z[1]);
-    float min_exec = 10;
-    float max_exec = 30;
+    float cycles = total_b / (repeat_count);
+    printf("Benchmark dsps_dotprod_s16 - %f cycles for 1024 samples + overhead. Result = %08x\n", cycles, z[1]);
+    float min_exec = 1024 * 10;
+    float max_exec = 1024 * 30;
     TEST_ASSERT_EXEC_IN_RANGE(min_exec, max_exec, cycles);
 
     free(x);

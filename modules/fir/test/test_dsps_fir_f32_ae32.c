@@ -117,11 +117,11 @@ TEST_CASE("dsps_fir_f32_aexx benchmark", "[dsps]")
 
     dsps_fir_init_f32(&fir1, coeffs, delay, fir_len);
 
-    unsigned int start_b = xthal_get_ccount();
+    unsigned int start_b = dsp_get_cpu_cycle_count();
     for (int i = 0 ; i < repeat_count ; i++) {
         dsps_fir_f32(&fir1, x, y, len);
     }
-    unsigned int end_b = xthal_get_ccount();
+    unsigned int end_b = dsp_get_cpu_cycle_count();
 
     float total_b = end_b - start_b;
     float cycles = total_b / (len * repeat_count);

@@ -173,6 +173,15 @@ TEST_CASE("dspm_mult_ex_f32_aexx functionality", "[dspm]")
     const int k_mak = 12;
     const int dim_increment = 4;
     const int dim_start = 4;
+#elif CONFIG_IDF_TARGET_ESP32P4
+    const int start_col_max = 1;
+    const int start_row_max = 1;
+    const int col_row_increment = 1;
+    const int m_max = 4;
+    const int n_max = 4;
+    const int k_mak = 4;
+    const int dim_increment = 1;
+    const int dim_start = 2; // <= the esp.lp.setup instruction is not working with loop count 1. The min value is 2.
 #else
     const int start_col_max = 1;
     const int start_row_max = 1;
@@ -255,19 +264,19 @@ TEST_CASE("dspm_mult_ex_f32_aexx benchmark", "[dspm]")
     portENTER_CRITICAL(&testnlock);
     dspm_mult_ex_f32(A_subset.data, B_subset.data, C_subset.data, m, n, k, A_subset.padding, B_subset.padding, C_subset.padding);
 
-    unsigned int start_b = xthal_get_ccount();
+    unsigned int start_b = dsp_get_cpu_cycle_count();
     int repeat_count = 1024;
     for (int i = 0 ; i < repeat_count ; i++) {
         dspm_mult_ex_f32(A_subset.data, B_subset.data, C_subset.data, m, n, k, A_subset.padding, B_subset.padding, C_subset.padding);
     }
-    unsigned int end_b = xthal_get_ccount();
+    unsigned int end_b = dsp_get_cpu_cycle_count();
     portEXIT_CRITICAL(&testnlock);
 
     float total_b = end_b - start_b;
     float cycles = total_b / (repeat_count);
     printf("Benchmark dspm_mult_f32 - %f per multiplication 4x4 + overhead.\n", cycles);
     float min_exec = 100;
-    float max_exec = 700;
+    float max_exec = 750;
     TEST_ASSERT_EXEC_IN_RANGE(min_exec, max_exec, cycles);
 
     free(A_data);

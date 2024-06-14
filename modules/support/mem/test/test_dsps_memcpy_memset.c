@@ -203,17 +203,17 @@ TEST_CASE("dsps_memcpy_memset_aes3_benchmark", "[dsps]")
     uint8_t *arr_dest = (uint8_t *)malloc(area_len * sizeof(uint8_t));
 
     // Memcpy benchmark
-    const unsigned int start_aes3_memcpy = xthal_get_ccount();
+    const unsigned int start_aes3_memcpy = dsp_get_cpu_cycle_count();
     for (int j = 0; j < CALL_REPEAT_COUNT; j++) {
         dsps_memcpy((void *)arr_dest, (void *)arr_src, full_count);
     }
-    const unsigned int end_aes3_memcpy = xthal_get_ccount();
+    const unsigned int end_aes3_memcpy = dsp_get_cpu_cycle_count();
 
-    const unsigned int start_ae32_memcpy = xthal_get_ccount();
+    const unsigned int start_ae32_memcpy = dsp_get_cpu_cycle_count();
     for (int j = 0; j < CALL_REPEAT_COUNT; j++) {
         memcpy((void *)arr_dest, (void *)arr_src, full_count);
     }
-    const unsigned int end_ae32_memcpy = xthal_get_ccount();
+    const unsigned int end_ae32_memcpy = dsp_get_cpu_cycle_count();
 
     const float aes3_cycles_memcpy = ((float)(end_aes3_memcpy - start_aes3_memcpy)) / CALL_REPEAT_COUNT;
     const float ae32_cycles_memcpy = ((float)(end_ae32_memcpy - start_ae32_memcpy)) / CALL_REPEAT_COUNT;
@@ -223,17 +223,17 @@ TEST_CASE("dsps_memcpy_memset_aes3_benchmark", "[dsps]")
     ESP_LOGI(TAG, "S3  optimized cycles  = %.2f", aes3_cycles_memcpy);
 
     // Memset benchmark
-    const unsigned int start_aes3_memset = xthal_get_ccount();
+    const unsigned int start_aes3_memset = dsp_get_cpu_cycle_count();
     for (int j = 0; j < CALL_REPEAT_COUNT; j++) {
         dsps_memset((void *)arr_dest, set_val, full_count);
     }
-    const unsigned int end_aes3_memset = xthal_get_ccount();
+    const unsigned int end_aes3_memset = dsp_get_cpu_cycle_count();
 
-    const unsigned int start_ae32_memset = xthal_get_ccount();
+    const unsigned int start_ae32_memset = dsp_get_cpu_cycle_count();
     for (int j = 0; j < CALL_REPEAT_COUNT; j++) {
         memset((void *)arr_dest, set_val, full_count);
     }
-    const unsigned int end_ae32_memset = xthal_get_ccount();
+    const unsigned int end_ae32_memset = dsp_get_cpu_cycle_count();
 
     const float ae32_cycles_memset = ((float)(end_ae32_memset - start_ae32_memset)) / CALL_REPEAT_COUNT;
     const float aes3_cycles_memset = ((float)(end_aes3_memset - start_aes3_memset)) / CALL_REPEAT_COUNT;
@@ -318,18 +318,18 @@ TEST_CASE("dsps_memcpy_benchmark_report", "[dsps]")
 
         for (int cpy_amount = 1; cpy_amount <= MEMCPY_REPORT_LEN; cpy_amount++) {
 
-            start_count = xthal_get_ccount();
+            start_count = dsp_get_cpu_cycle_count();
             for (int j = 0; j < CALL_REPEAT_COUNT; j++) {
                 dsps_memcpy((void *)arr_dest_align, (void *)arr_src_align, cpy_amount);
             }
-            end_count = xthal_get_ccount();
+            end_count = dsp_get_cpu_cycle_count();
             result_aes3[iter][cpy_amount - 1] = ((uint16_t)((end_count - start_count) / CALL_REPEAT_COUNT));
 
-            start_count = xthal_get_ccount();
+            start_count = dsp_get_cpu_cycle_count();
             for (int j = 0; j < CALL_REPEAT_COUNT; j++) {
                 memcpy((void *)arr_dest_align, (void *)arr_src_align, cpy_amount);
             }
-            end_count = xthal_get_ccount();
+            end_count = dsp_get_cpu_cycle_count();
             result_ae32[iter][cpy_amount - 1] = ((uint16_t)((end_count - start_count) / CALL_REPEAT_COUNT));
         }
     }
@@ -407,18 +407,18 @@ TEST_CASE("dsps_memset_benchmark_report", "[dsps]")
         }
 
         for (int set_amount = 1; set_amount <= MEMSET_REPORT_LEN; set_amount++) {
-            start_count = xthal_get_ccount();
+            start_count = dsp_get_cpu_cycle_count();
             for (int j = 0; j < CALL_REPEAT_COUNT; j++) {
                 dsps_memset((void *)arr_dest_align, set_val, set_amount);
             }
-            end_count = xthal_get_ccount();
+            end_count = dsp_get_cpu_cycle_count();
             result_aes3[iter][set_amount - 1] = ((uint16_t)((end_count - start_count) / CALL_REPEAT_COUNT));
 
-            start_count = xthal_get_ccount();
+            start_count = dsp_get_cpu_cycle_count();
             for (int j = 0; j < CALL_REPEAT_COUNT; j++) {
                 memset((void *)arr_dest_align, set_val, set_amount);
             }
-            end_count = xthal_get_ccount();
+            end_count = dsp_get_cpu_cycle_count();
             result_ae32[iter][set_amount - 1] = ((uint16_t)((end_count - start_count) / CALL_REPEAT_COUNT));
         }
     }
@@ -485,11 +485,11 @@ static void pinned_task_benchmark_memcpy(void *arg)
     unsigned int start_memcpy_count, end_memcpy_count;
 
     for (int j = 0; j < CPY_ITERS; j++) {
-        start_memcpy_count = xthal_get_ccount();
+        start_memcpy_count = dsp_get_cpu_cycle_count();
         for (int i = 0; i < CPY_REPEAT_COUNT; i++) {
             dsps_memcpy((void *)context->arr_dest, (void *)context->arr_src, context->area_len);
         }
-        end_memcpy_count = xthal_get_ccount();
+        end_memcpy_count = dsp_get_cpu_cycle_count();
         cycles_acc += (end_memcpy_count - start_memcpy_count);
         vTaskDelay(1);  // Block to cause a context switch, forcing the TIE context to be saved
     }
@@ -510,11 +510,11 @@ static void pinned_task_benchmark_memset(void *arg)
     unsigned int start_memset_count, end_memset_count;
 
     for (int j = 0; j < CPY_ITERS; j++) {
-        start_memset_count = xthal_get_ccount();
+        start_memset_count = dsp_get_cpu_cycle_count();
         for (int i = 0; i < CPY_REPEAT_COUNT; i++) {
             dsps_memset((void *)context->arr_dest, context->set_val, context->area_len);
         }
-        end_memset_count = xthal_get_ccount();
+        end_memset_count = dsp_get_cpu_cycle_count();
         cycles_acc += (end_memset_count - start_memset_count);
         vTaskDelay(1);  // Block to cause a context switch, forcing the TIE context to be saved
     }

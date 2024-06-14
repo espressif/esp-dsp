@@ -106,9 +106,9 @@ TEST_CASE("dspi_conv_f32_ansi benchmark", "[dspi]")
         }
     }
 
-    unsigned int start_b = xthal_get_ccount();
+    unsigned int start_b = dsp_get_cpu_cycle_count();
     dspi_conv_f32_ansi(&image1, &image2, &image3);
-    unsigned int end_b = xthal_get_ccount();
+    unsigned int end_b = dsp_get_cpu_cycle_count();
     float cycles = end_b - start_b;
     ESP_LOGI(TAG, "dspi_conv_f32_ansi - %f cycles", cycles);
 

@@ -140,11 +140,11 @@ TEST_CASE("dsps_fird_s16_ansi benchmark", "[dsps]")
     for (int i = 0 ; i < 4 ; i++) {
 
         output_len = (int32_t)(len / fir1.decim);
-        const unsigned int start_b = xthal_get_ccount();
+        const unsigned int start_b = dsp_get_cpu_cycle_count();
         for (int i = 0 ; i < repeat_count ; i++) {
             dsps_fird_s16_ansi(&fir1, x, y, output_len);
         }
-        const unsigned int end_b = xthal_get_ccount();
+        const unsigned int end_b = dsp_get_cpu_cycle_count();
 
         const float total_b = end_b - start_b;
         const float cycles = total_b / (len * repeat_count);
@@ -281,7 +281,7 @@ TEST_CASE("dsps_fird_s16_ansi noise_snr", "[dsps]")
     signal_pow = 10 * log10f(signal_pow);
 
     ESP_LOGI(TAG, "\nSignal Power: \t%f\nNoise Power: \t%f\nSNR: \t\t%f", signal_pow, noise_pow, snr);
-    dsps_view(fft_data, N_FFT / 2, 128, 16,  -140, 40, '|');
+    dsps_view(fft_data, N_FFT / 2, 64, 16,  -140, 40, '|');
     free(fft_data);
 
     const float min_exec_snr = 50;

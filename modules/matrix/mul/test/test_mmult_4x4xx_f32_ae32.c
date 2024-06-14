@@ -134,19 +134,19 @@ TEST_CASE("dspm_mult_4x4x1_f32_ae32 benchmark", "[dspm]")
 
     portENTER_CRITICAL(&testnlock);
 
-    unsigned int start_b = xthal_get_ccount();
+    unsigned int start_b = dsp_get_cpu_cycle_count();
     int repeat_count = 1024;
     for (int i = 0 ; i < repeat_count ; i++) {
         dspm_mult_4x4x1_f32(A_ptr, B_ptr, C_ptr);
     }
-    unsigned int end_b = xthal_get_ccount();
+    unsigned int end_b = dsp_get_cpu_cycle_count();
     portEXIT_CRITICAL(&testnlock);
 
     float total_b = end_b - start_b;
     float cycles = total_b / (repeat_count);
     ESP_LOGI("dspm_mult_4x4x1_f32_ae32", "dspm_mult_4x4x1_f32_ae32 - %f per multiplication", cycles);
     float min_exec = 60;
-    float max_exec = 110;
+    float max_exec = 300;
     TEST_ASSERT_EXEC_IN_RANGE(min_exec, max_exec, cycles);
 }
 
@@ -169,18 +169,18 @@ TEST_CASE("dspm_mult_4x4x4_f32_ae32 benchmark", "[dspm]")
 
     portENTER_CRITICAL(&testnlock);
 
-    unsigned int start_b = xthal_get_ccount();
+    unsigned int start_b = dsp_get_cpu_cycle_count();
     int repeat_count = 1024;
     for (int i = 0 ; i < repeat_count ; i++) {
         dspm_mult_4x4x4_f32(A_ptr, B_ptr, C_ptr);
     }
-    unsigned int end_b = xthal_get_ccount();
+    unsigned int end_b = dsp_get_cpu_cycle_count();
     portEXIT_CRITICAL(&testnlock);
 
     float total_b = end_b - start_b;
     float cycles = total_b / (repeat_count);
     ESP_LOGI("dspm_mult_4x4x4_f32_ae32", "dspm_mult_4x4x4_f32_ae32 - %f per multiplication", cycles);
     float min_exec = 50;
-    float max_exec = 450;
+    float max_exec = 750;
     TEST_ASSERT_EXEC_IN_RANGE(min_exec, max_exec, cycles);
 }

@@ -24,6 +24,7 @@ from pathlib import Path
 import argparse
 
 
+
 def read_csv(csv_file):
     data = []
     with open(csv_file, 'r') as f:
@@ -82,7 +83,7 @@ def main():
             active_dict = table_dict[item[0]]
         # We check if the line has a name and data values inside
         if ((len(item) == 5) & (len(item[0]) > max_unused_length)):
-            active_dict[item[0]] = [0] * 6
+            active_dict[item[0]] = [0] * (6 + 4)
 
     for i, item in enumerate(data):
         item = data[i]
@@ -100,9 +101,17 @@ def main():
             opt  = int(item[1])
             ansi = int(item[2])
             flag  = int(item[3]) - 1  # o2/os
-            cpu  = int(item[4])  # 1 + esp32/esp32s2/esp32s3
-            index = flag * 3 + int(round(cpu / 3))
-            index_ansi = flag * 3 + 2
+            cpu  = int(item[4])  # 1 + esp32/esp32s2/esp32s3/esp32p4
+#            index = flag * 5; #+ int(round(cpu / 3))
+            if (cpu == 1):
+                index = flag * 5 + 0
+                index_ansi = flag * 5 + 3
+            if (cpu == 3):
+                index = flag * 5 + 1
+                index_ansi = flag * 5 + 3
+            if (cpu == 4):
+                index = flag * 5 + 2
+                index_ansi = flag * 5 + 4
             current_dict[index] = opt
             current_dict[index_ansi] = ansi
 
@@ -119,7 +128,7 @@ def main():
                 data.append(data_array[n])
             table.append(data)
 
-    headers = ["Function\n\rOptimization", "ESP32\n\rO2", "ESP32S3\n\rO2", "ANSI\n\rO2", "ESP32\n\rOs", "ESP32S3\n\rOs", "ANSI\n\rOs"]
+    headers = ["Function\n\rOptimization", "ESP32\n\rO2", "ESP32S3\n\rO2", "ESP32P4\n\rO2", "ANSI Xtensa\n\rO2", "ANSI Risc-V\n\rO2", "ESP32\n\rOs", "ESP32S3\n\rOs", "ESP32P4\n\rOs", "ANSI Xtensa\n\rOs", "ANSI Risc-V\n\rOs"]
     text_table = tabulate(table, headers, tablefmt="grid")
 
     rts_doc = rts_doc.replace("MAIN_TABLE", text_table)

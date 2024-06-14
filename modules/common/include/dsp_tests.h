@@ -17,6 +17,7 @@
 
 #include <stdlib.h>
 #include "esp_idf_version.h"
+#include "esp_dsp.h"
 
 #define TEST_ASSERT_EXEC_IN_RANGE(min_exec, max_exec, actual) \
     if (actual >= max_exec) { \

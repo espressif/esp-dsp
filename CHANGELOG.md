@@ -13,6 +13,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+## [1.5.1]  2024-08-2
+
+### Added
+- Added support for esp32p4 chip
+
 ## [1.4.14] 2024-07-31
 
 ### Added
