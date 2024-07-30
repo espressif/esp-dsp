@@ -18,3 +18,4 @@ The examples are grouped into subdirectories by category. Each category director
 * [IIR Filter](./iir/README.md) Example
 * [Kalman Filter](./kalman/README.md) Example
 * [FIR Filter](.fir/README.md) Example
+* [2D Convolution](./conv2d//README.md) Example

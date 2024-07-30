@@ -13,6 +13,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+## [1.4.14] 2024-07-31
+
+### Added
+- 2D convolution added
+
 ## [1.4.13] 2024-05-08
 
 ### Added
