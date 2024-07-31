@@ -39,8 +39,8 @@ TEST_CASE("dspi_dotprod_off_s8_ansi functionality", "[dspi]")
         y[i] = i % 8 + 20;
         z[i] = 0;
     }
-    image2d_t image1 = {x, 2, 2, 8, 8}; // Image 8x8
-    image2d_t image2 = {y, 2, 2, 8, 8}; // Umage 8x8
+    image2d_t image1 = {x, 2, 2, 8, 8, 8, 8}; // Image 8x8
+    image2d_t image2 = {y, 2, 2, 8, 8, 8, 8}; // Umage 8x8
     int8_t result = -1;
     dspi_dotprod_off_s8_ansi(&image1, &image2, &result, 4, 4, shift, offset);
     ESP_LOGI(TAG, "result 1 = %i", result);

@@ -234,8 +234,8 @@ TEST_CASE("DSP Benchmarks data", "[dsp]")
     REPORT_SECTION_NAME("**Image processing prototypes**");
     // s8
     {
-        image2d_t image1 = {data1, 1, 1, 64, 64}; // Image 64x64
-        image2d_t image2 = {data2, 1, 1, 16, 16}; // Umage 16x16
+        image2d_t image1 = {data1, 1, 1, 64, 64, 64, 64}; // Image 64x64
+        image2d_t image2 = {data2, 1, 1, 16, 16, 16, 16}; // Umage 16x16
 
         REPORT_BENCHMARK_CSV("dspi_dotprod_s8/u8 - dotproduct of two images 16x16",
                              dspi_dotprod_s8,
@@ -243,8 +243,8 @@ TEST_CASE("DSP Benchmarks data", "[dsp]")
                              &image1, &image2, (int8_t *)data2, 16, 16, 1);
     }
     {
-        image2d_t image1 = {data1, 1, 1, 64, 64}; // Image 64x64
-        image2d_t image2 = {data2, 1, 1, 16, 16}; // Umage 16x16
+        image2d_t image1 = {data1, 1, 1, 64, 64, 64, 64}; // Image 64x64
+        image2d_t image2 = {data2, 1, 1, 16, 16, 16, 16}; // Umage 16x16
 
         REPORT_BENCHMARK_CSV("dspi_dotprod_off_s8/u8 - dotproduct of two images 16x16",
                              dspi_dotprod_off_s8,
@@ -252,8 +252,8 @@ TEST_CASE("DSP Benchmarks data", "[dsp]")
                              &image1, &image2, (int8_t *)data2, 16, 16, 1, 10);
     }
     {
-        image2d_t image1 = {data1, 1, 1, 64, 64}; // Image 64x64
-        image2d_t image2 = {data2, 1, 1, 64, 64}; // Umage 64x64
+        image2d_t image1 = {data1, 1, 1, 64, 64, 64, 64}; // Image 64x64
+        image2d_t image2 = {data2, 1, 1, 64, 64, 64, 64}; // Umage 64x64
 
         REPORT_BENCHMARK_CSV("dspi_dotprod_s8/u8- dotproduct of two images 64x64",
                              dspi_dotprod_s8,
@@ -261,8 +261,8 @@ TEST_CASE("DSP Benchmarks data", "[dsp]")
                              &image1, &image2, (int8_t *)data2, 64, 64, 1);
     }
     {
-        image2d_t image1 = {data1, 1, 1, 64, 64}; // Image 64x64
-        image2d_t image2 = {data2, 1, 1, 64, 64}; // Umage 64x64
+        image2d_t image1 = {data1, 1, 1, 64, 64, 64, 64}; // Image 64x64
+        image2d_t image2 = {data2, 1, 1, 64, 64, 64, 64}; // Umage 64x64
 
         REPORT_BENCHMARK_CSV("dspi_dotprod_off_s8/u8 - dotproduct of two images 64x64",
                              dspi_dotprod_off_s8,
@@ -271,8 +271,8 @@ TEST_CASE("DSP Benchmarks data", "[dsp]")
     }
     // s16
     {
-        image2d_t image1 = {data1, 1, 1, 32, 32}; // Image 32x32
-        image2d_t image2 = {data2, 1, 1, 8, 8}; // Umage 8x8
+        image2d_t image1 = {data1, 1, 1, 32, 32, 32, 32}; // Image 32x32
+        image2d_t image2 = {data2, 1, 1, 8, 8, 8, 8}; // Umage 8x8
 
         REPORT_BENCHMARK_CSV("dspi_dotprod_s16/u16 - dotproduct of two images 8x8",
                              dspi_dotprod_s16,
@@ -280,8 +280,8 @@ TEST_CASE("DSP Benchmarks data", "[dsp]")
                              &image1, &image2, (int16_t *)data2, 8, 8, 1);
     }
     {
-        image2d_t image1 = {data1, 1, 1, 32, 32}; // Image 32x32
-        image2d_t image2 = {data2, 1, 1, 8, 8}; // Umage 8x8
+        image2d_t image1 = {data1, 1, 1, 32, 32, 32, 32}; // Image 32x32
+        image2d_t image2 = {data2, 1, 1, 8, 8, 8, 8}; // Umage 8x8
 
         REPORT_BENCHMARK_CSV("dspi_dotprod_off_s16/u16 - dotproduct of two images 8x8",
                              dspi_dotprod_off_s16,
@@ -289,8 +289,8 @@ TEST_CASE("DSP Benchmarks data", "[dsp]")
                              &image1, &image2, (int16_t *)data2, 8, 8, 1, 10);
     }
     {
-        image2d_t image1 = {data1, 1, 1, 32, 32}; // Image 64x64
-        image2d_t image2 = {data2, 1, 1, 32, 32}; // Umage 64x64
+        image2d_t image1 = {data1, 1, 1, 32, 32, 32, 32}; // Image 64x64
+        image2d_t image2 = {data2, 1, 1, 32, 32, 32, 32}; // Umage 64x64
 
         REPORT_BENCHMARK_CSV("dspi_dotprod_s16 - dotproduct of two images 32x32",
                              dspi_dotprod_s16,
@@ -298,8 +298,8 @@ TEST_CASE("DSP Benchmarks data", "[dsp]")
                              &image1, &image2, (int16_t *)data2, 32, 32, 1);
     }
     {
-        image2d_t image1 = {data1, 1, 1, 32, 32}; // Image 32x32
-        image2d_t image2 = {data2, 1, 1, 32, 32}; // Umage 32x32
+        image2d_t image1 = {data1, 1, 1, 32, 32, 32, 32}; // Image 32x32
+        image2d_t image2 = {data2, 1, 1, 32, 32, 32, 32}; // Umage 32x32
 
         REPORT_BENCHMARK_CSV("dspi_dotprod_off_s16/u16 - dotproduct of two images 32x32",
                              dspi_dotprod_off_s16,

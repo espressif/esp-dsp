@@ -29,7 +29,8 @@ typedef struct image2d_s {
     int stride_y; // stride height: size of the elements in Y axis * by step_y + padding
     // Point[x,y] = data[width*y*step_y + x*step_x];
     // Full data size = width*height
-
+    int size_x;  // image width
+    int size_y;  // image height
 } image2d_t;
 
 #endif // _dsp_types_H_

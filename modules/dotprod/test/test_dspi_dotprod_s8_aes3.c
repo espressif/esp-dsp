@@ -40,8 +40,8 @@ TEST_CASE("dspi_dotprod_s8_aexx functionality", "[dspi]")
     }
     {
         ESP_LOGI(TAG, "dspi_dotprod_s8 16x16");
-        image2d_t image1 = {&x[3], 1, 1, 64, 64}; // Image 64x64
-        image2d_t image2 = {y, 1, 1, 16, 16}; // Umage 16x16
+        image2d_t image1 = {&x[3], 1, 1, 64, 64, 64, 64}; // Image 64x64
+        image2d_t image2 = {y, 1, 1, 16, 16, 16, 16}; // Umage 16x16
         int8_t result = -1;
         unsigned int start_b = xthal_get_ccount();
         dspi_dotprod_s8(&image1, &image2, &result, 16, 16, shift);
@@ -55,8 +55,8 @@ TEST_CASE("dspi_dotprod_s8_aexx functionality", "[dspi]")
     }
     {
         ESP_LOGI(TAG, "dspi_dotprod_s8 32x32");
-        image2d_t image1 = {&x[3], 1, 1, 64, 64}; // Image 64x64
-        image2d_t image2 = {y, 1, 1, 32, 32}; // Umage 16x16
+        image2d_t image1 = {&x[3], 1, 1, 64, 64, 64, 64}; // Image 64x64
+        image2d_t image2 = {y, 1, 1, 32, 32, 32, 32}; // Umage 16x16
         int8_t result = -1;
         unsigned int start_b = xthal_get_ccount();
         dspi_dotprod_s8(&image1, &image2, &result, 32, 32, shift);
@@ -70,8 +70,8 @@ TEST_CASE("dspi_dotprod_s8_aexx functionality", "[dspi]")
     }
     {
         ESP_LOGI(TAG, "dspi_dotprod_s8 48x48");
-        image2d_t image1 = {&x[3], 1, 1, 64, 64}; // Image 64x64
-        image2d_t image2 = {y, 1, 1, 48, 48}; // Umage 48x48
+        image2d_t image1 = {&x[3], 1, 1, 64, 64, 64, 64}; // Image 64x64
+        image2d_t image2 = {y, 1, 1, 48, 48, 48, 48}; // Umage 48x48
         int8_t result = -1;
         unsigned int start_b = xthal_get_ccount();
         dspi_dotprod_s8(&image1, &image2, &result, 48, 48, shift);
@@ -85,8 +85,8 @@ TEST_CASE("dspi_dotprod_s8_aexx functionality", "[dspi]")
     }
     {
         ESP_LOGI(TAG, "dspi_dotprod_s8 64x64");
-        image2d_t image1 = {&x[3], 1, 1, 128, 128}; // Image 64x64
-        image2d_t image2 = {y, 1, 1, 64, 64}; // Umage 32x32
+        image2d_t image1 = {&x[3], 1, 1, 128, 128, 128, 128}; // Image 64x64
+        image2d_t image2 = {y, 1, 1, 64, 64, 64, 64}; // Umage 32x32
         int8_t result = -1;
         unsigned int start_b = xthal_get_ccount();
         dspi_dotprod_s8(&image1, &image2, &result, 64, 64, shift);
@@ -100,8 +100,8 @@ TEST_CASE("dspi_dotprod_s8_aexx functionality", "[dspi]")
     }
     {
         ESP_LOGI(TAG, "dspi_dotprod_s8 128x128");
-        image2d_t image1 = {&x[3], 1, 1, 128, 128}; // Image 64x64
-        image2d_t image2 = {y, 1, 1, 128, 128}; // Umage 32x32
+        image2d_t image1 = {&x[3], 1, 1, 128, 128, 128, 128}; // Image 64x64
+        image2d_t image2 = {y, 1, 1, 128, 128, 128, 128}; // Umage 32x32
         int8_t result = -1;
         unsigned int start_b = xthal_get_ccount();
         dspi_dotprod_s8(&image1, &image2, &result, 128, 128, shift);

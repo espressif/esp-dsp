@@ -52,7 +52,7 @@ extern "C"
 
 // Image processing functions:
 #include "dspi_dotprod.h"
-
+#include "dspi_conv.h"
 
 #ifdef __cplusplus
 }
