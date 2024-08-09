@@ -17,14 +17,15 @@
 #include "dsp_platform.h"
 #include "esp_log.h"
 
+#include "dsp_tests.h"
 #include "dsps_tone_gen.h"
 #include "dsps_d_gen.h"
 #include "dsps_biquad_gen.h"
 #include "dsps_biquad.h"
 
-static const char *TAG = "dsps_biquad_f32_ae32";
+static const char *TAG = "dsps_biquad_f32";
 const int bq_len = 1024;
-TEST_CASE("dsps_biquad_f32_ae32 functionality", "[dsps]")
+TEST_CASE("dsps_biquad_f32 functionality", "[dsps]")
 {
     float *x = calloc(bq_len, sizeof(float));
     float *y = calloc(bq_len, sizeof(float));
@@ -40,13 +41,13 @@ TEST_CASE("dsps_biquad_f32_ae32 functionality", "[dsps]")
     float w1[2] = {0};
     float w2[2] = {0};
     dsps_biquad_gen_lpf_f32(coeffs, 0.1, 1);
-    dsps_biquad_f32_ae32(x, y, len, coeffs, w1);
+    dsps_biquad_f32(x, y, len, coeffs, w1);
     dsps_biquad_f32_ansi(x, z, len, coeffs, w2);
 
     for (int i = 0 ; i < 32 ; i++) {
-        ESP_LOGD(TAG, "[%i]calc = %f, expected=%f", i, y[i], z[i]);
         if (y[i] != z[i]) {
-            TEST_ASSERT_EQUAL( y[i], z[i]);
+            ESP_LOGI(TAG, "[%i]calc = %f, expected=%f", i, y[i], z[i]);
+            TEST_ASSERT_EQUAL( y[i] * 100000, z[i] * 100000);
         }
     }
     free(x);
@@ -54,7 +55,7 @@ TEST_CASE("dsps_biquad_f32_ae32 functionality", "[dsps]")
     free(z);
 }
 
-TEST_CASE("dsps_biquad_f32_ae32 benchmark", "[dsps]")
+TEST_CASE("dsps_biquad_f32 benchmark", "[dsps]")
 {
     float *x = calloc(bq_len, sizeof(float));
     float *y = calloc(bq_len, sizeof(float));
@@ -68,24 +69,24 @@ TEST_CASE("dsps_biquad_f32_ae32 benchmark", "[dsps]")
     dsps_biquad_gen_lpf_f32(coeffs, 0.1, 1);
 
 
-    unsigned int start_b = xthal_get_ccount();
+    unsigned int start_b = dsp_get_cpu_cycle_count();
     for (int i = 0 ; i < repeat_count ; i++) {
-        dsps_biquad_f32_ae32(x, y, len, coeffs, w1);
+        dsps_biquad_f32(x, y, len, coeffs, w1);
     }
-    unsigned int end_b = xthal_get_ccount();
+    unsigned int end_b = dsp_get_cpu_cycle_count();
 
     float total_b = end_b - start_b;
     float cycles = total_b / (len * repeat_count);
 
-    start_b = xthal_get_ccount();
+    start_b = dsp_get_cpu_cycle_count();
     for (int i = 0 ; i < repeat_count ; i++) {
         dsps_biquad_f32_ansi(x, y, len, coeffs, w1);
     }
-    end_b = xthal_get_ccount();
+    end_b = dsp_get_cpu_cycle_count();
     float total_b_ansi = end_b - start_b;
     float cycles_ansi = total_b_ansi / (len * repeat_count);
 
-    ESP_LOGI(TAG, "dsps_biquad_f32_ae32 - %f per sample\n", cycles);
+    ESP_LOGI(TAG, "dsps_biquad_f32      - %f per sample\n", cycles);
     ESP_LOGI(TAG, "dsps_biquad_f32_ansi - %f per sample\n", cycles_ansi);
     // float min_exec = 10;
     // float max_exec = 20;

@@ -89,6 +89,9 @@ TEST_CASE("DSP Benchmarks data", "[dsp]")
 #ifdef CONFIG_IDF_TARGET_ESP32S3
     chip_id = 3;
 #endif
+#ifdef CONFIG_IDF_TARGET_ESP32P4
+    chip_id = 4;
+#endif
 
 
     REPORT_SECTION_NAME("**Dot Product**");

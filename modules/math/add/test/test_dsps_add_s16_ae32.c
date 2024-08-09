@@ -9,6 +9,7 @@
 #include "dsp_platform.h"
 #include "esp_log.h"
 
+#include "dsp_tests.h"
 #include "dsps_add.h"
 #include "esp_attr.h"
 
@@ -45,9 +46,9 @@ TEST_CASE("dsps_add_s16_ae32 benchmark", "[dsps]")
         x[i] = i << 4;
     }
 
-    unsigned int start_b = xthal_get_ccount();
+    unsigned int start_b = dsp_get_cpu_cycle_count();
     dsps_add_s16_ae32(x, x, x, n, 1, 1, 1, 0);
-    unsigned int end_b = xthal_get_ccount();
+    unsigned int end_b = dsp_get_cpu_cycle_count();
 
     float cycles = end_b - start_b;
     ESP_LOGI(TAG, "dsps_add_s16_ae32 - %f cycles per sample \n", cycles);

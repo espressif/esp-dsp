@@ -17,6 +17,7 @@
 #include "dsp_platform.h"
 #include "esp_log.h"
 
+#include "dsp_tests.h"
 #include "dsps_corr.h"
 #include "esp_attr.h"
 
@@ -30,7 +31,7 @@ static float inputB[lenB];
 static float output[lenA + lenB - 1 + 2];
 static float output_ref[lenA + lenB - 1 + 2];
 
-TEST_CASE("dsps_corr_f32_ae32 functionality", "[dsps]")
+TEST_CASE("dsps_corr_f32_aexx functionality", "[dsps]")
 {
     for (int i = 0 ; i < lenA ; i++) {
         inputA[i] = i;
@@ -43,7 +44,7 @@ TEST_CASE("dsps_corr_f32_ae32 functionality", "[dsps]")
         output_ref[i] = -1;
     }
     inputB[0] = 1;
-    dsps_corr_f32_ae32(inputA, lenA, inputB, lenB, &output[1]);
+    dsps_corr_f32(inputA, lenA, inputB, lenB, &output[1]);
     dsps_corr_f32_ansi(inputA, lenA, inputB, lenB, &output_ref[1]);
     for (size_t i = 0; i < (lenA - lenB) + 2; i++) {
         ESP_LOGD(TAG, "Data[%i] = %2.2f, expected = %2.2f", i, output[i], output_ref[i]);
@@ -53,7 +54,7 @@ TEST_CASE("dsps_corr_f32_ae32 functionality", "[dsps]")
     }
 }
 
-TEST_CASE("dsps_corr_f32_ae32 benchmark", "[dsps]")
+TEST_CASE("dsps_corr_f32_aexx benchmark", "[dsps]")
 {
     int max_N = 1024;
     int corr_size = 64;
@@ -69,9 +70,9 @@ TEST_CASE("dsps_corr_f32_ae32 benchmark", "[dsps]")
         y[i] = 1000;
     }
 
-    unsigned int start_b = xthal_get_ccount();
-    dsps_corr_f32_ae32(x, max_N, y, corr_size, &z[0]);
-    unsigned int end_b = xthal_get_ccount();
+    unsigned int start_b = dsp_get_cpu_cycle_count();
+    dsps_corr_f32(x, max_N, y, corr_size, &z[0]);
+    unsigned int end_b = dsp_get_cpu_cycle_count();
 
     float cycles = end_b - start_b;
     ESP_LOGI(TAG, "dsps_corr_f32_ae32 - %f cycles for signal %i and pattern %i", cycles, max_N, corr_size);

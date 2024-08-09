@@ -45,7 +45,6 @@ check_pre_commit_MR:
   script:
     - pre-commit run --all-files --show-diff-on-failure
 
-
 # This template gets expanded multiple times, once for every IDF version.
 # IDF version is specified by setting the espressif/idf image tag.
 #
@@ -198,7 +197,7 @@ build_latest_test_app:
     # - tools/idf_tools.py --non-interactive install cmake
     # - tools/idf_tools.py install-python-env
     # - tools/idf_tools.py --non-interactive install && eval "$(tools/idf_tools.py --non-interactive export)" || exit 1
-    # - 'echo "ESP-IDF: ${IDF_VERSION}" >> ${TEST_DIR}/idf_version_info.txt'
+    # - '  "ESP-IDF: ${IDF_VERSION}" >> ${TEST_DIR}/idf_version_info.txt'
     # - pip install "pytest-embedded-serial-esp~=1.2.3" "pytest-embedded-idf~=1.2.3"
 
 .test_template:
@@ -329,4 +328,7 @@ upload_to_component_manager:
   when: on_success
   dependencies: []
   script:
+    - pip install idf-component-manager
+    - export IDF_COMPONENT_REGISTRY_URL=https://components.espressif.com/
+    - export IDF_COMPONENT_STORAGE_URL=https://components-file.espressif.com/
     - python -m idf_component_manager upload-component --allow-existing --name=esp-dsp --namespace=espressif

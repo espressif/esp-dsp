@@ -80,6 +80,10 @@ TEST_CASE("DSP Libary benchmark table", "[dsp]")
         abort();
     }
 
+    memset(data1, 0, test_size * 2 * sizeof(float));
+    memset(data2, 0, test_size * 2 * sizeof(float));
+    memset(data3, 0, test_size * 2 * sizeof(float));
+
     fir_f32_t fir1;
     dsps_fir_init_f32(&fir1, data1, data2, 256);
 
@@ -93,6 +97,8 @@ TEST_CASE("DSP Libary benchmark table", "[dsp]")
     REPORT_HEADER_ESP32();
 #elif CONFIG_IDF_TARGET_ESP32S3
     REPORT_HEADER_ESP32S3();
+#elif CONFIG_IDF_TARGET_ESP32P4
+    REPORT_HEADER_ESP32P4();
 #endif
     REPORT_SECTION("**Dot Product**");
     REPORT_BENCHMARK("dsps_dotprod_f32 for N=256 points",
@@ -151,7 +157,6 @@ TEST_CASE("DSP Libary benchmark table", "[dsp]")
                      data1, 1024);
 
     REPORT_SECTION("**FFTs Radix-4 32 bit Floating Point**");
-
     REPORT_BENCHMARK("dsps_fft4r_fc32 for  64 complex points",
                      dsps_fft4r_fc32,
                      dsps_fft4r_fc32_ansi,

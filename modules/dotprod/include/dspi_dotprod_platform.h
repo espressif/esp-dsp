@@ -13,4 +13,12 @@
 #endif
 #endif // __XTENSA__
 
+#if CONFIG_IDF_TARGET_ESP32P4
+#ifdef CONFIG_DSP_OPTIMIZED
+#define dspi_dotprod_arp4_enabled 1
+#else
+#define dspi_dotprod_arp4_enabled 0
+#endif
+#endif
+
 #endif // _dspi_dotprod_platform_H_

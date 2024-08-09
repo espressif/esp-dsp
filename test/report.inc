@@ -74,15 +74,15 @@ static void report_separator(const char *fill)
     do { \
         func1(__VA_ARGS__); /* warm up the cache */ \
         unsigned intlevel = dsp_ENTER_CRITICAL(); \
-        uint32_t func1_start = xthal_get_ccount(); \
+        uint32_t func1_start = dsp_get_cpu_cycle_count(); \
         func1(__VA_ARGS__); \
-        uint32_t func1_end = xthal_get_ccount(); \
+        uint32_t func1_end = dsp_get_cpu_cycle_count(); \
         dsp_EXIT_CRITICAL(intlevel); \
         func2(__VA_ARGS__); /* warm up the cache */ \
         intlevel = dsp_ENTER_CRITICAL(); \
-        uint32_t func2_start = xthal_get_ccount(); \
+        uint32_t func2_start = dsp_get_cpu_cycle_count(); \
         func2(__VA_ARGS__); \
-        uint32_t func2_end = xthal_get_ccount(); \
+        uint32_t func2_end = dsp_get_cpu_cycle_count(); \
         dsp_EXIT_CRITICAL(intlevel); \
         report_value_line(title, func1_end - func1_start, func2_end - func2_start); \
         report_separator(report_line_str); \
@@ -115,6 +115,15 @@ static void report_separator(const char *fill)
         report_separator(report_double_line_str); \
     } while(0);
 
+#define REPORT_HEADER_ESP32P4() \
+    do { \
+        report_separator(report_line_str); \
+        report_text_line_2col("Function name and arguments", "CPU cycles"); \
+        report_separator(report_line_str); \
+        report_text_line(report_space_str, "ESP32P4", "ANSI C"); \
+        report_separator(report_double_line_str); \
+    } while(0);
+
 #define REPORT_SECTION_NAME(title) \
     do { \
         printf("%s\n", title);\
@@ -125,16 +134,16 @@ static void report_separator(const char *fill)
         func1(__VA_ARGS__); /* warm up the cache */ \
         unsigned intlevel = dsp_ENTER_CRITICAL(); \
         func1(__VA_ARGS__); \
-        uint32_t func1_start = xthal_get_ccount(); \
+        uint32_t func1_start = dsp_get_cpu_cycle_count(); \
         func1(__VA_ARGS__); \
-        uint32_t func1_end = xthal_get_ccount(); \
+        uint32_t func1_end = dsp_get_cpu_cycle_count(); \
         dsp_EXIT_CRITICAL(intlevel); \
         func2(__VA_ARGS__); /* warm up the cache */ \
         intlevel = dsp_ENTER_CRITICAL(); \
         func2(__VA_ARGS__); \
-        uint32_t func2_start = xthal_get_ccount(); \
+        uint32_t func2_start = dsp_get_cpu_cycle_count(); \
         func2(__VA_ARGS__); \
-        uint32_t func2_end = xthal_get_ccount(); \
+        uint32_t func2_end = dsp_get_cpu_cycle_count(); \
         dsp_EXIT_CRITICAL(intlevel); \
         printf("%s, %"PRIu32", %"PRIu32", %"PRIu32", %"PRIu32"\n", title, (func1_end - func1_start), (func2_end - func2_start), compiler_opt, chip_id); \
     } while(0);

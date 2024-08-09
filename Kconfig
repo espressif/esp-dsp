@@ -4,7 +4,7 @@ menu "DSP Library"
 config DSP_OPTIMIZATIONS_SUPPORTED
    bool
    default y
-   depends on IDF_TARGET_ESP32 || IDF_TARGET_ESP32S3
+   depends on IDF_TARGET_ESP32 || IDF_TARGET_ESP32S3 || IDF_TARGET_ESP32P4
 
 choice DSP_OPTIMIZATION
    bool "DSP Optimization"

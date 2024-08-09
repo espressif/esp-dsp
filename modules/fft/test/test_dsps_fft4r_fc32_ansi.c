@@ -66,14 +66,14 @@ TEST_CASE("dsps_fft4r_fc32_ansi functionality", "[dsps]")
         diff = diff / N_check;
         ESP_LOGI(TAG, "diff[%i] = %f\n", N_check, diff);
         if (diff > 0.00001) {
-            dsps_view(data, N_check * 2, 128, 16, -N_check, N_check, '.');
-            dsps_view(check_data_fft, N_check * 2, 128, 16, -N_check, N_check, '.');
+            dsps_view(data, N_check * 2, 64, 16, -N_check, N_check, '.');
+            dsps_view(check_data_fft, N_check * 2, 64, 16, -N_check, N_check, '.');
             TEST_ASSERT_MESSAGE (false, "Result out of range!\n");
         }
     }
 
-    dsps_view(data, N_check * 2, 128, 16, -N_check, N_check, '.');
-    dsps_view(check_data_fft, N_check * 2, 128, 16, -N_check, N_check, '.');
+    dsps_view(data, N_check * 2, 64, 16, -N_check, N_check, '.');
+    dsps_view(check_data_fft, N_check * 2, 64, 16, -N_check, N_check, '.');
 
     dsps_fft2r_deinit_fc32();
     dsps_fft4r_deinit_fc32();
@@ -100,10 +100,10 @@ TEST_CASE("dsps_fft4r_fc32_ansi benchmark", "[dsps]")
             check_data_fft[i * 2 + 1] = sinf(2 * M_PI * 18 / 256 * i);
         }
 
-        start_b = xthal_get_ccount();
+        start_b = dsp_get_cpu_cycle_count();
         dsps_fft4r_fc32_ansi(check_data_fft, N_check);
         dsps_bit_rev4r_fc32(check_data_fft, N_check);
-        cycles = xthal_get_ccount() - start_b;
+        cycles = dsp_get_cpu_cycle_count() - start_b;
 
         ESP_LOGI(TAG, "Benchmark dsps_fft4r_fc32_ansi - %6i cycles for %6i points FFT.", (int)cycles, N_check);
     }
@@ -143,7 +143,7 @@ TEST_CASE("dsps_cplx2real_fc32 functionality", "[dsps]")
 
         dsps_fft2r_fc32_ansi(check_data_fft, N_check);
         dsps_bit_rev_fc32_ansi(check_data_fft, N_check);
-        dsps_cplx2real_fc32_ae32(check_data_fft, N_check);
+        dsps_cplx2real_fc32(check_data_fft, N_check);
 
         float diff = 0;
         for (size_t i = 0; i < N_check * 2; i++) {
@@ -193,9 +193,9 @@ TEST_CASE("dsps_cplx2real_fc32_ansi benchmark", "[dsps]")
         }
 
         portENTER_CRITICAL(&testnlock);
-        start_b = xthal_get_ccount();
+        start_b = dsp_get_cpu_cycle_count();
         dsps_cplx2real_fc32_ansi(check_data_fft, N_check);
-        cycles = xthal_get_ccount() - start_b;
+        cycles = dsp_get_cpu_cycle_count() - start_b;
         portEXIT_CRITICAL(&testnlock);
 
         ESP_LOGI(TAG, "Benchmark dsps_cplx2real_fc32_ansi - %6i cycles for %6i points FFT.", (int)cycles, N_check);

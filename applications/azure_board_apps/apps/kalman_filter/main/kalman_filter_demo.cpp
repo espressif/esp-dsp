@@ -269,7 +269,7 @@ static void kalman_filter_task(void *arg)
     while (1) {
         // dt calculation
         static float prev_time = 0;
-        const float current_time = xthal_get_ccount();
+        const float current_time = dsp_get_cpu_cycle_count();
         float dt = 0;
 
         // Crystal count difference conversion to Dt time constant

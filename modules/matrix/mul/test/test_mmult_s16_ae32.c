@@ -72,8 +72,8 @@ static portMUX_TYPE testnlock = portMUX_INITIALIZER_UNLOCKED;
 
 TEST_CASE("dspm_mult_s16_aexx benchmark", "[dspm]")
 {
-    unsigned int start_b = xthal_get_ccount();
-    unsigned int end_b = xthal_get_ccount();
+    unsigned int start_b = dsp_get_cpu_cycle_count();
+    unsigned int end_b = dsp_get_cpu_cycle_count();
     for (int m = 2 ; m <= 8 ; m++) {
         for (int n = 2 ; n <= 16 ; n++) {
             for (int k = 1 ; k <= 16 ; k++) {
@@ -92,9 +92,9 @@ TEST_CASE("dspm_mult_s16_aexx benchmark", "[dspm]")
                 memset(C, 0, sizeof(A));
                 portENTER_CRITICAL(&testnlock);
 
-                start_b = xthal_get_ccount();
+                start_b = dsp_get_cpu_cycle_count();
                 dspm_mult_s16(A_ptr, B_ptr, C_ptr, m, n, k, 0);
-                end_b = xthal_get_ccount();
+                end_b = dsp_get_cpu_cycle_count();
                 portEXIT_CRITICAL(&testnlock);
 
                 float total_b = end_b - start_b;

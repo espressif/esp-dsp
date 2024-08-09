@@ -30,4 +30,15 @@
 #define dspm_mult_s16_aes3_enabled 1
 #endif
 
+#if CONFIG_IDF_TARGET_ESP32P4
+#ifdef CONFIG_DSP_OPTIMIZED
+#define dspm_mult_f32_arp4_enabled 1
+#define dspm_mult_s16_arp4_enabled 1
+#else
+#define dspm_mult_f32_arp4_enabled 0
+#define dspm_mult_s16_arp4_enabled 0
+#endif // CONFIG_DSP_OPTIMIZED
+
+#endif
+
 #endif // _dspm_mult_platform_H_

@@ -46,9 +46,9 @@ TEST_CASE("dsps_fft2r_sc16_aexx functionality", "[dsps]")
     ESP_LOGI(TAG, "data address=%8.8"PRIx32"\n", (uint32_t)data);
 
     dsps_fft2r_sc16(data, N);
-    unsigned int start_b = xthal_get_ccount();
+    unsigned int start_b = dsp_get_cpu_cycle_count();
     dsps_bit_rev_sc16_ansi(data, N);
-    unsigned int end_b = xthal_get_ccount();
+    unsigned int end_b = dsp_get_cpu_cycle_count();
 
 
     for (int i = 0 ; i < N ; i++) {
@@ -114,9 +114,9 @@ TEST_CASE("dsps_fft2r_sc16_aexx overflow check", "[dsps]")
 
 
     dsps_fft2r_sc16(data, N);
-    unsigned int start_b = xthal_get_ccount();
+    unsigned int start_b = dsp_get_cpu_cycle_count();
     dsps_bit_rev_sc16_ansi(data, N);
-    unsigned int end_b = xthal_get_ccount();
+    unsigned int end_b = dsp_get_cpu_cycle_count();
 
 
     for (int i = 0 ; i < N ; i++) {
@@ -168,10 +168,10 @@ TEST_CASE("dsps_fft2r_sc16_ae32 benchmark", "[dsps]")
 
     for (int i = 5 ; i < 10 ; i++) {
         int N_check = 2 << i;
-        unsigned int start_b = xthal_get_ccount();
+        unsigned int start_b = dsp_get_cpu_cycle_count();
         dsps_fft2r_sc16(data, N_check);
 
-        unsigned int end_b = xthal_get_ccount();
+        unsigned int end_b = dsp_get_cpu_cycle_count();
         float total_b = end_b - start_b;
         float cycles = total_b;
         ESP_LOGI(TAG, "Benchmark dsps_fft2r_sc16_aexx - %6i cycles for %6i points FFT.", (int)cycles, N_check);

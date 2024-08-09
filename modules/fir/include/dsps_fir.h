@@ -157,6 +157,7 @@ esp_err_t dsps_fir_f32_aes3(fir_f32_t *fir, const float *input, float *output, i
 int dsps_fird_f32_ansi(fir_f32_t *fir, const float *input, float *output, int len);
 int dsps_fird_f32_ae32(fir_f32_t *fir, const float *input, float *output, int len);
 int dsps_fird_f32_aes3(fir_f32_t *fir, const float *input, float *output, int len);
+int dsps_fird_f32_arp4(fir_f32_t *fir, const float *input, float *output, int len);
 /**@}*/
 
 /**@{*/
@@ -178,6 +179,7 @@ int dsps_fird_f32_aes3(fir_f32_t *fir, const float *input, float *output, int le
 int32_t dsps_fird_s16_ansi(fir_s16_t *fir, const int16_t *input, int16_t *output, int32_t len);
 int32_t dsps_fird_s16_ae32(fir_s16_t *fir, const int16_t *input, int16_t *output, int32_t len);
 int32_t dsps_fird_s16_aes3(fir_s16_t *fir, const int16_t *input, int16_t *output, int32_t len);
+int32_t dsps_fird_s16_arp4(fir_s16_t *fir, const int16_t *input, int16_t *output, int32_t len);
 /**@}*/
 
 
@@ -250,16 +252,18 @@ esp_err_t dsps_16_array_rev(int16_t *arr, int16_t len);
 #define dsps_fird_f32 dsps_fird_f32_aes3
 #elif (dsps_fird_f32_ae32_enabled == 1)
 #define dsps_fird_f32 dsps_fird_f32_ae32
+#elif (dsps_fird_f32_arp4_enabled == 1)
+#define dsps_fird_f32 dsps_fird_f32_arp4
 #else
 #define dsps_fird_f32 dsps_fird_f32_ansi
 #endif
 
 #if (dsps_fird_s16_ae32_enabled == 1)
 #define dsps_fird_s16 dsps_fird_s16_ae32
-
 #elif (dsps_fird_s16_aes3_enabled == 1)
 #define dsps_fird_s16 dsps_fird_s16_aes3
-
+#elif (dsps_fird_s16_arp4_enabled == 1)
+#define dsps_fird_s16 dsps_fird_s16_arp4
 #else
 #define dsps_fird_s16 dsps_fird_s16_ansi
 #endif

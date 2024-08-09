@@ -17,6 +17,7 @@
 #include "dsp_platform.h"
 #include "esp_log.h"
 
+#include "dsp_tests.h"
 #include "dsps_mulc.h"
 #include "esp_attr.h"
 
@@ -43,7 +44,7 @@ TEST_CASE("dsps_mulc_s16_ansi functionality", "[dsps]")
     }
 }
 
-TEST_CASE("dsps_mulc_s16_ae32 benchmark", "[dsps]")
+TEST_CASE("dsps_mulc_s16 benchmark", "[dsps]")
 {
     const int n = 256;
     int16_t x[n];
@@ -51,10 +52,10 @@ TEST_CASE("dsps_mulc_s16_ae32 benchmark", "[dsps]")
         x[i] = i << 4;
     }
 
-    unsigned int start_b = xthal_get_ccount();
+    unsigned int start_b = dsp_get_cpu_cycle_count();
     dsps_mulc_s16_ansi(x, x, n, 10, 1, 1);
-    unsigned int end_b = xthal_get_ccount();
+    unsigned int end_b = dsp_get_cpu_cycle_count();
 
     float cycles = end_b - start_b;
-    ESP_LOGI(TAG, "dsps_mulc_f32_ae32 - %f cycles per sample \n", cycles);
+    ESP_LOGI(TAG, "dsps_mulc_f32 - %f cycles per sample \n", cycles);
 }

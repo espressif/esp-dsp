@@ -89,11 +89,13 @@ void dsps_fft4r_deinit_fc32(void);
  */
 esp_err_t dsps_fft4r_fc32_ansi_(float *data, int N, float *table, int table_size);
 esp_err_t dsps_fft4r_fc32_ae32_(float *data, int N, float *table, int table_size);
+esp_err_t dsps_fft4r_fc32_arp4_(float *data, int N, float *table, int table_size);
 /**@}*/
 // This is workaround because linker generates permanent error when assembler uses
 // direct access to the table pointer
 #define dsps_fft4r_fc32_ansi(data, N) dsps_fft4r_fc32_ansi_(data, N, dsps_fft4r_w_table_fc32, dsps_fft4r_w_table_size)
 #define dsps_fft4r_fc32_ae32(data, N) dsps_fft4r_fc32_ae32_(data, N, dsps_fft4r_w_table_fc32, dsps_fft4r_w_table_size)
+#define dsps_fft4r_fc32_arp4(data, N) dsps_fft4r_fc32_arp4_(data, N, dsps_fft4r_w_table_fc32, dsps_fft4r_w_table_size/N)
 
 /**@{*/
 /**
@@ -118,9 +120,9 @@ esp_err_t dsps_bit_rev4r_sc16_ansi(int16_t *data, int N);
 
 /**@{*/
 /**
- * @brief      Convert complex FFT result to real array
+ * @brief      Convert FFT result to complex array for real input data
  *
- * Convert FFT result of complex FFT for real input to real array.
+ * Convert FFT result of complex FFT for real input to complex output.
  * This function have to be used if FFT used to process real data.
  * This function use tabels inside and can be used only it dsps_fft4r_init_fc32(...) was
  * called and FFT4 was initialized.
@@ -129,7 +131,8 @@ esp_err_t dsps_bit_rev4r_sc16_ansi(int16_t *data, int N);
  * @param[inout] data: Input complex array and result of FFT2R/FFT4R.
  *               input has size of 2*N, because contains real and imaginary part.
  *               result will be stored to the same array.
- *               Input1: input[0..N-1], Input2: input[N..2*N-1]
+ *               Input1: input[0..N-1] if the result is complex Re[0], Im[0]....Re[N-1], Im[N-1],
+ *                       and input[0...2*n-1] if result is real re[0], re[1],...,re[2*N-1].
  * @param[in] N: Number of complex elements in input array
  * @param[in] table: pointer to sin/cos table
  * @param[in] table_size: size of the sin/cos table
@@ -152,8 +155,11 @@ esp_err_t dsps_gen_bitrev4r_table(int N, int step, char *name_ext);
 #endif
 
 #if CONFIG_DSP_OPTIMIZED
+
 #if (dsps_fft4r_fc32_ae32_enabled == 1)
 #define dsps_fft4r_fc32 dsps_fft4r_fc32_ae32
+#elif (dsps_fft4r_fc32_arp4_enabled == 1)
+#define dsps_fft4r_fc32 dsps_fft4r_fc32_arp4
 #else
 #define dsps_fft4r_fc32 dsps_fft4r_fc32_ansi
 #endif // dsps_fft4r_fc32_ae32_enabled
@@ -166,6 +172,7 @@ esp_err_t dsps_gen_bitrev4r_table(int N, int step, char *name_ext);
 #else
 #define dsps_cplx2real_fc32 dsps_cplx2real_fc32_ansi
 #endif // dsps_cplx2real_fc32_ae32_enabled
+
 
 #else
 #define dsps_fft4r_fc32 dsps_fft4r_fc32_ansi

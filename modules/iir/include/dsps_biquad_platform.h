@@ -21,5 +21,14 @@
 
 #endif // __XTENSA__
 
+#ifdef CONFIG_IDF_TARGET_ESP32P4
+#ifdef CONFIG_DSP_OPTIMIZED
+#define dsps_biquad_f32_arp4_enabled 1
+#else
+#define dsps_biquad_f32_arp4_enabled 0
+#endif // CONFIG_DSP_OPTIMIZED
+#else
+#define dsps_biquad_f32_arp4_enabled 0
+#endif
 
 #endif // _dsps_biquad_platform_H_

@@ -204,11 +204,11 @@ TEST_CASE("dsps_fird_s16_aexx benchmark", "[dsps]")
         loop_len = (local_len / dec);
         fir.decim = dec;
 
-        const unsigned int start_b = xthal_get_ccount();
+        const unsigned int start_b = dsp_get_cpu_cycle_count();
         for (int j = 0 ; j < repeat_count ; j++) {
             dsps_fird_s16(&fir, x, y, loop_len);
         }
-        const unsigned int end_b = xthal_get_ccount();
+        const unsigned int end_b = dsp_get_cpu_cycle_count();
 
         const float total_b = end_b - start_b;
         const float cycles = total_b / (float)(repeat_count);
@@ -267,6 +267,7 @@ TEST_CASE("dsps_fird_s16_aexx noise_snr", "[dsps]")
     // Input signal conversion to q15
     int16_t *fir_x = (int16_t *)memalign(16, fir_buffer * sizeof(int16_t));
     int16_t *fir_y = (int16_t *)memalign(16, fir_buffer * sizeof(int16_t));
+    int16_t *fir_y2 = (int16_t *)memalign(16, fir_buffer * sizeof(int16_t));
     for (int i = 0; i < fir_buffer; i++) {
         fir_x[i] = f_in_signal[i] * (int16_t)Q15_MAX;
     }
@@ -279,13 +280,20 @@ TEST_CASE("dsps_fird_s16_aexx noise_snr", "[dsps]")
     const int32_t loop_len = (int32_t)(fir_buffer / decim);                         // loop_len result must be without remainder
     fir_s16_t fir;
     esp_err_t status = dsps_fird_init_s16(&fir, s_coeffs, delay_line, fir_len, decim, start_pos, shift);
+    fir_s16_t fir2;
+    esp_err_t status2 = dsps_fird_init_s16(&fir2, s_coeffs, delay_line, fir_len, decim, start_pos, shift);
     error_msg_handler(&fir, status);
+    error_msg_handler(&fir2, status2);
 
-#if(dsps_fird_s16_aes3_enabled)
+#if(dsps_fird_s16_aes3_enabled || dsps_fird_s16_arv4_enabled)
     dsps_16_array_rev(fir.coeffs, fir.coeffs_len);
 #endif
 
     dsps_fird_s16(&fir, fir_x, fir_y, loop_len);
+    dsps_fird_s16_ansi(&fir2, fir_x, fir_y2, loop_len);
+    for (int i = 0 ; i < loop_len ; i++) {
+        ESP_LOGD(TAG, "Data[%i] = %i vs %i, diff = %i", i, fir_y[i], fir_y2[i], fir_y[i] - fir_y2[i]);
+    }
 
     free(delay_line);
     free(s_coeffs);
@@ -352,7 +360,7 @@ TEST_CASE("dsps_fird_s16_aexx noise_snr", "[dsps]")
     signal_pow = 10 * log10f(signal_pow);
 
     ESP_LOGI(TAG, "\nSignal Power: \t%f\nNoise Power: \t%f\nSNR: \t\t%f", signal_pow, noise_pow, snr);
-    dsps_view(fft_data, N_FFT / 2, 128, 16,  -140, 40, '|');
+    dsps_view(fft_data, N_FFT / 2, 64, 16,  -140, 40, '|');
     free(fft_data);
 
     const float min_exec_snr = 50;

@@ -73,6 +73,11 @@ esp_err_t dspi_dotprod_u16_aes3(image2d_t *in_image, image2d_t *filter, uint16_t
 esp_err_t dspi_dotprod_s8_aes3(image2d_t *in_image, image2d_t *filter, int8_t *out_value, int count_x, int count_y, int shift);
 esp_err_t dspi_dotprod_u8_aes3(image2d_t *in_image, image2d_t *filter, uint8_t *out_value, int count_x, int count_y, int shift);
 
+esp_err_t dspi_dotprod_s16_arp4(image2d_t *in_image, image2d_t *filter, int16_t *out_value, int count_x, int count_y, int shift);
+esp_err_t dspi_dotprod_s8_arp4(image2d_t *in_image, image2d_t *filter, int8_t *out_value, int count_x, int count_y, int shift);
+esp_err_t dspi_dotprod_u16_arp4(image2d_t *in_image, image2d_t *filter, uint16_t *out_value, int count_x, int count_y, int shift);
+esp_err_t dspi_dotprod_u8_arp4(image2d_t *in_image, image2d_t *filter, uint8_t *out_value, int count_x, int count_y, int shift);
+
 
 /**@}*/
 
@@ -123,6 +128,12 @@ esp_err_t dspi_dotprod_off_s16_aes3(image2d_t *in_image, image2d_t *filter, int1
 esp_err_t dspi_dotprod_off_u16_aes3(image2d_t *in_image, image2d_t *filter, uint16_t *out_value, int count_x, int count_y, int shift, uint16_t offset);
 esp_err_t dspi_dotprod_off_s8_aes3(image2d_t *in_image, image2d_t *filter, int8_t *out_value, int count_x, int count_y, int shift, int8_t offset);
 esp_err_t dspi_dotprod_off_u8_aes3(image2d_t *in_image, image2d_t *filter, uint8_t *out_value, int count_x, int count_y, int shift, uint8_t offset);
+
+esp_err_t dspi_dotprod_off_s16_arp4(image2d_t *in_image, image2d_t *filter, int16_t *out_value, int count_x, int count_y, int shift, int16_t offset);
+esp_err_t dspi_dotprod_off_u16_arp4(image2d_t *in_image, image2d_t *filter, uint16_t *out_value, int count_x, int count_y, int shift, uint16_t offset);
+esp_err_t dspi_dotprod_off_s8_arp4(image2d_t *in_image, image2d_t *filter, int8_t *out_value, int count_x, int count_y, int shift, int8_t offset);
+esp_err_t dspi_dotprod_off_u8_arp4(image2d_t *in_image, image2d_t *filter, uint8_t *out_value, int count_x, int count_y, int shift, uint8_t offset);
+
 /**@}*/
 
 
@@ -143,6 +154,15 @@ esp_err_t dspi_dotprod_off_u8_aes3(image2d_t *in_image, image2d_t *filter, uint8
 #define dspi_dotprod_off_s8 dspi_dotprod_off_s8_aes3
 #define dspi_dotprod_off_u16 dspi_dotprod_off_u16_aes3
 #define dspi_dotprod_off_u8 dspi_dotprod_off_u8_aes3
+#elif (dspi_dotprod_arp4_enabled == 1)
+#define dspi_dotprod_s16 dspi_dotprod_s16_arp4
+#define dspi_dotprod_s8 dspi_dotprod_s8_arp4
+#define dspi_dotprod_u16 dspi_dotprod_u16_arp4
+#define dspi_dotprod_u8 dspi_dotprod_u8_arp4
+#define dspi_dotprod_off_s16 dspi_dotprod_off_s16_arp4
+#define dspi_dotprod_off_s8 dspi_dotprod_off_s8_arp4
+#define dspi_dotprod_off_u16 dspi_dotprod_off_u16_arp4
+#define dspi_dotprod_off_u8 dspi_dotprod_off_u8_arp4
 #else
 #define dspi_dotprod_s16 dspi_dotprod_s16_ansi
 #define dspi_dotprod_s8 dspi_dotprod_s8_ansi

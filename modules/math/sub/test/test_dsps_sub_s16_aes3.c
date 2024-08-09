@@ -49,9 +49,9 @@ TEST_CASE("dsps_sub_s16_aes3 benchmark", "[dsps]")
         x[i] = i << 4;
     }
 
-    unsigned int start_b = xthal_get_ccount();
+    unsigned int start_b = dsp_get_cpu_cycle_count();
     dsps_sub_s16_aes3(x, x, x, n, 1, 1, 1, 0);
-    unsigned int end_b = xthal_get_ccount();
+    unsigned int end_b = dsp_get_cpu_cycle_count();
 
     float cycles = end_b - start_b;
     ESP_LOGI(TAG, "dsps_sub_s16_aes3 - %f cycles per sample \n", cycles);

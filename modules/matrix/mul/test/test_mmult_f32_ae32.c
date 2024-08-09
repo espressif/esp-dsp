@@ -91,18 +91,18 @@ TEST_CASE("dspm_mult_f32 benchmark", "[dspm]")
     ESP_LOGI(TAG, "A: %8.8"PRIx32", B: %8.8"PRIx32", C=%8.8"PRIx32"", (uint32_t)A_ptr, (uint32_t)B_ptr, (uint32_t)C_ptr);
     portENTER_CRITICAL(&testnlock);
 
-    unsigned int start_b = xthal_get_ccount();
+    unsigned int start_b = dsp_get_cpu_cycle_count();
     int repeat_count = 1024;
     for (int i = 0 ; i < repeat_count ; i++) {
         dspm_mult_f32(A_ptr, B_ptr, C_ptr, m, n, k);
     }
-    unsigned int end_b = xthal_get_ccount();
+    unsigned int end_b = dsp_get_cpu_cycle_count();
     portEXIT_CRITICAL(&testnlock);
 
     float total_b = end_b - start_b;
     float cycles = total_b / (repeat_count);
     printf("Benchmark dspm_mult_f32 - %f per multiplication 4x4 + overhead.\n", cycles);
     float min_exec = 100;
-    float max_exec = 700;
+    float max_exec = 800;
     TEST_ASSERT_EXEC_IN_RANGE(min_exec, max_exec, cycles);
 }

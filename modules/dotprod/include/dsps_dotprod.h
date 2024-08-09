@@ -44,6 +44,7 @@ extern "C"
  */
 esp_err_t dsps_dotprod_s16_ansi(const int16_t *src1, const int16_t *src2, int16_t *dest, int len, int8_t shift);
 esp_err_t dsps_dotprod_s16_ae32(const int16_t *src1, const int16_t *src2, int16_t *dest, int len, int8_t shift);
+esp_err_t dsps_dotprod_s16_arp4(const int16_t *src1, const int16_t *src2, int16_t *dest, int len, int8_t shift);
 /**@}*/
 
 
@@ -65,6 +66,7 @@ esp_err_t dsps_dotprod_s16_ae32(const int16_t *src1, const int16_t *src2, int16_
 esp_err_t dsps_dotprod_f32_ansi(const float *src1, const float *src2, float *dest, int len);
 esp_err_t dsps_dotprod_f32_ae32(const float *src1, const float *src2, float *dest, int len);
 esp_err_t dsps_dotprod_f32_aes3(const float *src1, const float *src2, float *dest, int len);
+esp_err_t dsps_dotprod_f32_arp4(const float *src1, const float *src2, float *dest, int len);
 /**@}*/
 
 /**@{*/
@@ -86,6 +88,7 @@ esp_err_t dsps_dotprod_f32_aes3(const float *src1, const float *src2, float *des
  */
 esp_err_t dsps_dotprode_f32_ansi(const float *src1, const float *src2, float *dest, int len, int step1, int step2);
 esp_err_t dsps_dotprode_f32_ae32(const float *src1, const float *src2, float *dest, int len, int step1, int step2);
+esp_err_t dsps_dotprode_f32_arp4(const float *src1, const float *src2, float *dest, int len, int step1, int step2);
 /**@}*/
 
 #ifdef __cplusplus
@@ -96,6 +99,8 @@ esp_err_t dsps_dotprode_f32_ae32(const float *src1, const float *src2, float *de
 
 #if (dsps_dotprod_s16_ae32_enabled == 1)
 #define dsps_dotprod_s16 dsps_dotprod_s16_ae32
+#elif (dsps_dotprod_s16_arp4_enabled == 1)
+#define dsps_dotprod_s16 dsps_dotprod_s16_arp4
 #else
 #define dsps_dotprod_s16 dsps_dotprod_s16_ansi
 #endif // dsps_dotprod_s16_ae32_enabled
@@ -103,6 +108,9 @@ esp_err_t dsps_dotprode_f32_ae32(const float *src1, const float *src2, float *de
 #if (dsps_dotprod_f32_aes3_enabled == 1)
 #define dsps_dotprod_f32 dsps_dotprod_f32_aes3
 #define dsps_dotprode_f32 dsps_dotprode_f32_ae32
+#elif (dsps_dotprod_f32_arp4_enabled == 1)
+#define dsps_dotprod_f32 dsps_dotprod_f32_arp4
+#define dsps_dotprode_f32 dsps_dotprode_f32_arp4
 #elif (dotprod_f32_ae32_enabled == 1)
 #define dsps_dotprod_f32 dsps_dotprod_f32_ae32
 #define dsps_dotprode_f32 dsps_dotprode_f32_ae32

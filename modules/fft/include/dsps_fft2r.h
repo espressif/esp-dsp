@@ -94,19 +94,25 @@ void dsps_fft2r_deinit_sc16(void);
 esp_err_t dsps_fft2r_fc32_ansi_(float *data, int N, float *w);
 esp_err_t dsps_fft2r_fc32_ae32_(float *data, int N, float *w);
 esp_err_t dsps_fft2r_fc32_aes3_(float *data, int N, float *w);
+esp_err_t dsps_fft2r_fc32_arp4_(float *data, int N, float *w);
+
 esp_err_t dsps_fft2r_sc16_ansi_(int16_t *data, int N, int16_t *w);
 esp_err_t dsps_fft2r_sc16_ae32_(int16_t *data, int N, int16_t *w);
 esp_err_t dsps_fft2r_sc16_aes3_(int16_t *data, int N, int16_t *w);
+esp_err_t dsps_fft2r_sc16_arp4_(int16_t *data, int N, int16_t *w);
+
 /**@}*/
 // This is workaround because linker generates permanent error when assembler uses
 // direct access to the table pointer
 #define dsps_fft2r_fc32_ae32(data, N) dsps_fft2r_fc32_ae32_(data, N, dsps_fft_w_table_fc32)
 #define dsps_fft2r_fc32_aes3(data, N) dsps_fft2r_fc32_aes3_(data, N, dsps_fft_w_table_fc32)
+#define dsps_fft2r_fc32_arp4(data, N) dsps_fft2r_fc32_arp4_(data, N, dsps_fft_w_table_fc32)
+
 #define dsps_fft2r_sc16_ae32(data, N) dsps_fft2r_sc16_ae32_(data, N, dsps_fft_w_table_sc16)
 #define dsps_fft2r_sc16_aes3(data, N) dsps_fft2r_sc16_aes3_(data, N, dsps_fft_w_table_sc16)
+#define dsps_fft2r_sc16_arp4(data, N) dsps_fft2r_sc16_arp4_(data, N, dsps_fft_w_table_sc16)
 #define dsps_fft2r_fc32_ansi(data, N) dsps_fft2r_fc32_ansi_(data, N, dsps_fft_w_table_fc32)
 #define dsps_fft2r_sc16_ansi(data, N) dsps_fft2r_sc16_ansi_(data, N, dsps_fft_w_table_sc16)
-
 
 /**@{*/
 /**
@@ -210,6 +216,8 @@ esp_err_t dsps_gen_bitrev2r_table(int N, int step, char *name_ext);
 #define dsps_fft2r_fc32 dsps_fft2r_fc32_aes3
 #elif (dsps_fft2r_fc32_ae32_enabled == 1)
 #define dsps_fft2r_fc32 dsps_fft2r_fc32_ae32
+#elif (dsps_fft2r_fc32_arp4_enabled == 1)
+#define dsps_fft2r_fc32 dsps_fft2r_fc32_arp4
 #else
 #define dsps_fft2r_fc32 dsps_fft2r_fc32_ansi
 #endif
@@ -218,6 +226,8 @@ esp_err_t dsps_gen_bitrev2r_table(int N, int step, char *name_ext);
 #define dsps_fft2r_sc16 dsps_fft2r_sc16_aes3
 #elif (dsps_fft2r_sc16_ae32_enabled == 1)
 #define dsps_fft2r_sc16 dsps_fft2r_sc16_ae32
+#elif (dsps_fft2r_sc16_arp4_enabled == 1)
+#define dsps_fft2r_sc16 dsps_fft2r_sc16_arp4
 #else
 #define dsps_fft2r_sc16 dsps_fft2r_sc16_ansi
 #endif
@@ -232,6 +242,7 @@ esp_err_t dsps_gen_bitrev2r_table(int N, int step, char *name_ext);
 #define dsps_bit_rev_lookup_fc32 dsps_bit_rev_lookup_fc32_ansi
 #endif
 
+
 #else // CONFIG_DSP_OPTIMIZED
 
 #define dsps_fft2r_fc32 dsps_fft2r_fc32_ansi
@@ -239,6 +250,7 @@ esp_err_t dsps_gen_bitrev2r_table(int N, int step, char *name_ext);
 #define dsps_cplx2reC_fc32 dsps_cplx2reC_fc32_ansi
 #define dsps_bit_rev_sc16 dsps_bit_rev_sc16_ansi
 #define dsps_bit_rev_lookup_fc32 dsps_bit_rev_lookup_fc32_ansi
+#define dsps_fft2r_sc16 dsps_fft2r_sc16_ansi
 
 #endif // CONFIG_DSP_OPTIMIZED
 

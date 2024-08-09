@@ -17,6 +17,7 @@
 #include "dsp_platform.h"
 #include "esp_log.h"
 
+#include "dsp_tests.h"
 #include "dsps_sqrt.h"
 #include "esp_attr.h"
 
@@ -62,9 +63,9 @@ TEST_CASE("dsps_sqrt_f32_ansi functionality", "[dsps]")
         y[i] = i * 10;
         x[i] = y[i] * y[i];
     }
-    unsigned int start_b = xthal_get_ccount();
+    unsigned int start_b = dsp_get_cpu_cycle_count();
     dsps_sqrt_f32_ansi(x, result, n);
-    float cycles = xthal_get_ccount() - start_b;
+    float cycles = dsp_get_cpu_cycle_count() - start_b;
 
     for (int i = 0 ; i < n ; i++) {
         //printf("Result[%i] = %f, expected = %f,  diff = %f\n", i, result[i], y[i], 20*logf(fabs((result[i] - y[i])/y[i]) + 0.000001));

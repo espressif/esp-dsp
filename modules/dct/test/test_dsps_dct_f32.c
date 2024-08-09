@@ -150,9 +150,9 @@ TEST_CASE("dsps_dct_f32 benchmark", "[dsps]")
         data[i + N] = 0;
     }
 
-    unsigned int start_b = xthal_get_ccount();
+    unsigned int start_b = dsp_get_cpu_cycle_count();
     ret = dsps_dct_f32(data, N);
-    unsigned int end_b = xthal_get_ccount();
+    unsigned int end_b = dsp_get_cpu_cycle_count();
 
     TEST_ESP_OK(ret);
 

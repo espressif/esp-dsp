@@ -29,7 +29,7 @@
 
 static const char *TAG = "dsps_fft4r_ae32";
 
-TEST_CASE("dsps_fft4r_fc32_ae32 functionality", "[dsps]")
+TEST_CASE("dsps_fft4r_fc32 functionality", "[dsps]")
 {
     float *data =  (float *)memalign(16, sizeof(float) * FFTR4_TEST_SIZE * 2);
     TEST_ASSERT_NOT_NULL(data);
@@ -57,7 +57,7 @@ TEST_CASE("dsps_fft4r_fc32_ae32 functionality", "[dsps]")
         dsps_fft4r_fc32_ansi(data, N_check);
         dsps_bit_rev4r_fc32(data, N_check);
 
-        dsps_fft4r_fc32_ae32(check_data_fft, N_check);
+        dsps_fft4r_fc32(check_data_fft, N_check);
         dsps_bit_rev4r_fc32(check_data_fft, N_check);
         float diff = 0;
         for (size_t i = 0; i < N_check * 2; i++) {
@@ -72,8 +72,8 @@ TEST_CASE("dsps_fft4r_fc32_ae32 functionality", "[dsps]")
     if (N_check > FFTR4_TEST_SIZE) {
         N_check = FFTR4_TEST_SIZE;
     }
-    dsps_view(data, N_check * 2, 128, 16, -256, 256, '.');
-    dsps_view(check_data_fft, N_check * 2, 128, 16, -256, 256, '.');
+    dsps_view(data, N_check * 2, 64, 16, -256, 256, '.');
+    dsps_view(check_data_fft, N_check * 2, 64, 16, -256, 256, '.');
 
     dsps_fft2r_deinit_fc32();
     dsps_fft4r_deinit_fc32();
@@ -83,7 +83,7 @@ TEST_CASE("dsps_fft4r_fc32_ae32 functionality", "[dsps]")
 
 static portMUX_TYPE testnlock = portMUX_INITIALIZER_UNLOCKED;
 
-TEST_CASE("dsps_fft4r_fc32_ae32 benchmark", "[dsps]")
+TEST_CASE("dsps_fft4r_fc32 benchmark", "[dsps]")
 {
     float *check_data_fft = (float *)memalign(16, sizeof(float) * 4096 * 2);
     TEST_ASSERT_NOT_NULL(check_data_fft);
@@ -103,20 +103,20 @@ TEST_CASE("dsps_fft4r_fc32_ae32 benchmark", "[dsps]")
         }
 
         portENTER_CRITICAL(&testnlock);
-        start_b = xthal_get_ccount();
-        dsps_fft4r_fc32_ae32(check_data_fft, N_check);
+        start_b = dsp_get_cpu_cycle_count();
+        dsps_fft4r_fc32(check_data_fft, N_check);
         dsps_bit_rev4r_fc32(check_data_fft, N_check);
-        cycles = xthal_get_ccount() - start_b;
+        cycles = dsp_get_cpu_cycle_count() - start_b;
         portEXIT_CRITICAL(&testnlock);
 
-        ESP_LOGI(TAG, "Benchmark dsps_fft4r_fc32_ae32 - %6i cycles for %6i points FFT.", (int)cycles, N_check);
+        ESP_LOGI(TAG, "Benchmark dsps_fft4r_fc32 - %6i cycles for %6i points FFT.", (int)cycles, N_check);
     }
 
     dsps_fft4r_deinit_fc32();
     free(check_data_fft);
 }
 
-TEST_CASE("dsps_cplx2real_fc32_ae32 benchmark", "[dsps]")
+TEST_CASE("dsps_cplx2real_fc32 benchmark", "[dsps]")
 {
     float *check_data_fft = (float *)memalign(16, sizeof(float) * 4096 * 2);
     TEST_ASSERT_NOT_NULL(check_data_fft);
@@ -136,12 +136,12 @@ TEST_CASE("dsps_cplx2real_fc32_ae32 benchmark", "[dsps]")
         }
 
         portENTER_CRITICAL(&testnlock);
-        start_b = xthal_get_ccount();
-        dsps_cplx2real_fc32_ae32(check_data_fft, N_check);
-        cycles = xthal_get_ccount() - start_b;
+        start_b = dsp_get_cpu_cycle_count();
+        dsps_cplx2real_fc32(check_data_fft, N_check);
+        cycles = dsp_get_cpu_cycle_count() - start_b;
         portEXIT_CRITICAL(&testnlock);
 
-        ESP_LOGI(TAG, "Benchmark dsps_cplx2real_fc32_ae32 - %6i cycles for %6i points FFT.", (int)cycles, N_check);
+        ESP_LOGI(TAG, "Benchmark dsps_cplx2real_fc32 - %6i cycles for %6i points FFT.", (int)cycles, N_check);
     }
 
     dsps_fft4r_deinit_fc32();
@@ -168,9 +168,9 @@ TEST_CASE("dsps_bit_rev4r_fc32_ansi benchmark", "[dsps]")
         }
 
         portENTER_CRITICAL(&testnlock);
-        start_b = xthal_get_ccount();
+        start_b = dsp_get_cpu_cycle_count();
         dsps_bit_rev4r_fc32(check_data_fft, N_check);
-        cycles = xthal_get_ccount() - start_b;
+        cycles = dsp_get_cpu_cycle_count() - start_b;
         portEXIT_CRITICAL(&testnlock);
 
         ESP_LOGI(TAG, "Benchmark dsps_bit_rev4r_fc32_ansi - %6i cycles for %6i points FFT.", (int)cycles, N_check);

@@ -18,6 +18,7 @@
 #include "dsp_platform.h"
 #include "esp_log.h"
 
+#include "dsp_tests.h"
 #include "dsps_conv.h"
 #include "esp_attr.h"
 
@@ -32,7 +33,7 @@ static float output_ref[lenA + lenB - 1 + 2];
 static float output_fwd[lenA + lenB - 1 + 2];
 static float output_back[lenA + lenB - 1 + 2];
 
-TEST_CASE("dsps_conv_f32_ae32 test output", "[dsps]")
+TEST_CASE("dsps_conv_f32 test output", "[dsps]")
 {
     int la = 3;
     int lb = 2;
@@ -49,7 +50,7 @@ TEST_CASE("dsps_conv_f32_ae32 test output", "[dsps]")
         output_back[i] = -1;
     }
     dsps_conv_f32_ansi(inputA, la, inputB, lb, &output_ref[1]);
-    dsps_conv_f32_ae32(inputA, la, inputB, lb, &output_fwd[1]);
+    dsps_conv_f32(inputA, la, inputB, lb, &output_fwd[1]);
 
     for (size_t i = 0; i < (la + lb + 1); i++) {
         ESP_LOGD(TAG, "la=%i, lb=%i, i=%i, ref=%2.3f, fwd=%2.3f", la, lb, i, output_ref[i], output_fwd[i]);
@@ -63,7 +64,7 @@ TEST_CASE("dsps_conv_f32_ae32 test output", "[dsps]")
     }
 }
 
-TEST_CASE("dsps_conv_f32_ae32 functionality", "[dsps]")
+TEST_CASE("dsps_conv_f32 functionality", "[dsps]")
 {
     for (size_t la = 2; la < lenA; la++) {
         for (size_t lb = 2; lb < lenB; lb++) {
@@ -79,8 +80,8 @@ TEST_CASE("dsps_conv_f32_ae32 functionality", "[dsps]")
                 output_back[i] = -1;
             }
             dsps_conv_f32_ansi(inputA, la, inputB, lb, &output_ref[1]);
-            dsps_conv_f32_ae32(inputA, la, inputB, lb, &output_fwd[1]);
-            dsps_conv_f32_ae32(inputB, lb, inputA, la, &output_back[1]);
+            dsps_conv_f32(inputA, la, inputB, lb, &output_fwd[1]);
+            dsps_conv_f32(inputB, lb, inputA, la, &output_back[1]);
             float max_eps = 0.000001;
             for (size_t i = 0; i < (la + lb + 1); i++) {
                 if ((fabs(output_ref[i] - output_fwd[i]) > max_eps) || (fabs(output_ref[i] - output_back[i]) > max_eps) || (fabs(output_back[i] - output_fwd[i]) > max_eps)) {
@@ -95,7 +96,7 @@ TEST_CASE("dsps_conv_f32_ae32 functionality", "[dsps]")
 }
 
 
-TEST_CASE("dsps_conv_f32_ae32 benchmark", "[dsps]")
+TEST_CASE("dsps_conv_f32 benchmark", "[dsps]")
 {
     int max_N = 1024;
     int conv_size = 64;
@@ -111,12 +112,12 @@ TEST_CASE("dsps_conv_f32_ae32 benchmark", "[dsps]")
         y[i] = 1000;
     }
 
-    unsigned int start_b = xthal_get_ccount();
-    dsps_conv_f32_ae32(x, max_N, y, conv_size, &z[0]);
-    unsigned int end_b = xthal_get_ccount();
+    unsigned int start_b = dsp_get_cpu_cycle_count();
+    dsps_conv_f32(x, max_N, y, conv_size, &z[0]);
+    unsigned int end_b = dsp_get_cpu_cycle_count();
 
     float cycles = end_b - start_b;
-    ESP_LOGI(TAG, "dsps_conv_f32_ae32 - %f cycles for signal %i and pattern %i", cycles, max_N, conv_size);
+    ESP_LOGI(TAG, "dsps_conv_f32 - %f cycles for signal %i and pattern %i", cycles, max_N, conv_size);
     free(x);
     free(y);
     free(z);

@@ -75,12 +75,12 @@ TEST_CASE("dsps_dotprod_f32_aexx benchmark", "[dsps]")
     }
     printf("Benchmark dsps_dotprod_f32_aexx - x=%8.8"PRIx32", y=%8.8"PRIx32", len=%8.8x\n", (uint32_t)x, (uint32_t)y, 1024);
 
-    unsigned int start_b = xthal_get_ccount();
+    unsigned int start_b = dsp_get_cpu_cycle_count();
     int repeat_count = 1024;
     for (int i = 0 ; i < repeat_count ; i++) {
         dsps_dotprod_f32(x, y, &z[1], 1024);
     }
-    unsigned int end_b = xthal_get_ccount();
+    unsigned int end_b = dsp_get_cpu_cycle_count();
 
     float total_b = end_b - start_b;
     float cycles = total_b / (repeat_count);
@@ -147,12 +147,12 @@ TEST_CASE("dsps_dotprod_f32_ansi benchmark", "[dsps]")
         y[i] = 1000;
     }
 
-    unsigned int start_b = xthal_get_ccount();
+    unsigned int start_b = dsp_get_cpu_cycle_count();
     int repeat_count = 1024;
     for (int i = 0 ; i < repeat_count ; i++) {
         dsps_dotprod_f32_ansi(x, y, &z[1], 1024);
     }
-    unsigned int end_b = xthal_get_ccount();
+    unsigned int end_b = dsp_get_cpu_cycle_count();
 
     float total_b = end_b - start_b;
     float cycles = total_b / (repeat_count);

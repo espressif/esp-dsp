@@ -117,17 +117,17 @@ TEST_CASE("cplx_gen_benchmark_test", "[dsps]")
     int16_t *out_array_fixed = (int16_t *)malloc(out_len * 2 * 32 * sizeof(int16_t));
 
     for (int i = 0; i < 6; i++) {
-        const unsigned int start_float = xthal_get_ccount();
+        const unsigned int start_float = dsp_get_cpu_cycle_count();
         for (int j = 0 ; j < repeat_count ; j++) {
             dsps_cplx_gen(&cplx_signal_float, (void *)out_array_float, out_len);
         }
-        const unsigned int end_float = xthal_get_ccount();
+        const unsigned int end_float = dsp_get_cpu_cycle_count();
 
-        const unsigned int start_fixed = xthal_get_ccount();
+        const unsigned int start_fixed = dsp_get_cpu_cycle_count();
         for (int j = 0 ; j < repeat_count ; j++) {
             dsps_cplx_gen(&cplx_signal_fixed, (void *)out_array_fixed, out_len);
         }
-        const unsigned int end_fixed = xthal_get_ccount();
+        const unsigned int end_fixed = dsp_get_cpu_cycle_count();
 
         const float total_float = end_float - start_float;
         const float total_fixed = end_fixed - start_fixed;
@@ -249,11 +249,11 @@ TEST_CASE("cplx_gen_noise_SNR_test", "[dsps]")
     const float sfdr_2 = out_array_float[max_pos_2] - out_array_float[spur_pos_2];
 
     ESP_LOGI(TAG, "\nSignal Power: \t%f\nNoise Power: \t%f\nSNR: \t\t%f \nSFDR: \t\t%f", signal_pow_1, noise_pow_1, snr_1, sfdr_1);
-    dsps_view(out_array_float, n_fft / 4, 128, 16,  -140, 40, '|');
+    dsps_view(out_array_float, n_fft / 4, 64, 16,  -140, 40, '|');
     putchar('\n');
 
     ESP_LOGI(TAG, "\nSignal Power: \t%f\nNoise Power: \t%f\nSNR: \t\t%f \nSFDR: \t\t%f", signal_pow_2, noise_pow_2, snr_2, sfdr_2);
-    dsps_view(out_array_float + (n_fft / 4), n_fft / 4, 128, 16,  -140, 40, '|');
+    dsps_view(out_array_float + (n_fft / 4), n_fft / 4, 64, 16,  -140, 40, '|');
 
     free(out_array_float);
     cplx_gen_free(&cplx_signal_float);

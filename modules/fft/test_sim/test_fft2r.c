@@ -58,7 +58,7 @@ void test_fft2r()
     // table_size = dsps_fft2r_rev_tables_fc32_size[6];
 
     xt_iss_profile_enable();
-    dsps_fft2r_fc32_ae32(data, N_check);
+    dsps_fft2r_fc32(data, N_check);
 //    dsps_bit_rev_lookup_fc32_ae32(data, N_check, dsps_fft2r_rev_tables_fc32[6]);
     dsps_fft2r_fc32_aes3_(check_data, N_check, dsps_fft_w_table_fc32);
 //    dsps_bit_rev_lookup_fc32_ae32(data, N_check, dsps_fft2r_rev_tables_fc32[6]);
