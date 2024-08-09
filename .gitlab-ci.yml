@@ -20,7 +20,6 @@ variables:
   TEST_DIR: "$CI_PROJECT_DIR/test_app"
   SIZE_INFO_LOCATION: "${TEST_DIR}/size_info.txt"
 
-
   ESP_IDF_GIT: "https://gitlab-ci-token:${CI_JOB_TOKEN}@${GITLAB_HTTPS_SERVER}/espressif/esp-idf.git"
 
 .setup_idf_tools: &setup_idf_tools |
@@ -177,7 +176,7 @@ build_clang_idf_latest:
     - python -m idf_build_apps build -v -p .
       --recursive
       --target all
-      --default-build-targets "${TEST_TARGETS}"
+      --default-build-targets ${TEST_TARGETS}
       --config "sdkconfig.*=" --build-dir "build"
       --collect-size-info $SIZE_INFO_LOCATION
       --parallel-count ${CI_NODE_TOTAL:-1}
@@ -221,7 +220,7 @@ build_latest_test_app:
     # - tools/idf_tools.py --non-interactive install cmake
     # - tools/idf_tools.py install-python-env
     # - tools/idf_tools.py --non-interactive install && eval "$(tools/idf_tools.py --non-interactive export)" || exit 1
-    # - '  "ESP-IDF: ${IDF_VERSION}" >> ${TEST_DIR}/idf_version_info.txt'
+    # - 'echo "ESP-IDF: ${IDF_VERSION}" >> ${TEST_DIR}/idf_version_info.txt'
     # - pip install "pytest-embedded-serial-esp~=1.2.3" "pytest-embedded-idf~=1.2.3"
 
 .test_template:
@@ -339,20 +338,3 @@ push_master_to_github:
     - git clone --depth 1 ${ESP_IDF_GIT} esp-idf
     - *add_gh_key_remote
     - esp-idf/tools/ci/push_to_github.sh
-
-upload_to_component_manager:
-  image: espressif/idf:latest
-  stage: deploy
-  tags:
-    - deploy
-  only:
-    - master
-    - /^release\/v/
-    - /^v\d+\.\d+(\.\d+)?($|-)/
-  when: on_success
-  dependencies: []
-  script:
-    - pip install idf-component-manager
-    - export IDF_COMPONENT_REGISTRY_URL=https://components.espressif.com/
-    - export IDF_COMPONENT_STORAGE_URL=https://components-file.espressif.com/
-    - python -m idf_component_manager upload-component --allow-existing --name=esp-dsp --namespace=espressif
