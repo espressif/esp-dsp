@@ -2,7 +2,7 @@
 
 # Espressif DSP Library
 
-ESP-DSP is the official DSP library for all Espressif chips. The library contains optimized functions for [ESP32](https://espressif.com/en/products/hardware/esp32/overview) and [ESP32-S3](https://espressif.com/en/products/hardware/esp32s3/overview) chips. 
+ESP-DSP is the official DSP library for all Espressif chips. The library contains optimized functions for [ESP32](https://espressif.com/en/products/hardware/esp32/overview), [ESP32-S3](https://espressif.com/en/products/hardware/esp32s3/overview) and [ESP32P4](https://www.espressif.com/en/products/socs/esp32-p4) chips. 
 
 ## Overview
 
