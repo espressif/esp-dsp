@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Add esp32p4 chip to chip list into main readme
+
 ### Removed
 
 ## [1.5.1]  2024-08-2
