@@ -45,6 +45,15 @@ check_pre_commit_MR:
   script:
     - pre-commit run --all-files --show-diff-on-failure
 
+.install_clang: &install_clang |
+  pip install --upgrade pyclang
+  $IDF_PATH/tools/idf_tools.py --non-interactive install esp-clang
+  source $IDF_PATH/export.sh
+
+.before_script_build_jobs:
+  before_script:
+    - *install_clang
+
 # This template gets expanded multiple times, once for every IDF version.
 # IDF version is specified by setting the espressif/idf image tag.
 #
@@ -65,7 +74,9 @@ check_pre_commit_MR:
   variables:
     EXAMPLE_TARGETS: "esp32"
     TEST_TARGETS: "esp32"
+    IDF_TOOLCHAIN: "gcc"
 
+# GCC builds
 build_idf_v4.2:
   extends: .build_template
   image: espressif/idf:release-v4.2
@@ -107,8 +118,21 @@ build_idf_latest:
   extends: .build_template
   image: espressif/idf:latest
   variables:
-    EXAMPLE_TARGETS: "esp32 esp32s2 esp32s3 esp32c3"
+    EXAMPLE_TARGETS: "esp32 esp32s2 esp32s3 esp32c3 esp32p4"
+    TEST_TARGETS: "esp32 esp32s3 esp32p4"
+    # GNU Make based build system is not supported starting from IDF v5.0
+    SKIP_GNU_MAKE_BUILD: 1
+
+# clang build
+build_clang_idf_latest:
+  extends: 
+    - .before_script_build_jobs
+    - .build_template
+  image: espressif/idf:latest
+  variables:
+    EXAMPLE_TARGETS: "esp32 esp32s2 esp32c3 esp32s3"
     TEST_TARGETS: "esp32 esp32s3"
+    IDF_TOOLCHAIN: clang
     # GNU Make based build system is not supported starting from IDF v5.0
     SKIP_GNU_MAKE_BUILD: 1
 
@@ -153,7 +177,7 @@ build_idf_latest:
     - python -m idf_build_apps build -v -p .
       --recursive
       --target all
-      --default-build-targets ${TEST_TARGETS}
+      --default-build-targets "${TEST_TARGETS}"
       --config "sdkconfig.*=" --build-dir "build"
       --collect-size-info $SIZE_INFO_LOCATION
       --parallel-count ${CI_NODE_TOTAL:-1}

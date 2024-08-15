@@ -7,11 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] 
 
-### Added
-
 ### Changed
-
 - Add esp32p4 chip to chip list into main readme
+
+### Added
+- CI test build for Clang
 
 ### Removed
 

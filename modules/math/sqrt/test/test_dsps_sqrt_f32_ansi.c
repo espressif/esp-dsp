@@ -1,4 +1,4 @@
-// Copyright 2018-2019 Espressif Systems (Shanghai) PTE LTD
+// Copyright 2018-2023 Espressif Systems (Shanghai) PTE LTD
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -28,7 +28,7 @@ TEST_CASE("dsps_sqrtf_f32_ansi functionality", "[dsps]")
     float max_err = -1000;
     float max_value = 0;
     float min_err = 0;
-    float min_value = INT32_MAX;
+    float min_value = (float)INT32_MAX;
     int test_points = 100000;
     for (size_t i = 0; i < test_points; i++) {
         float test_value = rand();
