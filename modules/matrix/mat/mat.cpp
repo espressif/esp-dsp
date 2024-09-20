@@ -743,28 +743,39 @@ Mat Mat::cofactor(int row, int col, int n)
 
 float Mat::det(int n)
 {
-    float D = 0; // Initialize result
-
     //  Base case : if matrix contains single element
     if (n == 1) {
         return (*this)(0, 0);
     }
 
-    Mat temp(this->rows, this->rows); // To store cofactors
+    float det = 1.0;
+    Mat *temp = new Mat(n, n);
+    *temp = *this;
 
-    int sign = 1;  // To store sign multiplier
-
-    // Iterate for each element of first row
-    for (int f = 0; f < n; f++) {
-        // Getting Cofactor of A[0][f]
-        Mat temp = this->cofactor(0, f, n);
-        D += (*this)(0, f) * temp.det(n - 1) * sign;
-
-        // terms are to be added with alternate sign
-        sign = -sign;
+    for (int i = 0; i < n; i++) {
+        int pivot = i;
+        for (int j = i + 1; j < n; j++) {
+            if (std::abs((*temp)(j, i)) > std::abs((*temp)(pivot, i))) {
+                pivot = j;
+            }
+        }
+        if (pivot != i) {
+            temp->swapRows(i, pivot);
+            det *= -1;
+        }
+        if ((*temp)(i, i) == 0) {
+            return 0;
+        }
+        det *= (*temp)(i, i);
+        for (int j = i + 1; j < n; j++) {
+            float factor = (*temp)(j, i) / (*temp)(i, i);
+            for (int k = i + 1; k < n; k++) {
+                (*temp)(j, k) -= factor * (*temp)(i, k);
+            }
+        }
     }
-
-    return D;
+    delete temp;
+    return det;
 }
 
 Mat Mat::adjoint()

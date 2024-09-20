@@ -22,10 +22,9 @@
 
 static const char *TAG = "dsps_view";
 
-static float data[1024];
-
 TEST_CASE("dsps_view functionality", "[dsps]")
 {
+    float *data = (float *)malloc(1024 * sizeof(float));
     for (int i = 0 ; i < 1024 ; i++) {
         data[i] = -100;
     }
@@ -33,4 +32,5 @@ TEST_CASE("dsps_view functionality", "[dsps]")
     dsps_view_spectrum(data, 1024, -100, 0);
 
     ESP_LOGI(TAG, "Just a check\n");
+    free(data);
 }

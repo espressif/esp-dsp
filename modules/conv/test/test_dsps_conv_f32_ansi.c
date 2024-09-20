@@ -14,10 +14,12 @@
 
 #include <string.h>
 #include <math.h>
+#include <malloc.h>
 #include "unity.h"
 #include "dsp_platform.h"
 #include "esp_log.h"
 
+#include "dsp_tests.h"
 #include "dsps_conv.h"
 #include "esp_attr.h"
 #include "esp_dsp.h"
@@ -26,13 +28,6 @@ static const char *TAG = "dsps_conv";
 
 #define lenA  20
 #define lenB  20
-
-static float inputA[lenA];
-static float inputB[lenB];
-static float output_ref[lenA + lenB - 1 + 2];
-static float output_fwd[lenA + lenB - 1 + 2];
-static float output_back[lenA + lenB - 1 + 2];
-
 
 esp_err_t dsps_conv_f32_ref(const float *Signal, const int siglen, const float *Kernel, const int kernlen, float *convout)
 {
@@ -45,7 +40,6 @@ esp_err_t dsps_conv_f32_ref(const float *Signal, const int siglen, const float *
     if (NULL == convout) {
         return ESP_ERR_DSP_PARAM_OUTOFRANGE;
     }
-
 
     for (int n = 0; n < siglen + kernlen - 1; n++) {
         size_t kmin, kmax, k;
@@ -64,6 +58,13 @@ esp_err_t dsps_conv_f32_ref(const float *Signal, const int siglen, const float *
 
 TEST_CASE("dsps_conv_f32_ansi functionality", "[dsps]")
 {
+    float *inputA = (float *)memalign(16, lenA * sizeof(float));
+    float *inputB = (float *)memalign(16, lenB * sizeof(float));
+
+    float *output_ref = (float *)memalign(16, (lenA + lenB - 1 + 2) * sizeof(float));
+    float *output_fwd = (float *)memalign(16, (lenA + lenB - 1 + 2) * sizeof(float));
+    float *output_back = (float *)memalign(16, (lenA + lenB - 1 + 2) * sizeof(float));
+
     for (size_t la = 1; la < lenA; la++) {
         for (size_t lb = 1; lb < lenB; lb++) {
             for (int i = 0 ; i < lenA ; i++) {
@@ -83,7 +84,7 @@ TEST_CASE("dsps_conv_f32_ansi functionality", "[dsps]")
             float max_eps = 0.000001;
             for (size_t i = 0; i < (la + lb + 1); i++) {
                 if ((fabs(output_ref[i] - output_fwd[i]) > max_eps) || (fabs(output_ref[i] - output_back[i]) > max_eps) || (fabs(output_back[i] - output_fwd[i]) > max_eps)) {
-                    ESP_LOGE(TAG, "la=%i, lb=%i, i=%i, ref=%2.3f, fwd=%2.3f, back=%2.3f", la, lb, i, output_ref[i], output_fwd[i], output_back[i]);
+                    ESP_LOGI(TAG, "la=%i, lb=%i, i=%i, ref=%2.3f, fwd=%2.3f, back=%2.3f", la, lb, i, output_ref[i], output_fwd[i], output_back[i]);
                 }
                 TEST_ASSERT_EQUAL(output_ref[i], output_fwd[i]);
                 TEST_ASSERT_EQUAL(output_ref[i], output_back[i]);
@@ -91,6 +92,11 @@ TEST_CASE("dsps_conv_f32_ansi functionality", "[dsps]")
             }
         }
     }
+    free(inputA);
+    free(inputB);
+    free(output_ref);
+    free(output_fwd);
+    free(output_back);
 }
 
 TEST_CASE("dsps_conv_f32_ansi draw", "[dsps]")
