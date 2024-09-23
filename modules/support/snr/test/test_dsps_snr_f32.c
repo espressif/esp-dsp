@@ -24,11 +24,11 @@
 
 static const char *TAG = "dsps_snr_f32";
 
-static float data[1024];
 
 TEST_CASE("dsps_snr_f32 functionality", "[dsps]")
 {
-    int N = sizeof(data) / sizeof(float) / 2;
+    int N = 512;
+    float *data = (float *)malloc(N * 2 * sizeof(float));
     int check_bin = 32;
     float snr_exp = 0.001;
     for (int i = 0 ; i < N ; i++) {
@@ -40,4 +40,5 @@ TEST_CASE("dsps_snr_f32 functionality", "[dsps]")
     TEST_ASSERT_EQUAL(-round(20 * log10(snr_exp) + 3), (int)round(snr));
     ESP_LOGI(TAG, "dsps_snr_f32 = %f dB", snr);
     dsps_fft2r_deinit_fc32();
+    free(data);
 }
