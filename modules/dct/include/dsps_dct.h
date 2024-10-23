@@ -26,7 +26,7 @@ extern "C"
 /**
  * @brief      DCT of radix 2, unscaled
  *
- * DCT type II of radix 2, unscaled
+ * Discrete Cosine Transform type II of radix 2, unscaled
  * Function is FFT based
  * The extension (_ansi) use ANSI C and could be compiled and run on any platform.
  * The extension (_ae32) is optimized for ESP32 chip.
@@ -41,14 +41,56 @@ extern "C"
  *      - One of the error codes from DSP library
  */
 esp_err_t dsps_dct_f32(float *data, int N);
+/**@}*/
 
+
+/**@{*/
+/**
+ * @brief      DCT of radix 2, type IV, unscaled
+ *
+ * Discrete Cosine Transform type IV of radix 2, unscaled
+ * Function is FFT based
+ * The extension (_ansi) use ANSI C and could be compiled and run on any platform.
+ * The extension (_ae32) is optimized for ESP32 chip.
+ *
+ * @param[inout] data: input/output array with size of N. An elements located: Re[0],Re[1], , ... Re[N-1]
+ *               result of DST will be stored to this array from 0...N-1.
+ *               Size of data array must be N
+ * @param[in] N: Size of DCT transform. Size of data array must be N
+ *
+ * @return
+ *      - ESP_OK on success
+ *      - One of the error codes from DSP library
+ */
+esp_err_t dsps_dctiv_f32(float *data, int N);
+/**@}*/
+
+/**@{*/
+/**
+ * @brief      DST of radix 2, type IV, unscaled
+ *
+ * Discrete Sine Transform type IV of radix 2, unscaled
+ * Function is FFT based
+ * The extension (_ansi) use ANSI C and could be compiled and run on any platform.
+ * The extension (_ae32) is optimized for ESP32 chip.
+ *
+ * @param[inout] data: input/output array with size of N*2. An elements located: Re[0],Re[1], , ... Re[N-1]
+ *               result of DST will be stored to this array from 0...N-1.
+ *               Size of data array must be N
+ * @param[in] N: Size of DST transform. Size of data array must be N
+ *
+ * @return
+ *      - ESP_OK on success
+ *      - One of the error codes from DSP library
+ */
+esp_err_t dsps_dstiv_f32(float *data, int N);
 /**@}*/
 
 /**@{*/
 /**
  * @brief      Inverce DCT of radix 2
  *
- * Inverce DCT type III of radix 2, unscaled
+ * Inverce Discrete Cosine Transform type II of radix 2, unscaled
  * Function is FFT based
  * The extension (_ansi) use ANSI C and could be compiled and run on any platform.
  * The extension (_ae32) is optimized for ESP32 chip.
