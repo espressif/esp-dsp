@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Bugfix for determinant calculation in mat.cpp 
 
 ### Added
+- Add DCT-IV and DST-IV 
 
 ### Removed
 

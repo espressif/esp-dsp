@@ -121,6 +121,8 @@ set(srcs            "modules/common/misc/dsps_pwroftwo.cpp"
                     "modules/fft/fixed/dsps_fft2r_sc16_arp4.S"
 
                     "modules/dct/float/dsps_dct_f32.c"
+                    "modules/dct/float/dsps_dctiv_f32.c"
+                    "modules/dct/float/dsps_dstiv_f32.c"
                     "modules/support/snr/float/dsps_snr_f32.cpp"
                     "modules/support/sfdr/float/dsps_sfdr_f32.cpp"
                     "modules/support/misc/dsps_d_gen.c"
