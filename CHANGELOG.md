@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased] 
 
 ### Changed
+- Bugfix for SNR calculation: free array in case of error 
 - Bugfix for determinant calculation in mat.cpp 
 
 ### Added
