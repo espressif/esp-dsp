@@ -58,12 +58,12 @@ Mat::Mat(float *data, int roi_rows, int roi_cols, int stride)
 {
     this->rows = roi_rows;
     this->cols = roi_cols;
-    this->data = data;
     this->stride = stride;
     this->padding = stride - roi_cols;
     this->length = this->rows * this->cols;
-    this->ext_buff = true;
     this->sub_matrix = true;
+    this->ext_buff = true;
+    this->data = data;
 }
 
 Mat::Mat(int rows, int cols)
@@ -81,15 +81,17 @@ Mat::Mat(int rows, int cols)
 Mat::Mat(float *data, int rows, int cols)
 {
     ESP_LOGD("Mat", "Mat(data, %i, %i)", rows, cols);
-    this->ext_buff = true;
     this->rows = rows;
     this->cols = cols;
-    this->data = data;
     this->sub_matrix = false;
     this->stride = cols;
     this->padding = 0;
     this->length = this->rows * this->cols;
-    memcpy(this->data, data, this->length * sizeof(float));
+    allocate();
+    this->ext_buff = false;
+    for (size_t i = 0; i < this->length; i++) {
+        this->data[i] = data[i];
+    }
 }
 
 
