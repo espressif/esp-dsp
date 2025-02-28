@@ -29,11 +29,13 @@ __attribute__((aligned(16)))
 static float data[1024 * 2];
 __attribute__((aligned(16)))
 static float check_data[1024 * 2];
-__attribute__((aligned(16)))
-static float data_test[1024 * 2];
 
 TEST_CASE("dsps_fft2r_fc32 functionality", "[dsps]")
 {
+
+    float *data_test = (float *)memalign(1024, sizeof(float) * 1024 * 2);
+    TEST_ASSERT_NOT_NULL(data_test);
+
     int N = sizeof(data) / sizeof(float) / 2;
     int check_bin = 32;
     float check_ampl = 2;
@@ -86,6 +88,7 @@ TEST_CASE("dsps_fft2r_fc32 functionality", "[dsps]")
     TEST_ASSERT_EQUAL( 6 * 10, round_pow);
     ESP_LOGI(TAG, "Calculation error is less then 0.1 dB");
     dsps_fft2r_deinit_fc32();
+    free(data_test);
 }
 
 TEST_CASE("dsps_fft2r_fc32 benchmark", "[dsps]")

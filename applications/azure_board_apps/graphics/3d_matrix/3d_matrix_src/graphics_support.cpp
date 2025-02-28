@@ -92,7 +92,7 @@ void update_rotation_matrix(dspm::Mat &T_m, float rot_x, float rot_y, float rot_
     rotation_data(2, 0) = DEG_TO_RAD * rot_z;           // rotation data z
 
     // Create and populate rotation matrix R(3x3). Then inverse it
-    dspm::Mat R = ekf::eul2rotm(rotation_data.data).inverse();
+    dspm::Mat R = ekf::eul2rotm(rotation_data.data).t();
 
     // Enlarge rotation matrix from 3x3 to 4x4
     for (int row = 0; row < R.rows; row++) {            // Copy rotation matrix R(3x3) to transformation matrix T_m(4x4)

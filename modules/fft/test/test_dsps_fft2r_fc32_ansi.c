@@ -17,6 +17,7 @@
 #include "esp_dsp.h"
 #include "dsp_platform.h"
 #include "esp_log.h"
+#include <malloc.h>
 
 #include "dsps_view.h"
 #include "dsps_fft2r.h"
