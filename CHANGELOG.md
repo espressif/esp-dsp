@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased] 
 
 ### Changed
+- Improvements for FFT2R and FFT4R for esp32 and esp32s3
+- Update 3D graphics applications for M5Stack Core S3 board  
 - Bugfix for SNR calculation: free array in case of error 
 - Bugfix for determinant calculation in mat.cpp 
 
