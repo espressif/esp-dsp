@@ -151,7 +151,7 @@ TEST_CASE("dsps_cplx2real_fc32 functionality", "[dsps]")
         }
         diff = diff / N_check;
         if (diff > 0.00001) {
-            for (size_t i = 0; i < N_check * 2; i++) {
+            for (int i = 0; i < N_check * 2; i++) {
                 ESP_LOGD(TAG, "data[%i]= %f,    %f = check_data_fft[%i], diff=%f\n", i, data[i], check_data_fft[i], i, data[i] - check_data_fft[i]);
             }
 

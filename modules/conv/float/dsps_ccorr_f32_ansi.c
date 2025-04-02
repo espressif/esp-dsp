@@ -42,8 +42,8 @@ esp_err_t dsps_ccorr_f32_ansi(const float *Signal, const int siglen, const float
     }
 
     for (int n = 0; n < lkern; n++) {
-        size_t k;
-        size_t kmin = lkern - 1 - n;
+        int k;
+        int kmin = lkern - 1 - n;
         corrvout[n] = 0;
 
         for (k = 0; k <= n; k++) {
@@ -52,7 +52,7 @@ esp_err_t dsps_ccorr_f32_ansi(const float *Signal, const int siglen, const float
         ESP_LOGV(TAG, "L1 k = %i, n = %i , kmin= %i, kmax= %i", 0, n, kmin, kmin + n);
     }
     for (int n = lkern; n < lsig; n++) {
-        size_t kmin, kmax, k;
+        int kmin, kmax, k;
 
         corrvout[n] = 0;
 
@@ -65,7 +65,7 @@ esp_err_t dsps_ccorr_f32_ansi(const float *Signal, const int siglen, const float
     }
 
     for (int n = lsig; n < lsig + lkern - 1; n++) {
-        size_t kmin, kmax, k;
+        int kmin, kmax, k;
 
         corrvout[n] = 0;
 

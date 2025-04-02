@@ -65,8 +65,8 @@ TEST_CASE("dsps_conv_f32_ansi functionality", "[dsps]")
     float *output_fwd = (float *)memalign(16, (lenA + lenB - 1 + 2) * sizeof(float));
     float *output_back = (float *)memalign(16, (lenA + lenB - 1 + 2) * sizeof(float));
 
-    for (size_t la = 1; la < lenA; la++) {
-        for (size_t lb = 1; lb < lenB; lb++) {
+    for (int la = 1; la < lenA; la++) {
+        for (int lb = 1; lb < lenB; lb++) {
             for (int i = 0 ; i < lenA ; i++) {
                 inputA[i] = (float)rand() / (float)INT32_MAX;
             }
@@ -82,7 +82,7 @@ TEST_CASE("dsps_conv_f32_ansi functionality", "[dsps]")
             dsps_conv_f32_ansi(inputA, la, inputB, lb, &output_fwd[1]);
             dsps_conv_f32_ansi(inputB, lb, inputA, la, &output_back[1]);
             float max_eps = 0.000001;
-            for (size_t i = 0; i < (la + lb + 1); i++) {
+            for (int i = 0; i < (la + lb + 1); i++) {
                 if ((fabs(output_ref[i] - output_fwd[i]) > max_eps) || (fabs(output_ref[i] - output_back[i]) > max_eps) || (fabs(output_back[i] - output_fwd[i]) > max_eps)) {
                     ESP_LOGI(TAG, "la=%i, lb=%i, i=%i, ref=%2.3f, fwd=%2.3f, back=%2.3f", la, lb, i, output_ref[i], output_fwd[i], output_back[i]);
                 }

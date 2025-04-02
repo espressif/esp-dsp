@@ -19,10 +19,12 @@
 #include "dsp_err.h"
 #include "esp_idf_version.h"
 
+#if defined(__XTENSA__) || defined(__riscv)
 #if ESP_IDF_VERSION >= ESP_IDF_VERSION_VAL(4, 4, 0)
 #include "esp_cpu.h"
 #else
 #include "soc/cpu.h"
+#endif
 #endif
 
 #ifdef __cplusplus
@@ -70,6 +72,7 @@ esp_err_t tie_log(int n_regs, ...);
 #endif
 
 // esp_cpu_get_ccount function is implemented in IDF 4.1 and later
+#if defined(__XTENSA__) || defined(__riscv)
 #if ESP_IDF_VERSION >= ESP_IDF_VERSION_VAL(5, 0, 0)
 #define dsp_get_cpu_cycle_count  esp_cpu_get_cycle_count
 #else
@@ -79,5 +82,9 @@ esp_err_t tie_log(int n_regs, ...);
 #define dsp_get_cpu_cycle_count  xthal_get_ccount
 #endif
 #endif // ESP_IDF_VERSION
-
+#else
+// Linux Target
+#include <x86intrin.h>
+#define dsp_get_cpu_cycle_count  __rdtsc
+#endif
 #endif // _dsp_common_H_

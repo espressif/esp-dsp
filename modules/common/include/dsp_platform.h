@@ -16,10 +16,13 @@
 #ifndef dsp_platform_h_
 #define dsp_platform_h_
 #include "esp_idf_version.h"
+
+#if defined(__XTENSA__) || defined(__riscv)
 #if ESP_IDF_VERSION >= ESP_IDF_VERSION_VAL(4, 4, 0)
 #include "esp_cpu.h"
 #else
 #include "soc/cpu.h"
+#endif
 #endif
 
 #include "freertos/FreeRTOS.h"
