@@ -52,7 +52,7 @@ esp_err_t dsps_conv_f32_ansi(const float *Signal, const int siglen, const float 
         ESP_LOGV(TAG, "L1 kmin = %i, kmax = %i , n-kmin = %i", 0, n, n);
     }
     for (int n = lkern; n < lsig; n++) {
-        size_t kmin, kmax, k;
+        int kmin, kmax, k;
 
         convout[n] = 0;
 
@@ -65,7 +65,7 @@ esp_err_t dsps_conv_f32_ansi(const float *Signal, const int siglen, const float 
     }
 
     for (int n = lsig; n < lsig + lkern - 1; n++) {
-        size_t kmin, kmax, k;
+        int kmin, kmax, k;
 
         convout[n] = 0;
 

@@ -43,7 +43,7 @@ TEST_CASE("dsps_corr_f32_ansi functionality", "[dsps]")
     }
     inputB[0] = 1;
     dsps_corr_f32_ansi(inputA, lenA, inputB, lenB, &output[1]);
-    for (size_t i = 0; i < lenA + lenB; i++) {
+    for (int i = 0; i < lenA + lenB; i++) {
         ESP_LOGD(TAG, "output[%i] = %2.2f", i, output[i]);
     }
 

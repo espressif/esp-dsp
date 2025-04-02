@@ -54,11 +54,11 @@ TEST_CASE("dsps_dct_f32 functionality", "[dsps]")
     dsps_dct_inverce_f32_ref(&data[N], N, data);
     dsps_view(&data[0], 32, 32, 10, -2, 2, '.');
 
-    for (size_t i = 0; i < N; i++) {
+    for (int i = 0; i < N; i++) {
         ESP_LOGD(TAG, "DCT data[%i] = %2.3f\n", i, data[N + i]);
     }
     float abs_tol = 1e-5;
-    for (size_t i = 1; i < N; i++) {
+    for (int i = 1; i < N; i++) {
         ESP_LOGD(TAG, "data[%i] = %f, ref_data = %f\n", i, data[i], data_ref[i]*N / 2);
         float error = fabs(data[i] - data_ref[i] * N / 2) / (N / 2);
         if (error > abs_tol) {
@@ -104,7 +104,7 @@ TEST_CASE("dsps_dct_f32 functionality Fast DCT", "[dsps]")
 
     float abs_tol = 1e-5;
 
-    for (size_t i = 0; i < N; i++) {
+    for (int i = 0; i < N; i++) {
         ESP_LOGD(TAG, "DCT data[%i] = %2.3f, data_fft = %2.3f\n", i, data[N + i], data_fft[i]);
         float error = fabs(data[N + i] - data_fft[i]) / (N / 2);
         if (error > abs_tol) {
@@ -115,7 +115,7 @@ TEST_CASE("dsps_dct_f32 functionality Fast DCT", "[dsps]")
 
     dsps_dct_inv_f32(data_fft, N);
 
-    for (size_t i = 0; i < N; i++) {
+    for (int i = 0; i < N; i++) {
         ESP_LOGD(TAG, "IDCT data[%i] = %2.3f, data_fft = %2.3f\n", i, data[i], data_fft[i] / N * 2);
         float error = fabs(data[i] - data_fft[i] / N * 2) / (N / 2);
         if (error > abs_tol) {
