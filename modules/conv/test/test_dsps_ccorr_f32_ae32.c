@@ -45,7 +45,7 @@ TEST_CASE("dsps_ccorr_f32 functionality", "[dsps]")
     }
     dsps_ccorr_f32(inputA, lenA, inputB, lenB, &output[0]);
     dsps_ccorr_f32_ansi(inputA, lenA, inputB, lenB, &output_ref[0]);
-    for (size_t i = 0; i < (lenA + lenB - 1) + 2; i++) {
+    for (int i = 0; i < (lenA + lenB - 1) + 2; i++) {
         ESP_LOGI(TAG, "Data[%i] = %2.2f, expected = %2.2f", i, output[i], output_ref[i]);
     }
     for (size_t i = 0; i < (lenA + lenB - 1) + 2; i++) {

@@ -46,7 +46,7 @@ TEST_CASE("dsps_corr_f32_aexx functionality", "[dsps]")
     inputB[0] = 1;
     dsps_corr_f32(inputA, lenA, inputB, lenB, &output[1]);
     dsps_corr_f32_ansi(inputA, lenA, inputB, lenB, &output_ref[1]);
-    for (size_t i = 0; i < (lenA - lenB) + 2; i++) {
+    for (int i = 0; i < (lenA - lenB) + 2; i++) {
         ESP_LOGD(TAG, "Data[%i] = %2.2f, expected = %2.2f", i, output[i], output_ref[i]);
     }
     for (size_t i = 0; i < (lenA - lenB) + 2; i++) {
