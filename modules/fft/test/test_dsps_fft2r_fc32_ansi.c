@@ -82,6 +82,45 @@ TEST_CASE("dsps_fft2r_fc32_ansi functionality", "[dsps]")
     dsps_fft2r_deinit_fc32();
 }
 
+TEST_CASE("dsps_ifft2r_fc32_ansi functionality", "[dsps]")
+{
+    float data[] = {
+        10.0, 0.0,
+        -2.0, 2.0,
+        -2.0, 0.0,
+        -2.0, -2.0,
+    };
+    const float check_data[] = {
+        1.0, 0.0,
+        2.0, 0.0,
+        3.0, 0.0,
+        4.0, 0.0,
+    };
+
+    const int N = 4;
+    dsps_ifft2r_init_fc32(NULL, N);
+
+    unsigned int start_b = dsp_get_cpu_cycle_count();
+    dsps_fft2r_fc32_ansi(data, N);
+    dsps_bit_rev_fc32_ansi(data, N);
+    unsigned int end_b = dsp_get_cpu_cycle_count();
+    dsps_fft2r_deinit_fc32();
+
+    for (int i = 0; i < N; i++)
+    {
+        data[i * 2 + 0] /= N;
+        data[i * 2 + 1] /= N;
+    }
+
+    for (int i = 0; i < N * 2; i++)
+    {
+        //ESP_LOGI(TAG, "ifft2r Data[%i] =%8.4f", i, data[i]);
+        float delta = fabsf(data[i] - check_data[i]);
+        TEST_ASSERT_TRUE(delta < 1e-4);
+    }
+    ESP_LOGI(TAG, "cycles - %i", end_b - start_b);
+}
+
 TEST_CASE("dsps_fft2r_fc32_ansi benchmark", "[dsps]")
 {
     esp_err_t ret = dsps_fft2r_init_fc32(NULL, CONFIG_DSP_MAX_FFT_SIZE);
