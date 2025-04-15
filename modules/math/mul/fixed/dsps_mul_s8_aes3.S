@@ -75,7 +75,7 @@ dsps_mul_s8_aes3:
 .sub_s8_ae32_mode:
     l8ui    a11, a2, 0
     l8ui    a8,  a3, 0
-    add     a8, a11, a8
+    mull    a8, a11, a8
     srl     a9, a8          // a8 = a8>>sar    
 
     loopnez a5, .loop_end_mul_s8_aes3

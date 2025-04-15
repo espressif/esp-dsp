@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update 3D graphics applications for M5Stack Core S3 board  
 - Bugfix for SNR calculation: free array in case of error 
 - Bugfix for determinant calculation in mat.cpp 
+- Bugfix esp32s3 sub/mul s8/s16
 
 ### Added
 - Add DCT-IV and DST-IV 
