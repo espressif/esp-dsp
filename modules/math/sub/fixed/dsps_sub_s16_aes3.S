@@ -82,7 +82,7 @@ dsps_sub_s16_aes3:
 
     l16si   a11, a2, 0
     l16si   a8,  a3, 0
-    add     a8, a11, a8
+    sub     a8, a11, a8
     srl     a9, a8          // a8 = a8>>sar    
 
     loopnez a5, .loop_end_sub_s16_aes3
