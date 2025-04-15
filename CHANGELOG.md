@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] 
 
+## [1.6.0] 2025-04-16
+### Added
+- IIR filter for stereo data processing
+- Add DCT-IV and DST-IV 
+
 ### Changed
 - Improvements for FFT2R and FFT4R for esp32 and esp32s3
 - Update 3D graphics applications for M5Stack Core S3 board  
@@ -14,9 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Bugfix for determinant calculation in mat.cpp 
 - Bugfix esp32s3 sub/mul s8/s16
 - Bugfix - definition in fft4_fc32 for esp32p4
-
-### Added
-- Add DCT-IV and DST-IV 
+- Bugfix for IIR esp32p4
 
 ### Removed
 

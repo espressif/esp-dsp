@@ -18,8 +18,8 @@
 // This is bi quad filter form II for ESP32 processor.
 	.text
 	.align  4
-	.global dsps_biquad_f32_ae32
-	.type   dsps_biquad_f32_ae32,@function
+	.global dsps_biquad_sf32_ae32
+	.type   dsps_biquad_sf32_ae32,@function
 // The function implements the following C code:
 //esp_err_t dsps_biquad_f32_ae32(const float* input, float* output, int len, float* coef, float* w)
 //  {
@@ -33,7 +33,7 @@
 //    return ESP_OK;
 //  }
 
-dsps_biquad_f32_ae32: 
+dsps_biquad_sf32_ae32: 
 // input    - a2
 // output   - a3
 // len  - a4
@@ -61,25 +61,40 @@ dsps_biquad_f32_ae32:
 	neg.s  f5, f3   // -a[1]
 	neg.s  f6, f4   // -a[2]
 
-	lsi   f7, a6, 0 // w[0]
-	lsi   f8, a6, 4 // w[1]
+	lsi   f7,  a6, 0 // w[0]
+	lsi   f8,  a6, 4 // w[1]
+	lsi   f11, a6, 8 // w[0]
+	lsi   f12, a6, 12 // w[1]
 	
+	//addi    a3, a3, -4       // i-- // preset a3
 	lsip     f9, a2, 4        // f9 = x[i]
 	loopnez a4, .loop_bq_end_m_ae32
 		madd.s  f9, f7, f5   // f9 += -a1*w0
 		mul.s   f10, f1, f7  // f10 = b1*w0
 		madd.s  f9, f8, f6   // f9 += -a2*w1
 		madd.s  f10, f9, f0  // f10 += b0*d0
-		addi    a2, a2, 4    // in++;
 		madd.s  f10, f2, f8  // f10+= b2*w1, f10 - result
 		mov.s   f8, f7       // w1 = w0
 		mov.s   f7, f9       // w0 = d0
+		lsip    f9, a2,  4   // f9 = x[i]
+		ssip	f10, a3, 4   // y[i] = result
+
+
+		madd.s  f9, f11, f5   // f9 += -a1*w0
+		mul.s   f10, f1, f11  // f10 = b1*w0
+		madd.s  f9, f12, f6   // f9 += -a2*w1
+		madd.s  f10, f9, f0  // f10 += b0*d0
+		madd.s  f10, f2, f12  // f10+= b2*w1, f10 - result
+		mov.s   f12, f11       // w1 = w0
+		mov.s   f11, f9       // w0 = d0
 		lsip    f9, a2,  4   // f9 = x[i]
 		ssip	f10, a3, 4   // y[i] = result
 .loop_bq_end_m_ae32:
 		// Store delay line
 		ssi     f7, a6, 0
 		ssi     f8, a6, 4
+		ssi     f11, a6, 8
+		ssi     f12, a6, 12
 
 	movi.n	a2, 0 // return status ESP_OK
 	retw.n
