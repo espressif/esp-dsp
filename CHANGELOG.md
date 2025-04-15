@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Bugfix for SNR calculation: free array in case of error 
 - Bugfix for determinant calculation in mat.cpp 
 - Bugfix esp32s3 sub/mul s8/s16
+- Bugfix - definition in fft4_fc32 for esp32p4
 
 ### Added
 - Add DCT-IV and DST-IV 
