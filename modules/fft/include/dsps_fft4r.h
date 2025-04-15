@@ -97,7 +97,7 @@ esp_err_t dsps_fft4r_fc32_arp4_(float *data, int N, float *table, int table_size
 #define dsps_fft4r_fc32_ansi(data, N) dsps_fft4r_fc32_ansi_(data, N, dsps_fft4r_w_table_fc32, dsps_fft4r_w_table_size)
 #define dsps_fft4r_fc32_ae32(data, N) dsps_fft4r_fc32_ae32_(data, N, dsps_fft4r_w_table_fc32, dsps_fft4r_w_table_size)
 #define dsps_fft4r_fc32_aes3(data, N) dsps_fft4r_fc32_aes3_(data, N, dsps_fft4r_w_table_fc32, dsps_fft4r_w_table_size)
-#define dsps_fft4r_fc32_arp4(data, N) dsps_fft4r_fc32_arp4_(data, N, dsps_fft4r_w_table_fc32, dsps_fft4r_w_table_size/N)
+#define dsps_fft4r_fc32_arp4(data, N) dsps_fft4r_fc32_arp4_(data, N, dsps_fft4r_w_table_fc32, dsps_fft4r_w_table_size/(N))
 
 /**@{*/
 /**
