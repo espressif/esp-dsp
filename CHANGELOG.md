@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] 
 
+## [1.6.2] 2025-04-28
+### Fixed
+- FFT2R output buffer overrun is fixed
+
 ## [1.6.1] 2025-04-17
 ### Changed
 - The fft4r added function with the same name as for esp32 to be compatible with precompiled libraries

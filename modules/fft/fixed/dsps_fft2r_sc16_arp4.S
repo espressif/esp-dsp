@@ -108,6 +108,8 @@ dsps_fft2r_sc16_arp4_:
 
     mv      x26, a2  // x26 - pointer to w
     mv      x24, a0
+    add     t0, t0, -1
+
     esp.lp.setup    0, t0, .fft2r_l2_0
         esp.vld.128.ip      q0, x24, 16  // q0 = ia
         esp.vld.128.ip      q1, x24,-16  // q1 = m
