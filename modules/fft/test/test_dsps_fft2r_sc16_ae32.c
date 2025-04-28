@@ -30,10 +30,10 @@ TEST_CASE("dsps_fft2r_sc16_aexx functionality", "[dsps]")
 {
     int N = 1024;
 
-    int16_t *data = (int16_t *)memalign(N, sizeof(int16_t) * N * 2);
+    int16_t *data = (int16_t *)memalign(N, sizeof(int16_t) * N * 2 + 16);
     TEST_ASSERT_NOT_NULL(data);
 
-    float *result_data = (float *)memalign(N, sizeof(float) * N * 2);
+    float *result_data = (float *)memalign(N, sizeof(float) * N * 2 + + 16);
     TEST_ASSERT_NOT_NULL(result_data);
 
 
@@ -42,7 +42,8 @@ TEST_CASE("dsps_fft2r_sc16_aexx functionality", "[dsps]")
         data[i * 2 + 0] = (INT16_MAX) * sin(M_PI / N * check_bin * 2 * i) * 0.5 * (1 - cosf(i * 2 * M_PI / (float)(N - 1)));
         data[i * 2 + 1] = 0;
     }
-
+    data[N * 2 + 0] = 0xdead;
+    data[N * 2 + 1] = 0xbeef;
     esp_err_t ret = dsps_fft2r_init_sc16(NULL, CONFIG_DSP_MAX_FFT_SIZE);
     TEST_ESP_OK(ret);
 
@@ -103,10 +104,10 @@ TEST_CASE("dsps_fft2r_sc16_aexx overflow check", "[dsps]")
 {
     int N = 1024;
 
-    int16_t *data = (int16_t *)memalign(N, sizeof(int16_t) * N * 2);
+    int16_t *data = (int16_t *)memalign(N, sizeof(int16_t) * N * 2 + 16);
     TEST_ASSERT_NOT_NULL(data);
 
-    float *result_data = (float *)memalign(N, sizeof(float) * N * 2);
+    float *result_data = (float *)memalign(N, sizeof(float) * N * 2 + 16);
     TEST_ASSERT_NOT_NULL(result_data);
 
     int check_bin = 32;
@@ -123,6 +124,8 @@ TEST_CASE("dsps_fft2r_sc16_aexx overflow check", "[dsps]")
     esp_err_t ret = dsps_fft2r_init_sc16(NULL, CONFIG_DSP_MAX_FFT_SIZE);
     TEST_ESP_OK(ret);
 
+    data[N * 2 + 0] = 0xdead;
+    data[N * 2 + 1] = 0xbeef;
 
     dsps_fft2r_sc16(data, N);
     unsigned int start_b = dsp_get_cpu_cycle_count();
@@ -166,6 +169,12 @@ TEST_CASE("dsps_fft2r_sc16_aexx overflow check", "[dsps]")
 
     if (noise_pow > (-65)) {
         TEST_ASSERT_MESSAGE (false, "Noise power is more than expected!");
+    }
+    if (((uint16_t *)data)[N * 2 + 0] != 0xdead) {
+        TEST_ASSERT_MESSAGE (false, "Buffer overrun!");
+    }
+    if (((uint16_t *)data)[N * 2 + 1] != 0xbeef) {
+        TEST_ASSERT_MESSAGE (false, "Buffer overrun!");
     }
 
     ESP_LOGI(TAG, "cycles - %i", end_b - start_b);
