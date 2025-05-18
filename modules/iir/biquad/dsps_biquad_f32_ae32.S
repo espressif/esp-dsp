@@ -70,7 +70,6 @@ dsps_biquad_f32_ae32:
 		mul.s   f10, f1, f7  // f10 = b1*w0
 		madd.s  f9, f8, f6   // f9 += -a2*w1
 		madd.s  f10, f9, f0  // f10 += b0*d0
-		addi    a2, a2, 4    // in++;
 		madd.s  f10, f2, f8  // f10+= b2*w1, f10 - result
 		mov.s   f8, f7       // w1 = w0
 		mov.s   f7, f9       // w0 = d0
