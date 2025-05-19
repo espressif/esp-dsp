@@ -33,7 +33,7 @@ TEST_CASE("dsps_fft2r_sc16_aexx functionality", "[dsps]")
     int16_t *data = (int16_t *)memalign(N, sizeof(int16_t) * N * 2 + 16);
     TEST_ASSERT_NOT_NULL(data);
 
-    float *result_data = (float *)memalign(N, sizeof(float) * N * 2 + + 16);
+    float *result_data = (float *)memalign(N, sizeof(float) * N * 2 + 16);
     TEST_ASSERT_NOT_NULL(result_data);
 
 
