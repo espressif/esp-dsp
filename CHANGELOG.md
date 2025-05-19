@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] 
 
+## [1.6.3] 2025-05-19
+### Fixed
+- FFT2R test case typo
+- IIR filter remove legacy a++
+
+
 ## [1.6.2] 2025-04-28
 ### Fixed
 - FFT2R output buffer overrun is fixed
