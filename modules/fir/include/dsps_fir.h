@@ -1,16 +1,9 @@
-// Copyright 2018-2022 Espressif Systems (Shanghai) PTE LTD
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+/*
+ * SPDX-FileCopyrightText: 2018-2025 Espressif Systems (Shanghai) CO LTD
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 
 #ifndef _dsps_fir_H_
 #define _dsps_fir_H_
@@ -40,6 +33,15 @@ typedef struct fir_f32_s {
     int     pos;        /*!< Position in delay line.*/
     int     decim;      /*!< Decimation factor.*/
     int16_t use_delay;  /*!< The delay line was allocated by init function.*/
+    /**
+     * @brief Interpolation parameters
+     *
+     * @note This is used for multi-rate FIR filter
+     */
+    int     delay_size;   /*!< Size of the delay line.*/
+    int     interp;     /*!< Interpolation factor.*/
+    int     interp_pos; /*!< Interpolation position.*/
+    int     start_pos;  /*!< Start position for decimation counter.*/
 } fir_f32_t;
 
 /**
@@ -60,6 +62,16 @@ typedef struct fir_s16_s {
     int32_t    *rounding_buff;  /*!< Rounding buffer for the purposes of esp32s3 ee.ld.accx.ip assembly instruction */
     int32_t     rounding_val;   /*!< Rounding value*/
     int16_t     free_status;    /*!< Indicator for dsps_fird_s16_aes3_free() function*/
+
+    /**
+     * @brief Interpolation parameters
+     *
+     * @note This is used for multi-rate FIR filter
+     */
+    int16_t     delay_size;   /*!< Size of the delay line.*/
+    int16_t     interp;     /*!< Interpolation factor.*/
+    int16_t     interp_pos; /*!< Interpolation position.*/
+    int16_t     start_pos;  /*!< Start position for decimation counter.*/
 } fir_s16_t;
 
 /**
@@ -182,6 +194,90 @@ int32_t dsps_fird_s16_aes3(fir_s16_t *fir, const int16_t *input, int16_t *output
 int32_t dsps_fird_s16_arp4(fir_s16_t *fir, const int16_t *input, int16_t *output, int32_t len);
 /**@}*/
 
+/**@{*/
+/**
+ * @brief   initialize structure for multi-rate FIR filter
+ * Function initialize structure for 32 bit floating point multi-rate FIR filter
+ * The implementation use ANSI C and could be compiled and run on any platform
+ *
+ * @param fir: pointer to fir filter structure, that must be preallocated
+ * @param coeffs: array with FIR filter coefficients. Must be length N
+ * @param delay: array for FIR filter delay line. Must be length N
+ * @param length: FIR filter length. Length of coeffs and delay arrays.
+ * @param interp: interpolation factor.
+ * @param decim: decimation factor.
+ * @param start_pos: initial value of decimation counter. Must be [0..decim)
+ *
+ * @return
+ *      - ESP_OK on success
+ *      - One of the error codes from DSP library
+ */
+esp_err_t dsps_firmr_init_f32(fir_f32_t *fir, float *coeffs, float *delay, int length, int interp, int decim, int start_pos );
+/**@}*/
+
+/**@{*/
+/**
+ * @brief   initialize structure for multi-rate FIR filter
+ * Function initialize structure for 16 bit signed fixed point multi-rate FIR filter
+ * The implementation use ANSI C and could be compiled and run on any platform
+ *
+ * @param fir: pointer to fir filter structure, that must be preallocated
+ * @param coeffs: array with FIR filter coefficients. Must be length N
+ * @param delay: array for FIR filter delay line. Must be length N
+ * @param length: FIR filter length. Length of coeffs and delay arrays.
+ * @param interp: interpolation factor.
+ * @param decim: decimation factor.
+ * @param start_pos: initial value of decimation counter. Must be [0..decim)
+ * @param shift: shift of accumulator value to store in the output array.
+ *
+ * @return
+ *      - ESP_OK on success
+ *      - One of the error codes from DSP library
+ */
+esp_err_t dsps_firmr_init_s16(fir_s16_t *fir, int16_t *coeffs, int16_t *delay, int16_t length, int16_t interp, int16_t decim, int16_t start_pos, int16_t shift);
+/**@}*/
+
+/**@{*/
+/**
+ * @brief   32 bit floating point multi-rate FIR filter
+ *
+ * Function implements FIR filter with decimation
+ * The extension (_ansi) uses ANSI C and could be compiled and run on any platform.
+ * The extension (_ae32) is optimized for ESP32 chip.
+ *
+ * @param fir: pointer to fir filter structure, that must be initialized before
+ * @param input: input array
+ * @param output: array with the result of the FIR filter
+ * @param input_len: length of the input array
+ *
+ * @return
+ *      - amount of samples stored in the output array
+ *      - depends on the previous state value
+ *      - could be [0..len*intepr/decimation]
+ *
+ */
+int dsps_firmr_f32_ansi(fir_f32_t *fir, const float *input, float *output, int input_len);
+/**@}*/
+
+/**@{*/
+/**
+ * @brief   16 bit signed fixed point multi-rate FIR filter
+ *
+ * Function implements FIR filter with decimation
+ * The extension (_ansi) uses ANSI C and could be compiled and run on any platform.
+ * The extension (_ae32) is optimized for ESP32 chip.
+ *
+ * @param fir: pointer to fir filter structure, that must be initialized before
+ * @param input: input array
+ * @param output: array with the result of the FIR filter
+ * @param input_len: length of the intput array
+ *
+ * @return: function returns the number of samples stored in the output array
+ *          depends on the previous state value could be [0..len*intepr/decimation]
+ */
+int32_t dsps_firmr_s16_ansi(fir_s16_t *fir, const int16_t *input, int16_t *output, int32_t input_len);
+/**@}*/
+
 
 /**@{*/
 /**
@@ -250,29 +346,40 @@ esp_err_t dsps_16_array_rev(int16_t *arr, int16_t len);
 
 #if (dsps_fird_f32_aes3_enabled == 1)
 #define dsps_fird_f32 dsps_fird_f32_aes3
+#define dsps_firmr_f32 dsps_firmr_f32_ansi
 #elif (dsps_fird_f32_ae32_enabled == 1)
 #define dsps_fird_f32 dsps_fird_f32_ae32
+#define dsps_firmr_f32 dsps_firmr_f32_ansi
 #elif (dsps_fird_f32_arp4_enabled == 1)
 #define dsps_fird_f32 dsps_fird_f32_arp4
+#define dsps_firmr_f32 dsps_firmr_f32_ansi
 #else
 #define dsps_fird_f32 dsps_fird_f32_ansi
+#define dsps_firmr_f32 dsps_firmr_f32_ansi
 #endif
+
 
 #if (dsps_fird_s16_ae32_enabled == 1)
 #define dsps_fird_s16 dsps_fird_s16_ae32
+#define dsps_firmr_s16 dsps_firmr_s16_ansi
 #elif (dsps_fird_s16_aes3_enabled == 1)
 #define dsps_fird_s16 dsps_fird_s16_aes3
+#define dsps_firmr_s16 dsps_firmr_s16_ansi
 #elif (dsps_fird_s16_arp4_enabled == 1)
 #define dsps_fird_s16 dsps_fird_s16_arp4
+#define dsps_firmr_s16 dsps_firmr_s16_ansi
 #else
 #define dsps_fird_s16 dsps_fird_s16_ansi
+#define dsps_firmr_s16 dsps_firmr_s16_ansi
 #endif
 
 #else // CONFIG_DSP_OPTIMIZED
 
 #define dsps_fir_f32 dsps_fir_f32_ansi
 #define dsps_fird_f32 dsps_fird_f32_ansi
+#define dsps_firmr_f32 dsps_firmr_f32_ansi
 #define dsps_fird_s16 dsps_fird_s16_ansi
+#define dsps_firmr_s16 dsps_firmr_s16_ansi
 
 #endif // CONFIG_DSP_OPTIMIZED
 

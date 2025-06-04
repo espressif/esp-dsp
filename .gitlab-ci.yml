@@ -11,7 +11,7 @@ variables:
   MAKEFLAGS: "-j5 --no-keep-going"
 
   # GitLab-CI environment
-  TARGET_TEST_ENV_IMAGE: "$CI_DOCKER_REGISTRY/target-test-env-v5.2:1"
+  TARGET_TEST_ENV_IMAGE: "$CI_DOCKER_REGISTRY/target-test-env-v6.0:1"
   ESP_DOCS_ENV_IMAGE: "$CI_DOCKER_REGISTRY/esp-idf-doc-env-v5.0:2-2"
   GET_SOURCES_ATTEMPTS: "10"
   ARTIFACT_DOWNLOAD_ATTEMPTS: "10"
@@ -152,7 +152,7 @@ build_clang_idf_latest:
       - "**/build*/config/sdkconfig.json"
       - "**/build*/bootloader/*.bin"
       - "**/build*/partition_table/*.bin"
-      - $SIZE_INFO_LOCATION
+      - $SIZE_INFO_LOCATION*
     when: always
     expire_in: 3 days
   before_script:
@@ -163,34 +163,36 @@ build_clang_idf_latest:
     - git clone -b master --depth 1 https://github.com/espressif/esp-idf.git
     - cd esp-idf
     - export IDF_PATH=${PWD}
-    # - export IDF_DESCRIBE=`git describe`
-    # - export IDF_VERSION=${IDF_DESCRIBE%-*}
     - tools/idf_tools.py --non-interactive install cmake
     - tools/idf_tools.py install-python-env
     - tools/idf_tools.py --non-interactive install && eval "$(tools/idf_tools.py --non-interactive export)" || exit 1
-    # - 'echo "ESP-IDF: ${IDF_VERSION}" >> ${TEST_DIR}/idf_version_info.txt'
   script:
-    # CI specific options start from "--collect-size-info xxx". could ignore when running locally
-    # The script below will build all test applications defined in environment variable $TEST_TARGETS
     - cd ${TEST_DIR}
-    - python -m idf_build_apps build -v -p .
-      --recursive
-      --target all
-      --default-build-targets ${TEST_TARGETS}
-      --config "sdkconfig.*=" --build-dir "build"
-      --collect-size-info $SIZE_INFO_LOCATION
-      --parallel-count ${CI_NODE_TOTAL:-1}
-      --parallel-index ${CI_NODE_INDEX:-1}
-      --ignore-warning-str "DeprecationWarning:"
+    - 'echo "TEST_TARGETS: ${TEST_TARGETS}. TEST_DIR: ${TEST_DIR}, target = ${target}"'
+    - |
+      IFS=',' read -ra TARGETS <<< "${TEST_TARGETS}"
+      for target in "${TARGETS[@]}"; do
+        echo "Building for target: ${target}"
+        python -m idf_build_apps build -v -p . \
+          --target all \
+          --default-build-targets=${target} \
+          --config "sdkconfig.*=" \
+          --build-dir "build_${target}" \
+          --collect-size-info $SIZE_INFO_LOCATION \
+          --parallel-count ${CI_NODE_TOTAL:-1} \
+          --parallel-index ${CI_NODE_INDEX:-1} \
+          --ignore-warning-str "DeprecationWarning:"      
+      done
+    - dir
 
   variables:
-    TEST_TARGETS: "esp32"
+    TEST_TARGETS: "esp32,esp32s3,esp32p4"
 
 build_latest_test_app:
   extends: .build_pytest_template
   image: espressif/idf:latest
   variables:
-    TEST_TARGETS: "esp32"
+    TEST_TARGETS: "esp32,esp32s3,esp32p4"
 
 
 .target_test_template:
@@ -229,31 +231,38 @@ build_latest_test_app:
   extends:
     - .before_script_pytest_jobs
   tags: [esp32]
-  # artifacts:
-  #   paths:
-  #     - "${TEST_DIR}/*/*.log"
-  #     - "${TEST_DIR}/*.txt"
-  #     - "${TEST_DIR}/*/results_*.xml"
-  #     - "${TEST_DIR}/pytest_embedded_log/"
-  #   reports:
-  #     junit: ${TEST_DIR}/results_${IDF_TARGET}.xml
-  #   when: always
-  #   expire_in: 1 week
+  artifacts:
+    paths:
+      - "${TEST_DIR}/*/*.log"
+      - "${TEST_DIR}/*.txt"
+      - "${TEST_DIR}/*/results_*.xml"
+      - "${TEST_DIR}/pytest_embedded_log/"
+    reports:
+      junit: ${TEST_DIR}/results_${IDF_TARGET}.xml
+    when: always
+    expire_in: 1 week
   script:
     - dir
     - cd ${TEST_DIR}
     - dir
-    - python -m pytest --junit-xml=./results_${TEST_TARGETS}.xml --target=${TEST_TARGETS}
+    - dir build_${TEST_TARGETS}
+    - python -m pytest --junit-xml=./results_${TEST_TARGETS}.xml --target=${TEST_TARGETS} --build-dir "build_${TEST_TARGETS}"
     - ls -lh > test_dir.txt
   variables:
     TEST_TARGETS: "esp32"
 
 test_examples:
   extends: .test_template
+  needs:
+    - build_latest_test_app
   parallel:
     matrix:
       - IDF_BRANCH: ["master"]
-        IDF_TARGET: ["esp32"]
+        IDF_TARGET: ["esp32", "esp32s3"]
+  variables:
+    TEST_TARGETS: ${IDF_TARGET}
+  tags:
+    - ${IDF_TARGET}
   after_script: []
 
 #-------------------------------

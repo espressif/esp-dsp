@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] 
 
+## [1.7.0] 2025-06-15
+### Added
+- Multirate FIR filter
+- Resampler based on Multirate FIR  
+
 ## [1.6.3] 2025-05-19
 ### Fixed
 - FFT2R test case typo
