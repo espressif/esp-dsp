@@ -109,7 +109,7 @@ esp_err_t dsps_fird_init_s16(fir_s16_t *fir, int16_t *coeffs, int16_t *delay, in
 #endif      // dsps_fird_s16_aes3_enabled
 #endif      // CONFIG_DSP_OPTIMIZED
 
-    for (int i = 0; i < fir->coeffs_len; i++) {                                  // Initialize the dealy line to zero
+    for (int i = 0; i < fir->coeffs_len; i++) { // Initialize the delay line to zero
         fir->delay[i] = 0;
     }
 

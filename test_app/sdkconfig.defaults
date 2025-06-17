@@ -1,5 +1,8 @@
+# This file was generated using idf.py save-defconfig. It can be edited manually.
+# Espressif IoT Development Framework (ESP-IDF) 6.0.0 Project Minimal Configuration
+#
 CONFIG_PARTITION_TABLE_OFFSET=0x9000
-CONFIG_ESP_TASK_WDT=n
-CONFIG_OPTIMIZATION_LEVEL_RELEASE=y
 CONFIG_COMPILER_OPTIMIZATION_PERF=y
 CONFIG_ETH_USE_SPI_ETHERNET=n
+CONFIG_ESP_INT_WDT=n
+CONFIG_ESP_TASK_WDT_EN=n

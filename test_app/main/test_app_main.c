@@ -8,5 +8,6 @@
 
 void app_main()
 {
+    printf("Start test app\n");
     unity_run_menu();
 }
