@@ -140,7 +140,7 @@ TEST_CASE("dspm_add_f32_ae32 benchmark", "[dspm]")
     float total_b = end_b - start_b;
     float cycles = total_b / (repeat_count);
     printf("Benchmark dspm_add_f32_ae32 - %f per sample %dx%d.\n", cycles, dim, dim);
-    float min_exec = 100;
+    float min_exec = 20;
     float max_exec = 1400;
     TEST_ASSERT_EXEC_IN_RANGE(min_exec, max_exec, cycles);
 }

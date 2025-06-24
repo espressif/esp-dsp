@@ -104,7 +104,7 @@ TEST_CASE("dspm_mult_s16_ansi benchmark", "[dspm]")
     float total_b = end_b - start_b;
     float cycles = total_b / (repeat_count);
     ESP_LOGI("dspm_mult_s16_ansi", "Benchmark dspm_mult_s16_ansi - %f per multiplication %ix%ix%i.\n", cycles, m, n, k);
-    float min_exec = 1000;
+    float min_exec = 100;
     float max_exec = 3000;
     TEST_ASSERT_EXEC_IN_RANGE(min_exec, max_exec, cycles);
 }

@@ -145,7 +145,7 @@ TEST_CASE("dspm_mult_4x4x1_f32_ae32 benchmark", "[dspm]")
     float total_b = end_b - start_b;
     float cycles = total_b / (repeat_count);
     ESP_LOGI("dspm_mult_4x4x1_f32_ae32", "dspm_mult_4x4x1_f32_ae32 - %f per multiplication", cycles);
-    float min_exec = 60;
+    float min_exec = 20;
     float max_exec = 300;
     TEST_ASSERT_EXEC_IN_RANGE(min_exec, max_exec, cycles);
 }

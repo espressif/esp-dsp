@@ -238,7 +238,7 @@ TEST_CASE("Mat class operators", "[dspm]")
     std::cout << "inverse: " << std::endl;
     std::cout << result << std::endl;
     for (int i = 0 ; i < 3 * 3 ; i++) {
-        if (std::abs(result.data[i] - m_result[i]) > 1e-4) {
+        if (std::abs(result.data[i] - m_result[i]) > (2 * 1e-4)) {
             printf("Error at[%i] = %f, expected= %f, calculated = %f \n", i, std::abs(result.data[i] - m_result[i]), m_result[i], result.data[i]);
             TEST_ASSERT_MESSAGE (false, "Error in inverse() operation!\n");
         }

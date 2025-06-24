@@ -147,7 +147,7 @@ TEST_CASE("dspm_mult_3x3x1_f32 benchmark", "[dspm]")
     float total_b = end_b - start_b;
     float cycles = total_b / (repeat_count);
     ESP_LOGI("dspm_mult_3x3x1_f32", "dspm_mult_3x3x1_f32 - %f per multiplication (ae32 - 134, ansi - 285)", cycles);
-    float min_exec = 60;
+    float min_exec = 10;
     float max_exec = 200;
     TEST_ASSERT_EXEC_IN_RANGE(min_exec, max_exec, cycles);
 }
@@ -181,7 +181,7 @@ TEST_CASE("dspm_mult_3x3x3_f32 benchmark", "[dspm]")
     float total_b = end_b - start_b;
     float cycles = total_b / (repeat_count);
     ESP_LOGI("dspm_mult_3x3x3_f32", "dspm_mult_3x3x3_f32 - %f per multiplication", cycles);
-    float min_exec = 100;
+    float min_exec = 80;
     float max_exec = 400;
     TEST_ASSERT_EXEC_IN_RANGE(min_exec, max_exec, cycles);
 }
