@@ -70,7 +70,7 @@ TEST_CASE("dsps_fft2r_fc32 functionality", "[dsps]")
     float min = 10000;
     float max = -10000;
     int max_pos = 0;
-    for (int i = 0 ; i < N ; i++) {
+    for (int i = 0 ; i < N / 2 ; i++) {
         data[i] = 10 * log10f(data[i * 2 + 0] * data[i * 2 + 0] + data[i * 2 + 1] * data[i * 2 + 1]);
         if (data[i] < min) {
             min = data[i];
