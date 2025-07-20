@@ -11,7 +11,7 @@ variables:
   MAKEFLAGS: "-j5 --no-keep-going"
 
   # GitLab-CI environment
-  TARGET_TEST_ENV_IMAGE: "$CI_DOCKER_REGISTRY/target-test-env-v6.0:1"
+  TARGET_TEST_ENV_IMAGE: "$CI_DOCKER_REGISTRY/target-test-env-v6.0:2"
   ESP_DOCS_ENV_IMAGE: "$CI_DOCKER_REGISTRY/esp-idf-doc-env-v5.0:2-2"
   GET_SOURCES_ATTEMPTS: "10"
   ARTIFACT_DOWNLOAD_ATTEMPTS: "10"
@@ -45,12 +45,17 @@ check_pre_commit_MR:
     - pre-commit run --all-files --show-diff-on-failure
 
 .install_clang: &install_clang |
-  pip install --upgrade pyclang
   $IDF_PATH/tools/idf_tools.py --non-interactive install esp-clang
+  pip install --upgrade pyclang
   source $IDF_PATH/export.sh
 
 .before_script_build_jobs:
   before_script:
+    - dir
+    - dir ..
+    - cmake --version
+    - dir ${IDF_PATH}
+    - dir
     - *install_clang
 
 # This template gets expanded multiple times, once for every IDF version.
@@ -75,34 +80,34 @@ check_pre_commit_MR:
     TEST_TARGETS: "esp32"
     IDF_TOOLCHAIN: "gcc"
 
-# GCC builds
-build_idf_v4.2:
-  extends: .build_template
-  image: espressif/idf:release-v4.2
-  variables:
-    EXAMPLE_TARGETS: "esp32 esp32s2"
+# # GCC builds
+# build_idf_v4.2:
+#   extends: .build_template
+#   image: espressif/idf:release-v4.2
+#   variables:
+#     EXAMPLE_TARGETS: "esp32 esp32s2"
 
-build_idf_v4.3:
-  extends: .build_template
-  image: espressif/idf:release-v4.3
-  variables:
-    EXAMPLE_TARGETS: "esp32 esp32s2 esp32c3"
+# build_idf_v4.3:
+#   extends: .build_template
+#   image: espressif/idf:release-v4.3
+#   variables:
+#     EXAMPLE_TARGETS: "esp32 esp32s2 esp32c3"
 
-build_idf_v4.4:
-  extends: .build_template
-  image: espressif/idf:release-v4.4
-  variables:
-    EXAMPLE_TARGETS: "esp32 esp32s2 esp32c3 esp32s3"
-    TEST_TARGETS: "esp32 esp32s3"
+# build_idf_v4.4:
+#   extends: .build_template
+#   image: espressif/idf:release-v4.4
+#   variables:
+#     EXAMPLE_TARGETS: "esp32 esp32s2 esp32c3 esp32s3"
+#     TEST_TARGETS: "esp32 esp32s3"
 
-build_idf_v5.0:
-  extends: .build_template
-  image: espressif/idf:release-v5.0
-  variables:
-    EXAMPLE_TARGETS: "esp32 esp32s2 esp32s3 esp32c3 esp32c2"
-    TEST_TARGETS: "esp32 esp32s3"
-    # GNU Make based build system is not supported starting from IDF v5.0
-    SKIP_GNU_MAKE_BUILD: 1
+# build_idf_v5.0:
+#   extends: .build_template
+#   image: espressif/idf:release-v5.0
+#   variables:
+#     EXAMPLE_TARGETS: "esp32 esp32s2 esp32s3 esp32c3 esp32c2"
+#     TEST_TARGETS: "esp32 esp32s3"
+#     # GNU Make based build system is not supported starting from IDF v5.0
+#     SKIP_GNU_MAKE_BUILD: 1
 
 build_idf_v5.3:
   extends: .build_template
@@ -125,8 +130,8 @@ build_idf_latest:
 # clang build
 build_clang_idf_latest:
   extends: 
-    - .before_script_build_jobs
     - .build_template
+    - .before_script_build_jobs
   image: espressif/idf:latest
   variables:
     EXAMPLE_TARGETS: "esp32 esp32s2 esp32c3 esp32s3"
@@ -134,6 +139,11 @@ build_clang_idf_latest:
     IDF_TOOLCHAIN: clang
     # GNU Make based build system is not supported starting from IDF v5.0
     SKIP_GNU_MAKE_BUILD: 1
+  script:
+    #- export IDF_PATH=${PWD}
+    - cmake --version
+    - idf.py --version
+    - ./build_all.sh
 
 # target tests related parts:
 
@@ -242,11 +252,12 @@ build_latest_test_app:
     when: always
     expire_in: 1 week
   script:
+    - pip install --only-binary cryptography pytest-embedded pytest-embedded-serial-esp pytest-embedded-idf --upgrade
     - dir
     - cd ${TEST_DIR}
     - dir
     - dir build_${TEST_TARGETS}
-    - python -m pytest --junit-xml=./results_${TEST_TARGETS}.xml --target=${TEST_TARGETS} --build-dir "build_${TEST_TARGETS}"
+    - python -m pytest --app-path . --junit-xml=./results_${TEST_TARGETS}.xml --target=${TEST_TARGETS} --build-dir "build_${TEST_TARGETS}"
     - ls -lh > test_dir.txt
   variables:
     TEST_TARGETS: "esp32"
@@ -258,7 +269,7 @@ test_examples:
   parallel:
     matrix:
       - IDF_BRANCH: ["master"]
-        IDF_TARGET: ["esp32", "esp32s3"]
+        IDF_TARGET: ["esp32", "esp32s3", "esp32p4"]
   variables:
     TEST_TARGETS: ${IDF_TARGET}
   tags:
