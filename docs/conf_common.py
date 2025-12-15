@@ -31,3 +31,9 @@ versions_url = './_static/esp-dsp_docs_versions.js'
 
 idf_targets = ['esp32', 'esp32s2', 'esp32s3', 'esp32c3', 'esp32c2', 'esp32c6', 'esp32h2', 'esp32p4', 'esp32c5']
 languages = ['en']
+
+# Paths relative to the language directory (docs/en/)
+# Doxyfile is in docs/, so one level up from docs/en/
+doxyfile_dir = '..'
+# Project root is two levels up from docs/en/
+project_path = '../..'
