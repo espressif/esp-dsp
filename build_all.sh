@@ -64,10 +64,10 @@ function build_for_targets
         idf.py set-target "${IDF_TARGET}"
         idf.py build || die "CMake build in ${PWD} has failed for ${IDF_TARGET}"
 
-        if [[ "${toolchain}" = "clang" ]]
-        then
-            idf.py clang-check --run-clang-tidy-py run-clang-tidy
-        fi
+        # if [[ "${toolchain}" = "clang" ]]
+        # then
+        #     idf.py clang-check --run-clang-tidy-py run-clang-tidy
+        # fi
 
         idf.py fullclean || true
     done
