@@ -160,6 +160,7 @@ esp_err_t dspm_mult_ex_f32_ansi(const float *A, const float *B, float *C, int m,
 esp_err_t dspm_mult_ex_f32_ae32(const float *A, const float *B, float *C, int m, int n, int k, int A_padd, int B_padd, int C_padd);
 esp_err_t dspm_mult_ex_f32_aes3(const float *A, const float *B, float *C, int m, int n, int k, int A_padd, int B_padd, int C_padd);
 esp_err_t dspm_mult_ex_f32_arp4(const float *A, const float *B, float *C, int m, int n, int k, int A_padd, int B_padd, int C_padd);
+/**@}*/
 
 #ifdef __cplusplus
 }

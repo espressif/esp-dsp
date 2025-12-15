@@ -12,7 +12,7 @@ variables:
 
   # GitLab-CI environment
   TARGET_TEST_ENV_IMAGE: "$CI_DOCKER_REGISTRY/target-test-env-v6.0:2"
-  ESP_DOCS_ENV_IMAGE: "$CI_DOCKER_REGISTRY/esp-idf-doc-env-v5.0:2-2"
+  ESP_DOCS_ENV_IMAGE:  "${CI_DOCKER_REGISTRY}/esp-idf-doc-env-v6.0:1-1"
   GET_SOURCES_ATTEMPTS: "10"
   ARTIFACT_DOWNLOAD_ATTEMPTS: "10"
   GIT_SUBMODULE_STRATEGY: none
@@ -346,6 +346,7 @@ deploy_docs_production:
 
 push_master_to_github:
   stage: deploy
+  image: espressif/idf:latest
   tags:
     - deploy
   only:

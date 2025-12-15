@@ -73,6 +73,9 @@ public:
 
         /**
          * @brief Get amount of elements in the rect area
+         *
+         * @return
+         *      - amount of elements in the rectangular area
          */
         int areaRect(void);
     };
@@ -173,7 +176,6 @@ public:
      * @brief print matrix header
      *
      * Print all information about matrix to the terminal
-     * @param[in] src: source matrix
      */
     void PrintHead(void);
 
