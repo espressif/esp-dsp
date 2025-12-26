@@ -67,7 +67,7 @@ void ShowIIRfilter(float freq, float qFactor)
     ESP_LOGI(TAG, "Impulse response of IIR filter with F=%f, qFactor=%f", freq, qFactor);
     dsps_view(y, 128, 64, 10,  -1, 1, '-');
 
-    // Show result as frequency responce on the plot
+    // Show result as frequency response on the plot
     for (int i = 0 ; i < N ; i++) {
         y_cf[i * 2 + 0] = y[i];
         y_cf[i * 2 + 1] = 0;
@@ -90,7 +90,7 @@ void app_main()
 {
     esp_err_t ret;
     ESP_LOGI(TAG, "Start Example.");
-    // If user don't care about buffer allocation, the defalt
+    // If user don't care about buffer allocation, the default
     // initialization could be used as shown here:
     ret = dsps_fft2r_init_fc32(NULL, CONFIG_DSP_MAX_FFT_SIZE);
     if (ret  != ESP_OK) {

@@ -17,3 +17,9 @@ repos:
         types_or: [c, c++]
         args: ['--fix=lf']
         description: Forces to replace line ending by the UNIX 'lf' character
+
+-   repo: https://github.com/codespell-project/codespell
+    rev: v2.4.1
+    hooks:
+      - id: codespell
+        args: [--config=.codespellrc]

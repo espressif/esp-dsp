@@ -784,7 +784,7 @@ static void test_mat_subset_solve(void)
     std::cout << "Roots result matrix: rows: " << x2.rows << ", columns: " << x2.cols << std::endl;
     std::cout << (x2 * 12).t();
     dspm::Mat diff_b = x1 - x2;
-    std::cout << "Difference between solve() abd roots(): " << diff_b.t();
+    std::cout << "Difference between solve() and roots(): " << diff_b.t();
     for (int row = 0; row < diff_b.rows; row++) {
         for (int col = 0; col < diff_b.cols; col++) {
             if (fabs(diff_b(row, col)) > 0.000001) {
@@ -850,7 +850,7 @@ static void test_mat_subset_normalize(void)
     dspm::Mat result_area_check = dspm::Mat::ones(4);
     dspm::Mat result_sub = result_origin.getROI(1, 1, 2, 2);
 
-    std::cout << "Befor normalize: " << std::endl;
+    std::cout << "Before normalize: " << std::endl;
     std::cout << result_sub << std::endl;
     result_sub.normalize();
     test_assert_check_area_mat_mat(result_area_check, result_sub, 1, 1, "normalize area check");

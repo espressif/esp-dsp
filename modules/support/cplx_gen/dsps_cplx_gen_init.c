@@ -93,7 +93,7 @@ float dsps_cplx_gen_freq_get(cplx_sig_t *cplx_gen)
 {
     // Check if the structure was initialized
     if (!dsp_is_power_of_two(cplx_gen->lut_len)) {
-        ESP_LOGE(TAG, "cplx_gen strucure was not initialized");
+        ESP_LOGE(TAG, "cplx_gen structure was not initialized");
         return -2;
     }
 
@@ -115,7 +115,7 @@ float dsps_cplx_gen_phase_get(cplx_sig_t *cplx_gen)
 {
     // Check if the structure was initialized
     if (!dsp_is_power_of_two(cplx_gen->lut_len)) {
-        ESP_LOGE(TAG, "cplx_gen strucure was not initialized");
+        ESP_LOGE(TAG, "cplx_gen structure was not initialized");
         return -2;
     }
 

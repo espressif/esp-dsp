@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// This file include defenitions that are emulate esp-idf error codes
+// This file include definitions that are emulate esp-idf error codes
 
 #ifndef _esp_log_h_
 #define _esp_log_h_

@@ -45,7 +45,7 @@ Here is an typical example console output.
 
 ```
 I (305) main: Start Example.
-I (305) main: 2D Convolution reuslt.
+I (305) main: 2D Convolution result.
 [ 0 ..  8,  0]:   9, 12, 12, 12, 12, 12,  9,  6,
 [ 0 ..  8,  1]:  12, 16, 16, 16, 16, 16, 12,  8,
 [ 0 ..  8,  2]:  12, 16, 16, 16, 16, 16, 12,  8,

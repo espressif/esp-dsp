@@ -270,7 +270,7 @@ int dsps_firmr_f32_ansi(fir_f32_t *fir, const float *input, float *output, int i
  * @param fir: pointer to fir filter structure, that must be initialized before
  * @param input: input array
  * @param output: array with the result of the FIR filter
- * @param input_len: length of the intput array
+ * @param input_len: length of the input array
  *
  * @return: function returns the number of samples stored in the output array
  *          depends on the previous state value could be [0..len*intepr/decimation]

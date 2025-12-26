@@ -42,7 +42,7 @@ def read_csv(csv_file):
 
 def main():
 
-    argparser = argparse.ArgumentParser("Generate benchmarks table for esp-dsp libray docu")
+    argparser = argparse.ArgumentParser("Generate benchmarks table for esp-dsp library docu")
     argparser.add_argument('--data', '-d', help='Benchmarks data file', type=argparse.FileType('r'))
     argparser.add_argument('--template', '-t', help='Docu template file', type=argparse.FileType('r'))
     argparser.add_argument('--output', '-o', help='Benchmarks output file', type=argparse.FileType('w'))

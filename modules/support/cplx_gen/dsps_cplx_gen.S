@@ -43,12 +43,12 @@ dsps_cplx_gen_ae32:
     // F32 floating point
     loopnez a4, ._main_loop_float
 
-        floor.s     a10,   f3,   0              // turncate wiht rounding towards -infinity
+        floor.s     a10,   f3,   0              // truncate with rounding towards -infinity
 
         // branch if ph_floor is greater than 0
         bgez    a10, _ph_check_low_float
             add.s       f3,    f3,   f1         // f3 = f3 - f1 (ph_f + 1)
-            floor.s     a10,   f3,    0         // turncate wiht rounding towards -infinity
+            floor.s     a10,   f3,    0         // truncate with rounding towards -infinity
         _ph_check_low_float:
 
         // branch if ph_ceil is lower than 2 (floored to 1)
@@ -82,12 +82,12 @@ dsps_cplx_gen_ae32:
     _s16_fixed:
     loopnez a4, ._main_loop_fixed
 
-        floor.s     a10,   f3,   0              // turncate wiht rounding towards -infinity
+        floor.s     a10,   f3,   0              // truncate with rounding towards -infinity
 
         // branch if ph_floor is greater than 0
         bgez    a10, _ph_check_low_fixed
             add.s       f3,    f3,   f1         // f3 = f3 - f1 (ph_f + 1)
-            floor.s     a10,   f3,    0         // turncate wiht rounding towards -infinity
+            floor.s     a10,   f3,    0         // truncate with rounding towards -infinity
         _ph_check_low_fixed:
 
         // branch if ph_ceil is lower than 2 (floored to 1)

@@ -66,7 +66,7 @@ void init_perspective_matrix(dspm::Mat &P_m);
  * Function updates scaling part of the transformation matrix.
  *
  * @param T_m: transformation matrix object from the Mat class
- * @param keep_diagonal: if true:  diagonal row of the transformation matrix T_m will be mulitplied with the scaling values
+ * @param keep_diagonal: if true:  diagonal row of the transformation matrix T_m will be multiplied with the scaling values
  *                       if false: diagonal row of the transformation matrix T_m will be substituted with new scaling values
  * @param scale_x: scaling value for x coordinate of the vector
  * @param scale_y: scaling value for y coordinate of the vector
@@ -93,7 +93,7 @@ void update_translation_matrix(dspm::Mat &T_m, bool row, float move_x, float mov
 /**
  * @brief   update rotation matrix
  *
- * Function updates rotation part of the tranformation matrix
+ * Function updates rotation part of the transformation matrix
  *
  * @param T_m: transformation matrix object from the Mat class
  * @param rot_x: rotation angle for x direction of the vector

@@ -62,7 +62,7 @@ dspm_mult_f32_ae32:
 	slli    a8, a6, 2 // Pointer increment for A
 	slli    a15,a7, 2 // Pointer increment for B
 
-	movi.n	a14, 0 // Innitial state of accumulator f1
+	movi.n	a14, 0 // Initial state of accumulator f1
 	movi.n	a10, 4 // Increment = 4
 	movi.n	a9, 0  // counter loop1
 

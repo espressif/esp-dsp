@@ -24,7 +24,7 @@ static const char *TAG = "main";
 
 // This example shows how to use Mat class from esp-dsp library.
 //
-// First we create matix A and x, and then calculating matrix b as result
+// First we create matrix A and x, and then calculating matrix b as result
 // A*x = b
 // Then we can find x as roots of matrices X and b
 //

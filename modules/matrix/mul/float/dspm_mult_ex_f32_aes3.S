@@ -148,13 +148,13 @@ dspm_mult_ex_f32_aes3:
             madd.s  f2, f6, f11     // f2 =
             madd.s  f3, f7, f11     // f3 =
         .iner_loop_mult_ex:
-        EE.STF.128.XP f3, f2, f1, f0, a4, a10 // Store result 
+        EE.STF.128.XP f3, f2, f1, f0, a4, a10 // Store result
 
         addi.n  a9,  a9, 1          // Increment loop1 counter
         add     a8,  a8, a6         // (increase A pointer by A_padding * 4 times)
     blt   a9, a5, .loop_y_mult_ex
 
-    addi.n  a7,  a7,  16            // Increase C pinter by 16
+    addi.n  a7,  a7,  16            // Increase C pointer by 16
     mov     a4,  a7
     addi.n  a14, a14, 16            // Increase B pointer by 16
     addi.n  a15, a15, 16            // Increment loop2 counter by 16

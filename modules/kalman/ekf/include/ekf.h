@@ -42,7 +42,7 @@ public:
 
 
     /**
-     * Distructor of EKF
+     * Destructor of EKF
     */
     virtual ~ekf();
     /**

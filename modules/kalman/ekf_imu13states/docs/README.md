@@ -22,7 +22,7 @@ Magn_offset - magnetometer offset value (called deviation)
 The EKF has two main methods: state calculation (Process(...)) and state correction (UpdateRefMeasurement() in our case).
 The current EKF has one main input value - is a gyroscope (gyro) angular speed. If the gyro has no bias error, then it's enough to call Process(...) method, and EKF 
 will calculate system attitude. But, the gyro has a bias error and that's why, the UpdateRefMeasurement(...) must be called, when reference accelerometer and magnetometer values are available.
-After the firs start, the EKF will need some time to calculate correct gyro bias and magnetometer deviation. This is a calibration phase. 
+After the first start, the EKF will need some time to calculate correct gyro bias and magnetometer deviation. This is a calibration phase. 
 To avoid this phase every time after filter started, it's better to store X vector and P matrix to the non-volatile memory, and restore them after system started.
 The sequence in this case will be:
 Init()-> restore X and P values (if exist) -> go to normal process 

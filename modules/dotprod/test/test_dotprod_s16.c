@@ -155,7 +155,7 @@ TEST_CASE("dsps_dotprod_s16 benchmark", "[dsps]")
         x[i] = 0x100;
         y[i] = 0x200;
     }
-    // Disable interrupt to get exect count
+    // Disable interrupt to get exact count
 
     portENTER_CRITICAL(&testnlock);
 
@@ -191,7 +191,7 @@ TEST_CASE("dsps_dotprod_s16_ansi benchmark", "[dsps]")
         x[i] = 0x100;
         y[i] = 0x200;
     }
-    // Disable interrupt to get exect count
+    // Disable interrupt to get exact count
 
     portENTER_CRITICAL(&testnlock);
 

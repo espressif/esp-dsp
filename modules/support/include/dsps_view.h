@@ -36,7 +36,7 @@ extern "C"
  * @param height: plot height in lines
  * @param min: minimum value that will be limited by Axis Y.
  * @param max: maximum value that will be limited by Axis Y.
- * @param view_char: character to draw the plot calues ('.' or '|' etc)
+ * @param view_char: character to draw the plot values ('.' or '|' etc)
  *
  */
 void dsps_view(const float *data, int32_t len, int width, int height, float min, float max, char view_char);

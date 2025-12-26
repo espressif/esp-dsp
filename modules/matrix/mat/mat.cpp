@@ -198,7 +198,7 @@ void Mat::PrintHead(void)
 {
     std::cout << "rows     " << this->rows << std::endl;
     std::cout << "cols     " << this->cols << std::endl;
-    std::cout << "lenght   " << this->length << std::endl;
+    std::cout << "length   " << this->length << std::endl;
     std::cout << "data     " << this->data << std::endl;
     std::cout << "ext_buff " << this->ext_buff << std::endl;
     std::cout << "sub_mat  " << this->sub_matrix << std::endl;

@@ -477,7 +477,7 @@ static void save_state_vectors_task(void *arg)
 
         ret = nvs_commit(nvs_handle_kalman);
         if (ret != ESP_OK && ret != ESP_ERR_NVS_NOT_FOUND) {
-            ESP_LOGE("NVS error", "(%s) commiting data to NVS!\n", esp_err_to_name(ret));
+            ESP_LOGE("NVS error", "(%s) committing data to NVS!\n", esp_err_to_name(ret));
             assert(ESP_OK == ret);
         }
         nvs_close(nvs_handle_kalman);
@@ -519,7 +519,7 @@ static void get_pressure_task(void *arg)
             baro_image = pressure_global;
         } else {
             call_count++;
-            if (fabs(pressure_global - last_pressure) > 0.0005) {        // cahnge more than 0.5 Pa
+            if (fabs(pressure_global - last_pressure) > 0.0005) {        // change more than 0.5 Pa
                 last_pressure = pressure_global;
                 baro_image = (0.9 * baro_image) + (0.1 * last_pressure);
                 changed = true;

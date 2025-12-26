@@ -4,7 +4,7 @@
 
 This example demonstrates how to use Mat class functionality from esp-dsp library. Example does the following steps:
 
-1. Initialize a matrix A and matirx x
+1. Initialize a matrix A and matrix x
 2. Calculate matrix b: b = A*x
 3. Find roots x1_: A*x1_ = b, with different methods
 4. Print result

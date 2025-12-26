@@ -76,7 +76,7 @@ void update_translation_matrix(dspm::Mat &T_m, bool row, float move_x, float mov
         T_m(3, 0) = move_x;
         T_m(3, 1) = move_y;
         T_m(3, 2) = move_z;
-    } else {                        // update values in 4-th collum, if translation matrix is the first multiplier
+    } else {                        // update values in 4-th column, if translation matrix is the first multiplier
         T_m(0, 3) = move_x;
         T_m(1, 3) = move_y;
         T_m(2, 3) = move_z;

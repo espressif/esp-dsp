@@ -126,7 +126,7 @@ esp_err_t dsps_bit_rev4r_sc16_ansi(int16_t *data, int N);
  *
  * Convert FFT result of complex FFT for real input to complex output.
  * This function have to be used if FFT used to process real data.
- * This function use tabels inside and can be used only it dsps_fft4r_init_fc32(...) was
+ * This function use tables inside and can be used only it dsps_fft4r_init_fc32(...) was
  * called and FFT4 was initialized.
  * The implementation use ANSI C and could be compiled and run on any platform
  *

@@ -34,15 +34,6 @@ variables:
   git remote remove github || true
   git remote add github ${GH_PUSH_REPO}
 
-check_pre_commit_MR:
-  stage: check
-  image: "$CI_DOCKER_REGISTRY/esp-idf-pre-commit:1"
-  tags:
-    - build
-    - internet
-  dependencies: []
-  script:
-    - pre-commit run --all-files --show-diff-on-failure
 
 .install_clang: &install_clang |
   $IDF_PATH/tools/idf_tools.py --non-interactive install esp-clang
@@ -317,6 +308,9 @@ build_docs:
 deploy_docs_preview:
   extends:
     - .deploy_docs_template
+  needs:
+    - build_docs
+    - test_examples
   except:
     refs:
       - master
@@ -332,6 +326,9 @@ deploy_docs_preview:
 deploy_docs_production:
   extends:
     - .deploy_docs_template
+  needs:
+    - build_docs
+    - test_examples
   only:
     refs:
       - master
@@ -359,3 +356,6 @@ push_master_to_github:
     - git clone --depth 1 ${ESP_IDF_GIT} esp-idf
     - *add_gh_key_remote
     - esp-idf/tools/ci/push_to_github.sh
+
+include:
+  - '.gitlab/ci/pre_commit.yml'

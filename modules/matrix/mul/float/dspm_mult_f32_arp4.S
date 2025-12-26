@@ -61,7 +61,7 @@ dspm_mult_f32_arp4:
     slli    a6, a4, 2 // Pointer increment for A
     slli    t5,a5, 2 // Pointer increment for B
 
-    li  t4, 0 // Innitial state of accumulator f1
+    li  t4, 0 // Initial state of accumulator f1
     li  t0, 4 // Increment = 4
     li  a7, 0  // counter loop1
 

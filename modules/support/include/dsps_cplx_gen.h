@@ -44,7 +44,7 @@ typedef struct cplx_sig_s {
 
 
 /**
- * @brief Initialize strucure for complex generator
+ * @brief Initialize structure for complex generator
  *
  * Function initializes a structure for either 16-bit fixed point, or 32-bit floating point complex generator using LUT table.
  * cplx_gen_free(...) must be called, once the generator is not needed anymore to free dynamically allocated memory
@@ -159,7 +159,7 @@ void cplx_gen_free(cplx_sig_t *cplx_gen);
  * where step = 2*Pi*frequency
  *
  * dsps_cplx_gen_ansi() - The implementation uses ANSI C and could be compiled and run on any platform
- * dsps_cplx_gen_ae32() - Is targetted for Xtensa cores
+ * dsps_cplx_gen_ae32() - Is targeted for Xtensa cores
  *
  * @param cplx_gen: pointer to the generator structure
  * @param output: output array (length of len*2), data type is void so both (S16_FIXED, F32_FLOAT) types could be used
