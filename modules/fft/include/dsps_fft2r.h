@@ -58,8 +58,11 @@ extern uint8_t dsps_fft2r_sc16_initialized;
  *      - ESP_ERR_DSP_REINITIALIZED if buffer already allocated internally by other function
  *      - One of the error codes from DSP library
  */
-esp_err_t dsps_fft2r_init_fc32(float *fft_table_buff, int table_size);
+esp_err_t dsps_fft2r_init_fc32_(float *fft_table_buff, int table_size, int reverse_fft);
+#define dsps_fft2r_init_fc32(fft_table_buff, table_size) dsps_fft2r_init_fc32_(fft_table_buff, table_size, 0)
+#define dsps_ifft2r_init_fc32(fft_table_buff, table_size) dsps_fft2r_init_fc32_(fft_table_buff, table_size, 1)
 esp_err_t dsps_fft2r_init_sc16(int16_t *fft_table_buff, int table_size);
+
 /**@}*/
 
 /**@{*/
@@ -154,7 +157,7 @@ esp_err_t dsps_bit_rev_lookup_fc32_aes3(float *data, int reverse_size, uint16_t 
  *      - ESP_OK on success
  *      - One of the error codes from DSP library
  */
-esp_err_t dsps_gen_w_r2_fc32(float *w, int N);
+esp_err_t dsps_gen_w_r2_fc32(float *w, int N, int iFFT);
 esp_err_t dsps_gen_w_r2_sc16(int16_t *w, int N);
 /**@}*/
 
