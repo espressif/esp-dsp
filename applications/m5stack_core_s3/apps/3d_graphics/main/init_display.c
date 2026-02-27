@@ -92,7 +92,7 @@ esp_err_t bsp_i2c_init(void)
 
 static esp_err_t dsp_display_brightness_init(void)
 {
-    /* Initilize I2C */
+    /* Initialize I2C */
     BSP_ERROR_CHECK_RETURN_ERR(bsp_i2c_init());
 
     const uint8_t lcd_bl_en[] = { 0x90, 0xBF }; // AXP DLDO1 Enable
@@ -143,7 +143,7 @@ static esp_err_t bsp_enable_feature(bsp_feature_t feature)
     static uint8_t aw9523_P1 = 0b10100000;
     uint8_t data[2];
 
-    /* Initilize I2C */
+    /* Initialize I2C */
     BSP_ERROR_CHECK_RETURN_ERR(bsp_i2c_init());
 
     switch (feature) {

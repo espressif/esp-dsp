@@ -51,11 +51,11 @@ public:
     void TestFull(bool enable_att);
 
     /**
-    *     Initial reference valie for magnetometer.
+    *     Initial reference value for magnetometer.
     */
     dspm::Mat mag0;
     /**
-    *     Initial reference valie for accelerometer.
+    *     Initial reference value for accelerometer.
     */
     dspm::Mat accel0;
 

@@ -44,7 +44,7 @@ esp_err_t dsps_firmr_init_s16(fir_s16_t *fir, int16_t *coeffs, int16_t *delay, i
     fir->delay_size = coeffs_len / interp;
 
 
-    if (fir->coeffs_len < 2) {                                          // number of coeffcients must be higer than 1
+    if (fir->coeffs_len < 2) {                                          // number of coefficients must be higher than 1
         return ESP_ERR_DSP_INVALID_LENGTH;
     }
 

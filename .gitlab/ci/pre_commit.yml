@@ -1,0 +1,45 @@
+.check_pre_commit_template:
+  stage: check
+  image: $ESP_DOCS_ENV_IMAGE
+  script:
+    - pip install pre-commit
+    - |
+      echo "Target branch: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME"
+      echo "Source branch: $CI_COMMIT_REF_NAME"
+
+      if [ -n "$CI_MERGE_REQUEST_TARGET_BRANCH_NAME" ]; then
+        git fetch origin "$CI_MERGE_REQUEST_TARGET_BRANCH_NAME" --depth=1
+        git fetch origin "$CI_COMMIT_REF_NAME" --depth=1
+        MODIFIED_FILES=$(git diff --name-only "origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME..origin/$CI_COMMIT_REF_NAME")
+        echo "Modified files to check (vs $CI_MERGE_REQUEST_TARGET_BRANCH_NAME):"
+        echo "$MODIFIED_FILES"
+        if [ -n "$MODIFIED_FILES" ]; then
+          CI=true pre-commit run --files $MODIFIED_FILES
+        else
+          echo "No modified files to check."
+        fi
+      else
+        echo "Not in Merge Request context; running pre-commit on all files."
+        CI=true pre-commit run --all-files --show-diff-on-failure
+      fi
+
+check_pre_commit:
+  extends:
+    - .check_pre_commit_template
+  tags:
+    - build
+    - internet
+  dependencies: []
+
+
+# Jobs moved from .gitlab-ci.yml
+
+check_pre_commit_MR:
+  stage: check
+  image: "$CI_DOCKER_REGISTRY/esp-idf-pre-commit:1"
+  tags:
+    - build
+    - internet
+  dependencies: []
+  script:
+    - pre-commit run --all-files --show-diff-on-failure

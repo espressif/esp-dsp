@@ -23,7 +23,7 @@ esp_err_t dsps_fird_init_s16(fir_s16_t *fir, int16_t *coeffs, int16_t *delay, in
     fir->rounding_val = (int16_t)(ROUNDING_VALUE);
     fir->free_status = 0;
 
-    if (fir->coeffs_len < 2) {                                          // number of coeffcients must be higer than 1
+    if (fir->coeffs_len < 2) {                                          // number of coefficients must be higher than 1
         return ESP_ERR_DSP_INVALID_LENGTH;
     }
 
@@ -86,7 +86,7 @@ esp_err_t dsps_fird_init_s16(fir_s16_t *fir, int16_t *coeffs, int16_t *delay, in
     // the newly allocated arrays are divisible by 8. Coefficients are copied from the original fir structure to
     // the new coeffs array and the remaining space is filled with zeroes
     // dsps_fird_s16_free_coeffs_delay must be called to free the memory after the FIR function is finished
-    if (fir->coeffs_len % 8) {                                           // Number of coefficients must be devisible by 8
+    if (fir->coeffs_len % 8) {                                           // Number of coefficients must be divisible by 8
         int16_t zero_coeffs = (8 - (fir->coeffs_len % 8));
         int16_t new_coeffs_len = fir->coeffs_len + zero_coeffs;
         int16_t *aes3_delay_buff = (int16_t *)memalign(16, new_coeffs_len * sizeof(int16_t));

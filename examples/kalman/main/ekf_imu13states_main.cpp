@@ -39,13 +39,13 @@ void app_main()
     float pi = std::atan(1) * 4;
 
     // gyroscope bias error
-    float gyro_err_data[] = {0.1, 0.2, 0.3}; // static constatnt error
+    float gyro_err_data[] = {0.1, 0.2, 0.3}; // static constant error
     dspm::Mat gyro_err(gyro_err_data, 3, 1);
 
 
     // Measurement noise covariance values for diagonal covariance matrix.
     // For the real system these values could be adjusted!
-    // These calues depends on how noisy the measurement.
+    // These values depends on how noisy the measurement.
     //
     float R[10];
     for (size_t i = 0; i < 10; i++) {

@@ -10,7 +10,7 @@
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
-// limitations under the License. 
+// limitations under the License.
 
 #include "dsps_fft2r_platform.h"
 #if (dsps_fft2r_sc16_ae32_enabled == 1)
@@ -49,7 +49,7 @@
 // 				sc16_t m1;
 // 				m1.re = xtfixed_bf_1(a_data.re, cs.re, m_data.re, cs.im, m_data.im, 16);//(a_data.re - temp.re + shift_const) >> 1;
 // 				m1.im = xtfixed_bf_2(a_data.im, cs.re, m_data.im, cs.im, m_data.re, 16);//(a_data.im - temp.im + shift_const) >> 1;
-// 				in_data[m] = m1.data; 
+// 				in_data[m] = m1.data;
 // 				sc16_t m2;
 // 				m2.re = xtfixed_bf_3(a_data.re, cs.re, m_data.re, cs.im, m_data.im, 16);//(a_data.re + temp.re + shift_const) >> 1;
 // 				m2.im = xtfixed_bf_4(a_data.im, cs.re, m_data.im, cs.im, m_data.re, 16);//(a_data.im + temp.im + shift_const)>>1;
@@ -63,7 +63,7 @@
 // 	return result;
 // }
 
-dsps_fft2r_sc16_ae32_: 
+dsps_fft2r_sc16_ae32_:
 //esp_err_t dsps_fft2r_sc16_ansi(float *data, int N, float* dsps_fft_w_table_sc16)
 
 	entry	a1, 16
@@ -85,27 +85,27 @@ dsps_fft2r_sc16_ae32_:
 // a15 - used to shift result
 
     // This instruction are not working. Have to be fixed!!!
-    // For now theres no solution...
+    // For now there is no solution...
 //    l32r    a4, dsps_fft_w_table_sc16_ae32
     // To use ldinc operation we have to prepare a4:
-    addi a4, a4, -4 
+    addi a4, a4, -4
     addi a9, a2, -4 // prepare input pointer for ldinc operation
-    
+
     ldinc   m1, a4 // Load [0x7fff j0] value to the m1
-    addi    a4, a4, -4 
+    addi    a4, a4, -4
 
     // a5 used to load 0x7fff and clear acch/l
     movi.n  a5, 1   // a5 = 1;
 
     srli a6, a3, 1 // a6 = N2 = N/2
-    
+
     // Load shift register
     movi     a7, 16
     ssr      a7
 
     movi a7, 1     // a7 - ie
 
-fft2r_l1: 
+fft2r_l1:
     movi a8, 0     // a8 - j
     movi a11,0     // a11 = ia = 0;
 
@@ -124,7 +124,7 @@ fft2r_l2:           // loop for j, a8 - j
             add.n    a13, a13, a9   // These pointers are -4 from expected values...
 
             ldinc      m2, a14        // m_data, a14 += 4; The pointers ready to store data
-            mul.da.ll  m1, a5         // acc = 0x7fff*1  
+            mul.da.ll  m1, a5         // acc = 0x7fff*1
             ldinc      m3, a13        // ai_data a13 += 4;
             // re - l, im - h
             muls.dd.ll m0, m2         // acc -= cs.re*m_data.re
@@ -132,7 +132,7 @@ fft2r_l2:           // loop for j, a8 - j
             muls.dd.hh m0, m2         // acc -= cs.im*m_data.im
             // result in acclo        in_data[m].re
             rsr      a15, acclo
-            mul.da.ll  m1, a5         // acc = 0x7fff*1  
+            mul.da.ll  m1, a5         // acc = 0x7fff*1
             sra      a15, a15
             muls.dd.lh m0, m2         // acc -= cs.re*m_data.im
             s16i     a15, a14, 0
@@ -140,7 +140,7 @@ fft2r_l2:           // loop for j, a8 - j
             mula.dd.hl m0, m2         // acc += cs.im*m_data.re
             // result in acclo        in_data[m].im
             rsr      a15, acclo
-            mul.da.ll  m1, a5         // acc = 0x7fff*1  
+            mul.da.ll  m1, a5         // acc = 0x7fff*1
             sra      a15, a15
             mula.dd.ll m0, m2         // acc += cs.re*m_data.re
             s16i     a15, a14, 2
@@ -148,7 +148,7 @@ fft2r_l2:           // loop for j, a8 - j
             mula.dd.hh m0, m2         // acc += cs.im*m_data.im
             // result in acclo        // in_data[ia].re
             rsr      a15, acclo
-            mul.da.ll  m1, a5         // acc = 0x7fff*1  
+            mul.da.ll  m1, a5         // acc = 0x7fff*1
 
             sra      a15, a15
             mula.dd.lh m0, m2         // acc += cs.re*m_data.im
@@ -162,13 +162,13 @@ fft2r_l2:           // loop for j, a8 - j
             sra      a15, a15
             s16i     a15, a13, 2
 
-            // Here we have m0 - w, m2 - m_data, m3 - ai_data, 
+            // Here we have m0 - w, m2 - m_data, m3 - ai_data,
             addi     a11, a11, 1// ia++
 fft2r_l3:
         add     a11, a11, a6
 
         addi    a8, a8, 1     // j++
-        BNE     a8, a7, fft2r_l2 // 
+        BNE     a8, a7, fft2r_l2 //
     slli    a7, a7, 1  // ie = ie<<1
 // main loop: for (int k = N/2; k > 0; k >>= 1)
     srli    a6, a6, 1  // a6 = a6>>1

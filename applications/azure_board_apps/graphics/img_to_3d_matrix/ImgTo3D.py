@@ -213,7 +213,7 @@ class Image3DMatrix:
 
 
 def fromat_comas_spaces(element_index: int, array_len: int, elements_per_line: int, c_file):
-    """ Formating of the spaces, commas and new lines for arrays in the .c file """
+    """ Formatting of the spaces, commas and new lines for arrays in the .c file """
 
     # Dont put comma after the last array member
     if element_index != array_len:

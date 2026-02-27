@@ -51,7 +51,7 @@ dspm_mult_ex_f32_ae32:
 
     movi.n  a10, 4          // Increment = 4
     movi.n  a9, 0           // counter loop1
-    const.s f3, 0           // Innitial state of accumulator, f3 = 0
+    const.s f3, 0           // Initial state of accumulator, f3 = 0
 
 .mult_ex_loop1:
     movi.n  a11, 0 // reset counter for loop2

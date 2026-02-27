@@ -175,7 +175,7 @@ TEST_CASE("dsps_fird_s16_aexx benchmark", "[dsps]")
 {
 
     const int16_t local_dec = 2;
-    const int32_t local_len = (len % 16) ? (4096) : (len);                          // length must be devisible by 16
+    const int32_t local_len = (len % 16) ? (4096) : (len);                          // length must be divisible by 16
 
     int16_t *x = (int16_t *)memalign(16, local_len * sizeof(int16_t));
     int16_t *y = (int16_t *)memalign(16, local_len * sizeof(int16_t));

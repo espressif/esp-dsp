@@ -138,7 +138,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Fix in tests to pass
-- Minimum coeffcient length for fird_s16
+- Minimum coefficient length for fird_s16
 - Include malloc.h into dsps_fft4r_fc32_ansi.c
 - Fix for calculation length for dsps_corr_f32_axxx
 

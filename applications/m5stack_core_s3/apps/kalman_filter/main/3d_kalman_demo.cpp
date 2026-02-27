@@ -96,7 +96,7 @@ static uint8_t i2c_write_buffer[32];
 #define BMM150_SHIP_ID              0x40
 #define BMM150_DATA0                0x42
 
-// Basic fuctions to access bmi270 and bmm150
+// Basic functions to access bmi270 and bmm150
 esp_err_t read_bmm150_data(uint8_t addr, uint8_t *data, int length)
 {
     i2c_write_buffer[0] = BMI270_AUX_READ_ADDR;
@@ -397,7 +397,7 @@ static void draw_3d_image_task(void *arg)
         ekf13->Process(gyro_input_mat.data, dt);
         ekf13->UpdateRefMeasurementMagn(accel_input_mat.data, mag_input_mat.data, R_m);
 
-        // Convert directin quaternion to rotation matrix
+        // Convert direction quaternion to rotation matrix
         dspm::Mat R1 = ekf::quat2rotm(ekf13->X.data).t();       // matrix(3x1) that holds x, y, z rotation data
         // Convert rotation matrix to Euler angels
         dspm::Mat eul_angles = ekf::rotm2eul(R1);

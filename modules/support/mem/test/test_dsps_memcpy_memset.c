@@ -68,7 +68,7 @@ TEST_CASE("dsps_memcpy_memset_aes3_functionality", "[dsps]")
     const size_t arr_len = 1024;
     const uint8_t set_val = 0xaa;
     const size_t full_count = arr_len;
-    const size_t canary_bytes = 16;                     // canary bytes to check a possibe overflow
+    const size_t canary_bytes = 16;                     // canary bytes to check a possible overflow
     const unsigned int align_combinations_cpy = 4;      // source and destination arrays aligned or unaligned combinations
     const unsigned int align_combinations_set = 2;      // destination array aligned or unaligned
 
@@ -91,7 +91,7 @@ TEST_CASE("dsps_memcpy_memset_aes3_functionality", "[dsps]")
     }
 
     // aes3 memcpy functionality
-    for (int align = 0; align < align_combinations_cpy; align++) {                   // alinged and unaligned arrays test loop
+    for (int align = 0; align < align_combinations_cpy; align++) {                   // aligned and unaligned arrays test loop
 
         size_t byte_count[2] = {0, full_count - CORNERS_CPY_SET_COUNT};         // amount of bytes to be copied
 
@@ -141,7 +141,7 @@ TEST_CASE("dsps_memcpy_memset_aes3_functionality", "[dsps]")
     }
 
     // aes3 memset functionality
-    for (int align = 0; align < align_combinations_set; align++ ) {             // alinged and unaligned arrays test loop
+    for (int align = 0; align < align_combinations_set; align++ ) {             // aligned and unaligned arrays test loop
 
         size_t byte_count[2] = {0, full_count - CORNERS_CPY_SET_COUNT};         // amount of bytes to be copied
         if (!align) {
@@ -625,7 +625,7 @@ typedef struct {
     uint32_t switch_count_tie_off;
 } test_context_timing_t;
 
-// Taks pinned to a core, executing TIE instruction
+// Task pinned to a core, executing TIE instruction
 static void pinned_task_tie_on(void *arg)
 {
     ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
@@ -641,7 +641,7 @@ static void pinned_task_tie_on(void *arg)
     vTaskSuspend(NULL);
 }
 
-// Taks pinned to a core, executing generic Xtensa instruction
+// Task pinned to a core, executing generic Xtensa instruction
 static void pinned_task_tie_off(void *arg)
 {
     ulTaskNotifyTake(pdTRUE, portMAX_DELAY);

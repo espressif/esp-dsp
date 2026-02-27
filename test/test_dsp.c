@@ -46,7 +46,7 @@ TEST_CASE("test template", "[dsp][ignore]")
 #define dspm_mult_4x4x1_f32_ansi(data1, data2, data3) dspm_mult_f32_ansi(data1, data2, data3, 4, 4, 1)
 #define dspm_mult_4x4x4_f32_ansi(data1, data2, data3) dspm_mult_f32_ansi(data1, data2, data3, 4, 4, 4)
 
-TEST_CASE("DSP Libary benchmark table", "[dsp]")
+TEST_CASE("DSP Library benchmark table", "[dsp]")
 {
 #ifndef CONFIG_COMPILER_OPTIMIZATION_PERF
     ESP_LOGW(TAG, "WARNING: not optimizing for performance, don't use these benchmark results");

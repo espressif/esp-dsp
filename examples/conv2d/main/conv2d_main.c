@@ -38,7 +38,7 @@ void app_main(void)
 
     dspi_conv_f32(&image1, &image2, &image3);
 
-    ESP_LOGI(TAG, "2D Convolution reuslt.");
+    ESP_LOGI(TAG, "2D Convolution result.");
 
     for (int y = 0 ; y < image3.size_y; y++) {
         printf("[%2i .. %2i, %2i]:  ", 0,  image3.size_x, y);

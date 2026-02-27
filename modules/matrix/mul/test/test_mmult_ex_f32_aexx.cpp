@@ -215,7 +215,7 @@ TEST_CASE("dspm_mult_ex_f32_aexx functionality", "[dspm]")
                                 // sub-matrix m parameter
                                 for (int m = dim_start; m <= m_max; m += dim_increment) {
 
-                                    // sub-matrix n paramter
+                                    // sub-matrix n parameter
                                     for (int n = dim_start; n <= n_max; n += dim_increment) {
 
                                         // sub-matrix k parameter

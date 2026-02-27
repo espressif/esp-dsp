@@ -80,7 +80,7 @@ dspm_mult_f32_aes3:
 
 .loop_x_aes3:
 	movi.n		a9, 0
-	mov      	a8,  a2		// A matirx
+	mov      	a8,  a2		// A matrix
 	.loop_y_aes3:
 		add	 a13, a3, a14		// Reload Y pointer to Y11 + A14
 		EE.LDF.128.IP f11, f10, f9, f8, a8, 16  // Load A values: X11, X12, X13, X14

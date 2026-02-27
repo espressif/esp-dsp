@@ -49,7 +49,7 @@ TEST_CASE("Mat class check solve ", "[dspm]")
     std::cout << "Roots result matrix: rows: " << x2.rows << ", columns: " << x2.cols << std::endl;
     std::cout << (x2 * 12).t();
     dspm::Mat diff_b = x1 - x2;
-    std::cout << "Difference between solve() abd roots(): " << diff_b.t();
+    std::cout << "Difference between solve() and roots(): " << diff_b.t();
     for (int m = 0 ; m < diff_b.rows; m++) {
         for (int n = 0 ; n < diff_b.cols ; n++) {
             if (fabs(diff_b(m, n)) > 0.000001) {
@@ -210,7 +210,7 @@ TEST_CASE("Mat class operators", "[dspm]")
             result(m, n) = 1;
         }
     }
-    std::cout << "Befor normalize: " << std::endl;
+    std::cout << "Before normalize: " << std::endl;
     std::cout << result << std::endl;
     result.normalize();
     std::cout << "normalize: " << std::endl;

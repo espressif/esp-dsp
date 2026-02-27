@@ -110,7 +110,7 @@ k_loop_mmult:
 		// check and increment for K
 		
 		addi    a10, a10, 2
-		add     a13, a3, a10 // we shift collumn 
+		add     a13, a3, a10 // we shift column 
 		bne     a10, a7, k_loop_mmult
 
 		// Check and increment for M
@@ -155,7 +155,7 @@ k_loop_mmult_even:
 		// check and increment for K
 		
 		addi    a10, a10, 2
-		add     a13, a3, a10 // we shift collumn 
+		add     a13, a3, a10 // we shift column 
 		bne     a10, a7, k_loop_mmult_even
 
 		// Check and increment for M
