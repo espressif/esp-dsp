@@ -250,12 +250,12 @@ dspm::Mat ekf::quat2eul(const float q[4])
 dspm::Mat ekf::eul2rotm(float xyz[3])
 {
     dspm::Mat result(3, 3);
-    float Cx = std::cos(xyz[0]);
-    float Sx = std::sin(xyz[0]);
-    float Cy = std::cos(xyz[1]);
-    float Sy = std::sin(xyz[1]);
-    float Cz = std::cos(xyz[2]);
-    float Sz = std::sin(xyz[2]);
+    float Cx = cosf(xyz[0]);
+    float Sx = sinf(xyz[0]);
+    float Cy = cosf(xyz[1]);
+    float Sy = sinf(xyz[1]);
+    float Cz = cosf(xyz[2]);
+    float Sz = sinf(xyz[2]);
 
     result(0, 0) = Cy * Cz;
     result(0, 1) = -Cy * Sz;
