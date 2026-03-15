@@ -1,6 +1,6 @@
 /*
  * SPDX-FileCopyrightText: 2018-2025 Espressif Systems (Shanghai) CO LTD
- * SPDX-FileContributor: 2024 f4lcOn @ Libera Chat IRC
+ * SPDX-FileContributor: 2024 f4lc0n @ Libera Chat IRC
  *
  * SPDX-License-Identifier: Apache-2.0
  */
