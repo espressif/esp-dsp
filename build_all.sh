@@ -61,7 +61,7 @@ function build_for_targets
         echo "${STARS}"
         echo "Building in $PWD with CMake for ${IDF_TARGET}"
         rm -f sdkconfig
-        idf.py set-target "${IDF_TARGET}"
+        idf.py --preview set-target "${IDF_TARGET}"
         idf.py build || die "CMake build in ${PWD} has failed for ${IDF_TARGET}"
 
         # if [[ "${toolchain}" = "clang" ]]

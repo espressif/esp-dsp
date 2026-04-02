@@ -122,8 +122,8 @@ build_idf_latest:
   extends: .build_template
   image: espressif/idf:latest
   variables:
-    EXAMPLE_TARGETS: "esp32 esp32s2 esp32s3 esp32c3 esp32p4"
-    TEST_TARGETS: "esp32 esp32s3 esp32p4"
+    EXAMPLE_TARGETS: "esp32 esp32s2 esp32s3 esp32c3 esp32p4 esp32s31"
+    TEST_TARGETS: "esp32 esp32s3 esp32p4 esp32s31"
     # GNU Make based build system is not supported starting from IDF v5.0
     SKIP_GNU_MAKE_BUILD: 1
 
@@ -196,13 +196,13 @@ build_clang_idf_latest:
     - dir
 
   variables:
-    TEST_TARGETS: "esp32,esp32s3,esp32p4"
+    TEST_TARGETS: "esp32,esp32s3,esp32p4,esp32s31"
 
 build_latest_test_app:
   extends: .build_pytest_template
   image: espressif/idf:latest
   variables:
-    TEST_TARGETS: "esp32,esp32s3,esp32p4"
+    TEST_TARGETS: "esp32,esp32s3,esp32p4,esp32s31"
 
 
 .target_test_template:
@@ -269,7 +269,7 @@ test_examples:
   parallel:
     matrix:
       - IDF_BRANCH: ["master"]
-        IDF_TARGET: ["esp32", "esp32s3", "esp32p4"]
+        IDF_TARGET: ["esp32", "esp32s3", "esp32p4", "esp32s31"]
   variables:
     TEST_TARGETS: ${IDF_TARGET}
   tags:

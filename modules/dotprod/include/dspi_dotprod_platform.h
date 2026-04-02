@@ -13,7 +13,7 @@
 #endif
 #endif // __XTENSA__
 
-#if CONFIG_IDF_TARGET_ESP32P4
+#if CONFIG_IDF_TARGET_ESP32P4 || CONFIG_IDF_TARGET_ESP32S31
 #ifdef CONFIG_DSP_OPTIMIZED
 #define dspi_dotprod_arp4_enabled 1
 #else
