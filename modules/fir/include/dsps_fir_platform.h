@@ -28,7 +28,7 @@
 #endif //
 #endif // __XTENSA__
 
-#ifdef CONFIG_IDF_TARGET_ESP32P4
+#if CONFIG_IDF_TARGET_ESP32P4 || CONFIG_IDF_TARGET_ESP32S31
 #ifdef CONFIG_DSP_OPTIMIZED
 #define dsps_fird_f32_arp4_enabled 1
 #define dsps_fird_s16_arp4_enabled 1

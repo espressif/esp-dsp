@@ -99,6 +99,8 @@ TEST_CASE("DSP Library benchmark table", "[dsp]")
     REPORT_HEADER_ESP32S3();
 #elif CONFIG_IDF_TARGET_ESP32P4
     REPORT_HEADER_ESP32P4();
+#elif CONFIG_IDF_TARGET_ESP32S31
+    REPORT_HEADER_ESP32S31();
 #endif
     REPORT_SECTION("**Dot Product**");
     REPORT_BENCHMARK("dsps_dotprod_f32 for N=256 points",

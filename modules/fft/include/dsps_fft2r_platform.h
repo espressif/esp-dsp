@@ -31,7 +31,7 @@
 #define dsps_fft2r_fc32_aes3_enabled 1
 #define dsps_fft2r_sc16_aes3_enabled 1
 #endif
-#if CONFIG_IDF_TARGET_ESP32P4
+#if CONFIG_IDF_TARGET_ESP32P4 || CONFIG_IDF_TARGET_ESP32S31
 #ifdef CONFIG_DSP_OPTIMIZED
 #define dsps_fft2r_fc32_arp4_enabled 1
 #define dsps_fft2r_sc16_arp4_enabled 1

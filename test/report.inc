@@ -124,6 +124,15 @@ static void report_separator(const char *fill)
         report_separator(report_double_line_str); \
     } while(0);
 
+#define REPORT_HEADER_ESP32S31() \
+    do { \
+        report_separator(report_line_str); \
+        report_text_line_2col("Function name and arguments", "CPU cycles"); \
+        report_separator(report_line_str); \
+        report_text_line(report_space_str, "ESP32S31", "ANSI C"); \
+        report_separator(report_double_line_str); \
+    } while(0);
+
 #define REPORT_SECTION_NAME(title) \
     do { \
         printf("%s\n", title);\
