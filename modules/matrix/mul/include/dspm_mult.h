@@ -64,6 +64,23 @@ esp_err_t dspm_mult_f32_arp4(const float *A, const float *B, float *C, int m, in
 esp_err_t dspm_mult_3x3x1_f32_ae32(const float *A, const float *B, float *C);
 
 /**
+ * @brief   Matrix multiplication A[MxN]xB[1xM] int8
+ *
+ * Matrix multiplication to vector: C[1][M] = A[M][N] * B[1][N]
+ * The implementation is optimized for ESP32 chip.
+ *
+ * @param[in] A  input matrix A[M][N]
+ * @param[in] B  input matrix/vector B[1][N]
+ * @param C  result matrix/vector C[1][M]
+ * @param[in] M  matrix rows dimension
+ * @param[in] N  matrix columns dimension (vector length)
+ * @return
+ *      - ESP_OK on success
+ *      - One of the error codes from DSP library
+ */
+esp_err_t dspm_mult_mxn_1xm_int8_ansi(const int8_t *A, const int8_t *B, int32_t *C, int M, int N);
+
+/**
  * @brief   Matrix multiplication A[3x3]xB[3x3]
  *
  * Matrix multiplication for two square 3x3 floating point matrices: C[3][3] = A[3][3] * B[3][3]
@@ -133,6 +150,7 @@ esp_err_t dspm_mult_s16_ae32(const int16_t *A, const int16_t *B, int16_t *C, int
 esp_err_t dspm_mult_s16_aes3(const int16_t *A, const int16_t *B, int16_t *C, int m, int n, int k, int shift);
 esp_err_t dspm_mult_s16_arp4(const int16_t *A, const int16_t *B, int16_t *C, int m, int n, int k, int shift);
 /**@}*/
+
 
 /**@{*/
 /**
@@ -229,5 +247,6 @@ esp_err_t dspm_mult_ex_f32_arp4(const float *A, const float *B, float *C, int m,
 #define dspm_mult_4x4x1_f32(A,B,C) dspm_mult_f32(A,B,C, 4, 4, 1)
 #endif // CONFIG_DSP_OPTIMIZED
 
+#define dspm_mult_mxn_1xm_int8 dspm_mult_mxn_1xm_int8_ansi
 
 #endif // _dspm_mult_H_

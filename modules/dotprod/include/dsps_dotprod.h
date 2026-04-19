@@ -28,6 +28,28 @@ extern "C"
 
 /**@{*/
 /**
+ * @brief      dot product of two 8 bit vectors
+ * Dot product calculation for two signed 8 bit arrays: *dest += (src1[i] * src2[i]); i= [0..N)
+ * The result is stored in a 32 bit integer without any shift.
+ * This function could be used as a primitive for other dot product functions.
+ * The extension (_ansi) use ANSI C and could be compiled and run on any platform.
+ * The extension (_aes3) is optimized for ESP32S3 chip.
+ *
+ * @param[in] src1  source array 1
+ * @param[in] src2  source array 2
+ * @param dest  destination pointer
+ * @param[in] len   length of input arrays
+ * @return
+ *      - ESP_OK on success
+ *      - One of the error codes from DSP library
+ */
+esp_err_t dsps_dp_s8_ansi(const int8_t *src1, const int8_t *src2, int32_t *dest, int len);
+esp_err_t dsps_dp_s8_aes3(const int8_t *src1, const int8_t *src2, int32_t *dest, int len);
+/**@}*/
+
+
+/**@{*/
+/**
  * @brief      dot product of two 16 bit vectors
  * Dot product calculation for two signed 16 bit arrays: *dest += (src1[i] * src2[i]) >> (15-shift); i= [0..N)
  * The extension (_ansi) use ANSI C and could be compiled and run on any platform.
@@ -97,12 +119,18 @@ esp_err_t dsps_dotprode_f32_arp4(const float *src1, const float *src2, float *de
 
 #if CONFIG_DSP_OPTIMIZED
 
-#if (dsps_dotprod_s16_ae32_enabled == 1)
+#if (dsps_dotprod_s16_aes3_enabled == 1)
 #define dsps_dotprod_s16 dsps_dotprod_s16_ae32
+#define dsps_dp_s8       dsps_dp_s8_aes3
+#elif (dsps_dotprod_s16_ae32_enabled == 1)
+#define dsps_dotprod_s16 dsps_dotprod_s16_ae32
+#define dsps_dp_s8       dsps_dp_s8_ansi
 #elif (dsps_dotprod_s16_arp4_enabled == 1)
 #define dsps_dotprod_s16 dsps_dotprod_s16_arp4
+#define dsps_dp_s8       dsps_dp_s8_ansi
 #else
 #define dsps_dotprod_s16 dsps_dotprod_s16_ansi
+#define dsps_dp_s8       dsps_dp_s8_ansi
 #endif // dsps_dotprod_s16_ae32_enabled
 
 #if (dsps_dotprod_f32_aes3_enabled == 1)
@@ -120,9 +148,10 @@ esp_err_t dsps_dotprode_f32_arp4(const float *src1, const float *src2, float *de
 #endif // dsps_dotprod_f32_ae32_enabled
 
 #else // CONFIG_DSP_OPTIMIZED
-#define dsps_dotprod_s16 dsps_dotprod_s16_ansi
-#define dsps_dotprod_f32 dsps_dotprod_f32_ansi
+#define dsps_dotprod_s16  dsps_dotprod_s16_ansi
+#define dsps_dotprod_f32  dsps_dotprod_f32_ansi
 #define dsps_dotprode_f32 dsps_dotprode_f32_ansi
+#define dsps_dp_s8        dsps_dp_s8_ansi
 #endif // CONFIG_DSP_OPTIMIZED
 
 #endif // _DSPI_DOTPROD_H_
