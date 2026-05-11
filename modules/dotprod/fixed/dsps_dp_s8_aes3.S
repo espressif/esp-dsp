@@ -50,8 +50,8 @@ dsps_dp_s8_aes3:
 
     loopnez	a5,.loop_dsps_dp_s8_aes3  
 	    ee.vmulas.s8.accx.ld.ip	    q1,a3,16, q0,q1
-.loop_dsps_dp_s8_aes3:		ee.vld.128.ip	            q0,a2,16
- 
+		ee.vld.128.ip	            q0,a2,16
+.loop_dsps_dp_s8_aes3:  
 
     rur.accx_0	a14
 	s32i	a14, a4, 0
