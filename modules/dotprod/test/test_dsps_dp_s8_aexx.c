@@ -26,29 +26,31 @@ static const char *TAG = "dsps_dp_s8_aeXX";
 // Test dsps_dp_s8_aeXX function
 TEST_CASE("dsps_dp_s8_aeXX functionality", "[dsps]")
 {
-    int32_t check_value = 123;
     int max_N = 1024;
     int8_t *x = (int8_t *)memalign(16, max_N * sizeof(int8_t));
     int8_t *y = (int8_t *)memalign(16, max_N * sizeof(int8_t));
     int32_t *z = (int32_t *)memalign(16, max_N * sizeof(int32_t));
+    int32_t *z_ansi = (int32_t *)memalign(16, max_N * sizeof(int32_t));
 
     for (int i = 0 ; i < max_N ; i++) {
-        x[i] = 1;
-        y[i] = 10;
+        x[i] = i + 12;
+        y[i] = i + 2;
     }
 
     // Check result == 0
     for (int i = 4; i < 33; i++) {
         esp_err_t status = dsps_dp_s8(x, y, &z[1], i);
         TEST_ASSERT_EQUAL(status, ESP_OK);
-        check_value = i * 10;
-        ESP_LOGD(TAG, "check_value for i = %d: %d, z[1]: %d", (int)i, (int)check_value, (int)z[1]);
-        TEST_ASSERT_EQUAL(check_value, z[1]);
+        status = dsps_dp_s8_ansi(x, y, &z_ansi[1], i);
+        TEST_ASSERT_EQUAL(status, ESP_OK);
+        TEST_ASSERT_EQUAL(z[1], z_ansi[1]);
+        ESP_LOGD(TAG, "check_value for i = %d: z[1]: %d, z_ansi[1]: %d", (int)i, (int)z[1], (int)z_ansi[1]);
     }
 
     free(x);
     free(y);
     free(z);
+    free(z_ansi);
 }
 
 TEST_CASE("dsps_dp_s8_aeXX benchmark", "[dsps]")
