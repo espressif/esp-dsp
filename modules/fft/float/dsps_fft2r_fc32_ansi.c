@@ -37,7 +37,7 @@ extern float *dsps_fft2r_w_table_fc32_1024;
 
 unsigned short reverse(unsigned short x, unsigned short N, int order);
 
-esp_err_t dsps_fft2r_init_fc32(float *fft_table_buff, int table_size)
+esp_err_t dsps_fft2r_init_fc32_(float *fft_table_buff, int table_size, int reverse)
 {
     esp_err_t result = ESP_OK;
     if (dsps_fft2r_initialized != 0) {
@@ -86,7 +86,7 @@ esp_err_t dsps_fft2r_init_fc32(float *fft_table_buff, int table_size)
         dsps_fft2r_rev_tables_fc32[pow - 4] = dsps_fft2r_ram_rev_table;
     }
 
-    result = dsps_gen_w_r2_fc32(dsps_fft_w_table_fc32, dsps_fft_w_table_size);
+    result = dsps_gen_w_r2_fc32(dsps_fft_w_table_fc32, dsps_fft_w_table_size, reverse);
     if (result != ESP_OK) {
         return result;
     }
@@ -199,7 +199,7 @@ esp_err_t dsps_bit_rev_fc32_ansi(float *data, int N)
     return result;
 }
 
-esp_err_t dsps_gen_w_r2_fc32(float *w, int N)
+esp_err_t dsps_gen_w_r2_fc32(float *w, int N, int iFFT)
 {
     if (!dsp_is_power_of_two(N)) {
         return ESP_ERR_DSP_INVALID_LENGTH;
@@ -208,7 +208,12 @@ esp_err_t dsps_gen_w_r2_fc32(float *w, int N)
     esp_err_t result = ESP_OK;
 
     int i;
-    float e = M_PI * 2.0 / N;
+    float e;
+    
+    if (iFFT)
+        e = -M_PI * 2.0 / N;
+    else
+        e = M_PI * 2.0 / N;
 
     for (i = 0; i < (N >> 1); i++) {
         w[2 * i] = cosf(i * e);
