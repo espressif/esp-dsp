@@ -68,7 +68,7 @@ void app_main()
 
     // Generate hann window
     dsps_wind_hann_f32(wind, N);
-    // Generate input signal for x1 A=1 , F=0.1
+    // Generate input signal for x1 A=1 , F=0.16
     dsps_tone_gen_f32(x1, N, 1.0, 0.16,  0);
 
     // Convert two input vectors to one complex vector
